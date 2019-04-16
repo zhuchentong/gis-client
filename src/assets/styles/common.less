@@ -1,0 +1,119 @@
+.full,.fill {
+  height: 100%;
+  width: 100%;
+}
+
+.full-absolute,.fill-absolute {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.fill-height{
+  height:100%;
+}
+
+.fill-width{
+  width:100%;
+}
+
+.text-right {
+  text-align: right
+}
+
+.text-left {
+  text-align: left
+}
+
+.text-center {
+  text-align: center
+}
+
+
+.form-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-warp {
+  flex-wrap: nowrap;
+}
+
+/*
+* 报表中用到的样式，使用flex布局
+*/
+.base-item {
+  height: 40px;
+  border-bottom: 1px solid rgb(223, 230, 236);
+  line-height: 20px;
+  align-items: center;
+  display: flex;
+}
+
+.item {
+  .base-item;
+  justify-content: center;
+}
+
+.item-right {
+  .base-item;
+  justify-content: center;
+
+}
+
+.item-sum {
+  .item-right;
+  font-weight: bold;
+}
+
+@media screen and (max-width:1366px) {
+  .set-text-area-width(180px)
+}
+
+@media screen and (min-width:1367px) and (max-width:1920px) {
+  .set-text-area-width(470px)
+}
+
+@media screen and (min-width:1921px) and (max-width:2560px) {
+  .set-text-area-width(470px)
+}
+
+.set-text-area-width(@size) {
+  .input-text-area-inline {
+    width: @size;
+  }
+}
+
+/*
+ * dialog 操作按钮框
+*/
+.operate-buttons {
+  .text-center;
+  margin-top: 40px;
+}
+
+// 未完成功能提示
+.working {
+  text-align: center;
+  margin-top: 25%;
+
+  &::after {
+    content: "功能正在开发中,即将为您呈现!";
+    font-size: 30px;
+    color: #cccccc;
+  }
+}
+
+.draggable {
+  -webkit-app-region: drag;
+}

@@ -1,0 +1,150 @@
+.generateTheme(@theme) {
+  .el-button.el-button--default {
+    background-color: @COLOR8;
+    color: @COLOR5;
+    border-color: @COLOR8;
+  }
+
+  .el-button.el-button--default.is-disabled {
+    background-color: lightgray;
+    border-color: lightgray;
+  }
+
+  .el-button.reset-button {
+    background-color: @COLOR5;
+    color: @COLOR8;
+  }
+
+  .data-form {
+
+    .search-button,
+    .reset-button {
+      background-color: @COLOR5;
+      color: @COLOR8;
+    }
+  }
+
+  // work-header样式
+  .component.work-header {
+    background-color: @COLOR2;
+
+    .work-menu,
+    .work-menu-right {
+      // work-header 底部颜色
+      border-bottom: 0px solid @COLOR2;
+    }
+  }
+
+  // work-menu样式
+  .component.work-menu {
+    background-color: @COLOR2;
+
+    .el-menu {
+      background-color: @COLOR2;
+    }
+
+    .collapse-icon {
+      color: @COLOR4;
+      border-bottom-color: @COLOR7;
+    }
+
+    // work-menu-item样式
+    .component.work-menu-item {
+
+      // 一级菜单
+      .submenu {
+        &.is-active {
+          .submenu-icon {
+            background-color: @COLOR6;
+          }
+        }
+
+        .submenu-icon,
+        .menu-icon {
+          border-right-color: @COLOR7;
+        }
+
+        .el-submenu__title {
+          background-color: @COLOR2;
+          color: @COLOR4;
+
+          &:hover {
+            background-color: @COLOR3;
+          }
+
+          .svg-icon {
+            color: @COLOR1;
+          }
+        }
+      }
+
+      // 二级菜单样式
+      .menu-item {
+        font-size: 12px;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 40px;
+        color: @COLOR4;
+        background-color: @COLOR3;
+
+        &.is-active {
+          color: @COLOR5;
+          background-color: @COLOR11;
+        }
+      }
+    }
+  }
+
+  // 头部菜单样式
+  .component.work-menu-top {
+    .el-tabs__active-bar {
+      //background-color: @COLOR11;
+      height: 0;
+    }
+
+    .el-tabs__item.is-active {
+      font-weight: bold;
+      color: @COLOR1;
+      background-color: @COLOR11;
+    }
+  }
+
+  // 自定义组件样式
+  .component,
+  .page {
+    .data-selection {
+      .icon-color {
+        background-color: @COLOR10;
+      }
+    }
+
+    a {
+      color: @COLOR8;
+    }
+  }
+
+  .el-menu--vertical {
+    .el-menu.el-menu--popup.el-menu--popup-right-start {
+      .el-menu-item.is-active {
+        background-color: @COLOR11;
+        color: @COLOR1;
+      }
+
+      .el-menu-item:hover {
+        background-color: @COLOR12;
+      }
+    }
+  }
+}
+
+
+// 主题列表
+body {
+
+  // 默认主题
+  &.theme-default {
+    @theme: default;
+    @import "./themes/@{theme}.less";
+    .generateTheme(@theme)
+  }
+}

@@ -1,0 +1,435 @@
+//容器全局样式
+@default-fontSize: 12px;
+@default-height: 26px;
+
+body,
+html,
+#app {
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+  padding: 0;
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  font-size: @default-fontSize;
+}
+
+a {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// 页面主题样式
+.page {
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.el-dialog__header {
+  text-align: center;
+}
+
+.el-message {
+  min-width: 150px !important;
+}
+
+/* 设置tooltip的最大宽度 */
+.el-tooltip__popper {
+  max-width: 500px;
+}
+
+/*-----el-picker type="datetime" 去掉“此刻”按钮-----*/
+
+.el-picker-panel.el-date-picker.has-time .el-picker-panel__footer .el-picker-panel__link-btn:first-child {
+  display: none;
+}
+
+/*-----DataGrid-----*/
+
+.data-grid {
+  font-size: @default-fontSize;
+
+  .data-grid-item__label {
+    margin: 0 !important;
+    min-height: 34px;
+  }
+}
+
+.data-grid-title {
+  line-height: 30px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+
+  >span:first-of-type {
+    color: #00bbca;
+    margin: 0 5px;
+  }
+}
+
+// form样式
+.form-style() {
+  .el-form {
+
+    // 表单项高度设置
+    .el-form-item {
+      .el-form-item__label {
+        font-size: @default-fontSize;
+        padding-bottom: 0;
+        .setHeight;
+      }
+
+      .el-form-item__content {
+        .setHeight;
+
+        .el-input {
+          // 表单内宽度
+          width: 180px;
+        }
+
+        .el-textarea {
+          min-height: @default-height;
+
+          .el-textarea__inner {
+            min-height: @default-height;
+            line-height: 1;
+            font-size: 12px;
+          }
+        }
+
+        .el-radio-group {
+          margin-top: 5px;
+
+          .el-radio {
+            min-width: 50px;
+            margin-left: 10px;
+          }
+        }
+
+        .el-input-number {
+          .setHeight(-2)
+        }
+
+        .span-a {
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  .data-form {
+    text-align: left;
+
+    .el-form {
+      .el-form-item~ {
+        margin: 5px 5px 10px 0;
+      }
+    }
+  }
+}
+
+.date-style() {
+  @date-width: 180px;
+
+  .el-date-editor--daterange,
+  .el-date-editor--datetimerange {
+    .el-range-input {
+      width: 80px;
+    }
+
+    .el-range-separator {
+      padding: 0 1px;
+    }
+
+    .el-icon-date {
+      display: none;
+    }
+
+    .el-input__icon {
+      line-height: 20px;
+    }
+
+    height: 26px;
+    width: @date-width;
+  }
+
+  .el-range-editor.el-input__inner {
+    padding-left: 0;
+  }
+
+  .el-range-separator {
+    line-height: initial;
+  }
+
+  .el-date-editor--datetimerange {
+    width: 455px;
+
+    .el-range-input {
+      width: 200px;
+    }
+
+    .el-input__icon {
+      padding-left: 10px;
+    }
+  }
+}
+
+//input样式
+.input-style() {
+
+  // 基础input样式
+  .el-input:not(.el-input--mini) {
+    height: @default-height;
+    font-size: @default-fontSize;
+
+    .el-input__inner {
+      height: @default-height;
+      .setHeight;
+      // padding-left:6px;
+    }
+
+    .el-input__icon {
+      .setHeight;
+    }
+
+    .el-input-group__append,
+    .el-input-group__prepend {
+      padding: 0 5px;
+    }
+  }
+
+  // 级联选择器样式
+  .el-cascader {
+    .setHeight; // 默认宽度
+
+    .el-cascader__label {
+      .setHeight; // 默认宽度
+    }
+
+    .el-input__icon {
+      .setHeight;
+    }
+  }
+
+  .date-style();
+}
+
+// table样式
+.table-style() {
+  .el-table {
+    .el-table__header {
+      thead th {
+        height: 26px;
+        line-height: 26px;
+        background-color: #f5f5f5;
+        color: #8c8c8c;
+        padding: 0;
+        text-align: center;
+        border-right: solid 1px transparent !important;
+
+        .el-checkbox {
+          width: 19px;
+        }
+      }
+
+      .caret-wrapper {
+        height: 23px;
+
+        .sort-caret {
+          &.ascending {
+            top: 0px;
+          }
+
+          &.descending {
+            bottom: 1px;
+          }
+        }
+      }
+    }
+
+    .el-table__body {
+      .el-table__row.current-row td {
+        background-color: #b2e5ff;
+      }
+
+      td {
+        .cell {
+          line-height: 28px;
+          padding: 0;
+
+          &>*:only-child {
+            padding: 0 4px;
+          }
+        }
+
+        &:not(.is-right):not(.is-left) {
+          text-align: center;
+        }
+
+        padding: 0;
+        font-size:@default-fontSize;
+
+        .el-button.el-button--text {
+          padding: 0 4px;
+          font-size: @default-fontSize;
+        }
+      }
+    }
+  }
+}
+
+//input样式
+.button-style() {
+  .el-button {
+    font-size: @default-fontSize;
+
+    &.el-button--default {
+      .setHeight;
+      padding: 0 20px;
+      min-width: 100px;
+      font-weight: 400;
+    }
+
+    &.el-button--primary {
+      .setHeight;
+      padding: 0 20px;
+      min-width: 100px;
+      font-weight: 400;
+    }
+
+    &.el-button--text {
+      font-weight: 400;
+    }
+  }
+}
+
+.radio-style() {
+  .el-radio-group {
+    .setHeight;
+
+    .el-radio__label {
+      font-size: @default-fontSize;
+    }
+  }
+}
+
+.select-style() {
+
+  .el-select,
+  .el-cascader {
+    font-size: @default-fontSize;
+  }
+}
+
+// el-step样式调整
+.case-flow-follow {
+  .el-steps {
+    .el-step {
+      height: 85px;
+      text-align: left;
+    }
+
+    .el-step__main {
+      white-space: nowrap;
+    }
+  }
+}
+
+.fixed-style() {
+
+  // 全局弹出框样式修正
+  .el-dialog {
+    .el-dialog__body {
+      max-height: 600px;
+      overflow: auto;
+      font-size: @default-fontSize;
+    }
+
+    &.is-fullscreen .el-dialog__body {
+      max-height: unset;
+      overflow: unset;
+    }
+  }
+
+  // 修正表格样式
+  .el-table__header-wrapper,
+  .el-table__body-wrapper {
+    padding-right: 1px;
+  }
+}
+
+.card-style() {
+  .el-card {
+    .el-card__header {
+      padding: 10px !important;
+    }
+
+    .el-card__body {
+      padding: 10px !important;
+    }
+  }
+}
+
+.tree-style() {
+  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+    background-color: #b2e5ff !important;
+  }
+
+  .el-tree {
+    .el-tree-node__content {
+      height: 22px;
+
+      .el-tree-node__expand-icon {
+        padding: 6px 3px;
+      }
+
+      .el-checkbox {
+        margin-right: 5px;
+      }
+
+      .el-tree-node__label {
+        font-size: @default-fontSize;
+      }
+    }
+  }
+}
+
+.setHeight() {
+  // height: @default-height;
+  line-height: @default-height;
+}
+
+.setHeight(@additional) {
+  // height: @default-height + @additional;
+  line-height: @default-height + @additional;
+}
+
+
+#app,
+.el-dialog {
+
+  .page,
+  .component {
+    .form-style();
+    .input-style();
+    .button-style();
+    .table-style();
+    .select-style();
+    .radio-style();
+    .card-style();
+    .fixed-style();
+    .tree-style();
+  }
+}
+
+// 地图窗体样式
+.amap-info-content .prompt {
+  line-height: 30px;
+  text-align: left;
+  height: auto;
+  width: 300px;
+}
