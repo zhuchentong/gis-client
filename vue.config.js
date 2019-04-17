@@ -4,7 +4,7 @@ const webpack = require('webpack')
 
 const aliasExtned = require('./extends/alias.extend')
 const routeExtend = require('./extends/route.extend')
-// const cesiumExtend = require('./extends/cesium.extend')
+const cesiumExtend = require('./extends/cesium.extend')
 const svgExtend = require('./extends/svg.extend')
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
     // svg扩展
     svgExtend(config)
     // cesium扩展
-    // cesiumExtend(config)
+    cesiumExtend(config)
   },
   configureWebpack: {
     module: {

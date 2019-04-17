@@ -58,7 +58,8 @@
   @color: #ffffff;
 
   background: url('../assets/images/login_bg_1.png');
-  background-size: 100%;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
   color: @color;
   .login-title {
     margin-top: 20px;
@@ -106,7 +107,9 @@ import { Component, Vue } from 'vue-property-decorator'
 import { Inject } from 'typescript-ioc'
 import { User } from '~/models/user.model'
 import { WindowSize } from '../config/enum.config'
+import { Layout } from '@/core/decorator'
 
+@Layout('empty')
 @Component({
   components: {}
 })

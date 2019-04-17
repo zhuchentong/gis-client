@@ -1,9 +1,9 @@
 <template>
   <div
-    class="layout fill draggable"
-    style="overflow:auto;"
+    class="layout fill"
+    style="overflow:hidden;"
   >
-    <div class="header">
+    <div class="header draggable">
       <el-button
         type="text"
         @click="onExit()"
@@ -21,9 +21,10 @@ import { Vue, Component } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class DefaultLayout extends Vue {
+export default class WorkspaceLayout extends Vue {
   private onExit() {
-    this.$electron.remote.process.exit(0)
+    const win = this.$electron.remote.getCurrentWindow()
+    win && win.close()
   }
 }
 </script>

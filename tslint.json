@@ -11,7 +11,6 @@
   "rules": {
     "semicolon": [true, "never"],
     "no-unused-expression": [true, "allow-fast-null-checks", "allow-new"],
-
     "ordered-imports": [
       true,
       {
@@ -19,6 +18,7 @@
         "named-imports-order": "any"
       }
     ],
+    // "member-ordering": [true, { "order": "fields-first" }],
     "object-literal-sort-keys": false,
     "no-console": false,
     "no-string-literal": false,

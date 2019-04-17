@@ -9,7 +9,7 @@ import '~/assets/styles/default.less'
 import '~/assets/styles/layout.less'
 import '~/assets/styles/common.less'
 import '~/assets/styles/theme.less'
-// import 'cesium/Widgets/widgets.css'
+import 'cesium/Widgets/widgets.css'
 // import '@zct1989/vue-component/dist/index.css'
 
 // 添加扩展模块

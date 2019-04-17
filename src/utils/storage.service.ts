@@ -4,6 +4,26 @@ const storageTypes = ['local', 'session']
 export class StorageService {
   public static instance: any = {}
 
+  private storageType
+  private storage
+
+  constructor(type?: string) {
+    // 设置storage类型
+    this.storageType = type || defaultStorage
+
+    // storage类型检测
+    if (!storageTypes.includes(this.storageType)) {
+      console.warn('storage类型错误')
+      this.storageType = defaultStorage
+    }
+
+    // 设置storage
+    this.storage = {
+      local: localStorage,
+      session: sessionStorage
+    }[this.storageType]
+  }
+
   /**
    * 获取当前存储类型对象
    * @param {*} type
@@ -49,26 +69,6 @@ export class StorageService {
 
   public static removeItem(key) {
     this.getStorage(defaultStorage).removeItem(key)
-  }
-
-  private storageType
-  private storage
-
-  constructor(type?: string) {
-    // 设置storage类型
-    this.storageType = type || defaultStorage
-
-    // storage类型检测
-    if (!storageTypes.includes(this.storageType)) {
-      console.warn('storage类型错误')
-      this.storageType = defaultStorage
-    }
-
-    // 设置storage
-    this.storage = {
-      local: localStorage,
-      session: sessionStorage
-    }[this.storageType]
   }
 
   /* 数据存储

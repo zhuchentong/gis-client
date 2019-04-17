@@ -26,7 +26,7 @@ export class WindowService {
 
     win.once('ready-to-show', () => {
       win && win.show()
-      currentWindow.close()
+      autoClose && currentWindow.close()
     })
 
     // 页面关闭时销毁页面

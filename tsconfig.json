@@ -17,9 +17,11 @@
     "types": ["webpack-env"],
     "paths": {
       "@/*": ["src/*"],
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "cesium/Cesium": ["node_modules/cesium"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "plugins": [{ "name": "typescript-tslint-plugin" }]
   },
   "include": [
     "src/**/*.ts",
