@@ -10,40 +10,6 @@ export class ReminderService {
   public static messageListenerList: any[] = []
   public static instance: ReminderService
 
-  public client?: CompatClient
-
-  /**
-   * 初始化65
-   */
-  private constructor() {
-    if (!app.rabbitmq) return
-    if (app.rabbitmq.socket && app.rabbitmq.socket.startsWith('ws://')) {
-      this.client = Stomp.client(app.rabbitmq.socket)
-    } else {
-      const ws = new SockJS(app.rabbitmq.socket)
-      this.client = Stomp.over(ws)
-    }
-
-    // 打印日志
-    // 生产模式关闭日志打印
-    if (!app.debug) {
-      console.log('关闭 reminder 日志输出')
-      this.client.debug = () => {
-        return
-      }
-    }
-
-    // 禁用日志消息
-    this.client.connect(
-      app.rabbitmq.username,
-      app.rabbitmq.password,
-      this.onConnectHandle.bind(this),
-      this.onErrorHandle.bind(this),
-      this.onCloseHandle.bind(this),
-      app.rabbitmq.vhost
-    )
-  }
-
   public static connect() {
     ReminderService.instance = new ReminderService()
   }
@@ -81,6 +47,40 @@ export class ReminderService {
         id
       })
     })
+  }
+
+  public client?: CompatClient
+
+  /**
+   * 初始化65
+   */
+  private constructor() {
+    if (!app.rabbitmq) return
+    if (app.rabbitmq.socket && app.rabbitmq.socket.startsWith('ws://')) {
+      this.client = Stomp.client(app.rabbitmq.socket)
+    } else {
+      const ws = new SockJS(app.rabbitmq.socket)
+      this.client = Stomp.over(ws)
+    }
+
+    // 打印日志
+    // 生产模式关闭日志打印
+    if (!app.debug) {
+      console.log('关闭 reminder 日志输出')
+      this.client.debug = () => {
+        return
+      }
+    }
+
+    // 禁用日志消息
+    this.client.connect(
+      app.rabbitmq.username,
+      app.rabbitmq.password,
+      this.onConnectHandle.bind(this),
+      this.onErrorHandle.bind(this),
+      this.onCloseHandle.bind(this),
+      app.rabbitmq.vhost
+    )
   }
 
   /**

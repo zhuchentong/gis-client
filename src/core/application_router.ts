@@ -1,6 +1,13 @@
 import VueRouter from 'vue-router'
 
 export class ApplicationRouter {
+  /**
+   * 注册路由守卫
+   * @param guards
+   */
+  public static registerGuard(guards) {
+    ApplicationRouter.guards = [...ApplicationRouter.guards, ...guards]
+  }
 
   private static guards: any[] = []
   private store
@@ -29,13 +36,6 @@ export class ApplicationRouter {
 
     // 添加自动路由
     this.importAutoRoutes()
-  }
-  /**
-   * 注册路由守卫
-   * @param guards
-   */
-  public static registerGuard(guards) {
-    ApplicationRouter.guards = [...ApplicationRouter.guards, ...guards]
   }
 
   /**

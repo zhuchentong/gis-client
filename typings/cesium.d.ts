@@ -1,414 +1,402 @@
+/* tslint:disable */
+
 /**
  * Created by laixiangran on 2018/10/08.
  * homepage：http://www.laixiangran.cn
  * Typescript definition for cesium 1.5x
  */
-
-declare module Cesium {
+declare namespace Cesium {
 
   class Ion {
-      static defaultAccessToken: string;
-      static defaultServer: string;
+      public static defaultAccessToken: string
+      public static defaultServer: string
 
       constructor();
   }
 
-  type RenderState = any;
+  type RenderState = any
 
   interface Proxy {
-      getURL(resource: string): string;
+      getURL(resource: string): string
   }
 
   class ArcGisImageServerTerrainProvider {
-      errorEvent: Event;
-      credit: Credit;
-      tilingScheme: GeographicTilingScheme;
-      ready: boolean;
-      hasWaterMask: boolean;
-      hasVertexNormals: boolean;
+      public errorEvent: Event
+      public credit: Credit
+      public tilingScheme: GeographicTilingScheme
+      public ready: boolean
+      public hasWaterMask: boolean
+      public hasVertexNormals: boolean
 
       constructor(options: { url: string; token?: string; proxy?: any; tilingScheme?: TilingScheme; ellipsoid?: Ellipsoid; credit?: Credit | string });
 
-      requestTileGeometry(x: number, y: number, level: number): Promise<TerrainData>;
+      public requestTileGeometry(x: number, y: number, level: number): Promise<TerrainData>
 
-      getLevelMaximumGeometricError(level: number): number;
+      public getLevelMaximumGeometricError(level: number): number
 
-      getTileDataAvailable(x: number, y: number, level: number): boolean;
+      public getTileDataAvailable(x: number, y: number, level: number): boolean
   }
 
   class AssociativeArray {
-      length: number;
-      values: any[];
+      public length: number
+      public values: any[]
 
-      contains(key: string | number): boolean;
+      public contains(key: string | number): boolean
 
-      set(key: string | number, value: any): void;
+      public set(key: string | number, value: any): void
 
-      get(key: string | number): any;
+      public get(key: string | number): any
 
-      remove(key: string | number): boolean;
+      public remove(key: string | number): boolean
 
-      removeAll(): void;
+      public removeAll(): void
   }
 
   class AxisAlignedBoundingBox {
-      minimum: Cartesian3;
-      maximum: Cartesian3;
-      center: Cartesian3;
+
+      public static fromPoints(positions: Cartesian3[], result?: AxisAlignedBoundingBox): AxisAlignedBoundingBox
+
+      public static clone(box: AxisAlignedBoundingBox, result?: AxisAlignedBoundingBox): AxisAlignedBoundingBox
+
+      public static equals(left?: AxisAlignedBoundingBox, right?: AxisAlignedBoundingBox): boolean
+
+      public static intersect(box: AxisAlignedBoundingBox, plane: Cartesian4): Intersect
+      public minimum: Cartesian3
+      public maximum: Cartesian3
+      public center: Cartesian3
 
       constructor(minimum?: Cartesian3, maximum?: Cartesian3, center?: Cartesian3);
 
-      clone(result?: AxisAlignedBoundingBox): AxisAlignedBoundingBox;
+      public clone(result?: AxisAlignedBoundingBox): AxisAlignedBoundingBox
 
-      intersect(plane: Cartesian4): Intersect;
+      public intersect(plane: Cartesian4): Intersect
 
-      equals(right?: AxisAlignedBoundingBox): boolean;
-
-      static fromPoints(positions: Cartesian3[], result?: AxisAlignedBoundingBox): AxisAlignedBoundingBox;
-
-      static clone(box: AxisAlignedBoundingBox, result?: AxisAlignedBoundingBox): AxisAlignedBoundingBox;
-
-      static equals(left?: AxisAlignedBoundingBox, right?: AxisAlignedBoundingBox): boolean;
-
-      static intersect(box: AxisAlignedBoundingBox, plane: Cartesian4): Intersect;
+      public equals(right?: AxisAlignedBoundingBox): boolean
   }
 
   class BoundingRectangle {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
+
+      public static fromPoints(positions: Cartesian2[], result?: BoundingRectangle): BoundingRectangle
+
+      public static fromRectangle(rectangle: Rectangle, projection?: any, result?: BoundingRectangle): BoundingRectangle
+
+      public static clone(rectangle: BoundingRectangle, result?: BoundingRectangle): BoundingRectangle
+
+      public static union(left: BoundingRectangle, right: BoundingRectangle, result?: BoundingRectangle): BoundingRectangle
+
+      public static expand(rectangle: BoundingRectangle, point: Cartesian2, result?: BoundingRectangle): BoundingRectangle
+
+      public static intersect(left: BoundingRectangle, right: BoundingRectangle): Intersect
+
+      public static equals(left?: BoundingRectangle, right?: BoundingRectangle): boolean
+      public x: number
+      public y: number
+      public width: number
+      public height: number
 
       constructor(x?: number, y?: number, width?: number, height?: number);
 
-      clone(result?: BoundingRectangle): BoundingRectangle;
+      public clone(result?: BoundingRectangle): BoundingRectangle
 
-      intersect(right: BoundingRectangle): Intersect;
+      public intersect(right: BoundingRectangle): Intersect
 
-      equals(right?: BoundingRectangle): boolean;
-
-      static fromPoints(positions: Cartesian2[], result?: BoundingRectangle): BoundingRectangle;
-
-      static fromRectangle(rectangle: Rectangle, projection?: any, result?: BoundingRectangle): BoundingRectangle;
-
-      static clone(rectangle: BoundingRectangle, result?: BoundingRectangle): BoundingRectangle;
-
-      static union(left: BoundingRectangle, right: BoundingRectangle, result?: BoundingRectangle): BoundingRectangle;
-
-      static expand(rectangle: BoundingRectangle, point: Cartesian2, result?: BoundingRectangle): BoundingRectangle;
-
-      static intersect(left: BoundingRectangle, right: BoundingRectangle): Intersect;
-
-      static equals(left?: BoundingRectangle, right?: BoundingRectangle): boolean;
+      public equals(right?: BoundingRectangle): boolean
   }
 
   class BoundingSphere {
-      static packedLength: number;
-      center: Cartesian3;
-      radius: number;
+      public static packedLength: number
+
+      public static fromPoints(positions: Cartesian3[], result?: BoundingSphere): BoundingSphere
+
+      public static fromRectangle2D(rectangle: Rectangle, projection?: any, result?: BoundingSphere): BoundingSphere
+
+      public static fromRectangleWithHeights2D(rectangle: Rectangle, projection?: any, minimumHeight?: number, maximumHeight?: number, result?: BoundingSphere): BoundingSphere
+
+      public static fromRectangle3D(rectangle: Rectangle, ellipsoid?: Ellipsoid, surfaceHeight?: number, result?: BoundingSphere): BoundingSphere
+
+      public static fromVertices(positions: Cartesian3[], center?: Cartesian3, stride?: number, result?: BoundingSphere): BoundingSphere
+
+      public static fromCornerPoints(corner?: number, oppositeCorner?: number, result?: BoundingSphere): BoundingSphere
+
+      public static fromEllipsoid(ellipsoid: Ellipsoid, result?: BoundingSphere): BoundingSphere
+
+      public static fromBoundingSpheres(boundingSpheres: BoundingSphere[], result?: BoundingSphere): BoundingSphere
+
+      public static fromEncodedCartesianVertices(positionsHigh?: number[], positionsLow?: number[], result?: BoundingSphere): BoundingSphere
+
+      public static fromOrientedBoundingBox(orientedBoundingBox: OrientedBoundingBox, result?: BoundingSphere): BoundingSphere
+
+      public static clone(sphere: BoundingSphere, result?: BoundingSphere): BoundingSphere
+
+      public static pack(value: BoundingSphere, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: BoundingSphere): BoundingSphere
+
+      public static union(left: BoundingSphere, right: BoundingSphere, result?: BoundingSphere): BoundingSphere
+
+      public static expand(sphere: BoundingSphere, point: Cartesian3, result?: BoundingSphere): BoundingSphere
+
+      public static intersect(sphere: BoundingSphere, plane: Cartesian4): Intersect
+
+      public static transform(sphere: BoundingSphere, transform: Matrix4, result?: BoundingSphere): BoundingSphere
+
+      public static distanceSquaredTo(sphere: BoundingSphere, cartesian: Cartesian3): number
+
+      public static transformWithoutScale(sphere: BoundingSphere, transform: Matrix4, result?: BoundingSphere): BoundingSphere
+
+      public static computePlaneDistances(sphere: BoundingSphere, position: Cartesian3, direction: Cartesian3, result?: Cartesian2): Interval
+
+      public static projectTo2D(sphere: BoundingSphere, projection?: any, result?: BoundingSphere): BoundingSphere
+
+      public static equals(left?: BoundingSphere, right?: BoundingSphere): boolean
+
+      public static intersectPlane(sphere: BoundingSphere, plane: Plane): Intersect
+
+      public static isOccluded(sphere: BoundingSphere, occluder: Occluder): boolean
+      public center: Cartesian3
+      public radius: number
 
       constructor(center?: Cartesian3, radius?: number);
 
-      static fromPoints(positions: Cartesian3[], result?: BoundingSphere): BoundingSphere;
+      public intersect(plane: Cartesian4): Intersect
 
-      static fromRectangle2D(rectangle: Rectangle, projection?: any, result?: BoundingSphere): BoundingSphere;
+      public equals(right?: BoundingSphere): boolean
 
-      static fromRectangleWithHeights2D(rectangle: Rectangle, projection?: any, minimumHeight?: number, maximumHeight?: number, result?: BoundingSphere): BoundingSphere;
+      public clone(result?: BoundingSphere): BoundingSphere
 
-      static fromRectangle3D(rectangle: Rectangle, ellipsoid?: Ellipsoid, surfaceHeight?: number, result?: BoundingSphere): BoundingSphere;
+      public computePlaneDistances(position: Cartesian3, direction: Cartesian3, result?: Interval): Interval
 
-      static fromVertices(positions: Cartesian3[], center?: Cartesian3, stride?: number, result?: BoundingSphere): BoundingSphere;
+      public distanceSquaredTo(cartesian: Cartesian3): number
 
-      static fromCornerPoints(corner?: number, oppositeCorner?: number, result?: BoundingSphere): BoundingSphere;
+      public intersectPlane(plane: Plane): Intersect
 
-      static fromEllipsoid(ellipsoid: Ellipsoid, result?: BoundingSphere): BoundingSphere;
-
-      static fromBoundingSpheres(boundingSpheres: BoundingSphere[], result?: BoundingSphere): BoundingSphere;
-
-      static fromEncodedCartesianVertices(positionsHigh?: number[], positionsLow?: number[], result?: BoundingSphere): BoundingSphere;
-
-      static fromOrientedBoundingBox(orientedBoundingBox: OrientedBoundingBox, result?: BoundingSphere): BoundingSphere;
-
-      static clone(sphere: BoundingSphere, result?: BoundingSphere): BoundingSphere;
-
-      static pack(value: BoundingSphere, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: BoundingSphere): BoundingSphere;
-
-      static union(left: BoundingSphere, right: BoundingSphere, result?: BoundingSphere): BoundingSphere;
-
-      static expand(sphere: BoundingSphere, point: Cartesian3, result?: BoundingSphere): BoundingSphere;
-
-      static intersect(sphere: BoundingSphere, plane: Cartesian4): Intersect;
-
-      static transform(sphere: BoundingSphere, transform: Matrix4, result?: BoundingSphere): BoundingSphere;
-
-      static distanceSquaredTo(sphere: BoundingSphere, cartesian: Cartesian3): number;
-
-      static transformWithoutScale(sphere: BoundingSphere, transform: Matrix4, result?: BoundingSphere): BoundingSphere;
-
-      static computePlaneDistances(sphere: BoundingSphere, position: Cartesian3, direction: Cartesian3, result?: Cartesian2): Interval;
-
-      static projectTo2D(sphere: BoundingSphere, projection?: any, result?: BoundingSphere): BoundingSphere;
-
-      static equals(left?: BoundingSphere, right?: BoundingSphere): boolean;
-
-      static intersectPlane(sphere: BoundingSphere, plane: Plane): Intersect;
-
-      static isOccluded(sphere: BoundingSphere, occluder: Occluder): boolean;
-
-      intersect(plane: Cartesian4): Intersect;
-
-      equals(right?: BoundingSphere): boolean;
-
-      clone(result?: BoundingSphere): BoundingSphere;
-
-      computePlaneDistances(position: Cartesian3, direction: Cartesian3, result?: Interval): Interval;
-
-      distanceSquaredTo(cartesian: Cartesian3): number;
-
-      intersectPlane(plane: Plane): Intersect;
-
-      isOccluded(occluder: Occluder): boolean;
+      public isOccluded(occluder: Occluder): boolean
   }
 
   class OrientedBoundingBox {
-      center: Cartesian3;
-      halfAxes: Matrix3;
+
+      public static clone(box: OrientedBoundingBox, result?: OrientedBoundingBox): OrientedBoundingBox
+
+      public static computePlaneDistances(box: OrientedBoundingBox, position: Cartesian3, direction: Cartesian3, result?: Interval): Interval
+
+      public static distanceSquaredTo(box: OrientedBoundingBox, cartesian: Cartesian3): number
+
+      public static equals(left: OrientedBoundingBox, right: OrientedBoundingBox): boolean
+
+      public static fromPoints(positions: Cartesian3[], result?: OrientedBoundingBox): OrientedBoundingBox
+
+      public static fromRectangle(rectangle: Rectangle, minimumHeight?: number, maximumHeight?: number, ellipsoid?: Ellipsoid, result?: OrientedBoundingBox): OrientedBoundingBox
+
+      public static intersectPlane(box: OrientedBoundingBox, plane: Plane): Intersect
+
+      public static isOccluded(box: OrientedBoundingBox, occluder: Occluder): boolean
+      public center: Cartesian3
+      public halfAxes: Matrix3
 
       constructor(center?: Cartesian3, halfAxes?: Matrix3);
 
-      static clone(box: OrientedBoundingBox, result?: OrientedBoundingBox): OrientedBoundingBox;
+      public clone(result?: OrientedBoundingBox): OrientedBoundingBox
 
-      static computePlaneDistances(box: OrientedBoundingBox, position: Cartesian3, direction: Cartesian3, result?: Interval): Interval;
+      public computePlaneDistances(position: Cartesian3, direction: Cartesian3, result?: Interval): Interval
 
-      static distanceSquaredTo(box: OrientedBoundingBox, cartesian: Cartesian3): number;
+      public distanceSquaredTo(cartesian: Cartesian3): number
 
-      static equals(left: OrientedBoundingBox, right: OrientedBoundingBox): boolean;
+      public equals(right: OrientedBoundingBox): boolean
 
-      static fromPoints(positions: Cartesian3[], result?: OrientedBoundingBox): OrientedBoundingBox;
+      public intersectPlane(plane: Plane): Intersect
 
-      static fromRectangle(rectangle: Rectangle, minimumHeight?: number, maximumHeight?: number, ellipsoid?: Ellipsoid, result?: OrientedBoundingBox): OrientedBoundingBox;
-
-      static intersectPlane(box: OrientedBoundingBox, plane: Plane): Intersect;
-
-      static isOccluded(box: OrientedBoundingBox, occluder: Occluder): boolean;
-
-      clone(result?: OrientedBoundingBox): OrientedBoundingBox;
-
-      computePlaneDistances(position: Cartesian3, direction: Cartesian3, result?: Interval): Interval;
-
-      distanceSquaredTo(cartesian: Cartesian3): number;
-
-      equals(right: OrientedBoundingBox): boolean;
-
-      intersectPlane(plane: Plane): Intersect;
-
-      isOccluded(occluder: Occluder): boolean;
+      public isOccluded(occluder: Occluder): boolean
   }
 
   class BoxGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(boxGeometry: BoxGeometry): Geometry | undefined
+
+      public static fromAxisAlignedBoundingBox(boundingBox: AxisAlignedBoundingBox): BoxGeometry
+
+      public static fromDimensions(options: { dimensions: Cartesian3, vertexFormat?: VertexFormat }): BoxGeometry
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: BoxGeometry): BoxGeometry
 
       constructor(options: {
           minimumCorner: Cartesian3;
           maximumCorner: Cartesian3;
           vertexFormat?: VertexFormat
       });
-
-      static createGeometry(boxGeometry: BoxGeometry): Geometry | undefined;
-
-      static fromAxisAlignedBoundingBox(boundingBox: AxisAlignedBoundingBox): BoxGeometry;
-
-      static fromDimensions(options: { dimensions: Cartesian3, vertexFormat?: VertexFormat }): BoxGeometry;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: BoxGeometry): BoxGeometry;
   }
 
   class BoxOutlineGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static fromDimensions(): BoxOutlineGeometry
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: BoxOutlineGeometry): BoxOutlineGeometry
+
+      public static createGeometry(boxGeometry: BoxOutlineGeometry): Geometry | undefined
 
       constructor();
-
-      static fromDimensions(): BoxOutlineGeometry;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: BoxOutlineGeometry): BoxOutlineGeometry;
-
-      static createGeometry(boxGeometry: BoxOutlineGeometry): Geometry | undefined;
   }
 
   class Cartesian2 {
-      x: number;
-      y: number;
-      static packedLength: number;
-      static ZERO: Cartesian2;
-      static UNIT_X: Cartesian2;
-      static UNIT_Y: Cartesian2;
+      public static packedLength: number
+      public static ZERO: Cartesian2
+      public static UNIT_X: Cartesian2
+      public static UNIT_Y: Cartesian2
+
+      public static fromElements(x: number, y: number, result?: Cartesian2): Cartesian2
+
+      public static clone(cartesian: Cartesian2, result?: Cartesian2): Cartesian2
+
+      public static fromCartesian3(cartesian: Cartesian3, result?: Cartesian2): Cartesian2
+
+      public static fromCartesian4(cartesian: Cartesian4, result?: Cartesian2): Cartesian2
+
+      public static pack(value: Cartesian2, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Cartesian2): Cartesian2
+
+      public static fromArray(array: number[], startingIndex?: number, result?: Cartesian2): Cartesian2
+
+      public static maximumComponent(cartesian: Cartesian2): number
+
+      public static minimumComponent(cartesian: Cartesian2): number
+
+      public static minimumByComponent(first: Cartesian2, second: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static maximumByComponent(first: Cartesian2, second: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static magnitudeSquared(cartesian: Cartesian2): number
+
+      public static magnitude(cartesian: Cartesian2): number
+
+      public static distance(left: Cartesian2, right: Cartesian2): number
+
+      public static distanceSquared(left: Cartesian2, right: Cartesian2): number
+
+      public static normalize(cartesian: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static dot(left: Cartesian2, right: Cartesian2): number
+
+      public static multiplyComponents(left: Cartesian2, right: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static add(left: Cartesian2, right: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static subtract(left: Cartesian2, right: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static multiplyByScalar(cartesian: Cartesian2, scalar: number, result: Cartesian2): Cartesian2
+
+      public static divideByScalar(cartesian: Cartesian2, scalar: number, result: Cartesian2): Cartesian2
+
+      public static negate(cartesian: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static abs(cartesian: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static lerp(start: Cartesian2, end: Cartesian2, t: number, result: Cartesian2): Cartesian2
+
+      public static angleBetween(left: Cartesian2, right: Cartesian2): number
+
+      public static mostOrthogonalAxis(cartesian: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static equals(left?: Cartesian2, right?: Cartesian2): boolean
+
+      public static equalsEpsilon(left: Cartesian2, right: Cartesian2, relativeEpsilon: number, absoluteEpsilon?: number): boolean
+      public x: number
+      public y: number
 
       constructor(x?: number, y?: number);
 
-      clone(result?: Cartesian2): Cartesian2;
+      public clone(result?: Cartesian2): Cartesian2
 
-      equals(right?: Cartesian2): boolean;
+      public equals(right?: Cartesian2): boolean
 
-      equalsEpsilon(right: Cartesian2, relativeEpsilon: number, absoluteEpsilon?: number): boolean;
+      public equalsEpsilon(right: Cartesian2, relativeEpsilon: number, absoluteEpsilon?: number): boolean
 
-      toString(): string;
-
-      static fromElements(x: number, y: number, result?: Cartesian2): Cartesian2;
-
-      static clone(cartesian: Cartesian2, result?: Cartesian2): Cartesian2;
-
-      static fromCartesian3(cartesian: Cartesian3, result?: Cartesian2): Cartesian2;
-
-      static fromCartesian4(cartesian: Cartesian4, result?: Cartesian2): Cartesian2;
-
-      static pack(value: Cartesian2, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: Cartesian2): Cartesian2;
-
-      static fromArray(array: number[], startingIndex?: number, result?: Cartesian2): Cartesian2;
-
-      static maximumComponent(cartesian: Cartesian2): number;
-
-      static minimumComponent(cartesian: Cartesian2): number;
-
-      static minimumByComponent(first: Cartesian2, second: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static maximumByComponent(first: Cartesian2, second: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static magnitudeSquared(cartesian: Cartesian2): number;
-
-      static magnitude(cartesian: Cartesian2): number;
-
-      static distance(left: Cartesian2, right: Cartesian2): number;
-
-      static distanceSquared(left: Cartesian2, right: Cartesian2): number;
-
-      static normalize(cartesian: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static dot(left: Cartesian2, right: Cartesian2): number;
-
-      static multiplyComponents(left: Cartesian2, right: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static add(left: Cartesian2, right: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static subtract(left: Cartesian2, right: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static multiplyByScalar(cartesian: Cartesian2, scalar: number, result: Cartesian2): Cartesian2;
-
-      static divideByScalar(cartesian: Cartesian2, scalar: number, result: Cartesian2): Cartesian2;
-
-      static negate(cartesian: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static abs(cartesian: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static lerp(start: Cartesian2, end: Cartesian2, t: number, result: Cartesian2): Cartesian2;
-
-      static angleBetween(left: Cartesian2, right: Cartesian2): number;
-
-      static mostOrthogonalAxis(cartesian: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static equals(left?: Cartesian2, right?: Cartesian2): boolean;
-
-      static equalsEpsilon(left: Cartesian2, right: Cartesian2, relativeEpsilon: number, absoluteEpsilon?: number): boolean;
+      public toString(): string
   }
 
   class Cartesian3 implements PositionProperty {
-      x: number;
-      y: number;
-      z: number;
-      static packedLength: number;
-      static ZERO: Cartesian3;
-      static UNIT_X: Cartesian3;
-      static UNIT_Y: Cartesian3;
-      static UNIT_Z: Cartesian3;
+      public static packedLength: number
+      public static ZERO: Cartesian3
+      public static UNIT_X: Cartesian3
+      public static UNIT_Y: Cartesian3
+      public static UNIT_Z: Cartesian3
 
-      constructor(x?: number, y?: number, z?: number);
+      public static fromSpherical(spherical: Spherical, result?: Cartesian3): Cartesian3
 
-      clone(result?: Cartesian3): Cartesian3;
+      public static fromElements(x: number, y: number, z: number, result?: Cartesian3): Cartesian3
 
-      equals(right?: Cartesian3): boolean;
+      public static clone(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      equalsEpsilon(right: Cartesian3, relativeEpsilon: number, absoluteEpsilon?: number): boolean;
+      public static fromCartesian4(cartesian: Cartesian4, result?: Cartesian3): Cartesian3
 
-      toString(): string;
+      public static pack(value: Cartesian3, array: number[], startingIndex?: number): number[]
 
-      static fromSpherical(spherical: Spherical, result?: Cartesian3): Cartesian3;
+      public static unpack(array: number[], startingIndex?: number, result?: Cartesian3): Cartesian3
 
-      static fromElements(x: number, y: number, z: number, result?: Cartesian3): Cartesian3;
+      public static fromArray(array: number[], startingIndex?: number, result?: Cartesian3): Cartesian3
 
-      static clone(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public static maximumComponent(cartesian: Cartesian3): number
 
-      static fromCartesian4(cartesian: Cartesian4, result?: Cartesian3): Cartesian3;
+      public static minimumComponent(cartesian: Cartesian3): number
 
-      static pack(value: Cartesian3, array: number[], startingIndex?: number): number[];
+      public static minimumByComponent(first: Cartesian3, second: Cartesian3, result: Cartesian3): Cartesian3
 
-      static unpack(array: number[], startingIndex?: number, result?: Cartesian3): Cartesian3;
+      public static maximumByComponent(first: Cartesian3, second: Cartesian3, result: Cartesian3): Cartesian3
 
-      static fromArray(array: number[], startingIndex?: number, result?: Cartesian3): Cartesian3;
+      public static magnitudeSquared(cartesian: Cartesian3): number
 
-      static maximumComponent(cartesian: Cartesian3): number;
+      public static magnitude(cartesian: Cartesian3): number
 
-      static minimumComponent(cartesian: Cartesian3): number;
+      public static distance(left: Cartesian3, right: Cartesian3): number
 
-      static minimumByComponent(first: Cartesian3, second: Cartesian3, result: Cartesian3): Cartesian3;
+      public static distanceSquared(left: Cartesian3, right: Cartesian3): number
 
-      static maximumByComponent(first: Cartesian3, second: Cartesian3, result: Cartesian3): Cartesian3;
+      public static normalize(cartesian: Cartesian3, result: Cartesian3): Cartesian3
 
-      static magnitudeSquared(cartesian: Cartesian3): number;
+      public static dot(left: Cartesian3, right: Cartesian3): number
 
-      static magnitude(cartesian: Cartesian3): number;
+      public static multiplyComponents(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3
 
-      static distance(left: Cartesian3, right: Cartesian3): number;
+      public static add(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3
 
-      static distanceSquared(left: Cartesian3, right: Cartesian3): number;
+      public static subtract(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3
 
-      static normalize(cartesian: Cartesian3, result: Cartesian3): Cartesian3;
+      public static multiplyByScalar(cartesian: Cartesian3, scalar: number, result: Cartesian3): Cartesian3
 
-      static dot(left: Cartesian3, right: Cartesian3): number;
+      public static divideByScalar(cartesian: Cartesian3, scalar: number, result: Cartesian3): Cartesian3
 
-      static multiplyComponents(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3;
+      public static negate(cartesian: Cartesian3, result: Cartesian3): Cartesian3
 
-      static add(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3;
+      public static abs(cartesian: Cartesian3, result: Cartesian3): Cartesian3
 
-      static subtract(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3;
+      public static lerp(start: Cartesian3, end: Cartesian3, t: number, result: Cartesian3): Cartesian3
 
-      static multiplyByScalar(cartesian: Cartesian3, scalar: number, result: Cartesian3): Cartesian3;
+      public static angleBetween(left: Cartesian3, right: Cartesian3): number
 
-      static divideByScalar(cartesian: Cartesian3, scalar: number, result: Cartesian3): Cartesian3;
+      public static mostOrthogonalAxis(cartesian: Cartesian3, result: Cartesian3): Cartesian3
 
-      static negate(cartesian: Cartesian3, result: Cartesian3): Cartesian3;
+      public static equals(left?: Cartesian3, right?: Cartesian3): boolean
 
-      static abs(cartesian: Cartesian3, result: Cartesian3): Cartesian3;
+      public static equalsEpsilon(left: Cartesian3, right: Cartesian3, relativeEpsilon: number, absoluteEpsilon?: number): boolean
 
-      static lerp(start: Cartesian3, end: Cartesian3, t: number, result: Cartesian3): Cartesian3;
+      public static cross(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3
 
-      static angleBetween(left: Cartesian3, right: Cartesian3): number;
+      public static fromDegrees(longitude: number, latitude: number, height?: number, ellipsoid?: Ellipsoid, result?: Cartesian3): Cartesian3
 
-      static mostOrthogonalAxis(cartesian: Cartesian3, result: Cartesian3): Cartesian3;
+      public static fromRadians(longitude: number, latitude: number, height?: number, ellipsoid?: Ellipsoid, result?: Cartesian3): Cartesian3
 
-      static equals(left?: Cartesian3, right?: Cartesian3): boolean;
+      public static fromDegreesArray(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[]
 
-      static equalsEpsilon(left: Cartesian3, right: Cartesian3, relativeEpsilon: number, absoluteEpsilon?: number): boolean;
+      public static fromRadiansArray(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[]
 
-      static cross(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3;
+      public static fromDegreesArrayHeights(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[]
 
-      static fromDegrees(longitude: number, latitude: number, height?: number, ellipsoid?: Ellipsoid, result?: Cartesian3): Cartesian3;
-
-      static fromRadians(longitude: number, latitude: number, height?: number, ellipsoid?: Ellipsoid, result?: Cartesian3): Cartesian3;
-
-      static fromDegreesArray(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[];
-
-      static fromRadiansArray(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[];
-
-      static fromDegreesArrayHeights(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[];
-
-      static fromRadiansArrayHeights(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[];
+      public static fromRadiansArrayHeights(coordinates: number[], ellipsoid?: Ellipsoid, result?: Cartesian3[]): Cartesian3[]
 
       /**
        * 计算两个笛卡尔坐标系的中点
@@ -416,151 +404,164 @@ declare module Cesium {
        * @param right 
        * @param result 
        */
-      static midpoint(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3
+      public static midpoint(left: Cartesian3, right: Cartesian3, result: Cartesian3): Cartesian3
+      public x: number
+      public y: number
+      public z: number
 
-      isConstant: boolean;
-      definitionChanged: Event;
-      referenceFrame: ReferenceFrame;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public referenceFrame: ReferenceFrame
 
-      getValue(time: JulianDate, result?: Cartesian3): Cartesian3;
+      constructor(x?: number, y?: number, z?: number);
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      public clone(result?: Cartesian3): Cartesian3
 
-      setInterpolationOptions(options?: { interpolationAlgorithm?: InterpolationAlgorithm; interpolationDegree?: number }): void;
+      public equals(right?: Cartesian3): boolean
+
+      public equalsEpsilon(right: Cartesian3, relativeEpsilon: number, absoluteEpsilon?: number): boolean
+
+      public toString(): string
+
+      public getValue(time: JulianDate, result?: Cartesian3): Cartesian3
+
+      public getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
+
+      public setInterpolationOptions(options?: { interpolationAlgorithm?: InterpolationAlgorithm; interpolationDegree?: number }): void
   }
 
   class Cartesian4 {
-      x: number;
-      y: number;
-      z: number;
-      w: number;
-      static packedLength: number;
-      static ZERO: Cartesian4;
-      static UNIT_X: Cartesian4;
-      static UNIT_Y: Cartesian4;
-      static UNIT_Z: Cartesian4;
-      static UNIT_W: Cartesian4;
+      public static packedLength: number
+      public static ZERO: Cartesian4
+      public static UNIT_X: Cartesian4
+      public static UNIT_Y: Cartesian4
+      public static UNIT_Z: Cartesian4
+      public static UNIT_W: Cartesian4
+
+      public static fromElements(x: number, y: number, z: number, w: number, result?: Cartesian4): Cartesian4
+
+      public static fromColor(color: Color, result?: Cartesian4): Cartesian4
+
+      public static clone(cartesian: Cartesian4, result?: Cartesian4): Cartesian4
+
+      public static pack(value: Cartesian4, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Cartesian4): Cartesian4
+
+      public static fromArray(array: number[], startingIndex?: number, result?: Cartesian4): Cartesian4
+
+      public static maximumComponent(cartesian: Cartesian4): number
+
+      public static minimumComponent(cartesian: Cartesian4): number
+
+      public static minimumByComponent(first: Cartesian4, second: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static maximumByComponent(first: Cartesian4, second: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static magnitudeSquared(cartesian: Cartesian4): number
+
+      public static magnitude(cartesian: Cartesian4): number
+
+      public static distance(left: Cartesian4, right: Cartesian4): number
+
+      public static distanceSquared(left: Cartesian4, right: Cartesian4): number
+
+      public static normalize(cartesian: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static dot(left: Cartesian4, right: Cartesian4): number
+
+      public static multiplyComponents(left: Cartesian4, right: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static add(left: Cartesian4, right: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static subtract(left: Cartesian4, right: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static multiplyByScalar(cartesian: Cartesian4, scalar: number, result: Cartesian4): Cartesian4
+
+      public static divideByScalar(cartesian: Cartesian4, scalar: number, result: Cartesian4): Cartesian4
+
+      public static negate(cartesian: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static abs(cartesian: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static lerp(start: Cartesian4, end: Cartesian4, t: number, result: Cartesian4): Cartesian4
+
+      public static mostOrthogonalAxis(cartesian: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static equals(left?: Cartesian4, right?: Cartesian4): boolean
+
+      public static equalsEpsilon(left: Cartesian4, right: Cartesian4, relativeEpsilon: number, absoluteEpsilon?: number): boolean
+      public x: number
+      public y: number
+      public z: number
+      public w: number
 
       constructor(x?: number, y?: number, z?: number, w?: number);
 
-      clone(result?: Cartesian4): Cartesian4;
+      public clone(result?: Cartesian4): Cartesian4
 
-      equals(right?: Cartesian4): boolean;
+      public equals(right?: Cartesian4): boolean
 
-      equalsEpsilon(right: Cartesian4, relativeEpsilon: number, absoluteEpsilon?: number): boolean;
+      public equalsEpsilon(right: Cartesian4, relativeEpsilon: number, absoluteEpsilon?: number): boolean
 
-      toString(): string;
-
-      static fromElements(x: number, y: number, z: number, w: number, result?: Cartesian4): Cartesian4;
-
-      static fromColor(color: Color, result?: Cartesian4): Cartesian4;
-
-      static clone(cartesian: Cartesian4, result?: Cartesian4): Cartesian4;
-
-      static pack(value: Cartesian4, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: Cartesian4): Cartesian4;
-
-      static fromArray(array: number[], startingIndex?: number, result?: Cartesian4): Cartesian4;
-
-      static maximumComponent(cartesian: Cartesian4): number;
-
-      static minimumComponent(cartesian: Cartesian4): number;
-
-      static minimumByComponent(first: Cartesian4, second: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static maximumByComponent(first: Cartesian4, second: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static magnitudeSquared(cartesian: Cartesian4): number;
-
-      static magnitude(cartesian: Cartesian4): number;
-
-      static distance(left: Cartesian4, right: Cartesian4): number;
-
-      static distanceSquared(left: Cartesian4, right: Cartesian4): number;
-
-      static normalize(cartesian: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static dot(left: Cartesian4, right: Cartesian4): number;
-
-      static multiplyComponents(left: Cartesian4, right: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static add(left: Cartesian4, right: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static subtract(left: Cartesian4, right: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static multiplyByScalar(cartesian: Cartesian4, scalar: number, result: Cartesian4): Cartesian4;
-
-      static divideByScalar(cartesian: Cartesian4, scalar: number, result: Cartesian4): Cartesian4;
-
-      static negate(cartesian: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static abs(cartesian: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static lerp(start: Cartesian4, end: Cartesian4, t: number, result: Cartesian4): Cartesian4;
-
-      static mostOrthogonalAxis(cartesian: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static equals(left?: Cartesian4, right?: Cartesian4): boolean;
-
-      static equalsEpsilon(left: Cartesian4, right: Cartesian4, relativeEpsilon: number, absoluteEpsilon?: number): boolean;
+      public toString(): string
   }
 
   class Cartographic {
-      longitude: number;
-      latitude: number;
-      height: number;
-      static ZERO: Cartographic;
+      public static ZERO: Cartographic
+
+      public static fromRadians(longitude: number, latitude: number, height?: number, result?: Cartographic): Cartographic
+
+      public static fromCartesian(cartesian: Cartesian3, ellipsoid?: Ellipsoid, result?: Cartographic): Cartographic
+
+      public static fromDegrees(longitude: number, latitude: number, height?: number, result?: Cartographic): Cartographic
+
+      public static clone(cartographic: Cartographic, result?: Cartographic): Cartographic
+
+      public static equals(left?: Cartographic, right?: Cartographic): boolean
+
+      public static equalsEpsilon(left: Cartographic, right: Cartographic, epsilon: number): boolean
+      public longitude: number
+      public latitude: number
+      public height: number
 
       constructor(longitude?: number, latitude?: number, height?: number);
 
-      clone(result?: Cartographic): Cartographic;
+      public clone(result?: Cartographic): Cartographic
 
-      equals(right?: Cartographic): boolean;
+      public equals(right?: Cartographic): boolean
 
-      equalsEpsilon(right: Cartographic, epsilon: number): boolean;
+      public equalsEpsilon(right: Cartographic, epsilon: number): boolean
 
-      toString(): string;
-
-      static fromRadians(longitude: number, latitude: number, height?: number, result?: Cartographic): Cartographic;
-
-      static fromCartesian(cartesian: Cartesian3, ellipsoid?: Ellipsoid, result?: Cartographic): Cartographic;
-
-      static fromDegrees(longitude: number, latitude: number, height?: number, result?: Cartographic): Cartographic;
-
-      static clone(cartographic: Cartographic, result?: Cartographic): Cartographic;
-
-      static equals(left?: Cartographic, right?: Cartographic): boolean;
-
-      static equalsEpsilon(left: Cartographic, right: Cartographic, epsilon: number): boolean;
+      public toString(): string
   }
 
   class CartographicGeocoderService implements GeocoderService {
-      geocode(query: string): Promise<Array<GeocoderResult>>
+      public geocode(query: string): Promise<GeocoderResult[]>
   }
 
   class CatmullRomSpline {
-      times: number[];
-      points: Cartesian3[];
-      firstTangent: Cartesian3;
-      lastTangent: Cartesian3;
+      public times: number[]
+      public points: Cartesian3[]
+      public firstTangent: Cartesian3
+      public lastTangent: Cartesian3
 
       constructor(options: { times: number[]; points: Cartesian3[]; firstTangent?: Cartesian3; lastTangent?: Cartesian3 });
 
-      findTimeInterval(time: number): number;
+      public findTimeInterval(time: number): number
 
-      evaluate(time: number, result?: Cartesian3): Cartesian3;
+      public evaluate(time: number, result?: Cartesian3): Cartesian3
   }
 
   class CesiumTerrainProvider extends TerrainProvider {
-      errorEvent: Event;
-      credit: Credit;
-      tilingScheme: GeographicTilingScheme;
-      ready: boolean;
-      hasWaterMask: boolean;
-      hasVertexNormals: boolean;
-      requestVertexNormals: boolean;
-      requestWaterMask: boolean;
+      public errorEvent: Event
+      public credit: Credit
+      public tilingScheme: GeographicTilingScheme
+      public ready: boolean
+      public hasWaterMask: boolean
+      public hasVertexNormals: boolean
+      public requestVertexNormals: boolean
+      public requestWaterMask: boolean
 
       constructor(options: {
           url: string;
@@ -571,44 +572,44 @@ declare module Cesium {
           credit?: Credit | string;
       });
 
-      requestTileGeometry(x: number, y: number, level: number, request: Request): Promise<TerrainData>;
+      public requestTileGeometry(x: number, y: number, level: number, request: Request): Promise<TerrainData>
 
-      getLevelMaximumGeometricError(level: number): number;
+      public getLevelMaximumGeometricError(level: number): number
 
-      getTileDataAvailable(x: number, y: number, level: number): boolean;
+      public getTileDataAvailable(x: number, y: number, level: number): boolean
   }
 
   class Cesium3DTileset {
-      readonly url: string;
-      show: boolean;
-      modelMatrix: Matrix4;
-      shadows: ShadowMode;
-      maximumScreenSpaceError: number;
-      maximumMemoryUsage: number;
-      cullWithChildrenBounds: boolean;
-      dynamicScreenSpaceError: boolean;
-      dynamicScreenSpaceErrorDensity: number;
-      dynamicScreenSpaceErrorFactor: number;
-      dynamicScreenSpaceErrorHeightFalloff: number;
-      skipLevelOfDetail: boolean;
-      baseScreenSpaceError: number;
-      skipScreenSpaceErrorFactor: number;
-      skipLevels: number;
-      immediatelyLoadDesiredLevelOfDetail: boolean;
-      loadSiblings: boolean;
-      debugFreezeFrame: boolean;
-      debugColorizeTiles: boolean;
-      debugWireframe: boolean;
-      debugShowBoundingVolume: boolean;
-      debugShowContentBoundingVolume: boolean;
-      debugShowViewerRequestVolume: boolean;
-      debugShowGeometricError: boolean;
-      debugShowRenderingStatistics: boolean;
-      debugShowMemoryUsage: boolean;
-      debugShowUrl: boolean;
-      pointCloudShading: PointCloudShading;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<Cesium3DTileset>;
+      public readonly url: string
+      public show: boolean
+      public modelMatrix: Matrix4
+      public shadows: ShadowMode
+      public maximumScreenSpaceError: number
+      public maximumMemoryUsage: number
+      public cullWithChildrenBounds: boolean
+      public dynamicScreenSpaceError: boolean
+      public dynamicScreenSpaceErrorDensity: number
+      public dynamicScreenSpaceErrorFactor: number
+      public dynamicScreenSpaceErrorHeightFalloff: number
+      public skipLevelOfDetail: boolean
+      public baseScreenSpaceError: number
+      public skipScreenSpaceErrorFactor: number
+      public skipLevels: number
+      public immediatelyLoadDesiredLevelOfDetail: boolean
+      public loadSiblings: boolean
+      public debugFreezeFrame: boolean
+      public debugColorizeTiles: boolean
+      public debugWireframe: boolean
+      public debugShowBoundingVolume: boolean
+      public debugShowContentBoundingVolume: boolean
+      public debugShowViewerRequestVolume: boolean
+      public debugShowGeometricError: boolean
+      public debugShowRenderingStatistics: boolean
+      public debugShowMemoryUsage: boolean
+      public debugShowUrl: boolean
+      public pointCloudShading: PointCloudShading
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<Cesium3DTileset>
 
       constructor(options: {
           url: string | Resource;
@@ -647,14 +648,20 @@ declare module Cesium {
   }
 
   class ShadowMode {
-      static CAST_ONLY: number;
-      static DISABLED: number;
-      static ENABLED: number;
-      static RECEIVE_ONLY: number;
+      public static CAST_ONLY: number
+      public static DISABLED: number
+      public static ENABLED: number
+      public static RECEIVE_ONLY: number
   }
 
   class CircleGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(circleGeometry: CircleGeometry): Geometry | undefined
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: CircleGeometry): CircleGeometry
 
       constructor(options: {
           center: Cartesian3;
@@ -666,16 +673,16 @@ declare module Cesium {
           extrudedHeight?: number;
           stRotation?: number
       });
-
-      static createGeometry(circleGeometry: CircleGeometry): Geometry | undefined;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: CircleGeometry): CircleGeometry;
   }
 
   class CircleOutlineGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(circleGeometry: CircleOutlineGeometry): Geometry | undefined
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: CircleOutlineGeometry): CircleOutlineGeometry
 
       constructor(options: {
           center: Cartesian3;
@@ -686,346 +693,346 @@ declare module Cesium {
           extrudedHeight?: number;
           numberOfVerticalLines?: number
       });
-
-      static createGeometry(circleGeometry: CircleOutlineGeometry): Geometry | undefined;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: CircleOutlineGeometry): CircleOutlineGeometry;
   }
 
   class ClassificationType {
-      static BOTH: number;
-      static CESIUM_3D_TILE: number;
-      static TERRAIN: number
+      public static BOTH: number
+      public static CESIUM_3D_TILE: number
+      public static TERRAIN: number
   }
 
   class Clock {
-      startTime: JulianDate;
-      stopTime: JulianDate;
-      currentTime: JulianDate;
-      multiplier: number;
-      clockStep: ClockStep;
-      clockRange: ClockRange;
-      canAnimate: boolean;
-      shouldAnimate: boolean;
-      onTick: Event;
+      public startTime: JulianDate
+      public stopTime: JulianDate
+      public currentTime: JulianDate
+      public multiplier: number
+      public clockStep: ClockStep
+      public clockRange: ClockRange
+      public canAnimate: boolean
+      public shouldAnimate: boolean
+      public onTick: Event
 
       constructor(options: { startTime?: JulianDate; stopTime?: JulianDate; currentTime?: JulianDate; multiplier?: number; clockStep?: ClockStep; clockRange?: ClockRange; canAnimate?: boolean; shouldAnimate?: boolean });
 
-      tick(): JulianDate;
+      public tick(): JulianDate
   }
 
   class Color extends MaterialProperty {
-      red: number;
-      green: number;
-      blue: number;
-      alpha: number;
-      static packedLength: number;
-      static ALICEBLUE: Color;
-      static ANTIQUEWHITE: Color;
-      static AQUA: Color;
-      static AQUAMARINE: Color;
-      static AZURE: Color;
-      static BEIGE: Color;
-      static BISQUE: Color;
-      static BLACK: Color;
-      static BLANCHEDALMOND: Color;
-      static BLUE: Color;
-      static BLUEVIOLET: Color;
-      static BROWN: Color;
-      static BURLYWOOD: Color;
-      static CADETBLUE: Color;
-      static CHARTREUSE: Color;
-      static CHOCOLATE: Color;
-      static CORAL: Color;
-      static CORNFLOWERBLUE: Color;
-      static CORNSILK: Color;
-      static CRIMSON: Color;
-      static CYAN: Color;
-      static DARKBLUE: Color;
-      static DARKCYAN: Color;
-      static DARKGOLDENROD: Color;
-      static DARKGRAY: Color;
-      static DARKGREEN: Color;
-      static DARKGREY: Color;
-      static DARKKHAKI: Color;
-      static DARKMAGENTA: Color;
-      static DARKOLIVEGREEN: Color;
-      static DARKORANGE: Color;
-      static DARKORCHID: Color;
-      static DARKRED: Color;
-      static DARKSALMON: Color;
-      static DARKSEAGREEN: Color;
-      static DARKSLATEBLUE: Color;
-      static DARKSLATEGRAY: Color;
-      static DARKSLATEGREY: Color;
-      static DARKTURQUOISE: Color;
-      static DARKVIOLET: Color;
-      static DEEPPINK: Color;
-      static DEEPSKYBLUE: Color;
-      static DIMGRAY: Color;
-      static DIMGREY: Color;
-      static DODGERBLUE: Color;
-      static FIREBRICK: Color;
-      static FLORALWHITE: Color;
-      static FORESTGREEN: Color;
-      static FUSCHIA: Color;
-      static GAINSBORO: Color;
-      static GHOSTWHITE: Color;
-      static GOLD: Color;
-      static GOLDENROD: Color;
-      static GRAY: Color;
-      static GREEN: Color;
-      static GREENYELLOW: Color;
-      static GREY: Color;
-      static HONEYDEW: Color;
-      static HOTPINK: Color;
-      static INDIANRED: Color;
-      static INDIGO: Color;
-      static IVORY: Color;
-      static KHAKI: Color;
-      static LAVENDER: Color;
-      static LAVENDAR_BLUSH: Color;
-      static LAWNGREEN: Color;
-      static LEMONCHIFFON: Color;
-      static LIGHTBLUE: Color;
-      static LIGHTCORAL: Color;
-      static LIGHTCYAN: Color;
-      static LIGHTGOLDENRODYELLOW: Color;
-      static LIGHTGRAY: Color;
-      static LIGHTGREEN: Color;
-      static LIGHTGREY: Color;
-      static LIGHTPINK: Color;
-      static LIGHTSEAGREEN: Color;
-      static LIGHTSKYBLUE: Color;
-      static LIGHTSLATEGRAY: Color;
-      static LIGHTSLATEGREY: Color;
-      static LIGHTSTEELBLUE: Color;
-      static LIGHTYELLOW: Color;
-      static LIME: Color;
-      static LIMEGREEN: Color;
-      static LINEN: Color;
-      static MAGENTA: Color;
-      static MAROON: Color;
-      static MEDIUMAQUAMARINE: Color;
-      static MEDIUMBLUE: Color;
-      static MEDIUMORCHID: Color;
-      static MEDIUMPURPLE: Color;
-      static MEDIUMSEAGREEN: Color;
-      static MEDIUMSLATEBLUE: Color;
-      static MEDIUMSPRINGGREEN: Color;
-      static MEDIUMTURQUOISE: Color;
-      static MEDIUMVIOLETRED: Color;
-      static MIDNIGHTBLUE: Color;
-      static MINTCREAM: Color;
-      static MISTYROSE: Color;
-      static MOCCASIN: Color;
-      static NAVAJOWHITE: Color;
-      static NAVY: Color;
-      static OLDLACE: Color;
-      static OLIVE: Color;
-      static OLIVEDRAB: Color;
-      static ORANGE: Color;
-      static ORANGERED: Color;
-      static ORCHID: Color;
-      static PALEGOLDENROD: Color;
-      static PALEGREEN: Color;
-      static PALETURQUOISE: Color;
-      static PALEVIOLETRED: Color;
-      static PAPAYAWHIP: Color;
-      static PEACHPUFF: Color;
-      static PERU: Color;
-      static PINK: Color;
-      static PLUM: Color;
-      static POWDERBLUE: Color;
-      static PURPLE: Color;
-      static RED: Color;
-      static ROSYBROWN: Color;
-      static ROYALBLUE: Color;
-      static SADDLEBROWN: Color;
-      static SALMON: Color;
-      static SANDYBROWN: Color;
-      static SEAGREEN: Color;
-      static SEASHELL: Color;
-      static SIENNA: Color;
-      static SILVER: Color;
-      static SKYBLUE: Color;
-      static SLATEBLUE: Color;
-      static SLATEGRAY: Color;
-      static SLATEGREY: Color;
-      static SNOW: Color;
-      static SPRINGGREEN: Color;
-      static STEELBLUE: Color;
-      static TAN: Color;
-      static TEAL: Color;
-      static THISTLE: Color;
-      static TOMATO: Color;
-      static TURQUOISE: Color;
-      static VIOLET: Color;
-      static WHEAT: Color;
-      static WHITE: Color;
-      static WHITESMOKE: Color;
-      static YELLOW: Color;
-      static YELLOWGREEN: Color;
-      static TRANSPARENT: Color;
+      public static packedLength: number
+      public static ALICEBLUE: Color
+      public static ANTIQUEWHITE: Color
+      public static AQUA: Color
+      public static AQUAMARINE: Color
+      public static AZURE: Color
+      public static BEIGE: Color
+      public static BISQUE: Color
+      public static BLACK: Color
+      public static BLANCHEDALMOND: Color
+      public static BLUE: Color
+      public static BLUEVIOLET: Color
+      public static BROWN: Color
+      public static BURLYWOOD: Color
+      public static CADETBLUE: Color
+      public static CHARTREUSE: Color
+      public static CHOCOLATE: Color
+      public static CORAL: Color
+      public static CORNFLOWERBLUE: Color
+      public static CORNSILK: Color
+      public static CRIMSON: Color
+      public static CYAN: Color
+      public static DARKBLUE: Color
+      public static DARKCYAN: Color
+      public static DARKGOLDENROD: Color
+      public static DARKGRAY: Color
+      public static DARKGREEN: Color
+      public static DARKGREY: Color
+      public static DARKKHAKI: Color
+      public static DARKMAGENTA: Color
+      public static DARKOLIVEGREEN: Color
+      public static DARKORANGE: Color
+      public static DARKORCHID: Color
+      public static DARKRED: Color
+      public static DARKSALMON: Color
+      public static DARKSEAGREEN: Color
+      public static DARKSLATEBLUE: Color
+      public static DARKSLATEGRAY: Color
+      public static DARKSLATEGREY: Color
+      public static DARKTURQUOISE: Color
+      public static DARKVIOLET: Color
+      public static DEEPPINK: Color
+      public static DEEPSKYBLUE: Color
+      public static DIMGRAY: Color
+      public static DIMGREY: Color
+      public static DODGERBLUE: Color
+      public static FIREBRICK: Color
+      public static FLORALWHITE: Color
+      public static FORESTGREEN: Color
+      public static FUSCHIA: Color
+      public static GAINSBORO: Color
+      public static GHOSTWHITE: Color
+      public static GOLD: Color
+      public static GOLDENROD: Color
+      public static GRAY: Color
+      public static GREEN: Color
+      public static GREENYELLOW: Color
+      public static GREY: Color
+      public static HONEYDEW: Color
+      public static HOTPINK: Color
+      public static INDIANRED: Color
+      public static INDIGO: Color
+      public static IVORY: Color
+      public static KHAKI: Color
+      public static LAVENDER: Color
+      public static LAVENDAR_BLUSH: Color
+      public static LAWNGREEN: Color
+      public static LEMONCHIFFON: Color
+      public static LIGHTBLUE: Color
+      public static LIGHTCORAL: Color
+      public static LIGHTCYAN: Color
+      public static LIGHTGOLDENRODYELLOW: Color
+      public static LIGHTGRAY: Color
+      public static LIGHTGREEN: Color
+      public static LIGHTGREY: Color
+      public static LIGHTPINK: Color
+      public static LIGHTSEAGREEN: Color
+      public static LIGHTSKYBLUE: Color
+      public static LIGHTSLATEGRAY: Color
+      public static LIGHTSLATEGREY: Color
+      public static LIGHTSTEELBLUE: Color
+      public static LIGHTYELLOW: Color
+      public static LIME: Color
+      public static LIMEGREEN: Color
+      public static LINEN: Color
+      public static MAGENTA: Color
+      public static MAROON: Color
+      public static MEDIUMAQUAMARINE: Color
+      public static MEDIUMBLUE: Color
+      public static MEDIUMORCHID: Color
+      public static MEDIUMPURPLE: Color
+      public static MEDIUMSEAGREEN: Color
+      public static MEDIUMSLATEBLUE: Color
+      public static MEDIUMSPRINGGREEN: Color
+      public static MEDIUMTURQUOISE: Color
+      public static MEDIUMVIOLETRED: Color
+      public static MIDNIGHTBLUE: Color
+      public static MINTCREAM: Color
+      public static MISTYROSE: Color
+      public static MOCCASIN: Color
+      public static NAVAJOWHITE: Color
+      public static NAVY: Color
+      public static OLDLACE: Color
+      public static OLIVE: Color
+      public static OLIVEDRAB: Color
+      public static ORANGE: Color
+      public static ORANGERED: Color
+      public static ORCHID: Color
+      public static PALEGOLDENROD: Color
+      public static PALEGREEN: Color
+      public static PALETURQUOISE: Color
+      public static PALEVIOLETRED: Color
+      public static PAPAYAWHIP: Color
+      public static PEACHPUFF: Color
+      public static PERU: Color
+      public static PINK: Color
+      public static PLUM: Color
+      public static POWDERBLUE: Color
+      public static PURPLE: Color
+      public static RED: Color
+      public static ROSYBROWN: Color
+      public static ROYALBLUE: Color
+      public static SADDLEBROWN: Color
+      public static SALMON: Color
+      public static SANDYBROWN: Color
+      public static SEAGREEN: Color
+      public static SEASHELL: Color
+      public static SIENNA: Color
+      public static SILVER: Color
+      public static SKYBLUE: Color
+      public static SLATEBLUE: Color
+      public static SLATEGRAY: Color
+      public static SLATEGREY: Color
+      public static SNOW: Color
+      public static SPRINGGREEN: Color
+      public static STEELBLUE: Color
+      public static TAN: Color
+      public static TEAL: Color
+      public static THISTLE: Color
+      public static TOMATO: Color
+      public static TURQUOISE: Color
+      public static VIOLET: Color
+      public static WHEAT: Color
+      public static WHITE: Color
+      public static WHITESMOKE: Color
+      public static YELLOW: Color
+      public static YELLOWGREEN: Color
+      public static TRANSPARENT: Color
+
+      public static fromCartesian4(cartesian: Cartesian4, result?: Color): Color
+
+      public static fromBytes(red?: number, green?: number, blue?: number, alpha?: number, result?: Color): Color
+
+      public static fromAlpha(color: Color, alpha: number, result?: Color): Color
+
+      public static fromRgba(rgba: number): Color
+
+      public static fromHsl(hue?: number, saturation?: number, lightness?: number, alpha?: number): Color
+
+      public static fromRandom(options?: { red?: number; minimumRed?: number; maximumRed?: number; green?: number; minimumGreen?: number; maximumGreen?: number; blue?: number; minimumBlue?: number; maximumBlue?: number; alpha?: number; minimumAlpha?: number; maximumAlpha?: number }, result?: Color): Color
+
+      public static fromCssColorString(color: string): Color
+
+      public static pack(value: Color, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Color): Color
+
+      public static byteToFloat(number: number): number
+
+      public static floatToByte(number: number): number
+
+      public static clone(color: Color, result?: Color): Color
+
+      public static equals(left: Color, right: Color): boolean
+      public red: number
+      public green: number
+      public blue: number
+      public alpha: number
 
       constructor(red?: number, green?: number, blue?: number, alpha?: number);
 
-      clone(result?: Color): Color;
+      public clone(result?: Color): Color
 
-      equals(other: Color): boolean;
+      public equals(other: Color): boolean
 
-      equalsEpsilon(other: Color, epsilon?: number): boolean;
+      public equalsEpsilon(other: Color, epsilon?: number): boolean
 
-      toString(): string;
+      public toString(): string
 
-      toCssColorString(): string;
+      public toCssColorString(): string
 
-      toBytes(result?: number[]): number[];
+      public toBytes(result?: number[]): number[]
 
-      toRgba(): number;
+      public toRgba(): number
 
-      brighten(magnitude: number, result: Color): Color;
+      public brighten(magnitude: number, result: Color): Color
 
-      darken(magnitude: number, result: Color): Color;
+      public darken(magnitude: number, result: Color): Color
 
-      withAlpha(alpha: number, result?: Color): Color;
-
-      static fromCartesian4(cartesian: Cartesian4, result?: Color): Color;
-
-      static fromBytes(red?: number, green?: number, blue?: number, alpha?: number, result?: Color): Color;
-
-      static fromAlpha(color: Color, alpha: number, result?: Color): Color;
-
-      static fromRgba(rgba: number): Color;
-
-      static fromHsl(hue?: number, saturation?: number, lightness?: number, alpha?: number): Color;
-
-      static fromRandom(options?: { red?: number; minimumRed?: number; maximumRed?: number; green?: number; minimumGreen?: number; maximumGreen?: number; blue?: number; minimumBlue?: number; maximumBlue?: number; alpha?: number; minimumAlpha?: number; maximumAlpha?: number }, result?: Color): Color;
-
-      static fromCssColorString(color: string): Color;
-
-      static pack(value: Color, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: Color): Color;
-
-      static byteToFloat(number: number): number;
-
-      static floatToByte(number: number): number;
-
-      static clone(color: Color, result?: Color): Color;
-
-      static equals(left: Color, right: Color): boolean;
+      public withAlpha(alpha: number, result?: Color): Color
   }
 
   class ColorGeometryInstanceAttribute {
-      value: Uint8Array;
-      componentDatatype: ComponentDatatype;
-      componentsPerAttribute: number;
-      normalize: boolean;
+
+      public static fromColor(color: Color): ColorGeometryInstanceAttribute
+
+      public static toValue(color: Color, result?: Uint8Array): Uint8Array
+      public value: Uint8Array
+      public componentDatatype: ComponentDatatype
+      public componentsPerAttribute: number
+      public normalize: boolean
 
       constructor(red?: number, green?: number, blue?: number, alpha?: number);
-
-      static fromColor(color: Color): ColorGeometryInstanceAttribute;
-
-      static toValue(color: Color, result?: Uint8Array): Uint8Array;
   }
 
   class CorridorGeometry {
-      packedLength: number;
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: CorridorGeometry): CorridorGeometry
+
+      public static createGeometry(corridorGeometry: CorridorGeometry): Geometry | undefined
+      public packedLength: number
 
       constructor(options: { positions: Cartesian3[]; width: number; ellipsoid?: Ellipsoid; granularity?: number; height?: number; extrudedHeight?: number; vertexFormat?: VertexFormat; cornerType?: CornerType });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: CorridorGeometry): CorridorGeometry;
-
-      static createGeometry(corridorGeometry: CorridorGeometry): Geometry | undefined;
   }
 
   class CorridorOutlineGeometry {
-      packedLength: number;
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: CorridorOutlineGeometry): CorridorOutlineGeometry
+
+      public static createGeometry(corridorOutlineGeometry: CorridorOutlineGeometry): Geometry | undefined
+      public packedLength: number
 
       constructor(options: { positions: Cartesian3[]; width: number; ellipsoid?: Ellipsoid; granularity?: number; height?: number; extrudedHeight?: number; cornerType?: CornerType });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: CorridorOutlineGeometry): CorridorOutlineGeometry;
-
-      static createGeometry(corridorOutlineGeometry: CorridorOutlineGeometry): Geometry | undefined;
   }
 
   class Credit {
-      text: string;
-      imageUrl: string;
-      link: string;
+      public static equals(left: Credit, right: Credit): boolean
+      public text: string
+      public imageUrl: string
+      public link: string
 
       constructor(text?: string, imageUrl?: string, link?: string);
 
-      hasImage(): boolean;
+      public hasImage(): boolean
 
-      hasLink(): boolean;
+      public hasLink(): boolean
 
-      equals(credits: Credit): boolean;
-      static equals(left: Credit, right: Credit): boolean;
+      public equals(credits: Credit): boolean
   }
 
   class CylinderGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: CylinderGeometry): CylinderGeometry
+
+      public static createGeometry(cylinderGeometry: CylinderGeometry): Geometry | undefined
 
       constructor(options: { length: number; topRadius: number; bottomRadius: number; slices?: number; vertexFormat?: VertexFormat });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: CylinderGeometry): CylinderGeometry;
-
-      static createGeometry(cylinderGeometry: CylinderGeometry): Geometry | undefined;
   }
 
   class CylinderOutlineGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: CylinderOutlineGeometry): CylinderOutlineGeometry
+
+      public static createGeometry(cylinderGeometry: CylinderOutlineGeometry): Geometry | undefined
 
       constructor(options: { length: number; topRadius: number; bottomRadius: number; slices?: number; numberOfVerticalLines?: number });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: CylinderOutlineGeometry): CylinderOutlineGeometry;
-
-      static createGeometry(cylinderGeometry: CylinderOutlineGeometry): Geometry | undefined;
   }
 
   class DefaultProxy {
       constructor(proxy: string);
 
-      getURL(resource: string): string;
+      public getURL(resource: string): string
   }
 
   class DeveloperError {
-      name: string;
-      message: string;
-      stack: string;
+      public name: string
+      public message: string
+      public stack: string
 
       constructor(message?: string);
   }
 
   class DistanceDisplayCondition {
-      near: number;
-      far: number;
+
+      public static clone(value?: DistanceDisplayCondition, result?: DistanceDisplayCondition): DistanceDisplayCondition
+
+      public static equals(left: DistanceDisplayCondition, right: DistanceDisplayCondition): boolean
+      public near: number
+      public far: number
 
       constructor(near?: number, far?: number);
 
-      clone(result?: DistanceDisplayCondition): DistanceDisplayCondition;
+      public clone(result?: DistanceDisplayCondition): DistanceDisplayCondition
 
-      equals(other: DistanceDisplayCondition): boolean;
-
-      static clone(value?: DistanceDisplayCondition, result?: DistanceDisplayCondition): DistanceDisplayCondition;
-
-      static equals(left: DistanceDisplayCondition, right: DistanceDisplayCondition): boolean;
+      public equals(other: DistanceDisplayCondition): boolean
   }
 
   class EllipseGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(ellipseGeometry: EllipseGeometry): Geometry | undefined
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: EllipseGeometry): EllipseGeometry
 
       constructor(options: {
           center: Cartesian3;
@@ -1039,212 +1046,208 @@ declare module Cesium {
           granularity?: number;
           vertexFormat?: VertexFormat
       });
-
-      static createGeometry(ellipseGeometry: EllipseGeometry): Geometry | undefined;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: EllipseGeometry): EllipseGeometry;
   }
 
   class EllipseOutlineGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(ellipseGeometry: EllipseOutlineGeometry): Geometry | undefined
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: EllipseOutlineGeometry): EllipseOutlineGeometry
 
       constructor(options: { center: Cartesian3; semiMajorAxis: number; semiMinorAxis: number; ellipsoid?: Ellipsoid; height?: number; extrudedHeight?: number; rotation?: number; granularity?: number; numberOfVerticalLines?: number });
-
-      static createGeometry(ellipseGeometry: EllipseOutlineGeometry): Geometry | undefined;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: EllipseOutlineGeometry): EllipseOutlineGeometry;
   }
 
   class Ellipsoid {
-      static MOON: Ellipsoid;
-      static packedLength: number;
-      static UNIT_SPHERE: Ellipsoid;
-      static WGS84: Ellipsoid;
-      minimumRadius: number;
-      maximumRadius: number;
-      oneOverRadii: Cartesian3;
-      oneOverRadiiSquared: Cartesian3;
-      radii: Cartesian3;
-      radiiSquared: Cartesian3;
-      radiiToTheFourth: Cartesian3;
+      public static MOON: Ellipsoid
+      public static packedLength: number
+      public static UNIT_SPHERE: Ellipsoid
+      public static WGS84: Ellipsoid
+
+      public static clone(ellipsoid: Ellipsoid, result?: Ellipsoid): Ellipsoid
+
+      public static fromCartesian3(radii?: Cartesian3): Ellipsoid
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Ellipsoid): Ellipsoid
+      public minimumRadius: number
+      public maximumRadius: number
+      public oneOverRadii: Cartesian3
+      public oneOverRadiiSquared: Cartesian3
+      public radii: Cartesian3
+      public radiiSquared: Cartesian3
+      public radiiToTheFourth: Cartesian3
 
       constructor(x?: number, y?: number, z?: number);
 
-      static clone(ellipsoid: Ellipsoid, result?: Ellipsoid): Ellipsoid;
+      public cartesianArrayToCartographicArray(cartesians: Cartesian3[], result?: Cartographic[]): Cartographic[]
 
-      static fromCartesian3(radii?: Cartesian3): Ellipsoid;
+      public cartesianToCartographic(cartesian: Cartesian3, result?: Cartographic): Cartographic
 
-      static pack(value: any, array: number[], startingIndex?: number): number[];
+      public cartographicArrayToCartesianArray(cartographics: Cartographic[], result?: Cartesian3[]): Cartesian3[]
 
-      static unpack(array: number[], startingIndex?: number, result?: Ellipsoid): Ellipsoid;
+      public cartographicToCartesian(cartographic: Cartographic, result?: Cartesian3): Cartesian3
 
-      cartesianArrayToCartographicArray(cartesians: Cartesian3[], result?: Cartographic[]): Cartographic[];
+      public clone(result?: Ellipsoid): Ellipsoid
 
-      cartesianToCartographic(cartesian: Cartesian3, result?: Cartographic): Cartographic;
+      public equals(right?: Ellipsoid): boolean
 
-      cartographicArrayToCartesianArray(cartographics: Cartographic[], result?: Cartesian3[]): Cartesian3[];
+      public geocentricSurfaceNormal(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      cartographicToCartesian(cartographic: Cartographic, result?: Cartesian3): Cartesian3;
+      public geodeticSurfaceNormalCartographic(cartographic: Cartographic, result?: Cartesian3): Cartesian3
 
-      clone(result?: Ellipsoid): Ellipsoid;
+      public geodeticSurfaceNormal(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      equals(right?: Ellipsoid): boolean;
+      public scaleToGeodeticSurface(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      geocentricSurfaceNormal(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public scaleToGeocentricSurface(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      geodeticSurfaceNormalCartographic(cartographic: Cartographic, result?: Cartesian3): Cartesian3;
+      public transformPositionToScaledSpace(position: Cartesian3, result?: Cartesian3): Cartesian3
 
-      geodeticSurfaceNormal(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public transformPositionFromScaledSpace(position: Cartesian3, result?: Cartesian3): Cartesian3
 
-      scaleToGeodeticSurface(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public getSurfaceNormalIntersectionWithZAxis(position: Cartesian3, buffer: number, result: Cartesian3): Cartesian3
 
-      scaleToGeocentricSurface(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
-
-      transformPositionToScaledSpace(position: Cartesian3, result?: Cartesian3): Cartesian3;
-
-      transformPositionFromScaledSpace(position: Cartesian3, result?: Cartesian3): Cartesian3;
-
-      getSurfaceNormalIntersectionWithZAxis(position: Cartesian3, buffer: number, result: Cartesian3): Cartesian3;
-
-      toString(): string;
+      public toString(): string
   }
 
   class EllipsoidGeodesic {
-      surfaceDistance: number;
-      start: Cartographic;
-      end: Cartographic;
-      startHeading: number;
-      endHeading: number;
+      public surfaceDistance: number
+      public start: Cartographic
+      public end: Cartographic
+      public startHeading: number
+      public endHeading: number
 
       constructor(start?: Cartographic, end?: Cartographic, ellipsoid?: Ellipsoid);
 
-      setEndPoints(start: Cartographic, end: Cartographic): void;
+      public setEndPoints(start: Cartographic, end: Cartographic): void
 
-      interpolateUsingFraction(fraction: number): Cartographic;
+      public interpolateUsingFraction(fraction: number): Cartographic
 
-      interpolateUsingSurfaceDistance(distance: number): Cartographic;
+      public interpolateUsingSurfaceDistance(distance: number): Cartographic
   }
 
   class EllipsoidGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(ellipsoidGeometry: EllipsoidGeometry): Geometry | undefined
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: EllipsoidGeometry): EllipsoidGeometry
 
       constructor(options?: { radii?: Cartesian3; stackPartitions?: number; slicePartitions?: number; vertexFormat?: VertexFormat });
-
-      static createGeometry(ellipsoidGeometry: EllipsoidGeometry): Geometry | undefined;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: EllipsoidGeometry): EllipsoidGeometry;
   }
 
   class EllipsoidOutlineGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(ellipsoidGeometry: EllipsoidOutlineGeometry): Geometry | undefined
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: EllipsoidOutlineGeometry): EllipsoidOutlineGeometry
 
       constructor(options?: { radii?: Cartesian3; stackPartitions?: number; slicePartitions?: number; subdivisions?: number });
-
-      static createGeometry(ellipsoidGeometry: EllipsoidOutlineGeometry): Geometry | undefined;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: EllipsoidOutlineGeometry): EllipsoidOutlineGeometry;
   }
 
   class EllipsoidTangentPlane {
-      ellipsoid: Ellipsoid;
-      origin: Cartesian3;
+
+      public static fromPoints(ellipsoid: Ellipsoid, cartesians: Cartesian3): EllipsoidTangentPlane
+      public ellipsoid: Ellipsoid
+      public origin: Cartesian3
 
       constructor(ellipsoid: Ellipsoid, origin: Cartesian3);
 
-      projectPointOntoPlane(cartesian: Cartesian3, result?: Cartesian2): Cartesian2;
+      public projectPointOntoPlane(cartesian: Cartesian3, result?: Cartesian2): Cartesian2
 
-      projectPointsOntoPlane(cartesians: Cartesian3[], result?: Cartesian2[]): Cartesian2[];
+      public projectPointsOntoPlane(cartesians: Cartesian3[], result?: Cartesian2[]): Cartesian2[]
 
-      projectPointsOntoEllipsoid(cartesians: Cartesian2[], result?: Cartesian3[]): Cartesian3[];
-
-      static fromPoints(ellipsoid: Ellipsoid, cartesians: Cartesian3): EllipsoidTangentPlane;
+      public projectPointsOntoEllipsoid(cartesians: Cartesian2[], result?: Cartesian3[]): Cartesian3[]
   }
 
   class EllipsoidTerrainProvider extends TerrainProvider {
-      credit: Credit;
-      errorEvent: Event;
-      hasWaterMask: boolean;
-      hasVertexNormals: boolean;
-      ready: boolean;
-      readonly readyPromise: Promise<boolean>
-      tilingScheme: GeographicTilingScheme;
+      public credit: Credit
+      public errorEvent: Event
+      public hasWaterMask: boolean
+      public hasVertexNormals: boolean
+      public ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public tilingScheme: GeographicTilingScheme
 
       constructor(options?: { tilingScheme?: TilingScheme; ellipsoid?: Ellipsoid });
 
-      getLevelMaximumGeometricError(level: number): number;
+      public getLevelMaximumGeometricError(level: number): number
 
-      getTileDataAvailable(x: number, y: number, level: number): boolean;
+      public getTileDataAvailable(x: number, y: number, level: number): boolean
 
-      requestTileGeometry(x: number, y: number, level: number, request: Request): Promise<TerrainData>;
+      public requestTileGeometry(x: number, y: number, level: number, request: Request): Promise<TerrainData>
   }
 
   class Event {
-      numberOfListeners: number;
+      public numberOfListeners: number
 
-      addEventListener(listener: Function, scope?: any): Event.RemoveCallback;
+      public addEventListener(listener: Function, scope?: any): Event.RemoveCallback
 
-      removeEventListener(listener: Function, scope?: any): boolean;
+      public removeEventListener(listener: Function, scope?: any): boolean
 
-      raiseEvent(...args: any[]): void;
+      public raiseEvent(...args: any[]): void
   }
 
-  module Event {
-      type RemoveCallback = () => void;
+  namespace Event {
+      type RemoveCallback = () => void
   }
 
   class EventHelper {
-      add(event: Event, listener: Function, scope?: any): EventHelper.RemoveCallback;
+      public add(event: Event, listener: Function, scope?: any): EventHelper.RemoveCallback
 
-      removeAll(): void;
+      public removeAll(): void
   }
 
-  module EventHelper {
-      type RemoveCallback = () => void;
+  namespace EventHelper {
+      type RemoveCallback = () => void
   }
 
   class GeographicProjection {
-      ellipsoid: Ellipsoid;
+      public ellipsoid: Ellipsoid
 
       constructor(ellipsoid?: Ellipsoid);
 
-      project(cartographic: Cartographic, result?: Cartesian3): Cartesian3;
+      public project(cartographic: Cartographic, result?: Cartesian3): Cartesian3
 
-      unproject(cartesian: Cartesian3, result?: Cartographic): Cartographic;
+      public unproject(cartesian: Cartesian3, result?: Cartographic): Cartographic
   }
 
   class GeographicTilingScheme {
-      ellipsoid: Ellipsoid;
-      rectangle: Rectangle;
-      projection: MapProjection;
+      public ellipsoid: Ellipsoid
+      public rectangle: Rectangle
+      public projection: MapProjection
 
       constructor(options?: { ellipsoid?: Ellipsoid; rectangle?: Rectangle; numberOfLevelZeroTilesX?: number; numberOfLevelZeroTilesY?: number });
 
-      getNumberOfXTilesAtLevel(level: number): number;
+      public getNumberOfXTilesAtLevel(level: number): number
 
-      getNumberOfYTilesAtLevel(level: number): number;
+      public getNumberOfYTilesAtLevel(level: number): number
 
-      rectangleToNativeRectangle(rectangle: Rectangle, result?: Rectangle): Rectangle;
+      public rectangleToNativeRectangle(rectangle: Rectangle, result?: Rectangle): Rectangle
 
-      tileXYToNativeRectangle(x: number, y: number, level: number, result?: any): Rectangle;
+      public tileXYToNativeRectangle(x: number, y: number, level: number, result?: any): Rectangle
 
-      tileXYToRectangle(x: number, y: number, level: number, result?: any): Rectangle;
+      public tileXYToRectangle(x: number, y: number, level: number, result?: any): Rectangle
 
-      positionToTileXY(position: Cartographic, level: number, result?: Cartesian2): Cartesian2;
+      public positionToTileXY(position: Cartographic, level: number, result?: Cartesian2): Cartesian2
   }
 
   class Geometry {
-      attributes: GeometryAttributes;
-      boundingSphere: BoundingSphere;
-      indices: any[];
-      primitiveType: PrimitiveType;
+
+      public static computeNumberOfVertices(geometry: Cartesian3): number
+      public attributes: GeometryAttributes
+      public boundingSphere: BoundingSphere
+      public indices: any[]
+      public primitiveType: PrimitiveType
 
       constructor(options: {
           attributes: GeometryAttributes;
@@ -1252,561 +1255,559 @@ declare module Cesium {
           indices?: Uint16Array | Uint32Array;
           boundingSphere?: BoundingSphere
       });
-
-      static computeNumberOfVertices(geometry: Cartesian3): number;
   }
 
   class GeometryAttribute {
-      componentDatatype: ComponentDatatype;
-      componentsPerAttribute: number;
-      normalize: boolean;
-      values: any[];
+      public componentDatatype: ComponentDatatype
+      public componentsPerAttribute: number
+      public normalize: boolean
+      public values: any[]
 
       constructor(options?: { componentDatatype?: ComponentDatatype; componentsPerAttribute?: number; normalize?: boolean; values?: number[] });
   }
 
   class GeometryAttributes {
-      bitangent: GeometryAttribute;
-      color: GeometryAttribute;
-      normal: GeometryAttribute;
-      position: GeometryAttribute;
-      st: GeometryAttribute;
-      tangent: GeometryAttribute;
+      public bitangent: GeometryAttribute
+      public color: GeometryAttribute
+      public normal: GeometryAttribute
+      public position: GeometryAttribute
+      public st: GeometryAttribute
+      public tangent: GeometryAttribute
   }
 
   class GeometryInstance {
-      geometry: Geometry;
-      modelMatrix: Matrix4;
-      id: any;
-      attributes: any;
+      public geometry: Geometry
+      public modelMatrix: Matrix4
+      public id: any
+      public attributes: any
 
       constructor(options: { geometry: Geometry | any; modelMatrix?: Matrix4; id?: any; attributes?: any });
   }
 
   class GeometryInstanceAttribute {
-      componentDatatype: ComponentDatatype;
-      componentsPerAttribute: number;
-      normalize: boolean;
-      value: number[];
+      public componentDatatype: ComponentDatatype
+      public componentsPerAttribute: number
+      public normalize: boolean
+      public value: number[]
 
       constructor(options: { componentDatatype?: ComponentDatatype; componentsPerAttribute?: number; normalize?: boolean; value?: number[] });
   }
 
   class GregorianDate {
-      year: number;
-      month: number;
-      day: number;
-      hour: number;
-      minute: number;
-      second: number;
-      millisecond: number;
-      isLeapSecond: boolean;
+      public year: number
+      public month: number
+      public day: number
+      public hour: number
+      public minute: number
+      public second: number
+      public millisecond: number
+      public isLeapSecond: boolean
   }
 
   class HeightmapTerrainData {
-      waterMask: Uint8Array | HTMLImageElement | HTMLCanvasElement;
+      public waterMask: Uint8Array | HTMLImageElement | HTMLCanvasElement
 
       constructor(options: { buffer: Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array | Float64Array; width: number; height: number; childTileMask?: number; structure?: any; structureheightScale?: number; structureheightOffset?: number; structureelementsPerHeight?: number; structurestride?: number; structureelementMultiplier?: number; structureisBigEndian?: boolean; createdByUpsampling?: boolean });
 
-      createMesh(tilingScheme: TilingScheme, x: number, y: number, level: number): Promise<TerrainMesh>;
+      public createMesh(tilingScheme: TilingScheme, x: number, y: number, level: number): Promise<TerrainMesh>
 
-      interpolateHeight(rectangle: Rectangle, longitude: number, latitude: number): number;
+      public interpolateHeight(rectangle: Rectangle, longitude: number, latitude: number): number
 
-      upsample(tilingScheme: TilingScheme, thisX: number, thisY: number, thisLevel: number, descendantX: number, descendantY: number, descendantLevel: number): Promise<HeightmapTerrainData>;
+      public upsample(tilingScheme: TilingScheme, thisX: number, thisY: number, thisLevel: number, descendantX: number, descendantY: number, descendantLevel: number): Promise<HeightmapTerrainData>
 
-      isChildAvailable(thisX: number, thisY: number, childX: number, childY: number): boolean;
+      public isChildAvailable(thisX: number, thisY: number, childX: number, childY: number): boolean
 
-      wasCreatedByUpsampling(): boolean;
+      public wasCreatedByUpsampling(): boolean
   }
 
   class HermiteSpline {
-      times: number[];
-      points: Cartesian3[];
-      inTangents: Cartesian3[];
-      outTangents: Cartesian3[];
+
+      public static createC1(): HermiteSpline
+
+      public static createNaturalCubic(): HermiteSpline | LinearSpline
+
+      public static createClampedCubic(): HermiteSpline | LinearSpline
+      public times: number[]
+      public points: Cartesian3[]
+      public inTangents: Cartesian3[]
+      public outTangents: Cartesian3[]
 
       constructor(options: { times: number[]; points: Cartesian3[]; inTangents: Cartesian3[]; outTangents: Cartesian3[] });
 
-      findTimeInterval(time: number): number;
+      public findTimeInterval(time: number): number
 
-      evaluate(time: number, result?: Cartesian3): Cartesian3;
-
-      static createC1(): HermiteSpline;
-
-      static createNaturalCubic(): HermiteSpline | LinearSpline;
-
-      static createClampedCubic(): HermiteSpline | LinearSpline;
+      public evaluate(time: number, result?: Cartesian3): Cartesian3
   }
 
   class Interval {
-      start: number;
-      stop: number;
+      public start: number
+      public stop: number
 
       constructor(start?: number, stop?: number);
   }
 
   class JulianDate {
-      dayNumber: number;
-      secondsOfDay: number;
-      static leapSeconds: LeapSecond[];
+      public static leapSeconds: LeapSecond[]
+
+      public static fromDate(date: Date, result?: JulianDate): JulianDate
+
+      public static fromIso8601(iso8601String: string, result?: JulianDate): JulianDate
+
+      public static now(result?: JulianDate): JulianDate
+
+      public static toGregorianDate(julianDate: JulianDate, result?: GregorianDate): GregorianDate
+
+      public static toDate(julianDate: JulianDate): Date
+
+      public static toIso8601(julianDate: JulianDate, precision?: number): string
+
+      public static clone(julianDate: JulianDate, result?: JulianDate): JulianDate
+
+      public static compare(left: JulianDate, right: JulianDate): number
+
+      public static equals(left?: JulianDate, right?: JulianDate): boolean
+
+      public static equalsEpsilon(left: JulianDate, right: JulianDate, epsilon: number): boolean
+
+      public static totalDays(julianDate: JulianDate): number
+
+      public static secondsDifference(left: JulianDate, right: JulianDate): number
+
+      public static daysDifference(left: JulianDate, right: JulianDate): number
+
+      public static computeTaiMinusUtc(julianDate: JulianDate): number
+
+      public static addSeconds(julianDate: JulianDate, seconds: number, result: JulianDate): JulianDate
+
+      public static addMinutes(julianDate: JulianDate, minutes: number, result: JulianDate): JulianDate
+
+      public static addHours(julianDate: JulianDate, hours: number, result: JulianDate): JulianDate
+
+      public static addDays(julianDate: JulianDate, days: number, result: JulianDate): JulianDate
+
+      public static lessThan(left: JulianDate, right: JulianDate): boolean
+
+      public static lessThanOrEquals(left: JulianDate, right: JulianDate): boolean
+
+      public static greaterThan(left: JulianDate, right: JulianDate): boolean
+
+      public static greaterThanOrEquals(left: JulianDate, right: JulianDate): boolean
+      public dayNumber: number
+      public secondsOfDay: number
 
       constructor(julianDayNumber: number, secondsOfDay: number, timeStandard?: TimeStandard);
 
-      clone(result?: JulianDate): JulianDate;
+      public clone(result?: JulianDate): JulianDate
 
-      equals(right?: JulianDate): boolean;
+      public equals(right?: JulianDate): boolean
 
-      equalsEpsilon(right: JulianDate, epsilon: number): boolean;
+      public equalsEpsilon(right: JulianDate, epsilon: number): boolean
 
-      toString(): string;
-
-      static fromDate(date: Date, result?: JulianDate): JulianDate;
-
-      static fromIso8601(iso8601String: string, result?: JulianDate): JulianDate;
-
-      static now(result?: JulianDate): JulianDate;
-
-      static toGregorianDate(julianDate: JulianDate, result?: GregorianDate): GregorianDate;
-
-      static toDate(julianDate: JulianDate): Date;
-
-      static toIso8601(julianDate: JulianDate, precision?: number): string;
-
-      static clone(julianDate: JulianDate, result?: JulianDate): JulianDate;
-
-      static compare(left: JulianDate, right: JulianDate): number;
-
-      static equals(left?: JulianDate, right?: JulianDate): boolean;
-
-      static equalsEpsilon(left: JulianDate, right: JulianDate, epsilon: number): boolean;
-
-      static totalDays(julianDate: JulianDate): number;
-
-      static secondsDifference(left: JulianDate, right: JulianDate): number;
-
-      static daysDifference(left: JulianDate, right: JulianDate): number;
-
-      static computeTaiMinusUtc(julianDate: JulianDate): number;
-
-      static addSeconds(julianDate: JulianDate, seconds: number, result: JulianDate): JulianDate;
-
-      static addMinutes(julianDate: JulianDate, minutes: number, result: JulianDate): JulianDate;
-
-      static addHours(julianDate: JulianDate, hours: number, result: JulianDate): JulianDate;
-
-      static addDays(julianDate: JulianDate, days: number, result: JulianDate): JulianDate;
-
-      static lessThan(left: JulianDate, right: JulianDate): boolean;
-
-      static lessThanOrEquals(left: JulianDate, right: JulianDate): boolean;
-
-      static greaterThan(left: JulianDate, right: JulianDate): boolean;
-
-      static greaterThanOrEquals(left: JulianDate, right: JulianDate): boolean;
+      public toString(): string
   }
 
   class LeapSecond {
-      julianDate: JulianDate;
-      offset: number;
+      public julianDate: JulianDate
+      public offset: number
 
       constructor(date?: JulianDate, offset?: number);
   }
 
   class LinearSpline {
-      times: number[];
-      points: Cartesian3[];
+      public times: number[]
+      public points: Cartesian3[]
 
       constructor();
 
-      findTimeInterval(time: number): number;
+      public findTimeInterval(time: number): number
 
-      evaluate(time: number, result?: Cartesian3): Cartesian3;
+      public evaluate(time: number, result?: Cartesian3): Cartesian3
   }
 
   class MapProjection {
-      ellipsoid: Ellipsoid;
+      public ellipsoid: Ellipsoid
 
-      project(cartographic: Cartographic, result?: Cartesian3): Cartesian3;
+      public project(cartographic: Cartographic, result?: Cartesian3): Cartesian3
 
-      unproject(cartesian: Cartesian3, result?: Cartographic): Cartographic;
+      public unproject(cartesian: Cartesian3, result?: Cartographic): Cartographic
   }
 
   class Matrix2 {
-      static packedLength: number;
-      static IDENTITY: Matrix2;
-      static COLUMN0ROW0: number;
-      static COLUMN0ROW1: number;
-      static COLUMN1ROW0: number;
-      static COLUMN1ROW1: number;
+      public static packedLength: number
+      public static IDENTITY: Matrix2
+      public static COLUMN0ROW0: number
+      public static COLUMN0ROW1: number
+      public static COLUMN1ROW0: number
+      public static COLUMN1ROW1: number
+
+      public static pack(value: Matrix2, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Matrix2): Matrix2
+
+      public static clone(matrix: Matrix2, result?: Matrix2): Matrix2
+
+      public static fromArray(array: number[], startingIndex?: number, result?: Matrix2): Matrix2
+
+      public static fromColumnMajorArray(values: number[], result?: Matrix2): Matrix2
+
+      public static fromRowMajorArray(values: number[], result?: Matrix2): Matrix2
+
+      public static fromScale(scale: Cartesian2, result?: Matrix2): Matrix2
+
+      public static fromUniformScale(scale: number, result?: Matrix2): Matrix2
+
+      public static fromRotation(angle: number, result?: Matrix2): Matrix2
+
+      public static toArray(matrix: Matrix2, result?: number[]): number[]
+
+      public static getElementIndex(row: number, column: number): number
+
+      public static getColumn(matrix: Matrix2, index: number, result: Cartesian2): Cartesian2
+
+      public static setColumn(matrix: Matrix2, index: number, cartesian: Cartesian2, result: Cartesian2): Matrix2
+
+      public static getRow(matrix: Matrix2, index: number, result: Cartesian2): Cartesian2
+
+      public static setRow(matrix: Matrix2, index: number, cartesian: Cartesian2, result: Matrix2): Matrix2
+
+      public static getScale(matrix: Matrix2, result: Cartesian2): Cartesian2
+
+      public static getMaximumScale(matrix: Matrix2): number
+
+      public static multiply(left: Matrix2, right: Matrix2, result: Matrix2): Matrix2
+
+      public static add(left: Matrix2, right: Matrix2, result: Matrix2): Matrix2
+
+      public static subtract(left: Matrix2, right: Matrix2, result: Matrix2): Matrix2
+
+      public static multiplyByVector(matrix: Matrix2, cartesian: Cartesian2, result: Cartesian2): Cartesian2
+
+      public static multiplyByScalar(matrix: Matrix2, scalar: number, result: Matrix2): Matrix2
+
+      public static negate(matrix: Matrix2, result: Matrix2): Matrix2
+
+      public static transpose(matrix: Matrix2, result: Matrix2): Matrix2
+
+      public static abs(matrix: Matrix2, result: Matrix2): Matrix2
+
+      public static equals(left?: Matrix2, right?: Matrix2): boolean
+
+      public static equalsEpsilon(left: Matrix2, right: Matrix2, epsilon: number): boolean
 
       constructor(column0Row0?: number, column1Row0?: number, column0Row1?: number, column1Row1?: number);
 
-      clone(result?: Matrix2): Matrix2;
+      public clone(result?: Matrix2): Matrix2
 
-      equals(right?: Matrix2): boolean;
+      public equals(right?: Matrix2): boolean
 
-      equalsEpsilon(right: Matrix2, epsilon: number): boolean;
+      public equalsEpsilon(right: Matrix2, epsilon: number): boolean
 
-      toString(): string;
-
-      static pack(value: Matrix2, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: Matrix2): Matrix2;
-
-      static clone(matrix: Matrix2, result?: Matrix2): Matrix2;
-
-      static fromArray(array: number[], startingIndex?: number, result?: Matrix2): Matrix2;
-
-      static fromColumnMajorArray(values: number[], result?: Matrix2): Matrix2;
-
-      static fromRowMajorArray(values: number[], result?: Matrix2): Matrix2;
-
-      static fromScale(scale: Cartesian2, result?: Matrix2): Matrix2;
-
-      static fromUniformScale(scale: number, result?: Matrix2): Matrix2;
-
-      static fromRotation(angle: number, result?: Matrix2): Matrix2;
-
-      static toArray(matrix: Matrix2, result?: number[]): number[];
-
-      static getElementIndex(row: number, column: number): number;
-
-      static getColumn(matrix: Matrix2, index: number, result: Cartesian2): Cartesian2;
-
-      static setColumn(matrix: Matrix2, index: number, cartesian: Cartesian2, result: Cartesian2): Matrix2;
-
-      static getRow(matrix: Matrix2, index: number, result: Cartesian2): Cartesian2;
-
-      static setRow(matrix: Matrix2, index: number, cartesian: Cartesian2, result: Matrix2): Matrix2;
-
-      static getScale(matrix: Matrix2, result: Cartesian2): Cartesian2;
-
-      static getMaximumScale(matrix: Matrix2): number;
-
-      static multiply(left: Matrix2, right: Matrix2, result: Matrix2): Matrix2;
-
-      static add(left: Matrix2, right: Matrix2, result: Matrix2): Matrix2;
-
-      static subtract(left: Matrix2, right: Matrix2, result: Matrix2): Matrix2;
-
-      static multiplyByVector(matrix: Matrix2, cartesian: Cartesian2, result: Cartesian2): Cartesian2;
-
-      static multiplyByScalar(matrix: Matrix2, scalar: number, result: Matrix2): Matrix2;
-
-      static negate(matrix: Matrix2, result: Matrix2): Matrix2;
-
-      static transpose(matrix: Matrix2, result: Matrix2): Matrix2;
-
-      static abs(matrix: Matrix2, result: Matrix2): Matrix2;
-
-      static equals(left?: Matrix2, right?: Matrix2): boolean;
-
-      static equalsEpsilon(left: Matrix2, right: Matrix2, epsilon: number): boolean;
+      public toString(): string
   }
 
   class Matrix3 {
-      static packedLength: number;
-      static IDENTITY: Matrix3;
-      static COLUMN0ROW0: number;
-      static COLUMN0ROW1: number;
-      static COLUMN0ROW2: number;
-      static COLUMN1ROW0: number;
-      static COLUMN1ROW1: number;
-      static COLUMN1ROW2: number;
-      static COLUMN2ROW0: number;
-      static COLUMN2ROW1: number;
-      static COLUMN2ROW2: number;
+      public static packedLength: number
+      public static IDENTITY: Matrix3
+      public static COLUMN0ROW0: number
+      public static COLUMN0ROW1: number
+      public static COLUMN0ROW2: number
+      public static COLUMN1ROW0: number
+      public static COLUMN1ROW1: number
+      public static COLUMN1ROW2: number
+      public static COLUMN2ROW0: number
+      public static COLUMN2ROW1: number
+      public static COLUMN2ROW2: number
+
+      public static pack(value: Matrix3, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Matrix3): Matrix3
+
+      public static clone(matrix: Matrix3, result?: Matrix3): Matrix3
+
+      public static fromArray(array: number[], startingIndex?: number, result?: Matrix3): Matrix3
+
+      public static fromColumnMajorArray(values: number[], result?: Matrix3): Matrix3
+
+      public static fromRowMajorArray(values: number[], result?: Matrix3): Matrix3
+
+      public static fromQuaternion(quaternion: Quaternion): Matrix3
+
+      public static fromScale(scale: Cartesian3, result?: Matrix3): Matrix3
+
+      public static fromUniformScale(scale: number, result?: Matrix3): Matrix3
+
+      public static fromCrossProduct(the: Cartesian3, result?: Matrix3): Matrix3
+
+      public static fromRotationX(angle: number, result?: Matrix3): Matrix3
+
+      public static fromRotationY(angle: number, result?: Matrix3): Matrix3
+
+      public static fromRotationZ(angle: number, result?: Matrix3): Matrix3
+
+      public static toArray(matrix: Matrix3, result?: number[]): number[]
+
+      public static getElementIndex(row: number, column: number): number
+
+      public static getColumn(matrix: Matrix3, index: number, result: Cartesian3): Cartesian3
+
+      public static setColumn(matrix: Matrix3, index: number, cartesian: Cartesian3, result: Cartesian3): Matrix3
+
+      public static getRow(matrix: Matrix3, index: number, result: Cartesian3): Cartesian3
+
+      public static setRow(matrix: Matrix3, index: number, cartesian: Cartesian3, result: Cartesian3): Matrix3
+
+      public static getScale(matrix: Matrix3, result: Cartesian3): Cartesian3
+
+      public static getMaximumScale(matrix: Matrix3): number
+
+      public static multiply(left: Matrix3, right: Matrix3, result: Matrix3): Matrix3
+
+      public static add(left: Matrix3, right: Matrix3, result: Matrix3): Matrix3
+
+      public static subtract(left: Matrix3, right: Matrix3, result: Matrix3): Matrix3
+
+      public static multiplyByVector(matrix: Matrix3, cartesian: Cartesian3, result: Cartesian3): Cartesian3
+
+      public static multiplyByScalar(matrix: Matrix3, scalar: number, result: Matrix3): Matrix3
+
+      public static negate(matrix: Matrix3, result: Matrix3): Matrix3
+
+      public static transpose(matrix: Matrix3, result: Matrix3): Matrix3
+
+      public static computeEigenDecomposition(matrix: Matrix3, result?: any): any
+
+      public static abs(matrix: Matrix3, result: Matrix3): Matrix3
+
+      public static determinant(matrix: Matrix3): number
+
+      public static inverse(matrix: Matrix3, result: Matrix3): Matrix3
+
+      public static equals(left?: Matrix3, right?: Matrix3): boolean
+
+      public static equalsEpsilon(left: Matrix3, right: Matrix3, epsilon: number): boolean
 
       constructor(column0Row0?: number, column1Row0?: number, column2Row0?: number, column0Row1?: number, column1Row1?: number, column2Row1?: number, column0Row2?: number, column1Row2?: number, column2Row2?: number);
 
-      clone(result?: Matrix3): Matrix3;
+      public clone(result?: Matrix3): Matrix3
 
-      equals(right?: Matrix3): boolean;
+      public equals(right?: Matrix3): boolean
 
-      equalsEpsilon(right: Matrix3, epsilon: number): boolean;
+      public equalsEpsilon(right: Matrix3, epsilon: number): boolean
 
-      toString(): string;
-
-      static pack(value: Matrix3, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: Matrix3): Matrix3;
-
-      static clone(matrix: Matrix3, result?: Matrix3): Matrix3;
-
-      static fromArray(array: number[], startingIndex?: number, result?: Matrix3): Matrix3;
-
-      static fromColumnMajorArray(values: number[], result?: Matrix3): Matrix3;
-
-      static fromRowMajorArray(values: number[], result?: Matrix3): Matrix3;
-
-      static fromQuaternion(quaternion: Quaternion): Matrix3;
-
-      static fromScale(scale: Cartesian3, result?: Matrix3): Matrix3;
-
-      static fromUniformScale(scale: number, result?: Matrix3): Matrix3;
-
-      static fromCrossProduct(the: Cartesian3, result?: Matrix3): Matrix3;
-
-      static fromRotationX(angle: number, result?: Matrix3): Matrix3;
-
-      static fromRotationY(angle: number, result?: Matrix3): Matrix3;
-
-      static fromRotationZ(angle: number, result?: Matrix3): Matrix3;
-
-      static toArray(matrix: Matrix3, result?: number[]): number[];
-
-      static getElementIndex(row: number, column: number): number;
-
-      static getColumn(matrix: Matrix3, index: number, result: Cartesian3): Cartesian3;
-
-      static setColumn(matrix: Matrix3, index: number, cartesian: Cartesian3, result: Cartesian3): Matrix3;
-
-      static getRow(matrix: Matrix3, index: number, result: Cartesian3): Cartesian3;
-
-      static setRow(matrix: Matrix3, index: number, cartesian: Cartesian3, result: Cartesian3): Matrix3;
-
-      static getScale(matrix: Matrix3, result: Cartesian3): Cartesian3;
-
-      static getMaximumScale(matrix: Matrix3): number;
-
-      static multiply(left: Matrix3, right: Matrix3, result: Matrix3): Matrix3;
-
-      static add(left: Matrix3, right: Matrix3, result: Matrix3): Matrix3;
-
-      static subtract(left: Matrix3, right: Matrix3, result: Matrix3): Matrix3;
-
-      static multiplyByVector(matrix: Matrix3, cartesian: Cartesian3, result: Cartesian3): Cartesian3;
-
-      static multiplyByScalar(matrix: Matrix3, scalar: number, result: Matrix3): Matrix3;
-
-      static negate(matrix: Matrix3, result: Matrix3): Matrix3;
-
-      static transpose(matrix: Matrix3, result: Matrix3): Matrix3;
-
-      static computeEigenDecomposition(matrix: Matrix3, result?: any): any;
-
-      static abs(matrix: Matrix3, result: Matrix3): Matrix3;
-
-      static determinant(matrix: Matrix3): number;
-
-      static inverse(matrix: Matrix3, result: Matrix3): Matrix3;
-
-      static equals(left?: Matrix3, right?: Matrix3): boolean;
-
-      static equalsEpsilon(left: Matrix3, right: Matrix3, epsilon: number): boolean;
+      public toString(): string
   }
 
   class Matrix4 {
-      static packedLength: number;
-      static IDENTITY: Matrix4;
-      static COLUMN0ROW0: number;
-      static COLUMN0ROW1: number;
-      static COLUMN0ROW2: number;
-      static COLUMN0ROW3: number;
-      static COLUMN1ROW0: number;
-      static COLUMN1ROW1: number;
-      static COLUMN1ROW2: number;
-      static COLUMN1ROW3: number;
-      static COLUMN2ROW0: number;
-      static COLUMN2ROW1: number;
-      static COLUMN2ROW2: number;
-      static COLUMN2ROW3: number;
-      static COLUMN3ROW0: number;
-      static COLUMN3ROW1: number;
-      static COLUMN3ROW2: number;
-      static COLUMN3ROW3: number;
+      public static packedLength: number
+      public static IDENTITY: Matrix4
+      public static COLUMN0ROW0: number
+      public static COLUMN0ROW1: number
+      public static COLUMN0ROW2: number
+      public static COLUMN0ROW3: number
+      public static COLUMN1ROW0: number
+      public static COLUMN1ROW1: number
+      public static COLUMN1ROW2: number
+      public static COLUMN1ROW3: number
+      public static COLUMN2ROW0: number
+      public static COLUMN2ROW1: number
+      public static COLUMN2ROW2: number
+      public static COLUMN2ROW3: number
+      public static COLUMN3ROW0: number
+      public static COLUMN3ROW1: number
+      public static COLUMN3ROW2: number
+      public static COLUMN3ROW3: number
+
+      public static pack(value: Matrix4, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Matrix4): Matrix4
+
+      public static clone(matrix: Matrix4, result?: Matrix4): Matrix4
+
+      public static fromArray(array: number[], startingIndex?: number, result?: Matrix4): Matrix4
+
+      public static fromColumnMajorArray(values: number[], result?: Matrix4): Matrix4
+
+      public static fromRowMajorArray(values: number[], result?: Matrix4): Matrix4
+
+      public static fromRotationTranslation(rotation: Matrix3, translation?: Cartesian3, result?: Matrix4): Matrix4
+
+      public static fromTranslationQuaternionRotationScale(translation: Cartesian3, rotation: Quaternion, scale: Cartesian3, result?: Matrix4): Matrix4
+
+      public static fromTranslation(translation: Cartesian3, result?: Matrix4): Matrix4
+
+      public static fromScale(scale: Cartesian3, result?: Matrix4): Matrix4
+
+      public static fromUniformScale(scale: number, result?: Matrix4): Matrix4
+
+      public static fromCamera(camera: Camera, result?: Matrix4): Matrix4
+
+      public static computePerspectiveFieldOfView(fovY: number, aspectRatio: number, near: number, far: number, result: Matrix4): Matrix4
+
+      public static computeOrthographicOffCenter(left: number, right: number, bottom: number, top: number, near: number, far: number, result: Matrix4): Matrix4
+
+      public static computePerspectiveOffCenter(left: number, right: number, bottom: number, top: number, near: number, far: number, result: Matrix4): Matrix4
+
+      public static computeInfinitePerspectiveOffCenter(left: number, right: number, bottom: number, top: number, near: number, far: number, result: Matrix4): Matrix4
+
+      public static computeViewportTransformation(viewport: any, nearDepthRange: number, farDepthRange: number, result: Matrix4): Matrix4
+
+      public static toArray(matrix: Matrix4, result?: number[]): number[]
+
+      public static getElementIndex(row: number, column: number): number
+
+      public static getColumn(matrix: Matrix4, index: number, result: Cartesian4): Cartesian4
+
+      public static setColumn(matrix: Matrix4, index: number, cartesian: Cartesian4, result: Cartesian4): Matrix4
+
+      public static getRow(matrix: Matrix4, index: number, result: Cartesian4): Cartesian4
+
+      public static setRow(matrix: Matrix4, index: number, cartesian: Cartesian4, result: Cartesian4): Matrix4
+
+      public static getScale(matrix: Matrix4, result: Cartesian3): Cartesian3
+
+      public static getMaximumScale(matrix: Matrix4): number
+
+      public static multiply(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4
+
+      public static add(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4
+
+      public static subtract(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4
+
+      public static multiplyTransformation(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4
+
+      public static multiplyByMatrix3(matrix: Matrix4, rotation: Matrix3, result: Matrix4): Matrix4
+
+      public static multiplyByTranslation(matrix: Matrix4, translation: Cartesian3, result: Matrix4): Matrix4
+
+      public static multiplyByUniformScale(matrix: Matrix4, scale: number, result: Matrix4): Matrix4
+
+      public static multiplyByScale(matrix: Matrix4, scale: Cartesian3, result: Matrix4): Matrix4
+
+      public static multiplyByVector(matrix: Matrix4, cartesian: Cartesian4, result: Cartesian4): Cartesian4
+
+      public static multiplyByPointAsVector(matrix: Matrix4, cartesian: Cartesian3, result: Cartesian3): Cartesian3
+
+      public static multiplyByPoint(matrix: Matrix4, cartesian: Cartesian3, result: Cartesian3): Cartesian3
+
+      public static multiplyByScalar(matrix: Matrix4, scalar: number, result: Matrix4): Matrix4
+
+      public static negate(matrix: Matrix4, result: Matrix4): Matrix4
+
+      public static transpose(matrix: Matrix4, result: Matrix4): Matrix4
+
+      public static abs(matrix: Matrix4, result: Matrix4): Matrix4
+
+      public static equals(left?: Matrix4, right?: Matrix4): boolean
+
+      public static equalsEpsilon(left: Matrix4, right: Matrix4, epsilon: number): boolean
+
+      public static getTranslation(matrix: Matrix4, result: Cartesian3): Cartesian3
+
+      public static getRotation(matrix: Matrix4, result: Matrix3): Matrix3
+
+      public static inverse(matrix: Matrix4, result: Matrix4): Matrix4
+
+      public static inverseTransformation(matrix: Matrix4, result: Matrix4): Matrix4
 
       constructor(column0Row0?: number, column1Row0?: number, column2Row0?: number, column3Row0?: number, column0Row1?: number, column1Row1?: number, column2Row1?: number, column3Row1?: number, column0Row2?: number, column1Row2?: number, column2Row2?: number, column3Row2?: number, column0Row3?: number, column1Row3?: number, column2Row3?: number, column3Row3?: number);
 
-      clone(result?: Matrix4): Matrix4;
+      public clone(result?: Matrix4): Matrix4
 
-      equals(right?: Matrix4): boolean;
+      public equals(right?: Matrix4): boolean
 
-      equalsEpsilon(right: Matrix4, epsilon: number): boolean;
+      public equalsEpsilon(right: Matrix4, epsilon: number): boolean
 
-      toString(): string;
-
-      static pack(value: Matrix4, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: Matrix4): Matrix4;
-
-      static clone(matrix: Matrix4, result?: Matrix4): Matrix4;
-
-      static fromArray(array: number[], startingIndex?: number, result?: Matrix4): Matrix4;
-
-      static fromColumnMajorArray(values: number[], result?: Matrix4): Matrix4;
-
-      static fromRowMajorArray(values: number[], result?: Matrix4): Matrix4;
-
-      static fromRotationTranslation(rotation: Matrix3, translation?: Cartesian3, result?: Matrix4): Matrix4;
-
-      static fromTranslationQuaternionRotationScale(translation: Cartesian3, rotation: Quaternion, scale: Cartesian3, result?: Matrix4): Matrix4;
-
-      static fromTranslation(translation: Cartesian3, result?: Matrix4): Matrix4;
-
-      static fromScale(scale: Cartesian3, result?: Matrix4): Matrix4;
-
-      static fromUniformScale(scale: number, result?: Matrix4): Matrix4;
-
-      static fromCamera(camera: Camera, result?: Matrix4): Matrix4;
-
-      static computePerspectiveFieldOfView(fovY: number, aspectRatio: number, near: number, far: number, result: Matrix4): Matrix4;
-
-      static computeOrthographicOffCenter(left: number, right: number, bottom: number, top: number, near: number, far: number, result: Matrix4): Matrix4;
-
-      static computePerspectiveOffCenter(left: number, right: number, bottom: number, top: number, near: number, far: number, result: Matrix4): Matrix4;
-
-      static computeInfinitePerspectiveOffCenter(left: number, right: number, bottom: number, top: number, near: number, far: number, result: Matrix4): Matrix4;
-
-      static computeViewportTransformation(viewport: any, nearDepthRange: number, farDepthRange: number, result: Matrix4): Matrix4;
-
-      static toArray(matrix: Matrix4, result?: number[]): number[];
-
-      static getElementIndex(row: number, column: number): number;
-
-      static getColumn(matrix: Matrix4, index: number, result: Cartesian4): Cartesian4;
-
-      static setColumn(matrix: Matrix4, index: number, cartesian: Cartesian4, result: Cartesian4): Matrix4;
-
-      static getRow(matrix: Matrix4, index: number, result: Cartesian4): Cartesian4;
-
-      static setRow(matrix: Matrix4, index: number, cartesian: Cartesian4, result: Cartesian4): Matrix4;
-
-      static getScale(matrix: Matrix4, result: Cartesian3): Cartesian3;
-
-      static getMaximumScale(matrix: Matrix4): number;
-
-      static multiply(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4;
-
-      static add(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4;
-
-      static subtract(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4;
-
-      static multiplyTransformation(left: Matrix4, right: Matrix4, result: Matrix4): Matrix4;
-
-      static multiplyByMatrix3(matrix: Matrix4, rotation: Matrix3, result: Matrix4): Matrix4;
-
-      static multiplyByTranslation(matrix: Matrix4, translation: Cartesian3, result: Matrix4): Matrix4;
-
-      static multiplyByUniformScale(matrix: Matrix4, scale: number, result: Matrix4): Matrix4;
-
-      static multiplyByScale(matrix: Matrix4, scale: Cartesian3, result: Matrix4): Matrix4;
-
-      static multiplyByVector(matrix: Matrix4, cartesian: Cartesian4, result: Cartesian4): Cartesian4;
-
-      static multiplyByPointAsVector(matrix: Matrix4, cartesian: Cartesian3, result: Cartesian3): Cartesian3;
-
-      static multiplyByPoint(matrix: Matrix4, cartesian: Cartesian3, result: Cartesian3): Cartesian3;
-
-      static multiplyByScalar(matrix: Matrix4, scalar: number, result: Matrix4): Matrix4;
-
-      static negate(matrix: Matrix4, result: Matrix4): Matrix4;
-
-      static transpose(matrix: Matrix4, result: Matrix4): Matrix4;
-
-      static abs(matrix: Matrix4, result: Matrix4): Matrix4;
-
-      static equals(left?: Matrix4, right?: Matrix4): boolean;
-
-      static equalsEpsilon(left: Matrix4, right: Matrix4, epsilon: number): boolean;
-
-      static getTranslation(matrix: Matrix4, result: Cartesian3): Cartesian3;
-
-      static getRotation(matrix: Matrix4, result: Matrix3): Matrix3;
-
-      static inverse(matrix: Matrix4, result: Matrix4): Matrix4;
-
-      static inverseTransformation(matrix: Matrix4, result: Matrix4): Matrix4;
+      public toString(): string
   }
 
   class NearFarScalar {
-      near: number;
-      nearValue: number;
-      far: number;
-      farValue: number;
-      static packedLength: number;
+      public static packedLength: number
+
+      public static clone(nearFarScalar: NearFarScalar, result?: NearFarScalar): NearFarScalar
+
+      public static pack(value: NearFarScalar, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: NearFarScalar): NearFarScalar
+
+      public static equals(left?: NearFarScalar, right?: NearFarScalar): boolean
+      public near: number
+      public nearValue: number
+      public far: number
+      public farValue: number
 
       constructor(near?: number, nearValue?: number, far?: number, farValue?: number);
 
-      clone(result?: NearFarScalar): NearFarScalar;
+      public clone(result?: NearFarScalar): NearFarScalar
 
-      equals(right?: NearFarScalar): boolean;
-
-      static clone(nearFarScalar: NearFarScalar, result?: NearFarScalar): NearFarScalar;
-
-      static pack(value: NearFarScalar, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: NearFarScalar): NearFarScalar;
-
-      static equals(left?: NearFarScalar, right?: NearFarScalar): boolean;
+      public equals(right?: NearFarScalar): boolean
   }
 
   class ObjectOrientedBoundingBox {
-      rotation: Matrix3;
-      translation: Cartesian3;
-      scale: Cartesian3;
+
+      public static fromPoints(positions: Cartesian3[], result?: ObjectOrientedBoundingBox): ObjectOrientedBoundingBox
+
+      public static fromBoundingRectangle(boundingRectangle: BoundingRectangle, rotation?: number): ObjectOrientedBoundingBox
+
+      public static clone(box: ObjectOrientedBoundingBox, result?: ObjectOrientedBoundingBox): ObjectOrientedBoundingBox
+
+      public static intersect(left: ObjectOrientedBoundingBox, right: ObjectOrientedBoundingBox): boolean
+
+      public static equals(left: ObjectOrientedBoundingBox, right: ObjectOrientedBoundingBox): boolean
+      public rotation: Matrix3
+      public translation: Cartesian3
+      public scale: Cartesian3
 
       constructor(rotation?: Matrix3, translation?: Cartesian3, scale?: Cartesian3);
 
-      clone(result?: ObjectOrientedBoundingBox): ObjectOrientedBoundingBox;
+      public clone(result?: ObjectOrientedBoundingBox): ObjectOrientedBoundingBox
 
-      equals(right?: ObjectOrientedBoundingBox): boolean;
-
-      static fromPoints(positions: Cartesian3[], result?: ObjectOrientedBoundingBox): ObjectOrientedBoundingBox;
-
-      static fromBoundingRectangle(boundingRectangle: BoundingRectangle, rotation?: number): ObjectOrientedBoundingBox;
-
-      static clone(box: ObjectOrientedBoundingBox, result?: ObjectOrientedBoundingBox): ObjectOrientedBoundingBox;
-
-      static intersect(left: ObjectOrientedBoundingBox, right: ObjectOrientedBoundingBox): boolean;
-
-      static equals(left: ObjectOrientedBoundingBox, right: ObjectOrientedBoundingBox): boolean;
+      public equals(right?: ObjectOrientedBoundingBox): boolean
   }
 
   class Occluder {
-      cameraPosition: Cartesian3;
-      position: Cartesian3;
-      radius: number;
+
+      public static computeOccludeePoint(occluderBoundingSphere: BoundingSphere, occludeePosition: Cartesian3, positions: Cartesian3[]): any
+
+      public static computeOccludeePointFromRectangle(rectangle: Rectangle, ellipsoid?: Ellipsoid): any
+
+      public static fromBoundingSphere(occluderBoundingSphere: BoundingSphere, cameraPosition: Cartesian3, result?: Occluder): Occluder
+      public cameraPosition: Cartesian3
+      public position: Cartesian3
+      public radius: number
 
       constructor(occluderBoundingSphere: BoundingSphere, cameraPosition: Cartesian3);
 
-      static computeOccludeePoint(occluderBoundingSphere: BoundingSphere, occludeePosition: Cartesian3, positions: Cartesian3[]): any;
+      public computeVisibility(occludeeBS: BoundingSphere): number
 
-      static computeOccludeePointFromRectangle(rectangle: Rectangle, ellipsoid?: Ellipsoid): any;
+      public isBoundingSphereVisible(occludee: BoundingSphere): boolean
 
-      static fromBoundingSphere(occluderBoundingSphere: BoundingSphere, cameraPosition: Cartesian3, result?: Occluder): Occluder;
-
-      computeVisibility(occludeeBS: BoundingSphere): number;
-
-      isBoundingSphereVisible(occludee: BoundingSphere): boolean;
-
-      isPointVisible(occludee: Cartesian3): boolean;
+      public isPointVisible(occludee: Cartesian3): boolean
   }
 
   class PinBuilder {
-      fromColor(color: Color, size: number): HTMLCanvasElement;
+      public fromColor(color: Color, size: number): HTMLCanvasElement
 
-      fromUrl(url: string, color: Color, size: number): HTMLCanvasElement | Promise<HTMLCanvasElement>;
+      public fromUrl(url: string, color: Color, size: number): HTMLCanvasElement | Promise<HTMLCanvasElement>
 
-      fromMakiIconId(id: string, color: Color, size: number): HTMLCanvasElement | Promise<HTMLCanvasElement>;
+      public fromMakiIconId(id: string, color: Color, size: number): HTMLCanvasElement | Promise<HTMLCanvasElement>
 
-      fromText(text: string, color: Color, size: number): HTMLCanvasElement;
+      public fromText(text: string, color: Color, size: number): HTMLCanvasElement
   }
 
   class Plane {
-      static ORIGIN_XY_PLANE: Plane;
-      static ORIGIN_YZ_PLANE: Plane;
-      static ORIGIN_ZX_PLANE: Plane;
-      distance: number;
-      normal: Cartesian3;
+      public static ORIGIN_XY_PLANE: Plane
+      public static ORIGIN_YZ_PLANE: Plane
+      public static ORIGIN_ZX_PLANE: Plane
+
+      public static fromCartesian4(coefficients: Cartesian4, result: Plane): Plane
+
+      public static fromPointNormal(point: Cartesian3, normal: Cartesian3, result?: Plane): Plane
+
+      public static getPointDistance(plane: Plane, point: Cartesian3): number
+      public distance: number
+      public normal: Cartesian3
 
       constructor(normal: Cartesian3, distance: number);
-
-      static fromCartesian4(coefficients: Cartesian4, result: Plane): Plane;
-
-      static fromPointNormal(point: Cartesian3, normal: Cartesian3, result?: Plane): Plane;
-
-      static getPointDistance(plane: Plane, point: Cartesian3): number;
   }
 
   type PointCloudShadingOptions = Partial<{
@@ -1817,25 +1818,33 @@ declare module Cesium {
       eyeDomeLighting: boolean;
       eyeDomeLightingStrength: number;
       eyeDomeLightingRadius: number;
-  }>;
+  }>
 
   class PointCloudShading {
 
-      attenuation: boolean;
-      baseResolution: number;
-      eyeDomeLighting: boolean;
-      eyeDomeLightingRadius: number;
-      eyeDomeLightingStrength: number;
-      geometricErrorScale: number;
-      maximumAttenuation: number;
+      public static isSupported(scene: Scene): boolean
+
+      public attenuation: boolean
+      public baseResolution: number
+      public eyeDomeLighting: boolean
+      public eyeDomeLightingRadius: number
+      public eyeDomeLightingStrength: number
+      public geometricErrorScale: number
+      public maximumAttenuation: number
 
       constructor(options: PointCloudShadingOptions);
-
-      static isSupported(scene: Scene): boolean;
   }
 
   class PolygonGeometry {
-      packedLength: number;
+
+      public static createGeometry(polygonGeometry: PolygonGeometry): Geometry | undefined
+
+      public static fromPositions(options: PolygonGeometryOptions): PolygonGeometry
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: PolygonGeometry): PolygonGeometry
+      public packedLength: number
 
       constructor(options: {
           polygonHierarchy: PolygonHierarchy;
@@ -1849,277 +1858,275 @@ declare module Cesium {
           closeTop?: boolean;
           closeBottom?: boolean;
       });
-
-      static createGeometry(polygonGeometry: PolygonGeometry): Geometry | undefined;
-
-      static fromPositions(options: PolygonGeometryOptions): PolygonGeometry;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: PolygonGeometry): PolygonGeometry;
   }
 
   type PolygonGeometryOptions = PolygonOutlineGeometryOptions & {
       closeBottom?: boolean;
       closeTop?: boolean;
       stRotation?: number;
-  };
+  }
 
   class PolygonHierarchy extends Property {
-      positions: Cartesian3[];
-      holes: PolygonHierarchy[];
+      public positions: Cartesian3[]
+      public holes: PolygonHierarchy[]
 
       constructor(positions?: Cartesian3[], holes?: PolygonHierarchy[]);
   }
 
   class PolygonOutlineGeometry {
+
+      public static createGeometry(polygonGeometry: PolygonOutlineGeometry): Geometry | undefined
+
+      public static fromPositions(options: PolygonOutlineGeometryOptions): PolygonOutlineGeometry
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: PolygonOutlineGeometry): PolygonOutlineGeometry
+
+      public packedLength: number
       constructor(options: { polygonHierarchy: any; height?: number; extrudedHeight?: number; vertexFormat?: VertexFormat; ellipsoid?: Ellipsoid; granularity?: number; perPositionHeight?: boolean });
-
-      packedLength: number;
-
-      static createGeometry(polygonGeometry: PolygonOutlineGeometry): Geometry | undefined;
-
-      static fromPositions(options: PolygonOutlineGeometryOptions): PolygonOutlineGeometry;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: PolygonOutlineGeometry): PolygonOutlineGeometry;
   }
 
-  type PolygonOutlineGeometryOptions = {
-      polygonHierarchy: PolygonHierarchy;
-      ellipsoid?: Ellipsoid;
-      extrudedHeight?: number;
-      granularity?: number;
-      height?: number;
-      perPositionHeight?: boolean;
-      vertexFormat?: VertexFormat;
-  };
+  interface PolygonOutlineGeometryOptions {
+      polygonHierarchy: PolygonHierarchy
+      ellipsoid?: Ellipsoid
+      extrudedHeight?: number
+      granularity?: number
+      height?: number
+      perPositionHeight?: boolean
+      vertexFormat?: VertexFormat
+  }
 
   class PolylineGeometry {
-      packedLength: number;
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: PolylineGeometry): PolylineGeometry
+
+      public static createGeometry(polylineGeometry: PolylineGeometry): Geometry | undefined
+      public packedLength: number
 
       constructor(options: { positions: Cartesian3[]; width?: number; colors?: Color[]; colorsPerVertex?: boolean; followSurface?: boolean; granularity?: number; ellipsoid?: Ellipsoid });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: PolylineGeometry): PolylineGeometry;
-
-      static createGeometry(polylineGeometry: PolylineGeometry): Geometry | undefined;
   }
 
   class PolylineVolumeGeometry {
-      packedLength: number;
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: PolylineVolumeGeometry): PolylineVolumeGeometry
+
+      public static createGeometry(polylineVolumeGeometry: PolylineVolumeGeometry): Geometry | undefined
+      public packedLength: number
 
       constructor(options: { polylinePositions: Cartesian3[]; shapePositions: Cartesian2[]; ellipsoid?: Ellipsoid; granularity?: number; vertexFormat?: VertexFormat; cornerType?: CornerType });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: PolylineVolumeGeometry): PolylineVolumeGeometry;
-
-      static createGeometry(polylineVolumeGeometry: PolylineVolumeGeometry): Geometry | undefined;
   }
 
   class PolylineVolumeOutlineGeometry {
-      packedLength: number;
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: PolylineVolumeOutlineGeometry): PolylineVolumeOutlineGeometry
+
+      public static createGeometry(polylineVolumeOutlineGeometry: PolylineVolumeOutlineGeometry): Geometry | undefined
+      public packedLength: number
 
       constructor(options: { polylinePositions: Cartesian3[]; shapePositions: number; ellipsoid?: Ellipsoid; granularity?: number; cornerType?: CornerType });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: PolylineVolumeOutlineGeometry): PolylineVolumeOutlineGeometry;
-
-      static createGeometry(polylineVolumeOutlineGeometry: PolylineVolumeOutlineGeometry): Geometry | undefined;
   }
 
   class QuantizedMeshTerrainData {
-      waterMask: Uint8Array | HTMLImageElement | HTMLCanvasElement;
+      public waterMask: Uint8Array | HTMLImageElement | HTMLCanvasElement
 
       constructor(options: { quantizedVertices: Uint16Array; indices: Uint16Array | Uint32Array; minimumHeight: number; maximumHeight: number; boundingSphere: BoundingSphere; horizonOcclusionPoint: Cartesian3; westIndices: number[]; southIndices: number[]; eastIndices: number[]; northIndices: number[]; westSkirtHeight: number; southSkirtHeight: number; eastSkirtHeight: number; northSkirtHeight: number; childTileMask?: number; createdByUpsampling?: boolean; encodedNormals?: Uint8Array; waterMask?: Uint8Array });
 
-      createMesh(tilingScheme: TilingScheme, x: number, y: number, level: number): Promise<TerrainMesh>;
+      public createMesh(tilingScheme: TilingScheme, x: number, y: number, level: number): Promise<TerrainMesh>
 
-      upsample(tilingScheme: TilingScheme, thisX: number, thisY: number, thisLevel: number, descendantX: number, descendantY: number, descendantLevel: number): Promise<QuantizedMeshTerrainData>;
+      public upsample(tilingScheme: TilingScheme, thisX: number, thisY: number, thisLevel: number, descendantX: number, descendantY: number, descendantLevel: number): Promise<QuantizedMeshTerrainData>
 
-      interpolateHeight(rectangle: Rectangle, longitude: number, latitude: number): number;
+      public interpolateHeight(rectangle: Rectangle, longitude: number, latitude: number): number
 
-      isChildAvailable(thisX: number, thisY: number, childX: number, childY: number): boolean;
+      public isChildAvailable(thisX: number, thisY: number, childX: number, childY: number): boolean
 
-      wasCreatedByUpsampling(): boolean;
+      public wasCreatedByUpsampling(): boolean
   }
 
   class Quaternion {
-      x: number;
-      y: number;
-      z: number;
-      w: number;
-      static packedLength: number;
-      static packedInterpolationLength: number;
-      static ZERO: Quaternion;
-      static IDENTITY: Quaternion;
+      public static packedLength: number
+      public static packedInterpolationLength: number
+      public static ZERO: Quaternion
+      public static IDENTITY: Quaternion
+
+      public static fromAxisAngle(axis: Cartesian3, angle: number, result?: Quaternion): Quaternion
+
+      public static fromRotationMatrix(matrix: Matrix3, result?: Quaternion): Quaternion
+
+      public static fromHeadingPitchRoll(heading: number, pitch: number, roll: number, result: Quaternion): Quaternion
+
+      public static pack(value: Quaternion, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: Quaternion): Quaternion
+
+      public static convertPackedArrayForInterpolation(packedArray: number[], startingIndex?: number, lastIndex?: number, result?: number[]): void
+
+      public static unpackInterpolationResult(array: number[], sourceArray: number[], startingIndex?: number, lastIndex?: number, result?: Quaternion): Quaternion
+
+      public static clone(quaternion: Quaternion, result?: Quaternion): Quaternion
+
+      public static conjugate(quaternion: Quaternion, result: Quaternion): Quaternion
+
+      public static magnitudeSquared(quaternion: Quaternion): number
+
+      public static magnitude(quaternion: Quaternion): number
+
+      public static normalize(quaternion: Quaternion, result: Quaternion): Quaternion
+
+      public static inverse(quaternion: Quaternion, result: Quaternion): Quaternion
+
+      public static add(left: Quaternion, right: Quaternion, result: Quaternion): Quaternion
+
+      public static subtract(left: Quaternion, right: Quaternion, result: Quaternion): Quaternion
+
+      public static negate(quaternion: Quaternion, result: Quaternion): Quaternion
+
+      public static dot(left: Quaternion, right: Quaternion): number
+
+      public static multiply(left: Quaternion, right: Quaternion, result: Quaternion): Quaternion
+
+      public static multiplyByScalar(quaternion: Quaternion, scalar: number, result: Quaternion): Quaternion
+
+      public static divideByScalar(quaternion: Quaternion, scalar: number, result: Quaternion): Quaternion
+
+      public static computeAxis(quaternion: Quaternion, result: Cartesian3): Cartesian3
+
+      public static computeAngle(quaternion: Quaternion): number
+
+      public static lerp(start: Quaternion, end: Quaternion, t: number, result: Quaternion): Quaternion
+
+      public static slerp(start: Quaternion, end: Quaternion, t: number, result: Quaternion): Quaternion
+
+      public static log(quaternion: Quaternion, result: Cartesian3): Cartesian3
+
+      public static exp(cartesian: Cartesian3, result: Quaternion): Quaternion
+
+      public static computeInnerQuadrangle(q0: Quaternion, q1: Quaternion, q2: Quaternion, result: Quaternion): Quaternion
+
+      public static squad(q0: Quaternion, q1: Quaternion, s0: Quaternion, s1: Quaternion, t: number, result: Quaternion): Quaternion
+
+      public static fastSlerp(start: Quaternion, end: Quaternion, t: number, result: Quaternion): Quaternion
+
+      public static fastSquad(q0: Quaternion, q1: Quaternion, s0: Quaternion, s1: Quaternion, t: number, result?: Quaternion): Quaternion
+
+      public static equals(left?: Quaternion, right?: Quaternion): boolean
+
+      public static equalsEpsilon(left: Quaternion, right: Quaternion, epsilon: number): boolean
+      public x: number
+      public y: number
+      public z: number
+      public w: number
 
       constructor(x?: number, y?: number, z?: number, w?: number);
 
-      clone(result?: Quaternion): Quaternion;
+      public clone(result?: Quaternion): Quaternion
 
-      equals(right?: Quaternion): boolean;
+      public equals(right?: Quaternion): boolean
 
-      equalsEpsilon(right: Quaternion, epsilon: number): boolean;
+      public equalsEpsilon(right: Quaternion, epsilon: number): boolean
 
-      toString(): string;
-
-      static fromAxisAngle(axis: Cartesian3, angle: number, result?: Quaternion): Quaternion;
-
-      static fromRotationMatrix(matrix: Matrix3, result?: Quaternion): Quaternion;
-
-      static fromHeadingPitchRoll(heading: number, pitch: number, roll: number, result: Quaternion): Quaternion;
-
-      static pack(value: Quaternion, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: Quaternion): Quaternion;
-
-      static convertPackedArrayForInterpolation(packedArray: number[], startingIndex?: number, lastIndex?: number, result?: number[]): void;
-
-      static unpackInterpolationResult(array: number[], sourceArray: number[], startingIndex?: number, lastIndex?: number, result?: Quaternion): Quaternion;
-
-      static clone(quaternion: Quaternion, result?: Quaternion): Quaternion;
-
-      static conjugate(quaternion: Quaternion, result: Quaternion): Quaternion;
-
-      static magnitudeSquared(quaternion: Quaternion): number;
-
-      static magnitude(quaternion: Quaternion): number;
-
-      static normalize(quaternion: Quaternion, result: Quaternion): Quaternion;
-
-      static inverse(quaternion: Quaternion, result: Quaternion): Quaternion;
-
-      static add(left: Quaternion, right: Quaternion, result: Quaternion): Quaternion;
-
-      static subtract(left: Quaternion, right: Quaternion, result: Quaternion): Quaternion;
-
-      static negate(quaternion: Quaternion, result: Quaternion): Quaternion;
-
-      static dot(left: Quaternion, right: Quaternion): number;
-
-      static multiply(left: Quaternion, right: Quaternion, result: Quaternion): Quaternion;
-
-      static multiplyByScalar(quaternion: Quaternion, scalar: number, result: Quaternion): Quaternion;
-
-      static divideByScalar(quaternion: Quaternion, scalar: number, result: Quaternion): Quaternion;
-
-      static computeAxis(quaternion: Quaternion, result: Cartesian3): Cartesian3;
-
-      static computeAngle(quaternion: Quaternion): number;
-
-      static lerp(start: Quaternion, end: Quaternion, t: number, result: Quaternion): Quaternion;
-
-      static slerp(start: Quaternion, end: Quaternion, t: number, result: Quaternion): Quaternion;
-
-      static log(quaternion: Quaternion, result: Cartesian3): Cartesian3;
-
-      static exp(cartesian: Cartesian3, result: Quaternion): Quaternion;
-
-      static computeInnerQuadrangle(q0: Quaternion, q1: Quaternion, q2: Quaternion, result: Quaternion): Quaternion;
-
-      static squad(q0: Quaternion, q1: Quaternion, s0: Quaternion, s1: Quaternion, t: number, result: Quaternion): Quaternion;
-
-      static fastSlerp(start: Quaternion, end: Quaternion, t: number, result: Quaternion): Quaternion;
-
-      static fastSquad(q0: Quaternion, q1: Quaternion, s0: Quaternion, s1: Quaternion, t: number, result?: Quaternion): Quaternion;
-
-      static equals(left?: Quaternion, right?: Quaternion): boolean;
-
-      static equalsEpsilon(left: Quaternion, right: Quaternion, epsilon: number): boolean;
+      public toString(): string
   }
 
   class QuaternionSpline {
-      times: number[];
-      points: Quaternion[];
-      innerQuadrangles: Quaternion[];
+      public times: number[]
+      public points: Quaternion[]
+      public innerQuadrangles: Quaternion[]
 
       constructor(options: { times: number[]; points: Quaternion[]; firstInnerQuadrangle?: Quaternion; lastInnerQuadrangle?: Quaternion });
 
-      findTimeInterval(time: number): number;
+      public findTimeInterval(time: number): number
 
-      evaluate(time: number, result?: Quaternion): Quaternion;
+      public evaluate(time: number, result?: Quaternion): Quaternion
   }
 
-  module Queue {
-      type Comparator = (a: any, b: any) => number;
+  namespace Queue {
+      type Comparator = (a: any, b: any) => number
   }
 
   class Ray {
-      origin: Cartesian3;
-      direction: Cartesian3;
+
+      public static getPoint(t: number, result?: Cartesian3): Cartesian3
+      public origin: Cartesian3
+      public direction: Cartesian3
 
       constructor(origin?: Cartesian3, direction?: Cartesian3);
-
-      static getPoint(t: number, result?: Cartesian3): Cartesian3;
   }
 
   class Rectangle {
-      west: number;
-      south: number;
-      east: number;
-      north: number;
-      width: number;
-      height: number;
-      static packedLength: number;
-      static MAX_VALUE: Rectangle;
+      public static packedLength: number
+      public static MAX_VALUE: Rectangle
 
-      constructor(west?: number, south?: number, east?: number, north?: number);
+      public static pack(value: Rectangle, array: number[], startingIndex?: number): number[]
 
-      clone(result?: Rectangle): Rectangle;
+      public static unpack(array: number[], startingIndex?: number, result?: Rectangle): Rectangle
 
-      equals(other?: Rectangle): boolean;
+      public static computeWidth(rectangle: Rectangle): number
 
-      equalsEpsilon(other: Rectangle, epsilon: number): boolean;
+      public static computeHeight(rectangle: Rectangle): number
 
-      static pack(value: Rectangle, array: number[], startingIndex?: number): number[];
+      public static fromDegrees(west?: number, south?: number, east?: number, north?: number, result?: Rectangle): Rectangle
 
-      static unpack(array: number[], startingIndex?: number, result?: Rectangle): Rectangle;
+      public static fromCartesianArray(cartesians: Cartesian3[], ellipsoid?: Ellipsoid, result?: Rectangle): Rectangle
 
-      static computeWidth(rectangle: Rectangle): number;
+      public static fromCartographicArray(cartographics: Cartographic[], result?: Rectangle): Rectangle
 
-      static computeHeight(rectangle: Rectangle): number;
+      public static clone(rectangle: Rectangle, result?: Rectangle): Rectangle
 
-      static fromDegrees(west?: number, south?: number, east?: number, north?: number, result?: Rectangle): Rectangle;
-
-      static fromCartesianArray(cartesians: Cartesian3[], ellipsoid?: Ellipsoid, result?: Rectangle): Rectangle
-
-      static fromCartographicArray(cartographics: Cartographic[], result?: Rectangle): Rectangle;
-
-      static clone(rectangle: Rectangle, result?: Rectangle): Rectangle;
-
-      static equals(left?: Rectangle, right?: Rectangle): boolean;
+      public static equals(left?: Rectangle, right?: Rectangle): boolean
 
       /**
        *
        * @param rectangle
        * @throws {DeveloperError}
        */
-      static validate(rectangle: Rectangle): void;
+      public static validate(rectangle: Rectangle): void
 
-      static southwest(rectangle: Rectangle, result?: Cartographic): Cartographic;
+      public static southwest(rectangle: Rectangle, result?: Cartographic): Cartographic
 
-      static northwest(rectangle: Rectangle, result?: Cartographic): Cartographic;
+      public static northwest(rectangle: Rectangle, result?: Cartographic): Cartographic
 
-      static northeast(rectangle: Rectangle, result?: Cartographic): Cartographic;
+      public static northeast(rectangle: Rectangle, result?: Cartographic): Cartographic
 
-      static southeast(rectangle: Rectangle, result?: Cartographic): Cartographic;
+      public static southeast(rectangle: Rectangle, result?: Cartographic): Cartographic
 
-      static center(rectangle: Rectangle, result?: Cartographic): Cartographic;
+      public static center(rectangle: Rectangle, result?: Cartographic): Cartographic
 
-      static intersection(rectangle: Rectangle, otherRectangle: Rectangle, result?: Rectangle): Rectangle;
+      public static intersection(rectangle: Rectangle, otherRectangle: Rectangle, result?: Rectangle): Rectangle
 
-      static contains(rectangle: Rectangle, cartographic: Cartographic): boolean;
+      public static contains(rectangle: Rectangle, cartographic: Cartographic): boolean
 
-      static subsample(rectangle: Rectangle, ellipsoid?: Ellipsoid, surfaceHeight?: number, result?: Cartesian3[]): Cartesian3[];
+      public static subsample(rectangle: Rectangle, ellipsoid?: Ellipsoid, surfaceHeight?: number, result?: Cartesian3[]): Cartesian3[]
+      public west: number
+      public south: number
+      public east: number
+      public north: number
+      public width: number
+      public height: number
+
+      constructor(west?: number, south?: number, east?: number, north?: number);
+
+      public clone(result?: Rectangle): Rectangle
+
+      public equals(other?: Rectangle): boolean
+
+      public equalsEpsilon(other: Rectangle, epsilon: number): boolean
   }
 
   class RectangleGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static createGeometry(rectangleGeometry: RectangleGeometry): Geometry | undefined
+
+      public static pack(value: BoundingSphere, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: RectangleGeometry): RectangleGeometry
 
       constructor(options: {
           rectangle: Rectangle;
@@ -2133,75 +2140,69 @@ declare module Cesium {
           closeTop?: boolean;
           closeBottom?: boolean;
       });
-
-      static createGeometry(rectangleGeometry: RectangleGeometry): Geometry | undefined;
-
-      static pack(value: BoundingSphere, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: RectangleGeometry): RectangleGeometry;
   }
 
   class RectangleOutlineGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static pack(value: BoundingSphere, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: RectangleGeometry): RectangleGeometry
+
+      public static createGeometry(rectangleGeometry: RectangleOutlineGeometry): Geometry | undefined
 
       constructor(options: { rectangle: Rectangle; ellipsoid?: Ellipsoid; granularity?: number; height?: number; rotation?: number; extrudedHeight?: number });
-
-      static pack(value: BoundingSphere, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: RectangleGeometry): RectangleGeometry;
-
-      static createGeometry(rectangleGeometry: RectangleOutlineGeometry): Geometry | undefined;
   }
 
   class RequestErrorEvent {
-      statusCode: number;
-      response: any;
-      responseHeaders: any;
+      public statusCode: number
+      public response: any
+      public responseHeaders: any
 
       constructor(statusCode?: number, response?: any, responseHeaders?: string | any);
 
-      toString(): string;
+      public toString(): string
   }
 
-  type ResourceCallback = (resource: Resource, error: Error) => boolean | Promise<boolean>;
+  type ResourceCallback = (resource: Resource, error: Error) => boolean | Promise<boolean>
 
-  type ResourceOptions = {
-      url: string;
-      queryParameters?: object;
-      templateValues?: object;
-      headers?: object;
-      proxy?: DefaultProxy;
-      retryCallback?: ResourceCallback;
-      retryAttempts?: number;
-      request?: any; // Cesium.Request
-  };
+  interface ResourceOptions {
+      url: string
+      queryParameters?: object
+      templateValues?: object
+      headers?: object
+      proxy?: DefaultProxy
+      retryCallback?: ResourceCallback
+      retryAttempts?: number
+      request?: any // Cesium.Request
+  }
 
   class Resource {
-      readonly queryParameters: any
-      readonly templateValues: any
-      hasHeaders: boolean
-      headers: object
-      isCrossOriginUrl: boolean
-      isDataUri: boolean
-      proxy: DefaultProxy
-      request: Request
-      retryAttempts: number
-      retryCallback: Function
-      url: string
+      public readonly queryParameters: any
+      public readonly templateValues: any
+      public hasHeaders: boolean
+      public headers: object
+      public isCrossOriginUrl: boolean
+      public isDataUri: boolean
+      public proxy: DefaultProxy
+      public request: Request
+      public retryAttempts: number
+      public retryCallback: Function
+      public url: string
       constructor(options: string | ResourceOptions);
 
-      addQueryParameters(params: any, useAsDefault?: boolean)
-      addTemplateValues(template: any, useAsDefault?: boolean)
-      appendQueryParameters(params: any)
-      clone(result?: Resource): Resource
-      fetch(options?: any): Promise<any> | undefined
+      public addQueryParameters(params: any, useAsDefault?: boolean)
+      public addTemplateValues(template: any, useAsDefault?: boolean)
+      public appendQueryParameters(params: any)
+      public clone(result?: Resource): Resource
+      public fetch(options?: any): Promise<any> | undefined
   }
 
 
   class RuntimeError {
-      name: string;
-      message: string;
-      stack: string;
+      public name: string
+      public message: string
+      public stack: string
 
       constructor(message?: string);
   }
@@ -2209,32 +2210,38 @@ declare module Cesium {
   class ScreenSpaceEventHandler {
       constructor(element?: HTMLCanvasElement);
 
-      setInputAction(action: ScreenSpaceEventAction, type: number, modifier?: number): void;
+      public setInputAction(action: ScreenSpaceEventAction, type: number, modifier?: number): void
 
-      getInputAction(type: number, modifier?: number): ScreenSpaceEventAction;
+      public getInputAction(type: number, modifier?: number): ScreenSpaceEventAction
 
-      removeInputAction(type: number, modifier?: number): void;
+      public removeInputAction(type: number, modifier?: number): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
-  type ScreenSpaceEventAction = (evt: PositionedEvent | MoveEvent | Touch2Event) => void;
+  type ScreenSpaceEventAction = (evt: PositionedEvent | MoveEvent | Touch2Event) => void
 
   class ShowGeometryInstanceAttribute {
-      value: Uint8Array;
-      componentDatatype: ComponentDatatype;
-      componentsPerAttribute: number;
-      normalize: boolean;
+
+      public static toValue(show: boolean, result?: Uint8Array): Uint8Array
+      public value: Uint8Array
+      public componentDatatype: ComponentDatatype
+      public componentsPerAttribute: number
+      public normalize: boolean
 
       constructor(show?: boolean);
-
-      static toValue(show: boolean, result?: Uint8Array): Uint8Array;
   }
 
   class SimplePolylineGeometry {
-      packedLength: number;
+
+      public static createGeometry(simplePolylineGeometry: SimplePolylineGeometry): Geometry | undefined
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: SimplePolylineGeometry): SimplePolylineGeometry
+      public packedLength: number
 
       constructor(options: {
           positions: Cartesian3[];
@@ -2244,257 +2251,251 @@ declare module Cesium {
           granularity?: number;
           ellipsoid?: Ellipsoid
       });
-
-      static createGeometry(simplePolylineGeometry: SimplePolylineGeometry): Geometry | undefined;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: SimplePolylineGeometry): SimplePolylineGeometry;
   }
 
   class SphereGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: SphereGeometry): SphereGeometry
+
+      public static createGeometry(sphereGeometry: SphereGeometry): Geometry | undefined
 
       constructor(options?: { radius?: number; stackPartitions?: number; slicePartitions?: number; vertexFormat?: VertexFormat });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: SphereGeometry): SphereGeometry;
-
-      static createGeometry(sphereGeometry: SphereGeometry): Geometry | undefined;
   }
 
   class SphereOutlineGeometry {
-      static packedLength: number;
+      public static packedLength: number
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: SphereOutlineGeometry): SphereOutlineGeometry
+
+      public static createGeometry(sphereGeometry: SphereOutlineGeometry): Geometry | undefined
 
       constructor(options?: { radius?: number; stackPartitions?: number; slicePartitions?: number; subdivisions?: number });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: SphereOutlineGeometry): SphereOutlineGeometry;
-
-      static createGeometry(sphereGeometry: SphereOutlineGeometry): Geometry | undefined;
   }
 
   class Spherical {
+
+      public static fromCartesian3(cartesian3: Cartesian3, spherical?: Spherical): Spherical
+
+      public static clone(spherical: Spherical, result?: Spherical): Spherical
+
+      public static normalize(spherical: Spherical, result?: Spherical): Spherical
+
+      public static equals(left: Spherical, right: Spherical): boolean
+
+      public static equalsEpsilon(left: Spherical, right: Spherical, epsilon?: number): boolean
       constructor(clock?: number, cone?: number, magnitude?: number);
 
-      equals(other: Spherical): boolean;
+      public equals(other: Spherical): boolean
 
-      clone(result?: Spherical): Spherical;
+      public clone(result?: Spherical): Spherical
 
-      equalsEpsilon(other: Spherical, epsilon: number): boolean;
+      public equalsEpsilon(other: Spherical, epsilon: number): boolean
 
-      toString(): string;
-
-      static fromCartesian3(cartesian3: Cartesian3, spherical?: Spherical): Spherical;
-
-      static clone(spherical: Spherical, result?: Spherical): Spherical;
-
-      static normalize(spherical: Spherical, result?: Spherical): Spherical;
-
-      static equals(left: Spherical, right: Spherical): boolean;
-
-      static equalsEpsilon(left: Spherical, right: Spherical, epsilon?: number): boolean;
+      public toString(): string
   }
 
   class Spline {
-      times: number[];
-      points: Cartesian3[] | Quaternion[];
+      public times: number[]
+      public points: Cartesian3[] | Quaternion[]
 
-      evaluate(time: number, result?: Cartesian3 | Quaternion): Cartesian3 | Quaternion;
+      public evaluate(time: number, result?: Cartesian3 | Quaternion): Cartesian3 | Quaternion
 
-      findTimeInterval(time: number, startIndex: number): number;
+      public findTimeInterval(time: number, startIndex: number): number
   }
 
   class TaskProcessor {
       constructor(workerName: string, maximumActiveTasks?: number);
 
-      scheduleTask(parameters: any, transferableObjects?: any[]): Promise<any>;
+      public scheduleTask(parameters: any, transferableObjects?: any[]): Promise<any>
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class TerrainData {
-      waterMask: Uint8Array | HTMLImageElement | HTMLCanvasElement;
+      public waterMask: Uint8Array | HTMLImageElement | HTMLCanvasElement
 
-      interpolateHeight(rectangle: Rectangle, longitude: number, latitude: number): number;
+      public interpolateHeight(rectangle: Rectangle, longitude: number, latitude: number): number
 
-      isChildAvailable(thisX: number, thisY: number, childX: number, childY: number): boolean;
+      public isChildAvailable(thisX: number, thisY: number, childX: number, childY: number): boolean
 
-      createMesh(tilingScheme: TilingScheme, x: number, y: number, level: number): Promise<TerrainMesh>;
+      public createMesh(tilingScheme: TilingScheme, x: number, y: number, level: number): Promise<TerrainMesh>
 
-      upsample(tilingScheme: TilingScheme, thisX: number, thisY: number, thisLevel: number, descendantX: number, descendantY: number, descendantLevel: number): Promise<TerrainData>;
+      public upsample(tilingScheme: TilingScheme, thisX: number, thisY: number, thisLevel: number, descendantX: number, descendantY: number, descendantLevel: number): Promise<TerrainData>
 
-      wasCreatedByUpsampling(): boolean;
+      public wasCreatedByUpsampling(): boolean
   }
 
   class TerrainMesh {
-      center: Cartesian3;
-      vertices: Float32Array;
-      stride: number;
-      indices: Uint16Array | Uint32Array;
-      minimumHeight: number;
-      maximumHeight: number;
-      boundingSphere3D: BoundingSphere;
-      occludeePointInScaledSpace: Cartesian3;
+      public center: Cartesian3
+      public vertices: Float32Array
+      public stride: number
+      public indices: Uint16Array | Uint32Array
+      public minimumHeight: number
+      public maximumHeight: number
+      public boundingSphere3D: BoundingSphere
+      public occludeePointInScaledSpace: Cartesian3
 
       constructor(center: Cartesian3, vertices: Float32Array, indices: Uint16Array | Uint32Array, minimumHeight: number, maximumHeight: number, boundingSphere3D: BoundingSphere, occludeePointInScaledSpace: Cartesian3, vertexStride?: number);
   }
 
   class TerrainProvider {
-      static heightmapTerrainQuality: number;
-      credit: Credit;
-      errorEvent: Event;
-      hasVertexNormals: boolean;
-      hasWaterMask: boolean;
-      ready: boolean;
-      readonly readyPromise: Promise<boolean>;
-      tilingScheme: TilingScheme;
+      public static heightmapTerrainQuality: number
 
-      static getEstimatedLevelZeroGeometricErrorForAHeightmap(ellipsoid: Ellipsoid, tileImageWidth: number, numberOfTilesAtLevelZero: number): number;
+      public static getEstimatedLevelZeroGeometricErrorForAHeightmap(ellipsoid: Ellipsoid, tileImageWidth: number, numberOfTilesAtLevelZero: number): number
 
-      static getRegularGridIndices(width: number, height: number): Uint16Array;
+      public static getRegularGridIndices(width: number, height: number): Uint16Array
+      public credit: Credit
+      public errorEvent: Event
+      public hasVertexNormals: boolean
+      public hasWaterMask: boolean
+      public ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public tilingScheme: TilingScheme
 
-      getLevelMaximumGeometricError(level: number): number;
+      public getLevelMaximumGeometricError(level: number): number
 
-      getTileDataAvailable(x: number, y: number, level: number): boolean;
+      public getTileDataAvailable(x: number, y: number, level: number): boolean
 
-      requestTileGeometry(x: number, y: number, level: number, request?: Request): Promise<TerrainData>;
+      public requestTileGeometry(x: number, y: number, level: number, request?: Request): Promise<TerrainData>
   }
 
   class TileProviderError {
-      provider: ImageryProvider | TerrainProvider;
-      message: string;
-      x: number;
-      y: number;
-      level: number;
-      timesRetried: number;
-      retry: boolean;
-      error: Error;
+
+      public static handleError(previousError: TileProviderError, provider: ImageryProvider | TerrainProvider, event: Event, message: string, x: number, y: number, level: number, retryFunction: TileProviderError.RetryFunction, errorDetails?: Error): TileProviderError
+
+      public static handleSuccess(previousError: TileProviderError): void
+      public provider: ImageryProvider | TerrainProvider
+      public message: string
+      public x: number
+      public y: number
+      public level: number
+      public timesRetried: number
+      public retry: boolean
+      public error: Error
 
       constructor(provider: ImageryProvider | TerrainProvider, message: string, x?: number, y?: number, level?: number, timesRetried?: number, error?: Error);
-
-      static handleError(previousError: TileProviderError, provider: ImageryProvider | TerrainProvider, event: Event, message: string, x: number, y: number, level: number, retryFunction: TileProviderError.RetryFunction, errorDetails?: Error): TileProviderError;
-
-      static handleSuccess(previousError: TileProviderError): void;
   }
 
-  module TileProviderError {
-      type RetryFunction = () => void;
+  namespace TileProviderError {
+      type RetryFunction = () => void
   }
 
   class TilingScheme {
-      ellipsoid: Ellipsoid;
-      rectangle: Rectangle;
-      projection: MapProjection;
+      public ellipsoid: Ellipsoid
+      public rectangle: Rectangle
+      public projection: MapProjection
 
-      getNumberOfXTilesAtLevel(level: number): number;
+      public getNumberOfXTilesAtLevel(level: number): number
 
-      getNumberOfYTilesAtLevel(level: number): number;
+      public getNumberOfYTilesAtLevel(level: number): number
 
-      rectangleToNativeRectangle(rectangle: Rectangle, result?: Rectangle): Rectangle;
+      public rectangleToNativeRectangle(rectangle: Rectangle, result?: Rectangle): Rectangle
 
-      tileXYToNativeRectangle(x: number, y: number, level: number, result?: any): Rectangle;
+      public tileXYToNativeRectangle(x: number, y: number, level: number, result?: any): Rectangle
 
-      tileXYToRectangle(x: number, y: number, level: number, result?: any): Rectangle;
+      public tileXYToRectangle(x: number, y: number, level: number, result?: any): Rectangle
 
-      positionToTileXY(position: Cartographic, level: number, result?: Cartesian2): Cartesian2;
+      public positionToTileXY(position: Cartographic, level: number, result?: Cartesian2): Cartesian2
   }
 
   class TimeInterval {
-      start: JulianDate;
-      stop: JulianDate;
-      data: any;
-      isStartIncluded: boolean;
-      isStopIncluded: boolean;
-      isEmpty: boolean;
-      static EMPTY: TimeInterval;
+      public static EMPTY: TimeInterval
+
+      public static fromIso8601(options: { iso8601: string; isStartIncluded?: boolean; isStopIncluded?: boolean; data?: any }, result?: TimeInterval): TimeInterval
+
+      public static toIso8601(timeInterval: TimeInterval, precision?: number): string
+
+      public static clone(timeInterval?: TimeInterval, result?: TimeInterval): TimeInterval
+
+      public static equals(left?: TimeInterval, right?: TimeInterval, dataComparer?: TimeInterval.DataComparer): boolean
+
+      public static equalsEpsilon(left: TimeInterval, right: TimeInterval, epsilon: number, dataComparer?: TimeInterval.DataComparer): boolean
+
+      public static intersect(left: TimeInterval, right: TimeInterval, result: TimeInterval, mergeCallback?: TimeInterval.MergeCallback): TimeInterval
+
+      public static contains(timeInterval: TimeInterval, julianDate: JulianDate): boolean
+      public start: JulianDate
+      public stop: JulianDate
+      public data: any
+      public isStartIncluded: boolean
+      public isStopIncluded: boolean
+      public isEmpty: boolean
 
       constructor(options?: { start?: JulianDate; stop?: JulianDate; isStartIncluded?: boolean; isStopIncluded?: boolean; data?: any });
 
-      clone(result?: TimeInterval): TimeInterval;
+      public clone(result?: TimeInterval): TimeInterval
 
-      equals(right?: TimeInterval, dataComparer?: TimeInterval.DataComparer): boolean;
+      public equals(right?: TimeInterval, dataComparer?: TimeInterval.DataComparer): boolean
 
-      equalsEpsilon(right: TimeInterval, epsilon: number, dataComparer?: TimeInterval.DataComparer): boolean;
+      public equalsEpsilon(right: TimeInterval, epsilon: number, dataComparer?: TimeInterval.DataComparer): boolean
 
-      toString(): string;
-
-      static fromIso8601(options: { iso8601: string; isStartIncluded?: boolean; isStopIncluded?: boolean; data?: any }, result?: TimeInterval): TimeInterval;
-
-      static toIso8601(timeInterval: TimeInterval, precision?: number): string;
-
-      static clone(timeInterval?: TimeInterval, result?: TimeInterval): TimeInterval;
-
-      static equals(left?: TimeInterval, right?: TimeInterval, dataComparer?: TimeInterval.DataComparer): boolean;
-
-      static equalsEpsilon(left: TimeInterval, right: TimeInterval, epsilon: number, dataComparer?: TimeInterval.DataComparer): boolean;
-
-      static intersect(left: TimeInterval, right: TimeInterval, result: TimeInterval, mergeCallback?: TimeInterval.MergeCallback): TimeInterval;
-
-      static contains(timeInterval: TimeInterval, julianDate: JulianDate): boolean;
+      public toString(): string
   }
 
-  module TimeInterval {
-      type MergeCallback = (leftData: any, rightData: any) => any;
-      type DataComparer = (leftData: any, rightData: any) => boolean;
+  namespace TimeInterval {
+      type MergeCallback = (leftData: any, rightData: any) => any
+      type DataComparer = (leftData: any, rightData: any) => boolean
   }
 
   class TimeIntervalCollection {
-      changedEvent: Event;
-      start: JulianDate;
-      isStartIncluded: boolean;
-      stop: JulianDate;
-      isStopIncluded: boolean;
-      length: number;
-      isEmpty: boolean;
+      public changedEvent: Event
+      public start: JulianDate
+      public isStartIncluded: boolean
+      public stop: JulianDate
+      public isStopIncluded: boolean
+      public length: number
+      public isEmpty: boolean
 
       constructor(intervals?: TimeInterval[]);
 
-      equals(right?: TimeIntervalCollection, dataComparer?: TimeInterval.DataComparer): boolean;
+      public equals(right?: TimeIntervalCollection, dataComparer?: TimeInterval.DataComparer): boolean
 
-      get(index: number): TimeInterval;
+      public get(index: number): TimeInterval
 
-      removeAll(): void;
+      public removeAll(): void
 
-      findIntervalContainingDate(date: JulianDate): TimeInterval;
+      public findIntervalContainingDate(date: JulianDate): TimeInterval
 
-      findDataForIntervalContainingDate(date: JulianDate): Object;
+      public findDataForIntervalContainingDate(date: JulianDate): Object
 
-      contains(julianDate: JulianDate): boolean;
+      public contains(julianDate: JulianDate): boolean
 
-      indexOf(date: JulianDate): number;
+      public indexOf(date: JulianDate): number
 
-      findInterval(options?: { start?: JulianDate; stop?: JulianDate; isStartIncluded?: boolean; isStopIncluded?: boolean }): TimeInterval;
+      public findInterval(options?: { start?: JulianDate; stop?: JulianDate; isStartIncluded?: boolean; isStopIncluded?: boolean }): TimeInterval
 
-      addInterval(interval: TimeInterval, dataComparer?: TimeInterval.DataComparer): void;
+      public addInterval(interval: TimeInterval, dataComparer?: TimeInterval.DataComparer): void
 
-      removeInterval(interval: TimeInterval): void;
+      public removeInterval(interval: TimeInterval): void
 
-      intersect(other: TimeIntervalCollection, dataComparer?: TimeInterval.DataComparer, mergeCallback?: TimeInterval.MergeCallback): TimeIntervalCollection;
+      public intersect(other: TimeIntervalCollection, dataComparer?: TimeInterval.DataComparer, mergeCallback?: TimeInterval.MergeCallback): TimeIntervalCollection
   }
 
   class GoogleEarthEnterpriseTerrainProvider extends TerrainProvider {
-      readonly credit: Credit;
-      readonly errorEvent: Event;
-      hasVertexNormals: boolean;
-      hasWaterMask: boolean;
-      readonly proxy: Proxy;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<boolean>;
-      readonly tilingScheme: TilingScheme;
-      readonly url: string;
+      public readonly credit: Credit
+      public readonly errorEvent: Event
+      public hasVertexNormals: boolean
+      public hasWaterMask: boolean
+      public readonly proxy: Proxy
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public readonly tilingScheme: TilingScheme
+      public readonly url: string
 
       constructor(options: { url: Resource | string; metadata: GoogleEarthEnterpriseMetadata; ellipsoid?: Ellipsoid; credit?: Credit | string });
 
-      getLevelMaximumGeometricError(level: number): number;
+      public getLevelMaximumGeometricError(level: number): number
 
-      getTileDataAvailable(x: number, y: number, level: number): boolean;
+      public getTileDataAvailable(x: number, y: number, level: number): boolean
 
-      requestTileGeometry(x: number, y: number, level: number, request?: Request): Promise<TerrainData>;
+      public requestTileGeometry(x: number, y: number, level: number, request?: Request): Promise<TerrainData>
   }
 
   class GoogleEarthEnterpriseMetadata {
@@ -2502,50 +2503,58 @@ declare module Cesium {
   }
 
   class VRTheWorldTerrainProvider extends TerrainProvider {
-      credit: Credit;
-      errorEvent: Event;
-      hasVertexNormals: boolean;
-      hasWaterMask: boolean;
-      ready: boolean;
-      readonly readyPromise: Promise<boolean>;
-      tilingScheme: GeographicTilingScheme;
+      public credit: Credit
+      public errorEvent: Event
+      public hasVertexNormals: boolean
+      public hasWaterMask: boolean
+      public ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public tilingScheme: GeographicTilingScheme
 
       constructor(options: { url: string; proxy?: any; ellipsoid?: Ellipsoid; credit?: Credit | string });
 
-      getLevelMaximumGeometricError(level: number): number;
+      public getLevelMaximumGeometricError(level: number): number
 
-      getTileDataAvailable(x: number, y: number, level: number): boolean;
+      public getTileDataAvailable(x: number, y: number, level: number): boolean
 
-      requestTileGeometry(x: number, y: number, level: number, request?: Request): Promise<TerrainData>;
+      public requestTileGeometry(x: number, y: number, level: number, request?: Request): Promise<TerrainData>
   }
 
   class VertexFormat {
-      position: boolean;
-      normal: boolean;
-      st: boolean;
-      binormal: boolean;
-      tangent: boolean;
-      color: boolean;
-      static POSITION_ONLY: VertexFormat;
-      static POSITION_AND_NORMAL: VertexFormat;
-      static POSITION_NORMAL_AND_ST: VertexFormat;
-      static POSITION_AND_ST: VertexFormat;
-      static POSITION_AND_COLOR: VertexFormat;
-      static ALL: VertexFormat;
-      static DEFAULT: VertexFormat;
-      static packedLength: number;
+      public static POSITION_ONLY: VertexFormat
+      public static POSITION_AND_NORMAL: VertexFormat
+      public static POSITION_NORMAL_AND_ST: VertexFormat
+      public static POSITION_AND_ST: VertexFormat
+      public static POSITION_AND_COLOR: VertexFormat
+      public static ALL: VertexFormat
+      public static DEFAULT: VertexFormat
+      public static packedLength: number
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: VertexFormat): VertexFormat
+
+      public static clone(cartesian: VertexFormat, result?: VertexFormat): VertexFormat
+      public position: boolean
+      public normal: boolean
+      public st: boolean
+      public binormal: boolean
+      public tangent: boolean
+      public color: boolean
 
       constructor(options?: any);
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: VertexFormat): VertexFormat;
-
-      static clone(cartesian: VertexFormat, result?: VertexFormat): VertexFormat;
   }
 
   class WallGeometry {
-      packedLength: number;
+
+      public static createGeometry(wallGeometry: WallGeometry): Geometry | undefined
+
+      public static fromConstantHeights(positions: Cartesian3[], maximumHeight?: number, minimumHeight?: number, ellipsoid?: Ellipsoid): WallGeometry
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: WallGeometry): WallGeometry
+      public packedLength: number
 
       constructor(options: {
           positions: Cartesian3[];
@@ -2555,825 +2564,797 @@ declare module Cesium {
           ellipsoid?: Ellipsoid;
           vertexFormat?: VertexFormat
       });
-
-      static createGeometry(wallGeometry: WallGeometry): Geometry | undefined;
-
-      static fromConstantHeights(positions: Cartesian3[], maximumHeight?: number, minimumHeight?: number, ellipsoid?: Ellipsoid): WallGeometry;
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: WallGeometry): WallGeometry;
   }
 
   class WallOutlineGeometry {
-      packedLength: number;
+
+      public static pack(value: any, array: number[], startingIndex?: number): number[]
+
+      public static unpack(array: number[], startingIndex?: number, result?: WallOutlineGeometry): WallOutlineGeometry
+
+      public static fromConstantHeights(positions: Cartesian3[], maximumHeight?: number, minimumHeight?: number, ellipsoid?: Ellipsoid): WallOutlineGeometry
+
+      public static createGeometry(wallGeometry: WallOutlineGeometry): Geometry | undefined
+      public packedLength: number
 
       constructor(options: { positions: Cartesian3[]; granularity?: number; maximumHeights?: number[]; minimumHeights?: number[]; ellipsoid?: Ellipsoid });
-
-      static pack(value: any, array: number[], startingIndex?: number): number[];
-
-      static unpack(array: number[], startingIndex?: number, result?: WallOutlineGeometry): WallOutlineGeometry;
-
-      static fromConstantHeights(positions: Cartesian3[], maximumHeight?: number, minimumHeight?: number, ellipsoid?: Ellipsoid): WallOutlineGeometry;
-
-      static createGeometry(wallGeometry: WallOutlineGeometry): Geometry | undefined;
   }
 
   class WebMercatorProjection {
-      ellipsoid: Ellipsoid;
-      static MaximumLatitude: number;
+      public static MaximumLatitude: number
+
+      public static mercatorAngleToGeodeticLatitude(mercatorAngle: number): number
+
+      public static geodeticLatitudeToMercatorAngle(latitude: number): number
+      public ellipsoid: Ellipsoid
 
       constructor(ellipsoid?: Ellipsoid);
 
-      project(cartographic: Cartographic, result?: Cartesian3): Cartesian3;
+      public project(cartographic: Cartographic, result?: Cartesian3): Cartesian3
 
-      unproject(cartesian: Cartesian3, result?: Cartographic): Cartographic;
-
-      static mercatorAngleToGeodeticLatitude(mercatorAngle: number): number;
-
-      static geodeticLatitudeToMercatorAngle(latitude: number): number;
+      public unproject(cartesian: Cartesian3, result?: Cartographic): Cartographic
   }
 
   class WebMercatorTilingScheme {
-      ellipsoid: Ellipsoid;
-      rectangle: Rectangle;
-      projection: MapProjection;
+      public ellipsoid: Ellipsoid
+      public rectangle: Rectangle
+      public projection: MapProjection
 
       constructor(options?: { ellipsoid?: Ellipsoid; numberOfLevelZeroTilesX?: number; numberOfLevelZeroTilesY?: number; rectangleSouthwestInMeters?: Cartesian2; rectangleNortheastInMeters?: Cartesian2 });
 
-      getNumberOfXTilesAtLevel(level: number): number;
+      public getNumberOfXTilesAtLevel(level: number): number
 
-      getNumberOfYTilesAtLevel(level: number): number;
+      public getNumberOfYTilesAtLevel(level: number): number
 
-      rectangleToNativeRectangle(rectangle: Rectangle, result?: Rectangle): Rectangle;
+      public rectangleToNativeRectangle(rectangle: Rectangle, result?: Rectangle): Rectangle
 
-      tileXYToNativeRectangle(x: number, y: number, level: number, result?: any): Rectangle;
+      public tileXYToNativeRectangle(x: number, y: number, level: number, result?: any): Rectangle
 
-      tileXYToRectangle(x: number, y: number, level: number, result?: any): Rectangle;
+      public tileXYToRectangle(x: number, y: number, level: number, result?: any): Rectangle
 
-      positionToTileXY(position: Cartographic, level: number, result?: Cartesian2): Cartesian2;
+      public positionToTileXY(position: Cartographic, level: number, result?: Cartesian2): Cartesian2
   }
 
-  type BillboardGraphicsOptions = {
-      image?: any | String | HTMLCanvasElement;
-      show?: any | boolean;
-      scale?: any | number;
-      horizontalOrigin?: any | HorizontalOrigin;
-      verticalOrigin?: any | VerticalOrigin;
-      eyeOffset?: any;
-      pixelOffset?: any | Cartesian2;
-      rotation?: any;
-      alignedAxis?: any;
-      width?: any | number;
-      height?: any | number;
-      color?: any;
-      scaleByDistance?: any | NearFarScalar;
-      translucencyByDistance?: any | NearFarScalar;
-      pixelOffsetScaleByDistance?: any | NearFarScalar;
+  interface BillboardGraphicsOptions {
+      image?: any | String | HTMLCanvasElement
+      show?: any | boolean
+      scale?: any | number
+      horizontalOrigin?: any | HorizontalOrigin
+      verticalOrigin?: any | VerticalOrigin
+      eyeOffset?: any
+      pixelOffset?: any | Cartesian2
+      rotation?: any
+      alignedAxis?: any
+      width?: any | number
+      height?: any | number
+      color?: any
+      scaleByDistance?: any | NearFarScalar
+      translucencyByDistance?: any | NearFarScalar
+      pixelOffsetScaleByDistance?: any | NearFarScalar
       imageSubRegion?: any
   }
 
   class BillboardGraphics {
-      readonly definitionChanged: Event;
-      disableDepthTestDistance: any | any;
-      distanceDisplayCondition: any | any;
-      heightReference: any | any;
-      sizeInMeters: any | any;
-      image: any | any;
-      imageSubRegion: any | any;
-      scale: any | any;
-      rotation: any | any;
-      alignedAxis: any | any;
-      horizontalOrigin: any | any;
-      verticalOrigin: any | any;
-      color: any | any;
-      eyeOffset: any | any;
-      pixelOffset: any | any;
-      show: any | any;
-      width: any | any;
-      height: any | any;
-      scaleByDistance: any | any;
-      translucencyByDistance: any | any;
-      pixelOffsetScaleByDistance: any | any;
+      public readonly definitionChanged: Event
+      public disableDepthTestDistance: any | any
+      public distanceDisplayCondition: any | any
+      public heightReference: any | any
+      public sizeInMeters: any | any
+      public image: any | any
+      public imageSubRegion: any | any
+      public scale: any | any
+      public rotation: any | any
+      public alignedAxis: any | any
+      public horizontalOrigin: any | any
+      public verticalOrigin: any | any
+      public color: any | any
+      public eyeOffset: any | any
+      public pixelOffset: any | any
+      public show: any | any
+      public width: any | any
+      public height: any | any
+      public scaleByDistance: any | any
+      public translucencyByDistance: any | any
+      public pixelOffsetScaleByDistance: any | any
 
       constructor(options?: BillboardGraphicsOptions);
 
-      clone(result?: BillboardGraphics): BillboardGraphics;
+      public clone(result?: BillboardGraphics): BillboardGraphics
 
-      merge(source: BillboardGraphics): void;
+      public merge(source: BillboardGraphics): void
   }
 
   class BillboardVisualizer {
       constructor(scene: Scene, entityCollection: EntityCollection);
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class BoxGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class BoxGraphics {
-      definitionChanged: Event;
-      show: any;
-      dimensions: any;
-      material: MaterialProperty;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
+      public definitionChanged: Event
+      public show: any
+      public dimensions: any
+      public material: MaterialProperty
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
 
       constructor(options?: { dimensions?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any });
 
-      clone(result?: BoxGraphics): BoxGraphics;
+      public clone(result?: BoxGraphics): BoxGraphics
 
-      merge(source: BoxGraphics): void;
+      public merge(source: BoxGraphics): void
   }
 
   class CallbackProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
+      public isConstant: boolean
+      public definitionChanged: Event
 
       constructor(callback: CallbackProperty.Callback, isConstant: boolean);
 
-      getValue(time?: JulianDate, result?: any): any;
+      public getValue(time?: JulianDate, result?: any): any
 
-      setCallback(callback: CallbackProperty.Callback, isConstant: boolean): void;
+      public setCallback(callback: CallbackProperty.Callback, isConstant: boolean): void
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
-  module CallbackProperty {
-      type Callback = (time?: JulianDate, result?: any) => any;
+  namespace CallbackProperty {
+      type Callback = (time?: JulianDate, result?: any) => any
   }
 
   class CheckerboardMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      evenColor: any;
-      oddColor: any;
-      repeat: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public evenColor: any
+      public oddColor: any
+      public repeat: any
 
       constructor(options?: { evenColor?: any; oddColor?: any; repeat?: any });
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class ColorMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      color: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public color: any
 
       constructor(color?: any);
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class CompositeEntityCollection {
-      collectionChanged: Event;
-      id: string;
-      values: Entity[];
+      public collectionChanged: Event
+      public id: string
+      public values: Entity[]
 
       constructor(collections?: EntityCollection[]);
 
-      addCollection(collection: EntityCollection, index?: number): void;
+      public addCollection(collection: EntityCollection, index?: number): void
 
-      removeCollection(collection: EntityCollection): boolean;
+      public removeCollection(collection: EntityCollection): boolean
 
-      removeAllCollections(): void;
+      public removeAllCollections(): void
 
-      containsCollection(collection: EntityCollection): boolean;
+      public containsCollection(collection: EntityCollection): boolean
 
-      contains(entity: Entity): boolean;
+      public contains(entity: Entity): boolean
 
-      indexOfCollection(collection: EntityCollection): number;
+      public indexOfCollection(collection: EntityCollection): number
 
-      getCollection(index: number): EntityCollection;
+      public getCollection(index: number): EntityCollection
 
-      getCollectionsLength(): number;
+      public getCollectionsLength(): number
 
-      raiseCollection(collection: EntityCollection): void;
+      public raiseCollection(collection: EntityCollection): void
 
-      lowerCollection(collection: EntityCollection): void;
+      public lowerCollection(collection: EntityCollection): void
 
-      raiseCollectionToTop(collection: EntityCollection): void;
+      public raiseCollectionToTop(collection: EntityCollection): void
 
-      lowerCollectionToBottom(collection: EntityCollection): void;
+      public lowerCollectionToBottom(collection: EntityCollection): void
 
-      suspendEvents(): void;
+      public suspendEvents(): void
 
-      resumeEvents(): void;
+      public resumeEvents(): void
 
-      computeAvailability(): TimeInterval;
+      public computeAvailability(): TimeInterval
 
-      getById(id: any): Entity;
+      public getById(id: any): Entity
   }
 
   class CompositeMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      intervals: TimeIntervalCollection;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public intervals: TimeIntervalCollection
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class CompositePositionProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      intervals: TimeIntervalCollection;
-      referenceFrame: ReferenceFrame;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public intervals: TimeIntervalCollection
+      public referenceFrame: ReferenceFrame
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      public getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class CompositeProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      intervals: TimeIntervalCollection;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public intervals: TimeIntervalCollection
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class ConstantPositionProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      referenceFrame: ReferenceFrame;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public referenceFrame: ReferenceFrame
 
       constructor(value?: Cartesian3, referenceFrame?: ReferenceFrame);
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      setValue(value: Cartesian3, referenceFrame?: ReferenceFrame): void;
+      public setValue(value: Cartesian3, referenceFrame?: ReferenceFrame): void
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      public getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class ConstantProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
+      public isConstant: boolean
+      public definitionChanged: Event
 
       constructor(value?: any);
 
-      getValue(time?: JulianDate, result?: any): any;
+      public getValue(time?: JulianDate, result?: any): any
 
-      setValue(value: any): void;
+      public setValue(value: any): void
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class CorridorGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class CorridorGraphics {
-      definitionChanged: Event;
-      show: any;
-      material: MaterialProperty;
-      positions: any;
-      height: any;
-      extrudedHeight: any;
-      granularity: any;
-      width: any;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
-      cornerType: any;
+      public definitionChanged: Event
+      public show: any
+      public material: MaterialProperty
+      public positions: any
+      public height: any
+      public extrudedHeight: any
+      public granularity: any
+      public width: any
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
+      public cornerType: any
 
       constructor(options?: { positions?: any; width?: any; cornerType?: any; height?: any; extrudedHeight?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; granularity?: any });
 
-      clone(result?: CorridorGraphics): CorridorGraphics;
+      public clone(result?: CorridorGraphics): CorridorGraphics
 
-      merge(source: CorridorGraphics): void;
+      public merge(source: CorridorGraphics): void
   }
 
   class CustomDataSource extends DataSource {
-      name: string;
-      clock: DataSourceClock;
-      entities: EntityCollection;
-      isLoading: boolean;
-      changedEvent: Event;
-      errorEvent: Event;
-      loadingEvent: Event;
+      public name: string
+      public clock: DataSourceClock
+      public entities: EntityCollection
+      public isLoading: boolean
+      public changedEvent: Event
+      public errorEvent: Event
+      public loadingEvent: Event
 
       constructor(name?: string);
   }
 
   class CylinderGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class CylinderGraphics {
-      definitionChanged: Event;
-      length: any;
-      topRadius: any;
-      bottomRadius: any;
-      numberOfVerticalLines: any;
-      slices: any;
-      show: any;
-      material: MaterialProperty;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
+      public definitionChanged: Event
+      public length: any
+      public topRadius: any
+      public bottomRadius: any
+      public numberOfVerticalLines: any
+      public slices: any
+      public show: any
+      public material: MaterialProperty
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
 
       constructor(options?: { length?: any; topRadius?: any; bottomRadius?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; numberOfVerticalLines?: any; slices?: any });
 
-      clone(result?: CylinderGraphics): CylinderGraphics;
+      public clone(result?: CylinderGraphics): CylinderGraphics
 
-      merge(source: CylinderGraphics): void;
+      public merge(source: CylinderGraphics): void
   }
 
   class CzmlDataSource extends DataSource {
-      name: string;
-      clock: DataSourceClock;
-      entities: EntityCollection;
-      isLoading: boolean;
-      changedEvent: Event;
-      errorEvent: Event;
-      loadingEvent: Event;
-      static updaters: any[];
+      public static updaters: any[]
+      public static load(data: string | any, options?: { sourceUri?: string }): Promise<CzmlDataSource>
+
+      public static processPacketData(type: Function, object: any, propertyName: string, packetData: any, interval: TimeInterval, sourceUri: string, entityCollection: EntityCollection): void
+
+      public static processPositionPacketData(object: any, propertyName: string, packetData: any, interval: TimeInterval, sourceUri: string, entityCollection: EntityCollection): void
+
+      public static processMaterialPacketData(object: any, propertyName: string, packetData: any, interval: TimeInterval, sourceUri: string, entityCollection: EntityCollection): void
+      public name: string
+      public clock: DataSourceClock
+      public entities: EntityCollection
+      public isLoading: boolean
+      public changedEvent: Event
+      public errorEvent: Event
+      public loadingEvent: Event
 
       constructor(name?: string);
 
-      process(data: string | any, options?: { sourceUri?: string }): Promise<CzmlDataSource>;
+      public process(data: string | any, options?: { sourceUri?: string }): Promise<CzmlDataSource>
 
-      load(data: string | any, options?: { sourceUri?: string }): Promise<CzmlDataSource>;
-      static load(data: string | any, options?: { sourceUri?: string }): Promise<CzmlDataSource>;
-
-      static processPacketData(type: Function, object: any, propertyName: string, packetData: any, interval: TimeInterval, sourceUri: string, entityCollection: EntityCollection): void;
-
-      static processPositionPacketData(object: any, propertyName: string, packetData: any, interval: TimeInterval, sourceUri: string, entityCollection: EntityCollection): void;
-
-      static processMaterialPacketData(object: any, propertyName: string, packetData: any, interval: TimeInterval, sourceUri: string, entityCollection: EntityCollection): void;
+      public load(data: string | any, options?: { sourceUri?: string }): Promise<CzmlDataSource>
   }
 
   class DataSource {
-      changedEvent: Event;
-      clock: DataSourceClock;
-      clustering: EntityCluster;
-      entities: EntityCollection;
-      errorEvent: Event;
-      isLoading: boolean;
-      loadingEvent: Event;
-      name: string;
-      show: boolean;
+      public changedEvent: Event
+      public clock: DataSourceClock
+      public clustering: EntityCluster
+      public entities: EntityCollection
+      public errorEvent: Event
+      public isLoading: boolean
+      public loadingEvent: Event
+      public name: string
+      public show: boolean
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
   }
 
   class DataSourceClock {
-      definitionChanged: Event;
-      startTime: JulianDate;
-      stopTime: JulianDate;
-      currentTime: JulianDate;
-      clockRange: ClockRange;
-      clockStep: ClockStep;
-      multiplier: number;
+      public definitionChanged: Event
+      public startTime: JulianDate
+      public stopTime: JulianDate
+      public currentTime: JulianDate
+      public clockRange: ClockRange
+      public clockStep: ClockStep
+      public multiplier: number
 
-      clone(result?: DataSourceClock): DataSourceClock;
+      public clone(result?: DataSourceClock): DataSourceClock
 
-      equals(other: DataSourceClock): boolean;
+      public equals(other: DataSourceClock): boolean
 
-      merge(source: DataSourceClock): void;
+      public merge(source: DataSourceClock): void
 
-      getValue(): Clock;
+      public getValue(): Clock
   }
 
   class DataSourceCollection {
-      length: number;
-      dataSourceAdded: Event;
-      dataSourceRemoved: Event;
+      public length: number
+      public dataSourceAdded: Event
+      public dataSourceRemoved: Event
 
-      add(dataSource: DataSource | Promise<DataSource>): Promise<DataSource>;
+      public add(dataSource: DataSource | Promise<DataSource>): Promise<DataSource>
 
-      remove(dataSource: DataSource, destroy?: boolean): boolean;
+      public remove(dataSource: DataSource, destroy?: boolean): boolean
 
-      removeAll(destroy?: boolean): void;
+      public removeAll(destroy?: boolean): void
 
-      contains(dataSource: DataSource): boolean;
+      public contains(dataSource: DataSource): boolean
 
-      indexOf(dataSource: DataSource): number;
+      public indexOf(dataSource: DataSource): number
 
-      get(index: number): DataSource;
+      public get(index: number): DataSource
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class DataSourceDisplay {
-      scene: Scene;
-      dataSources: DataSourceCollection;
-      defaultDataSource: CustomDataSource;
-      static defaultVisualizersCallback: DataSourceDisplay.VisualizersCallback;
+      public static defaultVisualizersCallback: DataSourceDisplay.VisualizersCallback
+      public scene: Scene
+      public dataSources: DataSourceCollection
+      public defaultDataSource: CustomDataSource
 
       constructor(options: { scene: Scene; dataSourceCollection: DataSourceCollection; visualizersCallback?: DataSourceDisplay.VisualizersCallback });
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
   }
 
-  module DataSourceDisplay {
-      type VisualizersCallback = (scene: Scene, dataSource: DataSource) => Visualizer[];
+  namespace DataSourceDisplay {
+      type VisualizersCallback = (scene: Scene, dataSource: DataSource) => Visualizer[]
   }
 
   class DynamicGeometryUpdater {
-      update(time: JulianDate): void;
+      public update(time: JulianDate): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class EllipseGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class EllipseGraphics {
-      definitionChanged: Event;
-      semiMajorAxis: any;
-      semiMinorAxis: any;
-      rotation: any;
-      show: any;
-      material: MaterialProperty;
-      height: any;
-      extrudedHeight: any;
-      granularity: any;
-      stRotation: any;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
-      numberOfVerticalLines: any;
+      public definitionChanged: Event
+      public semiMajorAxis: any
+      public semiMinorAxis: any
+      public rotation: any
+      public show: any
+      public material: MaterialProperty
+      public height: any
+      public extrudedHeight: any
+      public granularity: any
+      public stRotation: any
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
+      public numberOfVerticalLines: any
 
       constructor(options?: { semiMajorAxis?: number; semiMinorAxis?: number; height?: any; extrudedHeight?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; numberOfVerticalLines?: any; rotation?: any; stRotation?: any; granularity?: any });
 
-      clone(result?: EllipseGraphics): EllipseGraphics;
+      public clone(result?: EllipseGraphics): EllipseGraphics
 
-      merge(source: EllipseGraphics): void;
+      public merge(source: EllipseGraphics): void
   }
 
   class EllipsoidGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class EllipsoidGraphics {
-      definitionChanged: Event;
-      show: any;
-      radii: any;
-      material: MaterialProperty;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
-      stackPartitions: any;
-      slicePartitions: any;
-      subdivisions: any;
+      public definitionChanged: Event
+      public show: any
+      public radii: any
+      public material: MaterialProperty
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
+      public stackPartitions: any
+      public slicePartitions: any
+      public subdivisions: any
 
       constructor(options?: { radii?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; subdivisions?: any; stackPartitions?: any; slicePartitions?: any });
 
-      clone(result?: EllipsoidGraphics): EllipsoidGraphics;
+      public clone(result?: EllipsoidGraphics): EllipsoidGraphics
 
-      merge(source: EllipsoidGraphics): void;
+      public merge(source: EllipsoidGraphics): void
   }
 
   class Entity {
-      availability: TimeIntervalCollection;
-      id: string;
-      definitionChanged: Event;
-      name: string;
-      show: boolean;
-      isShowing: boolean;
-      parent: Entity;
-      propertyNames: Event;
-      billboard: BillboardGraphics;
-      box: BoxGraphics;
-      corridor: CorridorGraphics;
-      cylinder: CylinderGraphics;
-      description: any | any;
-      ellipse: EllipseGraphics;
-      ellipsoid: EllipsoidGraphics;
-      entityCollection: EntityCollection;
-      label: LabelGraphics;
-      model: ModelGraphics;
-      orientation: any;
-      path: PathGraphics;
-      point: PointGraphics;
-      polygon: PolygonGraphics;
-      polyline: PolylineGraphics;
-      polylineVolume: PolylineVolumeGraphics;
-      position: PositionProperty;
-      properties: PropertyBag;
-      rectangle: RectangleGraphics;
-      viewFrom: any;
-      wall: WallGraphics;
+      public availability: TimeIntervalCollection
+      public id: string
+      public definitionChanged: Event
+      public name: string
+      public show: boolean
+      public isShowing: boolean
+      public parent: Entity
+      public propertyNames: Event
+      public billboard: BillboardGraphics
+      public box: BoxGraphics
+      public corridor: CorridorGraphics
+      public cylinder: CylinderGraphics
+      public description: any | any
+      public ellipse: EllipseGraphics
+      public ellipsoid: EllipsoidGraphics
+      public entityCollection: EntityCollection
+      public label: LabelGraphics
+      public model: ModelGraphics
+      public orientation: any
+      public path: PathGraphics
+      public point: PointGraphics
+      public polygon: PolygonGraphics
+      public polyline: PolylineGraphics
+      public polylineVolume: PolylineVolumeGraphics
+      public position: PositionProperty
+      public properties: PropertyBag
+      public rectangle: RectangleGraphics
+      public viewFrom: any
+      public wall: WallGraphics
 
       constructor(options?: EntityOptions);
 
-      isAvailable(time: JulianDate): boolean;
+      public isAvailable(time: JulianDate): boolean
 
-      addProperty(propertyName: string): void;
+      public addProperty(propertyName: string): void
 
-      removeProperty(propertyName: string): void;
+      public removeProperty(propertyName: string): void
 
-      merge(source: Entity): void;
+      public merge(source: Entity): void
   }
 
   class EntityOptions {
-      id?: string;
-      name?: string;
-      show?: boolean;
-      description?: any | string;
-      position?: any | Cartesian3;
-      orientation?: any | any;
-      viewFrom?: any | any;
-      parent?: Entity;
-      billboard?: BillboardGraphics | BillboardGraphicsOptions;
-      box?: BoxGraphics;
-      corridor?: CorridorGraphics;
-      cylinder?: CylinderGraphics;
-      ellipse?: EllipseGraphics;
-      ellipsoid?: EllipsoidGraphics;
-      label?: LabelGraphics | LabelGraphicsOptions;
-      model?: ModelGraphics;
-      path?: PathGraphics;
-      point?: PointGraphics;
-      polygon?: PolygonGraphics | PolygonGraphicsOptions;
-      polyline?: PolylineGraphics | PolylineGraphicsOptions;
-      polylineVolume?: PolylineVolumeGraphics;
-      properties?: { [key: string]: string | number | boolean };
-      rectangle?: RectangleGraphics;
-      wall?: WallGraphics
+      public id?: string
+      public name?: string
+      public show?: boolean
+      public description?: any | string
+      public position?: any | Cartesian3
+      public orientation?: any | any
+      public viewFrom?: any | any
+      public parent?: Entity
+      public billboard?: BillboardGraphics | BillboardGraphicsOptions
+      public box?: BoxGraphics
+      public corridor?: CorridorGraphics
+      public cylinder?: CylinderGraphics
+      public ellipse?: EllipseGraphics
+      public ellipsoid?: EllipsoidGraphics
+      public label?: LabelGraphics | LabelGraphicsOptions
+      public model?: ModelGraphics
+      public path?: PathGraphics
+      public point?: PointGraphics
+      public polygon?: PolygonGraphics | PolygonGraphicsOptions
+      public polyline?: PolylineGraphics | PolylineGraphicsOptions
+      public polylineVolume?: PolylineVolumeGraphics
+      public properties?: { [key: string]: string | number | boolean }
+      public rectangle?: RectangleGraphics
+      public wall?: WallGraphics
   }
 
   class EntityCluster {
+
+      public clusterBillboards: boolean
+      public clusterEvent: Event
+      public clusterLabels: boolean
+      public clusterPoints: boolean
+      public enabled: boolean
+      public minimumClusterSize: number
+      public pixelRange: number
       constructor(options: EntityClusterOptions);
-
-      clusterBillboards: boolean;
-      clusterEvent: Event;
-      clusterLabels: boolean;
-      clusterPoints: boolean;
-      enabled: boolean;
-      minimumClusterSize: number;
-      pixelRange: number;
   }
 
-  type EntityClusterOptions = {
-      clusterBillboards?: boolean;
-      clusterLabels?: boolean;
-      clusterPoints?: boolean;
-      enabled?: boolean;
-      minimumClusterSize?: number;
-      pixelRange?: number;
+  interface EntityClusterOptions {
+      clusterBillboards?: boolean
+      clusterLabels?: boolean
+      clusterPoints?: boolean
+      enabled?: boolean
+      minimumClusterSize?: number
+      pixelRange?: number
   }
 
-  module EntityCluster {
-      type newClustterCallback = (clusteredEntities: Entity[], cluster: { billboard: BillboardGraphics, label: LabelGraphics, point: PointGraphics }) => void;
+  namespace EntityCluster {
+      type newClustterCallback = (clusteredEntities: Entity[], cluster: { billboard: BillboardGraphics, label: LabelGraphics, point: PointGraphics }) => void
   }
 
   class EntityCollection {
-      collectionChanged: Event;
-      id: string;
-      owner: DataSource | CompositeEntityCollection;
-      show: boolean;
-      values: Entity[];
+      public collectionChanged: Event
+      public id: string
+      public owner: DataSource | CompositeEntityCollection
+      public show: boolean
+      public values: Entity[]
 
-      suspendEvents(): void;
+      public suspendEvents(): void
 
-      resumeEvents(): void;
+      public resumeEvents(): void
 
-      computeAvailability(): TimeInterval;
+      public computeAvailability(): TimeInterval
 
-      add(entity: Entity | EntityOptions): Entity;
+      public add(entity: Entity | EntityOptions): Entity
 
-      remove(entity: Entity): boolean;
+      public remove(entity: Entity): boolean
 
-      contains(entity: Entity): boolean;
+      public contains(entity: Entity): boolean
 
-      removeById(id: any): boolean;
+      public removeById(id: any): boolean
 
-      removeAll(): void;
+      public removeAll(): void
 
-      getById(id: any): Entity;
+      public getById(id: any): Entity
 
-      getOrCreateEntity(id: any): Entity;
+      public getOrCreateEntity(id: any): Entity
   }
 
-  module EntityCollection {
-      type collectionChangedEventCallback = (collection: EntityCollection, added: Entity[], removed: Entity[], changed: Entity[]) => void;
+  namespace EntityCollection {
+      type collectionChangedEventCallback = (collection: EntityCollection, added: Entity[], removed: Entity[], changed: Entity[]) => void
   }
 
   class EntityView {
-      entity: Entity;
-      scene: Scene;
-      ellipsoid: Ellipsoid;
-      boundingSphere: Entity;
-      static defaultOffset3D: Cartesian3;
+      public static defaultOffset3D: Cartesian3
+      public entity: Entity
+      public scene: Scene
+      public ellipsoid: Ellipsoid
+      public boundingSphere: Entity
 
       constructor(entity: Entity, scene: Scene, ellipsoid?: Ellipsoid, boundingSphere?: BoundingSphere);
 
-      update(time: JulianDate): void;
+      public update(time: JulianDate): void
   }
 
   class GeoJsonDataSource extends DataSource {
-      name: string;
-      clock: DataSourceClock;
-      entities: EntityCollection;
-      isLoading: boolean;
-      changedEvent: Event;
-      errorEvent: Event;
-      loadingEvent: Event;
-      static markerSize: number;
-      static markerSymbol: string;
-      static markerColor: Color;
-      static stroke: Color;
-      static strokeWidth: number;
-      static fill: Color;
-      static crsNames: any;
-      static crsLinkHrefs: any;
-      static crsLinkTypes: any;
-
-      constructor(name?: string);
-
-      load(data: string | any, options?: {
-          sourceUri?: string;
-          markerSize?: number;
-          markerSymbol?: string;
-          markerColor?: Color;
-          stroke?: Color;
-          strokeWidth?: number;
-          fill?: Color;
-          clampToGround?: boolean;
-      }): Promise<GeoJsonDataSource>;
-      static load(data: string | any, options?: {
+      public static markerSize: number
+      public static markerSymbol: string
+      public static markerColor: Color
+      public static stroke: Color
+      public static strokeWidth: number
+      public static fill: Color
+      public static crsNames: any
+      public static crsLinkHrefs: any
+      public static crsLinkTypes: any
+      public static load(data: string | any, options?: {
           sourceUri?: string;
           describe?: (properties: Object, nameProperty: string) => void;
           markerSize?: number;
@@ -3383,576 +3364,596 @@ declare module Cesium {
           strokeWidth?: number;
           fill?: Color;
           clampToGround?: boolean;
-      }): Promise<GeoJsonDataSource>;
+      }): Promise<GeoJsonDataSource>
+      public name: string
+      public clock: DataSourceClock
+      public entities: EntityCollection
+      public isLoading: boolean
+      public changedEvent: Event
+      public errorEvent: Event
+      public loadingEvent: Event
+
+      constructor(name?: string);
+
+      public load(data: string | any, options?: {
+          sourceUri?: string;
+          markerSize?: number;
+          markerSymbol?: string;
+          markerColor?: Color;
+          stroke?: Color;
+          strokeWidth?: number;
+          fill?: Color;
+          clampToGround?: boolean;
+      }): Promise<GeoJsonDataSource>
   }
 
   class GeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class GeometryVisualizer {
       constructor(type: GeometryUpdater, scene: Scene, entityCollection: EntityCollection);
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class GridMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      color: Color;
-      cellAlpha: any;
-      lineCount: any;
-      lineThickness: any;
-      lineOffset: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public color: Color
+      public cellAlpha: any
+      public lineCount: any
+      public lineThickness: any
+      public lineOffset: any
 
       constructor(options?: { color?: any; cellAlpha?: any; lineCount?: any; lineThickness?: any; lineOffset?: any });
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class ImageMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      image: any;
-      repeat: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public image: any
+      public repeat: any
 
       constructor(options?: { image?: any; repeat?: any });
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class KmlDataSource extends DataSource {
-      name: string;
-      clock: DataSourceClock;
-      entities: EntityCollection;
-      isLoading: boolean;
-      changedEvent: Event;
-      errorEvent: Event;
-      loadingEvent: Event;
+      public static load(data: string | Document | Blob, options?: KmlConstructorOptions & KmlLoadOptions): Promise<KmlDataSource>
+      public name: string
+      public clock: DataSourceClock
+      public entities: EntityCollection
+      public isLoading: boolean
+      public changedEvent: Event
+      public errorEvent: Event
+      public loadingEvent: Event
 
       constructor(options: KmlConstructorOptions);
 
-      load(data: string | Document | Blob, options?: KmlLoadOptions): Promise<KmlDataSource>;
-      static load(data: string | Document | Blob, options?: KmlConstructorOptions & KmlLoadOptions): Promise<KmlDataSource>;
+      public load(data: string | Document | Blob, options?: KmlLoadOptions): Promise<KmlDataSource>
   }
 
   class KmlConstructorOptions {
-      camera: Camera;
-      canvas: HTMLCanvasElement;
-      proxy?: DefaultProxy;
+      public camera: Camera
+      public canvas: HTMLCanvasElement
+      public proxy?: DefaultProxy
   }
 
   class KmlLoadOptions {
-      camera: Camera;
-      canvas: HTMLCanvasElement;
-      proxy?: DefaultProxy;
-      sourceUri?: string;
-      clampToGround?: boolean;
-      query?: Object;
+      public camera: Camera
+      public canvas: HTMLCanvasElement
+      public proxy?: DefaultProxy
+      public sourceUri?: string
+      public clampToGround?: boolean
+      public query?: Object
   }
 
   class KmlFeatureData {
-      author: { name: string; uri: string; email: string };
-      link: { href: string; hreflang: string; rel: string; type: string; title: string; length: string };
-      address: string;
-      phoneNumber: string;
-      snippet: string;
-      extendedData: string;
+      public author: { name: string; uri: string; email: string }
+      public link: { href: string; hreflang: string; rel: string; type: string; title: string; length: string }
+      public address: string
+      public phoneNumber: string
+      public snippet: string
+      public extendedData: string
   }
 
   class LabelGraphics {
-      readonly definitionChanged: Event;
-      showBackground: any | boolean;
-      distanceDisplayCondition: any | any;
-      disableDepthTestDistance: any | any;
-      text: any;
-      font: any;
-      style: any;
-      fillColor: any;
-      outlineColor: any;
-      outlineWidth: any;
-      horizontalOrigin: any;
-      verticalOrigin: any;
-      eyeOffset: any;
-      pixelOffset: any;
-      scale: any;
-      show: any;
-      translucencyByDistance: any;
-      pixelOffsetScaleByDistance: any;
+      public readonly definitionChanged: Event
+      public showBackground: any | boolean
+      public distanceDisplayCondition: any | any
+      public disableDepthTestDistance: any | any
+      public text: any
+      public font: any
+      public style: any
+      public fillColor: any
+      public outlineColor: any
+      public outlineWidth: any
+      public horizontalOrigin: any
+      public verticalOrigin: any
+      public eyeOffset: any
+      public pixelOffset: any
+      public scale: any
+      public show: any
+      public translucencyByDistance: any
+      public pixelOffsetScaleByDistance: any
 
       constructor(options?: LabelGraphicsOptions);
 
-      clone(result?: LabelGraphics): LabelGraphics;
+      public clone(result?: LabelGraphics): LabelGraphics
 
-      merge(source: LabelGraphics): void;
+      public merge(source: LabelGraphics): void
   }
 
   class LabelGraphicsOptions {
-      text?: any | string;
-      font?: any | string;
-      style?: any;
-      fillColor?: any | Color;
-      backgroundColor?: any | Color;
-      outlineColor?: any | Color;
-      outlineWidth?: any | number;
-      show?: any | boolean;
-      showBackground?: any | boolean;
-      scale?: any | NearFarScalar | any;
-      scaleByDistance?: any | NearFarScalar;
-      horizontalOrigin?: any | HorizontalOrigin;
-      verticalOrigin?: any | VerticalOrigin;
-      eyeOffset?: any | Cartesian2;
-      pixelOffset?: any | Cartesian2;
-      translucencyByDistance?: any | NearFarScalar;
-      pixelOffsetScaleByDistance?: any | NearFarScalar;
-      distanceDisplayCondition?: any | DistanceDisplayCondition;
-      disableDepthTestDistance?: any | number;
-      heightReference?: any | number;
+      public text?: any | string
+      public font?: any | string
+      public style?: any
+      public fillColor?: any | Color
+      public backgroundColor?: any | Color
+      public outlineColor?: any | Color
+      public outlineWidth?: any | number
+      public show?: any | boolean
+      public showBackground?: any | boolean
+      public scale?: any | NearFarScalar | any
+      public scaleByDistance?: any | NearFarScalar
+      public horizontalOrigin?: any | HorizontalOrigin
+      public verticalOrigin?: any | VerticalOrigin
+      public eyeOffset?: any | Cartesian2
+      public pixelOffset?: any | Cartesian2
+      public translucencyByDistance?: any | NearFarScalar
+      public pixelOffsetScaleByDistance?: any | NearFarScalar
+      public distanceDisplayCondition?: any | DistanceDisplayCondition
+      public disableDepthTestDistance?: any | number
+      public heightReference?: any | number
   }
 
   class LabelVisualizer {
       constructor(scene: Scene, entityCollection: EntityCollection);
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class MaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
+      public isConstant: boolean
+      public definitionChanged: Event
 
-      equals(left: MaterialProperty, right: MaterialProperty): boolean;
+      public equals(left: MaterialProperty, right: MaterialProperty): boolean
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
   }
 
   class ModelGraphics {
-      readonly definitionChanged: Event;
-      show: any | boolean;
-      scale: any | number;
-      minimumPixelSize: any | number;
-      uri: any | string;
-      maximumScale: any | number;
+      public readonly definitionChanged: Event
+      public show: any | boolean
+      public scale: any | number
+      public minimumPixelSize: any | number
+      public uri: any | string
+      public maximumScale: any | number
 
       constructor(options?: { uri?: any | string; show?: any; scale?: any | number; minimumPixelSize?: any | number; maximumScale: any | number });
 
-      clone(result?: ModelGraphics): ModelGraphics;
+      public clone(result?: ModelGraphics): ModelGraphics
 
-      merge(source: ModelGraphics): void;
+      public merge(source: ModelGraphics): void
   }
 
   class ModelVisualizer {
       constructor(scene: Scene, entityCollection: EntityCollection);
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class PathGraphics {
-      definitionChanged: Event;
-      show: any;
-      material: MaterialProperty;
-      width: any;
-      resolution: any;
-      leadTime: any;
-      trailTime: any;
+      public definitionChanged: Event
+      public show: any
+      public material: MaterialProperty
+      public width: any
+      public resolution: any
+      public leadTime: any
+      public trailTime: any
 
       constructor(options?: { leadTime?: any; trailTime?: any; show?: any; width?: any; material?: MaterialProperty; resolution?: any });
 
-      clone(result?: PathGraphics): PathGraphics;
+      public clone(result?: PathGraphics): PathGraphics
 
-      merge(source: PathGraphics): void;
+      public merge(source: PathGraphics): void
   }
 
   class PathVisualizer {
       constructor(scene: Scene, entityCollection: EntityCollection);
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class PointGraphics {
-      color: any;
-      pixelSize: any;
-      outlineColor: any;
-      outlineWidth: any;
-      show: any | boolean;
-      scaleByDistance: any;
-      translucencyByDistance: any;
-      heightReference: any;
-      distanceDisplayCondition: any;
+      public color: any
+      public pixelSize: any
+      public outlineColor: any
+      public outlineWidth: any
+      public show: any | boolean
+      public scaleByDistance: any
+      public translucencyByDistance: any
+      public heightReference: any
+      public distanceDisplayCondition: any
 
       constructor(options?: PointGraphicsOptions);
 
-      clone(result?: PointGraphics): PointGraphics;
+      public clone(result?: PointGraphics): PointGraphics
 
-      merge(source: PointGraphics): void;
+      public merge(source: PointGraphics): void
   }
 
   class PointGraphicsOptions {
-      color?: Color;
-      pixelSize?: number;
-      outlineColor?: Color;
-      outlineWidth?: number;
-      show?: any | boolean;
-      scaleByDistance?: any | NearFarScalar;
-      translucencyByDistance?: any | NearFarScalar;
-      heightReference?: HeightReference;
-      distanceDisplayCondition?: any | number;
+      public color?: Color
+      public pixelSize?: number
+      public outlineColor?: Color
+      public outlineWidth?: number
+      public show?: any | boolean
+      public scaleByDistance?: any | NearFarScalar
+      public translucencyByDistance?: any | NearFarScalar
+      public heightReference?: HeightReference
+      public distanceDisplayCondition?: any | number
   }
 
   class PointVisualizer {
       constructor(scene: Scene, entityCollection: EntityCollection);
 
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class PolygonGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class PolygonGraphics {
-      definitionChanged: Event;
-      show: any | boolean;
-      material: MaterialProperty;
-      positions: any;
-      hierarchy: any;
-      height: any;
-      extrudedHeight: any;
-      granularity: any;
-      stRotation: any;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
-      perPositionHeight: any;
+      public definitionChanged: Event
+      public show: any | boolean
+      public material: MaterialProperty
+      public positions: any
+      public hierarchy: any
+      public height: any
+      public extrudedHeight: any
+      public granularity: any
+      public stRotation: any
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
+      public perPositionHeight: any
 
       constructor(options?: PolygonGraphicsOptions);
 
-      clone(result?: PolygonGraphics): PolygonGraphics;
+      public clone(result?: PolygonGraphics): PolygonGraphics
 
-      merge(source: PolygonGraphics): void;
+      public merge(source: PolygonGraphics): void
   }
 
   class PolygonGraphicsOptions {
-      hierarchy?: any | PolygonHierarchy | Cartesian3[];
-      height?: number;
-      extrudedHeight?: any | number;
-      show?: any | boolean;
-      fill?: any | boolean;
-      material?: MaterialProperty | Color;
-      outline?: boolean;
-      outlineColor?: any | Color;
-      outlineWidth?: number;
-      stRotation?: any | number;
-      granularity?: any | number;
-      perPositionHeight?: any | boolean;
+      public hierarchy?: any | PolygonHierarchy | Cartesian3[]
+      public height?: number
+      public extrudedHeight?: any | number
+      public show?: any | boolean
+      public fill?: any | boolean
+      public material?: MaterialProperty | Color
+      public outline?: boolean
+      public outlineColor?: any | Color
+      public outlineWidth?: number
+      public stRotation?: any | number
+      public granularity?: any | number
+      public perPositionHeight?: any | boolean
   }
 
   class PolylineArrowMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      color: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public color: any
 
       constructor(color?: any);
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class PolylineGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class PolylineGlowMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      color: any;
-      glowPower: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public color: any
+      public glowPower: any
 
       constructor(options?: { color?: any; glowPower?: any });
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
-  type PolylineGraphicsOptions = {
-      positions?: Array<Cartesian3>;
-      followSurface?: any;
-      width?: number;
-      show?: any;
-      clampToGround?: boolean;
-      material?: MaterialProperty;
-      granularity?: any;
-      arcType?: number;
-      depthFailMaterial?: any;
-  };
+  interface PolylineGraphicsOptions {
+      positions?: Cartesian3[]
+      followSurface?: any
+      width?: number
+      show?: any
+      clampToGround?: boolean
+      material?: MaterialProperty
+      granularity?: any
+      arcType?: number
+      depthFailMaterial?: any
+  }
 
   class ArcType {
-      static GEODESIC: number;
-      static NONE: number;
-      static RHUMB: number;
+      public static GEODESIC: number
+      public static NONE: number
+      public static RHUMB: number
   }
 
   class PolylineGraphics {
-      definitionChanged: Event;
-      show: any;
-      material: MaterialProperty;
-      positions: any;
-      width: number;
-      followSurface: any;
-      granularity: any;
-      clampToGround: boolean;
+      public definitionChanged: Event
+      public show: any
+      public material: MaterialProperty
+      public positions: any
+      public width: number
+      public followSurface: any
+      public granularity: any
+      public clampToGround: boolean
       constructor(options?: PolylineGraphicsOptions);
 
-      clone(result?: PolylineGraphics): PolylineGraphics;
+      public clone(result?: PolylineGraphics): PolylineGraphics
 
-      merge(source: PolylineGraphics): void;
+      public merge(source: PolylineGraphics): void
   }
 
   class PolylineOutlineMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      color: any;
-      outlineColor: any;
-      outlineWidth: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public color: any
+      public outlineColor: any
+      public outlineWidth: any
 
       constructor(options?: { color?: any; outlineColor?: any; outlineWidth?: any });
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class PolylineVolumeGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class PolylineVolumeGraphics {
-      definitionChanged: Event;
-      show: any;
-      material: MaterialProperty;
-      positions: any;
-      shape: any;
-      granularity: any;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
-      cornerType: any;
+      public definitionChanged: Event
+      public show: any
+      public material: MaterialProperty
+      public positions: any
+      public shape: any
+      public granularity: any
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
+      public cornerType: any
 
       constructor(options?: { positions?: any; shape?: any; cornerType?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; granularity?: any });
 
-      clone(result?: PolylineVolumeGraphics): PolylineVolumeGraphics;
+      public clone(result?: PolylineVolumeGraphics): PolylineVolumeGraphics
 
-      merge(source: PolylineVolumeGraphics): void;
+      public merge(source: PolylineVolumeGraphics): void
   }
 
   interface PositionProperty {
-      readonly isConstant: boolean;
-      readonly definitionChanged: Event;
-      referenceFrame: ReferenceFrame;
+      readonly isConstant: boolean
+      readonly definitionChanged: Event
+      referenceFrame: ReferenceFrame
 
-      equals(other: any): boolean;
+      equals(other: any): boolean
 
-      getValue(time: JulianDate, result?: Cartesian3): Cartesian3;
+      getValue(time: JulianDate, result?: Cartesian3): Cartesian3
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
   }
 
   class PositionPropertyArray {
-      isConstant: boolean;
-      definitionChanged: Event;
-      referenceFrame: ReferenceFrame;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public referenceFrame: ReferenceFrame
 
       constructor(value?: any[]);
 
-      getValue(time?: JulianDate, result?: Cartesian3[]): Cartesian3[];
+      public getValue(time?: JulianDate, result?: Cartesian3[]): Cartesian3[]
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      public getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
 
-      setValue(value: any[]): void;
+      public setValue(value: any[]): void
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class Property {
-      isConstant: boolean;
-      definitionChanged: Event;
+      public isConstant: boolean
+      public definitionChanged: Event
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class PropertyArray {
-      isConstant: boolean;
-      definitionChanged: Event;
+      public isConstant: boolean
+      public definitionChanged: Event
 
       constructor(value?: any[]);
 
-      getValue(time?: JulianDate, result?: any[]): any[];
+      public getValue(time?: JulianDate, result?: any[]): any[]
 
-      setValue(value: any[]): void;
+      public setValue(value: any[]): void
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   interface ObjectLike {
-      [key: string]: any;
+      [key: string]: any
   }
 
   type PropertyBag = ObjectLike & {
-      constructor(value?: object, createPropertyCallback?: Function): PropertyBag;
       definitionChanged: Event;
       isConstant: boolean;
       propertyNames: string[];
+      constructor(value?: object, createPropertyCallback?: Function): PropertyBag;
       addProperty(propertyName: string, value?: any, createPropertyCallback?: Function): void;
       getValue(time: JulianDate, result?: Object): Object;
       hasProperty(propertyName: string): boolean;
@@ -3961,530 +3962,530 @@ declare module Cesium {
   }
 
   class RectangleGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class RectangleGraphics {
-      definitionChanged: Event;
-      show: any;
-      coordinates: any;
-      material: MaterialProperty;
-      height: any;
-      extrudedHeight: any;
-      granularity: any;
-      stRotation: any;
-      rotation: any;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
-      closeTop: any;
-      closeBottom: any;
+      public definitionChanged: Event
+      public show: any
+      public coordinates: any
+      public material: MaterialProperty
+      public height: any
+      public extrudedHeight: any
+      public granularity: any
+      public stRotation: any
+      public rotation: any
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
+      public closeTop: any
+      public closeBottom: any
 
       constructor(options?: { coordinates?: any; height?: any; extrudedHeight?: any; closeTop?: any; closeBottom?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; rotation?: any; stRotation?: any; granularity?: any });
 
-      clone(result?: RectangleGraphics): RectangleGraphics;
+      public clone(result?: RectangleGraphics): RectangleGraphics
 
-      merge(source: RectangleGraphics): void;
+      public merge(source: RectangleGraphics): void
   }
 
   class ReferenceProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      referenceFrame: ReferenceFrame;
-      targetId: string;
-      targetCollection: EntityCollection;
-      targetPropertyNames: string[];
-      resolvedProperty: any;
+
+      public static fromString(targetCollection: Entity, referenceString: string): ReferenceProperty
+      public isConstant: boolean
+      public definitionChanged: Event
+      public referenceFrame: ReferenceFrame
+      public targetId: string
+      public targetCollection: EntityCollection
+      public targetPropertyNames: string[]
+      public resolvedProperty: any
 
       constructor(targetCollection: EntityCollection, targetId: string, targetPropertyNames: string);
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      public getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      equals(other?: any): boolean;
-
-      static fromString(targetCollection: Entity, referenceString: string): ReferenceProperty;
+      public equals(other?: any): boolean
   }
 
   class SampledPositionProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      referenceFrame: ReferenceFrame;
-      interpolationDegree: number;
-      interpolationAlgorithm: InterpolationAlgorithm;
-      numberOfDerivatives: boolean;
-      forwardExtrapolationType: ExtrapolationType;
-      forwardExtrapolationDuration: number;
-      backwardExtrapolationType: ExtrapolationType;
-      backwardExtrapolationDuration: number;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public referenceFrame: ReferenceFrame
+      public interpolationDegree: number
+      public interpolationAlgorithm: InterpolationAlgorithm
+      public numberOfDerivatives: boolean
+      public forwardExtrapolationType: ExtrapolationType
+      public forwardExtrapolationDuration: number
+      public backwardExtrapolationType: ExtrapolationType
+      public backwardExtrapolationDuration: number
 
       constructor(referenceFrame?: ReferenceFrame, numberOfDerivatives?: number);
 
-      getValue(time: JulianDate, result?: Cartesian3): Cartesian3;
+      public getValue(time: JulianDate, result?: Cartesian3): Cartesian3
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      public getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
 
-      setInterpolationOptions(options?: { interpolationAlgorithm?: InterpolationAlgorithm; interpolationDegree?: number }): void;
+      public setInterpolationOptions(options?: { interpolationAlgorithm?: InterpolationAlgorithm; interpolationDegree?: number }): void
 
-      addSample(time: JulianDate, position: Cartesian3, derivatives?: Cartesian3[]): void;
+      public addSample(time: JulianDate, position: Cartesian3, derivatives?: Cartesian3[]): void
 
-      addSamples(times: JulianDate[], positions: Cartesian3[], derivatives?: any[][]): void;
+      public addSamples(times: JulianDate[], positions: Cartesian3[], derivatives?: any[][]): void
 
-      addSamplesPackedArray(packedSamples: number[], epoch?: JulianDate): void;
+      public addSamplesPackedArray(packedSamples: number[], epoch?: JulianDate): void
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class SampledProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      type: any;
-      derivativeTypes: Packable[];
-      interpolationDegree: number;
-      interpolationAlgorithm: InterpolationAlgorithm;
-      forwardExtrapolationType: ExtrapolationType;
-      forwardExtrapolationDuration: number;
-      backwardExtrapolationType: ExtrapolationType;
-      backwardExtrapolationDuration: number;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public type: any
+      public derivativeTypes: Packable[]
+      public interpolationDegree: number
+      public interpolationAlgorithm: InterpolationAlgorithm
+      public forwardExtrapolationType: ExtrapolationType
+      public forwardExtrapolationDuration: number
+      public backwardExtrapolationType: ExtrapolationType
+      public backwardExtrapolationDuration: number
 
       constructor(type: number | Packable, derivativeTypes?: Packable[]);
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      setInterpolationOptions(options?: { interpolationAlgorithm?: InterpolationAlgorithm; interpolationDegree?: number }): void;
+      public setInterpolationOptions(options?: { interpolationAlgorithm?: InterpolationAlgorithm; interpolationDegree?: number }): void
 
-      addSample(time: JulianDate, value: Packable, derivatives?: Packable[]): void;
+      public addSample(time: JulianDate, value: Packable, derivatives?: Packable[]): void
 
-      addSamples(times: JulianDate[], values: Packable[], derivativeValues?: any[][]): void;
+      public addSamples(times: JulianDate[], values: Packable[], derivativeValues?: any[][]): void
 
-      addSamplesPackedArray(packedSamples: number[], epoch?: JulianDate): void;
+      public addSamplesPackedArray(packedSamples: number[], epoch?: JulianDate): void
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class StripeMaterialProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      orientation: any;
-      evenColor: Color;
-      oddColor: Color;
-      offset: any;
-      repeat: number;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public orientation: any
+      public evenColor: Color
+      public oddColor: Color
+      public offset: any
+      public repeat: number
 
       constructor(options?: { evenColor?: any; oddColor?: any; repeat?: any; offset?: any; orientation?: any });
 
-      getType(time: JulianDate): string;
+      public getType(time: JulianDate): string
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class TimeIntervalCollectionPositionProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      intervals: TimeIntervalCollection;
-      referenceFrame: ReferenceFrame;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public intervals: TimeIntervalCollection
+      public referenceFrame: ReferenceFrame
 
       constructor(referenceFrame?: ReferenceFrame);
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3;
+      public getValueInReferenceFrame(time: JulianDate, referenceFrame: ReferenceFrame, result?: Cartesian3): Cartesian3
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class TimeIntervalCollectionProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      intervals: TimeIntervalCollection;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public intervals: TimeIntervalCollection
 
-      getValue(time: JulianDate, result?: any): any;
+      public getValue(time: JulianDate, result?: any): any
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class VelocityOrientationProperty {
-      isConstant: boolean;
-      definitionChanged: Event;
-      position: any;
-      ellipsoid: any;
+      public isConstant: boolean
+      public definitionChanged: Event
+      public position: any
+      public ellipsoid: any
 
       constructor(position?: any, ellipsoid?: Ellipsoid);
 
-      getValue(time?: JulianDate, result?: Quaternion): Quaternion;
+      public getValue(time?: JulianDate, result?: Quaternion): Quaternion
 
-      equals(other?: any): boolean;
+      public equals(other?: any): boolean
   }
 
   class Visualizer {
-      update(time: JulianDate): boolean;
+      public update(time: JulianDate): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class WallGeometryUpdater {
-      entity: Entity;
-      fillEnabled: boolean;
-      hasConstantFill: boolean;
-      fillMaterialProperty: MaterialProperty;
-      outlineEnabled: boolean;
-      hasConstantOutline: boolean;
-      outlineColorProperty: any;
-      outlineWidth: number;
-      isDynamic: boolean;
-      isClosed: boolean;
-      geometryChanged: boolean;
-      static perInstanceColorAppearanceType: Appearance;
-      static materialAppearanceType: Appearance;
+      public static perInstanceColorAppearanceType: Appearance
+      public static materialAppearanceType: Appearance
+      public entity: Entity
+      public fillEnabled: boolean
+      public hasConstantFill: boolean
+      public fillMaterialProperty: MaterialProperty
+      public outlineEnabled: boolean
+      public hasConstantOutline: boolean
+      public outlineColorProperty: any
+      public outlineWidth: number
+      public isDynamic: boolean
+      public isClosed: boolean
+      public geometryChanged: boolean
 
       constructor(entity: Entity, scene: Scene);
 
-      isOutlineVisible(time: JulianDate): boolean;
+      public isOutlineVisible(time: JulianDate): boolean
 
-      isFilled(time: JulianDate): boolean;
+      public isFilled(time: JulianDate): boolean
 
-      createFillGeometryInstance(time: JulianDate): GeometryInstance;
+      public createFillGeometryInstance(time: JulianDate): GeometryInstance
 
-      createOutlineGeometryInstance(time: JulianDate): GeometryInstance;
+      public createOutlineGeometryInstance(time: JulianDate): GeometryInstance
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater;
+      public createDynamicUpdater(primitives: PrimitiveCollection): DynamicGeometryUpdater
   }
 
   class WallGraphics {
-      definitionChanged: Event;
-      show: any;
-      material: MaterialProperty;
-      positions: any;
-      minimumHeights: any;
-      maximumHeights: any;
-      granularity: any;
-      fill: any;
-      outline: any;
-      outlineColor: any;
-      outlineWidth: any;
+      public definitionChanged: Event
+      public show: any
+      public material: MaterialProperty
+      public positions: any
+      public minimumHeights: any
+      public maximumHeights: any
+      public granularity: any
+      public fill: any
+      public outline: any
+      public outlineColor: any
+      public outlineWidth: any
 
       constructor(options?: { positions?: any; maximumHeights?: any; minimumHeights?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; granularity?: any });
 
-      clone(result?: WallGraphics): WallGraphics;
+      public clone(result?: WallGraphics): WallGraphics
 
-      merge(source: WallGraphics): void;
+      public merge(source: WallGraphics): void
   }
 
   class Appearance {
-      material: Material;
-      translucent: boolean;
-      vertexShaderSource: string;
-      fragmentShaderSource: string;
-      renderState: any;
-      closed: boolean;
+      public material: Material
+      public translucent: boolean
+      public vertexShaderSource: string
+      public fragmentShaderSource: string
+      public renderState: any
+      public closed: boolean
 
       constructor(options?: { translucent?: boolean; closed?: boolean; material?: Material; vertexShaderSource?: string; fragmentShaderSource?: string; renderState?: RenderState });
 
-      getFragmentShaderSource(): string;
+      public getFragmentShaderSource(): string
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      getRenderState(): any;
+      public getRenderState(): any
   }
 
   class ArcGisMapServerImageryProvider extends ImageryProvider {
-      url: string;
-      proxy: Proxy;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      credit: Credit;
-      usingPrecachedTiles: boolean;
-      hasAlphaChannel: boolean;
+      public url: string
+      public proxy: Proxy
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public credit: Credit
+      public usingPrecachedTiles: boolean
+      public hasAlphaChannel: boolean
 
       constructor(options: { url: string; tileDiscardPolicy?: TileDiscardPolicy; proxy?: Proxy; usePreCachedTilesIfAvailable?: boolean; enablePickFeatures?: boolean; rectangle?: Rectangle; tilingScheme?: TilingScheme; ellipsoid?: Ellipsoid; tileWidth?: number; tileHeight?: number; maximumLevel?: number }, layers?: string);
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class Billboard {
-      show: boolean;
-      position: Cartesian3;
-      pixelOffset: Cartesian2;
-      scaleByDistance: NearFarScalar;
-      translucencyByDistance: NearFarScalar;
-      pixelOffsetScaleByDistance: NearFarScalar;
-      eyeOffset: Cartesian3;
-      horizontalOrigin: HorizontalOrigin;
-      verticalOrigin: VerticalOrigin;
-      scale: number;
-      color: Color;
-      rotation: number;
-      alignedAxis: Cartesian3;
-      width: number;
-      height: number;
-      id: any;
-      image: string;
-      ready: boolean;
+      public show: boolean
+      public position: Cartesian3
+      public pixelOffset: Cartesian2
+      public scaleByDistance: NearFarScalar
+      public translucencyByDistance: NearFarScalar
+      public pixelOffsetScaleByDistance: NearFarScalar
+      public eyeOffset: Cartesian3
+      public horizontalOrigin: HorizontalOrigin
+      public verticalOrigin: VerticalOrigin
+      public scale: number
+      public color: Color
+      public rotation: number
+      public alignedAxis: Cartesian3
+      public width: number
+      public height: number
+      public id: any
+      public image: string
+      public ready: boolean
 
-      setImage(id: string, image: HTMLImageElement | HTMLCanvasElement | string | Billboard.CreateImageCallback): void;
+      public setImage(id: string, image: HTMLImageElement | HTMLCanvasElement | string | Billboard.CreateImageCallback): void
 
-      setImageSubRegion(id: string, subRegion: BoundingRectangle): void;
+      public setImageSubRegion(id: string, subRegion: BoundingRectangle): void
 
-      computeScreenSpacePosition(scene: Scene, result?: Cartesian2): Cartesian2;
+      public computeScreenSpacePosition(scene: Scene, result?: Cartesian2): Cartesian2
 
-      equals(other: Billboard): boolean;
+      public equals(other: Billboard): boolean
   }
 
-  module Billboard {
-      type CreateImageCallback = (id: string) => HTMLImageElement | HTMLCanvasElement | Promise<HTMLImageElement | HTMLCanvasElement>;
+  namespace Billboard {
+      type CreateImageCallback = (id: string) => HTMLImageElement | HTMLCanvasElement | Promise<HTMLImageElement | HTMLCanvasElement>
   }
 
   class BillboardCollection {
-      modelMatrix: Matrix4;
-      debugShowBoundingVolume: boolean;
-      length: number;
+      public modelMatrix: Matrix4
+      public debugShowBoundingVolume: boolean
+      public length: number
 
       constructor(options?: { modelMatrix?: Matrix4; debugShowBoundingVolume?: boolean });
 
-      add(billboard?: any): Billboard;
+      public add(billboard?: any): Billboard
 
-      remove(billboard: Billboard): boolean;
+      public remove(billboard: Billboard): boolean
 
-      removeAll(): void;
+      public removeAll(): void
 
-      contains(billboard?: Billboard): boolean;
+      public contains(billboard?: Billboard): boolean
 
-      get(index: number): Billboard;
+      public get(index: number): Billboard
 
-      update(): void;
+      public update(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class BingMapsImageryProvider extends ImageryProvider {
-      defaultGamma: number;
-      url: string;
-      proxy: Proxy;
-      key: string;
-      mapStyle: BingMapsStyle;
-      culture: string;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      credit: Credit;
-      hasAlphaChannel: boolean;
+
+      public static tileXYToQuadKey(x: number, y: number, level: number): string
+
+      public static quadKeyToTileXY(quadkey: string): { x: number, y: number, level: number }
+      public defaultGamma: number
+      public url: string
+      public proxy: Proxy
+      public key: string
+      public mapStyle: BingMapsStyle
+      public culture: string
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public credit: Credit
+      public hasAlphaChannel: boolean
 
       constructor(options: { url: string; key?: string; tileProtocol?: string; mapStyle?: string; culture?: string; ellipsoid?: Ellipsoid; tileDiscardPolicy?: TileDiscardPolicy; proxy?: Proxy });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
-
-      static tileXYToQuadKey(x: number, y: number, level: number): string;
-
-      static quadKeyToTileXY(quadkey: string): { x: number, y: number, level: number };
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class BingMapsApi {
-      static defaultKey: string;
+      public static defaultKey: string
   }
 
   class EasingFunction {
-      static BACK_IN: Function;
-      static BACK_IN_OUT: Function;
-      static BACK_OUT: Function;
-      static BOUNCE_IN: Function;
-      static BOUNCE_IN_OUT: Function;
-      static BOUNCE_OUT: Function;
-      static CIRCULAR_IN: Function;
-      static CIRCULAR_IN_OUT: Function;
-      static CIRCULAR_OUT: Function;
-      static CUBIC_IN: Function;
-      static CUBIC_IN_OUT: Function;
-      static CUBIC_OUT: Function;
-      static ELASTIC_IN: Function;
-      static ELASTIC_IN_OUT: Function;
-      static ELASTIC_OUT: Function;
-      static EXPONENTIAL_IN: Function;
-      static EXPONENTIAL_IN_OUT: Function;
-      static EXPONENTIAL_OUT: Function;
-      static LINEAR_NONE: Function;
-      static QUADRACTIC_IN: Function;
-      static QUADRACTIC_IN_OUT: Function;
-      static QUADRACTIC_OUT: Function;
-      static QUARTIC_IN: Function;
-      static QUARTIC_IN_OUT: Function;
-      static QUARTIC_OUT: Function;
-      static QUINTIC_IN: Function;
-      static QUINTIC_IN_OUT: Function;
-      static QUINTIC_OUT: Function;
-      static SINUSOIDAL_IN: Function;
-      static SINUSOIDAL_IN_OUT: Function;
-      static SINUSOIDAL_OUT: Function;
+      public static BACK_IN: Function
+      public static BACK_IN_OUT: Function
+      public static BACK_OUT: Function
+      public static BOUNCE_IN: Function
+      public static BOUNCE_IN_OUT: Function
+      public static BOUNCE_OUT: Function
+      public static CIRCULAR_IN: Function
+      public static CIRCULAR_IN_OUT: Function
+      public static CIRCULAR_OUT: Function
+      public static CUBIC_IN: Function
+      public static CUBIC_IN_OUT: Function
+      public static CUBIC_OUT: Function
+      public static ELASTIC_IN: Function
+      public static ELASTIC_IN_OUT: Function
+      public static ELASTIC_OUT: Function
+      public static EXPONENTIAL_IN: Function
+      public static EXPONENTIAL_IN_OUT: Function
+      public static EXPONENTIAL_OUT: Function
+      public static LINEAR_NONE: Function
+      public static QUADRACTIC_IN: Function
+      public static QUADRACTIC_IN_OUT: Function
+      public static QUADRACTIC_OUT: Function
+      public static QUARTIC_IN: Function
+      public static QUARTIC_IN_OUT: Function
+      public static QUARTIC_OUT: Function
+      public static QUINTIC_IN: Function
+      public static QUINTIC_IN_OUT: Function
+      public static QUINTIC_OUT: Function
+      public static SINUSOIDAL_IN: Function
+      public static SINUSOIDAL_IN_OUT: Function
+      public static SINUSOIDAL_OUT: Function
   }
 
   class Camera {
-      position: Cartesian3;
-      direction: Cartesian3;
-      up: Cartesian3;
-      right: Cartesian3;
-      frustum: OrthographicFrustum;
-      defaultMoveAmount: number;
-      defaultLookAmount: number;
-      defaultRotateAmount: number;
-      defaultZoomAmount: number;
-      constrainedAxis: Cartesian3;
-      maximumTranslateFactor: number;
-      maximumZoomFactor: number;
-      readonly transform: Matrix4;
-      readonly inverseTransform: Matrix4;
-      readonly viewMatrix: Matrix4;
-      readonly inverseViewMatrix: Matrix4;
-      readonly positionCartographic: Cartographic;
-      readonly positionWC: Cartesian3;
-      readonly directionWC: Cartesian3;
-      readonly upWC: Cartesian3;
-      readonly rightWC: Cartesian3;
-      readonly heading: number;
-      readonly pitch: number;
-      readonly roll: number;
-      readonly moveStart: Event;
-      readonly moveEnd: Event;
-      readonly changed: Event;
-      percentageChanged: number;
-      static DEFAULT_OFFSET: HeadingPitchRange;
-      static DEFAULT_VIEW_RECTANGLE: Rectangle;
-      static DEFAULT_VIEW_FACTOR: number;
+      public static DEFAULT_OFFSET: HeadingPitchRange
+      public static DEFAULT_VIEW_RECTANGLE: Rectangle
+      public static DEFAULT_VIEW_FACTOR: number
+      public position: Cartesian3
+      public direction: Cartesian3
+      public up: Cartesian3
+      public right: Cartesian3
+      public frustum: OrthographicFrustum
+      public defaultMoveAmount: number
+      public defaultLookAmount: number
+      public defaultRotateAmount: number
+      public defaultZoomAmount: number
+      public constrainedAxis: Cartesian3
+      public maximumTranslateFactor: number
+      public maximumZoomFactor: number
+      public readonly transform: Matrix4
+      public readonly inverseTransform: Matrix4
+      public readonly viewMatrix: Matrix4
+      public readonly inverseViewMatrix: Matrix4
+      public readonly positionCartographic: Cartographic
+      public readonly positionWC: Cartesian3
+      public readonly directionWC: Cartesian3
+      public readonly upWC: Cartesian3
+      public readonly rightWC: Cartesian3
+      public readonly heading: number
+      public readonly pitch: number
+      public readonly roll: number
+      public readonly moveStart: Event
+      public readonly moveEnd: Event
+      public readonly changed: Event
+      public percentageChanged: number
 
       constructor(scene: Scene);
 
-      setView(options: { destination?: Cartesian3 | Rectangle, orientation?: Object, endTransform?: Matrix4 }): void;
+      public setView(options: { destination?: Cartesian3 | Rectangle, orientation?: Object, endTransform?: Matrix4 }): void
 
-      worldToCameraCoordinates(cartesian: Cartesian4, result?: Cartesian4): Cartesian4;
+      public worldToCameraCoordinates(cartesian: Cartesian4, result?: Cartesian4): Cartesian4
 
-      worldToCameraCoordinatesPoint(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public worldToCameraCoordinatesPoint(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      worldToCameraCoordinatesVector(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public worldToCameraCoordinatesVector(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      cameraToWorldCoordinates(cartesian: Cartesian4, result?: Cartesian4): Cartesian4;
+      public cameraToWorldCoordinates(cartesian: Cartesian4, result?: Cartesian4): Cartesian4
 
-      cameraToWorldCoordinatesPoint(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public cameraToWorldCoordinatesPoint(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      cameraToWorldCoordinatesVector(cartesian: Cartesian3, result?: Cartesian3): Cartesian3;
+      public cameraToWorldCoordinatesVector(cartesian: Cartesian3, result?: Cartesian3): Cartesian3
 
-      move(direction: Cartesian3, amount?: number): void;
+      public move(direction: Cartesian3, amount?: number): void
 
-      moveForward(amount?: number): void;
+      public moveForward(amount?: number): void
 
-      moveBackward(amount?: number): void;
+      public moveBackward(amount?: number): void
 
-      moveUp(amount?: number): void;
+      public moveUp(amount?: number): void
 
-      moveDown(amount?: number): void;
+      public moveDown(amount?: number): void
 
-      moveRight(amount?: number): void;
+      public moveRight(amount?: number): void
 
-      moveLeft(amount?: number): void;
+      public moveLeft(amount?: number): void
 
-      lookLeft(amount?: number): void;
+      public lookLeft(amount?: number): void
 
-      lookRight(amount?: number): void;
+      public lookRight(amount?: number): void
 
-      lookUp(amount?: number): void;
+      public lookUp(amount?: number): void
 
-      lookDown(amount?: number): void;
+      public lookDown(amount?: number): void
 
-      look(axis: Cartesian3, angle?: number): void;
+      public look(axis: Cartesian3, angle?: number): void
 
-      twistLeft(amount?: number): void;
+      public twistLeft(amount?: number): void
 
-      twistRight(amount?: number): void;
+      public twistRight(amount?: number): void
 
-      rotate(axis: Cartesian3, angle?: number): void;
+      public rotate(axis: Cartesian3, angle?: number): void
 
-      rotateDown(angle?: number): void;
+      public rotateDown(angle?: number): void
 
-      rotateUp(angle?: number): void;
+      public rotateUp(angle?: number): void
 
-      rotateRight(angle?: number): void;
+      public rotateRight(angle?: number): void
 
-      rotateLeft(angle?: number): void;
+      public rotateLeft(angle?: number): void
 
-      zoomIn(amount?: number): void;
+      public zoomIn(amount?: number): void
 
-      zoomOut(amount?: number): void;
+      public zoomOut(amount?: number): void
 
-      getMagnitude(): number;
+      public getMagnitude(): number
 
-      lookAt(target: Cartesian3, offset: Cartesian3 | HeadingPitchRange): void;
+      public lookAt(target: Cartesian3, offset: Cartesian3 | HeadingPitchRange): void
 
-      lookAtTransform(transform: Matrix4, offset: Cartesian3 | HeadingPitchRange): void;
+      public lookAtTransform(transform: Matrix4, offset: Cartesian3 | HeadingPitchRange): void
 
-      getRectangleCameraCoordinates(rectangle: Rectangle, result?: Cartesian3): Cartesian3;
+      public getRectangleCameraCoordinates(rectangle: Rectangle, result?: Cartesian3): Cartesian3
 
-      computeViewRectangle(ellipsoid?: Ellipsoid, result?: Rectangle): Rectangle | undefined;
+      public computeViewRectangle(ellipsoid?: Ellipsoid, result?: Rectangle): Rectangle | undefined
 
-      pickEllipsoid(windowPosition: Cartesian2, ellipsoid?: Ellipsoid, result?: Cartesian3): Cartesian3;
+      public pickEllipsoid(windowPosition: Cartesian2, ellipsoid?: Ellipsoid, result?: Cartesian3): Cartesian3
 
-      getPickRay(windowPosition: Cartesian2, result?: Ray): any;
+      public getPickRay(windowPosition: Cartesian2, result?: Ray): any
 
-      flyTo(options: {
+      public flyTo(options: {
           destination: Cartesian3 | Rectangle;
           orientation?: any;
           duration?: number;
@@ -4496,11 +4497,11 @@ declare module Cesium {
           pitchAdjustHeight?: number;
           flyOverLongitude?: number;
           flyOverLongitudeWeight?: number
-      }): void;
+      }): void
 
-      viewBoundingSphere(boundingSphere: BoundingSphere, offset?: HeadingPitchRange): void;
+      public viewBoundingSphere(boundingSphere: BoundingSphere, offset?: HeadingPitchRange): void
 
-      flyToBoundingSphere(boundingSphere: BoundingSphere, options?: {
+      public flyToBoundingSphere(boundingSphere: BoundingSphere, options?: {
           duration?: number;
           offset?: HeadingPitchRange;
           complete?: () => void;
@@ -4511,179 +4512,179 @@ declare module Cesium {
           pitchAdjustHeight?: number;
           flyOverLongitude?: number;
           flyOverLongitudeWeight?: number
-      }): void;
+      }): void
 
-      clone(): Camera;
+      public clone(): Camera
 
-      cancelFlight(): void;
+      public cancelFlight(): void
 
-      distanceToBoundingSphere(boundingSphere: BoundingSphere): number;
+      public distanceToBoundingSphere(boundingSphere: BoundingSphere): number
 
-      flyHome(duration?: number): void;
+      public flyHome(duration?: number): void
 
-      switchToOrthographicFrustum(): void;
+      public switchToOrthographicFrustum(): void
 
-      switchToPerspectiveFrustum(): void;
+      public switchToPerspectiveFrustum(): void
 
   }
 
   class CameraEventAggregator {
-      currentMousePosition: Cartesian2;
-      anyButtonDown: boolean;
+      public currentMousePosition: Cartesian2
+      public anyButtonDown: boolean
 
       constructor(element?: HTMLCanvasElement);
 
-      isMoving(type: CameraEventType, modifier?: KeyboardEventModifier): boolean;
+      public isMoving(type: CameraEventType, modifier?: KeyboardEventModifier): boolean
 
-      getMovement(type: CameraEventType, modifier?: KeyboardEventModifier): any;
+      public getMovement(type: CameraEventType, modifier?: KeyboardEventModifier): any
 
-      getLastMovement(type: CameraEventType, modifier?: KeyboardEventModifier): any;
+      public getLastMovement(type: CameraEventType, modifier?: KeyboardEventModifier): any
 
-      isButtonDown(type: CameraEventType, modifier?: KeyboardEventModifier): boolean;
+      public isButtonDown(type: CameraEventType, modifier?: KeyboardEventModifier): boolean
 
-      getStartMousePosition(type: CameraEventType, modifier?: KeyboardEventModifier): Cartesian2;
+      public getStartMousePosition(type: CameraEventType, modifier?: KeyboardEventModifier): Cartesian2
 
-      getButtonPressTime(type: CameraEventType, modifier?: KeyboardEventModifier): Date;
+      public getButtonPressTime(type: CameraEventType, modifier?: KeyboardEventModifier): Date
 
-      getButtonReleaseTime(type: CameraEventType, modifier?: KeyboardEventModifier): Date;
+      public getButtonReleaseTime(type: CameraEventType, modifier?: KeyboardEventModifier): Date
 
-      reset(): void;
+      public reset(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class CreditDisplay {
       constructor(container: HTMLElement, delimiter?: string);
 
-      addCredit(credit: Credit): void;
+      public addCredit(credit: Credit): void
 
-      addDefaultCredit(credit: Credit): void;
+      public addDefaultCredit(credit: Credit): void
 
-      removeDefaultCredit(credit: Credit): void;
+      public removeDefaultCredit(credit: Credit): void
 
-      beginFrame(credit: Credit): void;
+      public beginFrame(credit: Credit): void
 
-      endFrame(credit: Credit): void;
+      public endFrame(credit: Credit): void
 
-      destroy(): void;
+      public destroy(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
   }
 
   class CullingVolume {
-      planes: Cartesian4[];
+      public planes: Cartesian4[]
 
       constructor(planes: Cartesian4[]);
 
-      computeVisibility(boundingVolume: any): Intersect;
+      public computeVisibility(boundingVolume: any): Intersect
   }
 
   class DebugAppearance {
-      material: Material;
-      translucent: boolean;
-      vertexShaderSource: string;
-      fragmentShaderSource: string;
-      renderState: any;
-      closed: boolean;
-      attributeName: string;
-      glslDatatype: string;
+      public material: Material
+      public translucent: boolean
+      public vertexShaderSource: string
+      public fragmentShaderSource: string
+      public renderState: any
+      public closed: boolean
+      public attributeName: string
+      public glslDatatype: string
 
       constructor(options: { attributeName: string; glslDatatype?: string; vertexShaderSource?: string; fragmentShaderSource?: string; renderState?: RenderState });
 
-      getFragmentShaderSource(): string;
+      public getFragmentShaderSource(): string
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      getRenderState(): any;
+      public getRenderState(): any
   }
 
   class DebugModelMatrixPrimitive {
-      length: number;
-      width: number;
-      show: boolean;
-      modelMatrix: Matrix4;
-      id: any;
+      public length: number
+      public width: number
+      public show: boolean
+      public modelMatrix: Matrix4
+      public id: any
 
       constructor(options?: { length?: number; width?: number; modelMatrix?: Matrix4; show?: boolean; id?: any });
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class DiscardMissingTileImagePolicy {
       constructor(options: { missingImageUrl: string; pixelsToCheck: Cartesian2[]; disableCheckIfAllPixelsAreTransparent?: boolean });
 
-      isReady(): boolean;
+      public isReady(): boolean
 
-      shouldDiscardImage(image: HTMLImageElement): boolean;
+      public shouldDiscardImage(image: HTMLImageElement): boolean
   }
 
   class EllipsoidPrimitive {
-      center: Cartesian3;
-      radii: Cartesian3;
-      modelMatrix: Matrix4;
-      show: boolean;
-      material: Material;
-      id: any;
-      debugShowBoundingVolume: boolean;
+      public center: Cartesian3
+      public radii: Cartesian3
+      public modelMatrix: Matrix4
+      public show: boolean
+      public material: Material
+      public id: any
+      public debugShowBoundingVolume: boolean
 
       constructor(options?: { center?: Cartesian3; radii?: Cartesian3; modelMatrix?: Matrix4; show?: boolean; material?: Material; id?: any; debugShowBoundingVolume?: boolean });
 
-      update(): void;
+      public update(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class EllipsoidSurfaceAppearance {
-      material: Material;
-      translucent: boolean;
-      vertexShaderSource: string;
-      fragmentShaderSource: string;
-      renderState: any;
-      closed: boolean;
-      vertexFormat: VertexFormat;
-      flat: boolean;
-      faceForward: boolean;
-      aboveGround: boolean;
-      static VERTEX_FORMAT: VertexFormat;
+      public static VERTEX_FORMAT: VertexFormat
+      public material: Material
+      public translucent: boolean
+      public vertexShaderSource: string
+      public fragmentShaderSource: string
+      public renderState: any
+      public closed: boolean
+      public vertexFormat: VertexFormat
+      public flat: boolean
+      public faceForward: boolean
+      public aboveGround: boolean
 
       constructor(options?: { flat?: boolean; faceForward?: boolean; translucent?: boolean; aboveGround?: boolean; material?: Material; vertexShaderSource?: string; fragmentShaderSource?: string; renderState?: RenderState });
 
-      getFragmentShaderSource(): void;
+      public getFragmentShaderSource(): void
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      getRenderState(): any;
+      public getRenderState(): any
   }
 
   class FrameRateMonitor {
-      samplingWindow: number;
-      quietPeriod: number;
-      warmupPeriod: number;
-      minimumFrameRateDuringWarmup: number;
-      minimumFrameRateAfterWarmup: number;
-      scene: Scene;
-      lowFrameRate: Event;
-      nominalFrameRate: Event;
-      lastFramesPerSecond: number;
-      static defaultSettings: Object;
+      public static defaultSettings: Object
+
+      public static fromScene(scene: Scene): FrameRateMonitor
+      public samplingWindow: number
+      public quietPeriod: number
+      public warmupPeriod: number
+      public minimumFrameRateDuringWarmup: number
+      public minimumFrameRateAfterWarmup: number
+      public scene: Scene
+      public lowFrameRate: Event
+      public nominalFrameRate: Event
+      public lastFramesPerSecond: number
 
       constructor(options?: { scene: Scene; samplingWindow?: number; quietPeriod?: number; warmupPeriod?: number; minimumFrameRateDuringWarmup?: number; minimumFrameRateAfterWarmup?: number });
 
-      pause(): void;
+      public pause(): void
 
-      unpause(): void;
+      public unpause(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
-
-      static fromScene(scene: Scene): FrameRateMonitor;
+      public destroy(): void
   }
 
   class GetFeatureInfoFormat {
@@ -4691,107 +4692,107 @@ declare module Cesium {
   }
 
   class Globe {
-      baseColor: Color;
-      depthTestAgainstTerrain: boolean;
-      ellipsoid: Ellipsoid;
-      enableLighting: boolean;
-      imageryLayers: ImageryLayerCollection;
-      lightingFadeInDistance: number;
-      lightingFadeOutDistance: number;
-      maximumScreenSpaceError: number;
-      oceanNormalMapUrl: string;
-      shadows: ShadowMode;
-      show: boolean;
-      showWaterEffect: boolean;
-      terrainProvider: TerrainProvider;
-      readonly terrainProviderChanged: Event;
-      tileCacheSize: number;
-      tileLoadProgressEvent: Event;
-      material: Material;
+      public baseColor: Color
+      public depthTestAgainstTerrain: boolean
+      public ellipsoid: Ellipsoid
+      public enableLighting: boolean
+      public imageryLayers: ImageryLayerCollection
+      public lightingFadeInDistance: number
+      public lightingFadeOutDistance: number
+      public maximumScreenSpaceError: number
+      public oceanNormalMapUrl: string
+      public shadows: ShadowMode
+      public show: boolean
+      public showWaterEffect: boolean
+      public terrainProvider: TerrainProvider
+      public readonly terrainProviderChanged: Event
+      public tileCacheSize: number
+      public tileLoadProgressEvent: Event
+      public material: Material
 
       constructor(ellipsoid?: Ellipsoid);
 
-      pick(ray: Ray, scene: Scene, result?: Cartesian3): Cartesian3;
+      public pick(ray: Ray, scene: Scene, result?: Cartesian3): Cartesian3
 
-      getHeight(cartographic: Cartographic): number;
+      public getHeight(cartographic: Cartographic): number
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class GoogleEarthEnterpriseMapsProvider {
+
+      public readonly channel: number
+      public readonly credit: Credit
+      public defaultGamma: number
+      public readonly errorEvent: Event
+      public readonly hasAlphaChannel: boolean
+      public readonly maximumLevel: number
+      public readonly minimumLevel: number
+      public readonly path: string
+      public readonly proxy: Proxy
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public readonly rectangle: Rectangle
+      public readonly requestType: string
+      public readonly tileDiscardPolicy: TileDiscardPolicy
+      public readonly tileHeight: number
+      public readonly tileWidth: number
+      public readonly tilingScheme: TilingScheme
+      public readonly url: string
+      public readonly version: number
       constructor(options: { url: string; channel: number; path?: string; maximumLevel?: number; tileDiscardPolicy?: TileDiscardPolicy; ellipsoid?: Ellipsoid; proxy?: Proxy });
 
-      readonly channel: number;
-      readonly credit: Credit;
-      defaultGamma: number;
-      readonly errorEvent: Event;
-      readonly hasAlphaChannel: boolean;
-      readonly maximumLevel: number;
-      readonly minimumLevel: number;
-      readonly path: string;
-      readonly proxy: Proxy;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<boolean>;
-      readonly rectangle: Rectangle;
-      readonly requestType: string;
-      readonly tileDiscardPolicy: TileDiscardPolicy;
-      readonly tileHeight: number;
-      readonly tileWidth: number;
-      readonly tilingScheme: TilingScheme;
-      readonly url: string;
-      readonly version: number;
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
-
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
   }
 
   class GoogleEarthEnterpriseImageryProvider extends ImageryProvider {
-      defaultGamma: number;
-      url: string;
-      path: string;
-      proxy: Proxy;
-      channel: number;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      version: number;
-      requestType: string;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      credit: Credit;
-      hasAlphaChannel: boolean;
+      public defaultGamma: number
+      public url: string
+      public path: string
+      public proxy: Proxy
+      public channel: number
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public version: number
+      public requestType: string
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public credit: Credit
+      public hasAlphaChannel: boolean
 
       constructor(options: { url: string; proxy?: Proxy; ellipsoid?: Ellipsoid; tileDiscardPolicy?: TileDiscardPolicy; credit?: Credit | string; });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class GridImageryProvider extends ImageryProvider {
-      proxy: Proxy;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      credit: Credit;
-      hasAlphaChannel: boolean;
+      public proxy: Proxy
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public credit: Credit
+      public hasAlphaChannel: boolean
 
       constructor(options?: {
           tilingScheme?: TilingScheme;
@@ -4806,68 +4807,68 @@ declare module Cesium {
           backgroundColor?: Color;
       });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class HeadingPitchRange {
 
-      constructor(heading?: number, pitch?: number, roll?: number);
+      public static clone(hpr: HeadingPitchRange, result?: HeadingPitchRange): HeadingPitchRange
 
-      static clone(hpr: HeadingPitchRange, result?: HeadingPitchRange): HeadingPitchRange;
+      constructor(heading?: number, pitch?: number, roll?: number);
   }
 
 
   class HeadingPitchRoll {
-      heading: number;
-      pitch: number;
-      roll: number;
+
+      public static clone(headingPitchRoll: HeadingPitchRoll, result?: HeadingPitchRoll): HeadingPitchRoll
+
+      public static equals(left?: HeadingPitchRoll, right?: HeadingPitchRoll): boolean
+
+      public static equalsEpsilon(left?: HeadingPitchRoll, right?: HeadingPitchRoll, relativeEpsilon?: number, absoluteEpsilon?: number): boolean
+
+      public static fromDegrees(heading: number, pitch: number, roll: number, result?: HeadingPitchRoll): HeadingPitchRoll
+
+      public static fromQuaternion(quaternion: Quaternion, result?: HeadingPitchRoll): HeadingPitchRoll
+      public heading: number
+      public pitch: number
+      public roll: number
 
       constructor(heading?: number, pitch?: number, range?: number);
 
-      toString(): string;
+      public toString(): string
 
-      static clone(headingPitchRoll: HeadingPitchRoll, result?: HeadingPitchRoll): HeadingPitchRoll;
+      public clone(result?: HeadingPitchRoll): HeadingPitchRoll
 
-      static equals(left?: HeadingPitchRoll, right?: HeadingPitchRoll): boolean;
+      public equals(right?: HeadingPitchRoll): boolean
 
-      static equalsEpsilon(left?: HeadingPitchRoll, right?: HeadingPitchRoll, relativeEpsilon?: number, absoluteEpsilon?: number): boolean;
-
-      static fromDegrees(heading: number, pitch: number, roll: number, result?: HeadingPitchRoll): HeadingPitchRoll;
-
-      static fromQuaternion(quaternion: Quaternion, result?: HeadingPitchRoll): HeadingPitchRoll;
-
-      clone(result?: HeadingPitchRoll): HeadingPitchRoll;
-
-      equals(right?: HeadingPitchRoll): boolean;
-
-      equalsEpsilon(right?: HeadingPitchRoll, relativeEpsilon?: number, absoluteEpsilon?: number): boolean;
+      public equalsEpsilon(right?: HeadingPitchRoll, relativeEpsilon?: number, absoluteEpsilon?: number): boolean
   }
 
   class ImageryLayer {
-      alpha: number;
-      brightness: number;
-      contrast: number;
-      gamma: number;
-      hue: number;
-      readonly imageryProvider: ImageryProvider;
-      magnificationFilter: number;
-      minificationFilter: number;
-      readonly rectangle: Rectangle;
-      saturation: number;
-      show: boolean;
-      splitDirection: number;
-      static DEFAULT_BRIGHTNESS: number;
-      static DEFAULT_CONTRAST: number;
-      static DEFAULT_GAMMA: number;
-      static DEFAULT_HUE: number;
-      static DEFAULT_MAGNIFICATION_FILTER: number;
-      static DEFAULT_MINIFICATION_FILTER: number;
-      static DEFAULT_SATURATION: number;
-      static DEFAULT_SPLIT: number;
+      public static DEFAULT_BRIGHTNESS: number
+      public static DEFAULT_CONTRAST: number
+      public static DEFAULT_GAMMA: number
+      public static DEFAULT_HUE: number
+      public static DEFAULT_MAGNIFICATION_FILTER: number
+      public static DEFAULT_MINIFICATION_FILTER: number
+      public static DEFAULT_SATURATION: number
+      public static DEFAULT_SPLIT: number
+      public alpha: number
+      public brightness: number
+      public contrast: number
+      public gamma: number
+      public hue: number
+      public readonly imageryProvider: ImageryProvider
+      public magnificationFilter: number
+      public minificationFilter: number
+      public readonly rectangle: Rectangle
+      public saturation: number
+      public show: boolean
+      public splitDirection: number
 
       constructor(imageryProvider: ImageryProvider, options?: {
           rectangle?: Rectangle;
@@ -4886,242 +4887,263 @@ declare module Cesium {
           maximumTerrainLevel?: number
       });
 
-      getViewableRectangle(): Promise<Rectangle>;
+      public getViewableRectangle(): Promise<Rectangle>
 
-      isBaseLayer(): boolean;
+      public isBaseLayer(): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class TextureMagnificationFilter {
-      static LINEAR: number;
-      static NEAREST: number;
+      public static LINEAR: number
+      public static NEAREST: number
   }
 
   class ImagerySplitDirection {
-      static LEFT: number;
-      static NONE: number;
-      static RIGHT: number;
+      public static LEFT: number
+      public static NONE: number
+      public static RIGHT: number
   }
 
   class ImageryLayerCollection {
-      layerAdded: Event;
-      layerRemoved: Event;
-      layerMoved: Event;
-      layerShownOrHidden: Event;
-      length: number;
+      public layerAdded: Event
+      public layerRemoved: Event
+      public layerMoved: Event
+      public layerShownOrHidden: Event
+      public length: number
 
-      add(layer: ImageryLayer, index?: number): void;
+      public add(layer: ImageryLayer, index?: number): void
 
-      addImageryProvider(imageryProvider: ImageryProvider, index?: number): ImageryLayer;
+      public addImageryProvider(imageryProvider: ImageryProvider, index?: number): ImageryLayer
 
-      remove(layer: ImageryLayer, destroy?: boolean): boolean;
+      public remove(layer: ImageryLayer, destroy?: boolean): boolean
 
-      removeAll(destroy?: boolean): void;
+      public removeAll(destroy?: boolean): void
 
-      contains(layer: ImageryLayer): boolean;
+      public contains(layer: ImageryLayer): boolean
 
-      indexOf(layer: ImageryLayer): number;
+      public indexOf(layer: ImageryLayer): number
 
-      get(index: number): ImageryLayer;
+      public get(index: number): ImageryLayer
 
-      raise(layer: ImageryLayer): void;
+      public raise(layer: ImageryLayer): void
 
-      lower(layer: ImageryLayer): void;
+      public lower(layer: ImageryLayer): void
 
-      raiseToTop(layer: ImageryLayer): void;
+      public raiseToTop(layer: ImageryLayer): void
 
-      lowerToBottom(layer: ImageryLayer): void;
+      public lowerToBottom(layer: ImageryLayer): void
 
-      pickImageryLayerFeatures(ray: Ray, scene: Scene): Promise<ImageryLayerFeatureInfo[]>;
+      public pickImageryLayerFeatures(ray: Ray, scene: Scene): Promise<ImageryLayerFeatureInfo[]>
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class ImageryLayerFeatureInfo {
-      name: string;
-      description: string;
-      position: Cartographic;
-      data: any;
+      public name: string
+      public description: string
+      public position: Cartographic
+      public data: any
 
-      configureNameFromProperties(properties: any): void;
+      public configureNameFromProperties(properties: any): void
 
-      configureDescriptionFromProperties(properties: any): void;
+      public configureDescriptionFromProperties(properties: any): void
   }
 
   class ImageryProvider {
-      defaultAlpha: number;
-      defaultBrightness: number;
-      defaultContrast: number;
-      defaultHue: number;
-      defaultSaturation: number;
-      defaultGamma: number;
-      ready: boolean;
-      rectangle: Rectangle;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      credit: Credit;
-      proxy: Proxy;
-      hasAlphaChannel: boolean;
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public static loadImage(url: string): Promise<HTMLImageElement | HTMLCanvasElement>
+      public defaultAlpha: number
+      public defaultBrightness: number
+      public defaultContrast: number
+      public defaultHue: number
+      public defaultSaturation: number
+      public defaultGamma: number
+      public ready: boolean
+      public rectangle: Rectangle
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public credit: Credit
+      public proxy: Proxy
+      public hasAlphaChannel: boolean
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      static loadImage(url: string): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class Label {
-      show: boolean;
-      position: Cartesian3;
-      text: string;
-      font: string;
-      fillColor: Color;
-      outlineColor: Color;
-      outlineWidth: number;
-      style: LabelStyle;
-      pixelOffset: Cartesian2;
-      translucencyByDistance: NearFarScalar;
-      pixelOffsetScaleByDistance: NearFarScalar;
-      eyeOffset: Cartesian3;
-      horizontalOrigin: HorizontalOrigin;
-      verticalOrigin: VerticalOrigin;
-      scale: number;
-      id: any;
+      public show: boolean
+      public position: Cartesian3
+      public text: string
+      public font: string
+      public fillColor: Color
+      public outlineColor: Color
+      public outlineWidth: number
+      public style: LabelStyle
+      public pixelOffset: Cartesian2
+      public translucencyByDistance: NearFarScalar
+      public pixelOffsetScaleByDistance: NearFarScalar
+      public eyeOffset: Cartesian3
+      public horizontalOrigin: HorizontalOrigin
+      public verticalOrigin: VerticalOrigin
+      public scale: number
+      public id: any
 
-      computeScreenSpacePosition(scene: Scene, result?: Cartesian2): Cartesian2;
+      public computeScreenSpacePosition(scene: Scene, result?: Cartesian2): Cartesian2
 
-      equals(other: Label): boolean;
+      public equals(other: Label): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
   }
 
   class LabelCollection {
-      modelMatrix: Matrix4;
-      debugShowBoundingVolume: boolean;
-      length: number;
+      public modelMatrix: Matrix4
+      public debugShowBoundingVolume: boolean
+      public length: number
 
       constructor(options?: { modelMatrix?: Matrix4; debugShowBoundingVolume?: boolean });
 
-      add(options?: any): Label;
+      public add(options?: any): Label
 
-      remove(label: Label): boolean;
+      public remove(label: Label): boolean
 
-      removeAll(): void;
+      public removeAll(): void
 
-      contains(label: Label): boolean;
+      public contains(label: Label): boolean
 
-      get(index: number): Label;
+      public get(index: number): Label
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class Material {
-      type: string;
-      shaderSource: string;
-      materials: any;
-      uniforms: any;
-      translucent: boolean | Function;
-      static DefaultImageId: string;
-      static DefaultCubeMapId: string;
-      static ColorType: string;
-      static ImageType: string;
-      static DiffuseMapType: string;
-      static AlphaMapType: string;
-      static SpecularMapType: string;
-      static EmissionMapType: string;
-      static BumpMapType: string;
-      static NormalMapType: string;
-      static GridType: string;
-      static StripeType: string;
-      static CheckerboardType: string;
-      static DotType: string;
-      static WaterType: string;
-      static RimLightingType: string;
-      static FadeType: string;
-      static PolylineArrowType: string;
-      static PolylineGlowType: string;
-      static PolylineOutlineType: string;
+      public static DefaultImageId: string
+      public static DefaultCubeMapId: string
+      public static ColorType: string
+      public static ImageType: string
+      public static DiffuseMapType: string
+      public static AlphaMapType: string
+      public static SpecularMapType: string
+      public static EmissionMapType: string
+      public static BumpMapType: string
+      public static NormalMapType: string
+      public static GridType: string
+      public static StripeType: string
+      public static CheckerboardType: string
+      public static DotType: string
+      public static WaterType: string
+      public static RimLightingType: string
+      public static FadeType: string
+      public static PolylineArrowType: string
+      public static PolylineGlowType: string
+      public static PolylineOutlineType: string
+
+      public static fromType(type: string, uniforms?: any): Material
+      public type: string
+      public shaderSource: string
+      public materials: any
+      public uniforms: any
+      public translucent: boolean | Function
 
       constructor(options?: { strict?: boolean; translucent?: boolean | Function; fabric: any });
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
-
-      static fromType(type: string, uniforms?: any): Material;
+      public destroy(): void
   }
 
   class MaterialAppearance {
-      material: Material;
-      translucent: boolean;
-      vertexShaderSource: string;
-      fragmentShaderSource: string;
-      renderState: any;
-      closed: boolean;
-      materialSupport: MaterialAppearance.MaterialSupport;
-      vertexFormat: VertexFormat;
-      flat: boolean;
-      faceForward: boolean;
+      public material: Material
+      public translucent: boolean
+      public vertexShaderSource: string
+      public fragmentShaderSource: string
+      public renderState: any
+      public closed: boolean
+      public materialSupport: MaterialAppearance.MaterialSupport
+      public vertexFormat: VertexFormat
+      public flat: boolean
+      public faceForward: boolean
 
       constructor(options?: { flat?: boolean; faceForward?: boolean; translucent?: boolean; closed?: boolean; materialSupport?: MaterialAppearance.MaterialSupport; material?: Material; vertexShaderSource?: string; fragmentShaderSource?: string; renderState?: RenderState });
 
-      getFragmentShaderSource(): string;
+      public getFragmentShaderSource(): string
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      getRenderState(): any;
+      public getRenderState(): any
   }
 
-  module MaterialAppearance {
+  namespace MaterialAppearance {
       class MaterialSupport {
-          static BASIC: number;
-          static TEXTURED: number;
-          static ALL: number;
+          public static BASIC: number
+          public static TEXTURED: number
+          public static ALL: number
       }
   }
 
   class Model {
-      activeAnimations: ModelAnimationCollection;
-      readonly allowPicking: boolean;
-      readonly readonlyasynchronous: boolean;
-      readonly basePath: string;
-      readonly boundingSphere: BoundingSphere;
-      clampAnimations: boolean;
-      color: Color;
-      colorBlendAmount: number;
-      colorBlendMode: ColorBlendMode;
-      debugShowBoundingVolume: boolean;
-      debugWireframe: boolean;
-      readonly gltf: any;
-      id: any;
-      readonly incrementallyLoadTextures: boolean;
-      maximumScale: number;
-      minimumPixelSize: number;
-      modelMatrix: Matrix4;
-      readonly pendingTextureLoads: number;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<Model>;
-      scale: number;
-      shadows: ShadowMode;
-      show: boolean;
-      silhouetteColor: Color;
-      silhouetteSize: number;
+
+      public static fromGltf(options?: {
+          url?: string;
+          headers?: any;
+          basePath?: string;
+          show?: boolean;
+          modelMatrix?: Matrix4;
+          scale?: number;
+          minimumPixelSize?: number;
+          maximumScale?: number;
+          id?: any;
+          allowPicking?: boolean;
+          incrementallyLoadTextures?: boolean;
+          asynchronous?: boolean;
+          clampAnimations?: boolean;
+          shadows?: ShadowMode;
+          debugShowBoundingVolume?: boolean;
+          debugWireframe?: boolean;
+      }): Model
+
+      public static silhouetteSupported(scene: Scene): boolean
+      public activeAnimations: ModelAnimationCollection
+      public readonly allowPicking: boolean
+      public readonly readonlyasynchronous: boolean
+      public readonly basePath: string
+      public readonly boundingSphere: BoundingSphere
+      public clampAnimations: boolean
+      public color: Color
+      public colorBlendAmount: number
+      public colorBlendMode: ColorBlendMode
+      public debugShowBoundingVolume: boolean
+      public debugWireframe: boolean
+      public readonly gltf: any
+      public id: any
+      public readonly incrementallyLoadTextures: boolean
+      public maximumScale: number
+      public minimumPixelSize: number
+      public modelMatrix: Matrix4
+      public readonly pendingTextureLoads: number
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<Model>
+      public scale: number
+      public shadows: ShadowMode
+      public show: boolean
+      public silhouetteColor: Color
+      public silhouetteSize: number
 
       constructor(options?: {
           gltf?: any;
@@ -5149,62 +5171,41 @@ declare module Cesium {
           silhouetteSize?: number;
       });
 
-      static fromGltf(options?: {
-          url?: string;
-          headers?: any;
-          basePath?: string;
-          show?: boolean;
-          modelMatrix?: Matrix4;
-          scale?: number;
-          minimumPixelSize?: number;
-          maximumScale?: number;
-          id?: any;
-          allowPicking?: boolean;
-          incrementallyLoadTextures?: boolean;
-          asynchronous?: boolean;
-          clampAnimations?: boolean;
-          shadows?: ShadowMode;
-          debugShowBoundingVolume?: boolean;
-          debugWireframe?: boolean;
-      }): Model;
+      public getMesh(name: string): ModelMesh
 
-      static silhouetteSupported(scene: Scene): boolean;
+      public getNode(name: string): ModelNode
 
-      getMesh(name: string): ModelMesh;
+      public getMaterial(name: string): ModelMaterial
 
-      getNode(name: string): ModelNode;
+      public update(): void
 
-      getMaterial(name: string): ModelMaterial;
+      public isDestroyed(): boolean
 
-      update(): void;
-
-      isDestroyed(): boolean;
-
-      destroy(): void;
+      public destroy(): void
   }
 
   class ColorBlendMode { }
 
   class ModelAnimation {
-      removeOnStop: boolean;
-      start: Event;
-      update: Event;
-      stop: Event;
-      name: string;
-      startTime: JulianDate;
-      delay: number;
-      stopTime: JulianDate;
-      speedup: number;
-      reverse: boolean;
-      loop: ModelAnimationLoop;
+      public removeOnStop: boolean
+      public start: Event
+      public update: Event
+      public stop: Event
+      public name: string
+      public startTime: JulianDate
+      public delay: number
+      public stopTime: JulianDate
+      public speedup: number
+      public reverse: boolean
+      public loop: ModelAnimationLoop
   }
 
   class ModelAnimationCollection {
-      animationAdded: Event;
-      animationRemoved: Event;
-      readonly length: number;
+      public animationAdded: Event
+      public animationRemoved: Event
+      public readonly length: number
 
-      add(options: {
+      public add(options: {
           name: string;
           index?: number;
           startTime?: JulianDate;
@@ -5214,9 +5215,9 @@ declare module Cesium {
           speedup?: number;
           reverse?: boolean;
           loop?: ModelAnimationLoop;
-      }): ModelAnimation;
+      }): ModelAnimation
 
-      addAll(options?: {
+      public addAll(options?: {
           startTime?: JulianDate;
           delay?: number;
           stopTime?: JulianDate;
@@ -5224,179 +5225,179 @@ declare module Cesium {
           speedup?: number;
           reverse?: boolean;
           loop?: ModelAnimationLoop;
-      }): ModelAnimation[];
+      }): ModelAnimation[]
 
-      contains(animation: ModelAnimation): boolean;
+      public contains(animation: ModelAnimation): boolean
 
-      get(index: number): ModelAnimation;
+      public get(index: number): ModelAnimation
 
-      remove(animation: ModelAnimation): boolean;
+      public remove(animation: ModelAnimation): boolean
 
-      removeAll(): void;
+      public removeAll(): void
   }
 
   class ModelMaterial {
-      name: string;
-      id: string;
+      public name: string
+      public id: string
 
-      setValue(name: string, value?: any): void;
+      public setValue(name: string, value?: any): void
 
-      getValue(name: string): any;
+      public getValue(name: string): any
   }
 
   class ModelMesh {
-      name: string;
-      id: string;
-      materials: ModelMaterial[];
+      public name: string
+      public id: string
+      public materials: ModelMaterial[]
   }
 
   class ModelNode {
-      name: string;
-      id: string;
-      show: boolean;
-      matrix: Matrix4;
+      public name: string
+      public id: string
+      public show: boolean
+      public matrix: Matrix4
   }
 
   class Moon {
-      show: boolean;
-      textureUrl: string;
-      onlySunLighting: boolean;
-      ellipsoid: Ellipsoid;
+      public show: boolean
+      public textureUrl: string
+      public onlySunLighting: boolean
+      public ellipsoid: Ellipsoid
 
       constructor(options?: { show?: boolean; textureUrl?: string; ellipsoid?: Ellipsoid; onlySunLighting?: boolean });
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class NeverTileDiscardPolicy {
-      isReady(): boolean;
+      public isReady(): boolean
 
-      shouldDiscardImage(image: HTMLImageElement | Promise<HTMLImageElement>): Promise<boolean>;
+      public shouldDiscardImage(image: HTMLImageElement | Promise<HTMLImageElement>): Promise<boolean>
   }
 
   class OpenStreetMapImageryProvider {
-      url: string;
-      proxy: Proxy;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      credit: Credit;
-      hasAlphaChannel: boolean;
+      public url: string
+      public proxy: Proxy
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public credit: Credit
+      public hasAlphaChannel: boolean
 
       constructor(options?: { url?: string; fileExtension?: string; proxy?: any; rectangle?: Rectangle; minimumLevel?: number; maximumLevel?: number; ellipsoid?: Ellipsoid; credit?: Credit | string });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class OrthographicFrustum {
-      left: number;
-      right: number;
-      top: number;
-      bottom: number;
-      near: number;
-      far: number;
-      projectionMatrix: Matrix4;
+      public left: number
+      public right: number
+      public top: number
+      public bottom: number
+      public near: number
+      public far: number
+      public projectionMatrix: Matrix4
 
-      computeCullingVolume(position: Cartesian3, direction: Cartesian3, up: Cartesian3): CullingVolume;
+      public computeCullingVolume(position: Cartesian3, direction: Cartesian3, up: Cartesian3): CullingVolume
 
-      getPixelSize(drawingBufferDimensions: Cartesian2, distance?: number, result?: Cartesian2): Cartesian2;
+      public getPixelSize(drawingBufferDimensions: Cartesian2, distance?: number, result?: Cartesian2): Cartesian2
 
-      clone(result?: OrthographicFrustum): OrthographicFrustum;
+      public clone(result?: OrthographicFrustum): OrthographicFrustum
 
-      equals(other?: OrthographicFrustum): boolean;
+      public equals(other?: OrthographicFrustum): boolean
   }
 
   class PerInstanceColorAppearance {
-      material: Material;
-      translucent: boolean;
-      vertexShaderSource: string;
-      fragmentShaderSource: string;
-      renderState: any;
-      closed: boolean;
-      vertexFormat: VertexFormat;
-      flat: boolean;
-      faceForward: boolean;
-      static VERTEX_FORMAT: VertexFormat;
-      static FLAT_VERTEX_FORMAT: VertexFormat;
+      public static VERTEX_FORMAT: VertexFormat
+      public static FLAT_VERTEX_FORMAT: VertexFormat
+      public material: Material
+      public translucent: boolean
+      public vertexShaderSource: string
+      public fragmentShaderSource: string
+      public renderState: any
+      public closed: boolean
+      public vertexFormat: VertexFormat
+      public flat: boolean
+      public faceForward: boolean
 
       constructor(options?: { flat?: boolean; faceForward?: boolean; translucent?: boolean; closed?: boolean; vertexShaderSource?: string; fragmentShaderSource?: string; renderState?: RenderState });
 
-      getFragmentShaderSource(): void;
+      public getFragmentShaderSource(): void
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      getRenderState(): any;
+      public getRenderState(): any
   }
 
   class PerspectiveFrustum {
-      fov: number;
-      aspectRatio: number;
-      near: number;
-      far: number;
-      projectionMatrix: Matrix4;
-      infiniteProjectionMatrix: Matrix4;
-      fovy: number;
+      public fov: number
+      public aspectRatio: number
+      public near: number
+      public far: number
+      public projectionMatrix: Matrix4
+      public infiniteProjectionMatrix: Matrix4
+      public fovy: number
 
-      computeCullingVolume(position: Cartesian3, direction: Cartesian3, up: Cartesian3): CullingVolume;
+      public computeCullingVolume(position: Cartesian3, direction: Cartesian3, up: Cartesian3): CullingVolume
 
-      getPixelSize(drawingBufferDimensions: Cartesian2, distance?: number, result?: Cartesian2): Cartesian2;
+      public getPixelSize(drawingBufferDimensions: Cartesian2, distance?: number, result?: Cartesian2): Cartesian2
 
-      clone(result?: PerspectiveFrustum): PerspectiveFrustum;
+      public clone(result?: PerspectiveFrustum): PerspectiveFrustum
 
-      equals(other?: PerspectiveFrustum): boolean;
+      public equals(other?: PerspectiveFrustum): boolean
   }
 
   class PerspectiveOffCenterFrustum {
-      left: number;
-      right: number;
-      top: number;
-      bottom: number;
-      near: number;
-      far: number;
-      projectionMatrix: Matrix4;
-      infiniteProjectionMatrix: Matrix4;
+      public left: number
+      public right: number
+      public top: number
+      public bottom: number
+      public near: number
+      public far: number
+      public projectionMatrix: Matrix4
+      public infiniteProjectionMatrix: Matrix4
 
-      computeCullingVolume(position: Cartesian3, direction: Cartesian3, up: Cartesian3): CullingVolume;
+      public computeCullingVolume(position: Cartesian3, direction: Cartesian3, up: Cartesian3): CullingVolume
 
-      getPixelSize(drawingBufferDimensions: Cartesian2, distance?: number, result?: Cartesian2): Cartesian2;
+      public getPixelSize(drawingBufferDimensions: Cartesian2, distance?: number, result?: Cartesian2): Cartesian2
 
-      clone(result?: PerspectiveOffCenterFrustum): PerspectiveOffCenterFrustum;
+      public clone(result?: PerspectiveOffCenterFrustum): PerspectiveOffCenterFrustum
 
-      equals(other?: PerspectiveOffCenterFrustum): boolean;
+      public equals(other?: PerspectiveOffCenterFrustum): boolean
   }
 
   class PointPrimitive {
-      show: boolean;
-      position: Cartesian3;
-      scaleByDistance: NearFarScalar;
-      translucencyByDistance: NearFarScalar;
-      pixelSize: number;
-      color: Color;
-      outlineColor: Color;
-      outlineWidth: number;
-      id: any;
+      public show: boolean
+      public position: Cartesian3
+      public scaleByDistance: NearFarScalar
+      public translucencyByDistance: NearFarScalar
+      public pixelSize: number
+      public color: Color
+      public outlineColor: Color
+      public outlineWidth: number
+      public id: any
 
-      computeScreenSpacePosition(scene: Scene, result?: Cartesian2): Cartesian2;
+      public computeScreenSpacePosition(scene: Scene, result?: Cartesian2): Cartesian2
 
-      equals(other: PointPrimitive): boolean;
+      public equals(other: PointPrimitive): boolean
   }
 
   class PointPrimitiveCollection {
-      modelMatrix: Matrix4;
-      debugShowBoundingVolume: boolean;
-      length: number;
+      public modelMatrix: Matrix4
+      public debugShowBoundingVolume: boolean
+      public length: number
 
       constructor(options?: {
           modelMatrix?: Matrix4;
@@ -5404,138 +5405,138 @@ declare module Cesium {
           blendOption?: BlendOption;
       });
 
-      add(pointPrimitive?: any): PointPrimitive;
+      public add(pointPrimitive?: any): PointPrimitive
 
-      remove(pointPrimitive: PointPrimitive): boolean;
+      public remove(pointPrimitive: PointPrimitive): boolean
 
-      removeAll(): void;
+      public removeAll(): void
 
-      contains(pointPrimitive?: PointPrimitive): boolean;
+      public contains(pointPrimitive?: PointPrimitive): boolean
 
-      get(index: number): PointPrimitive;
+      public get(index: number): PointPrimitive
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class BlendOption {
-      static OPAQUE: number;
-      static OPAQUE_AND_TRANSLUCENT: number;
-      static TRANSLUCENT: number;
+      public static OPAQUE: number
+      public static OPAQUE_AND_TRANSLUCENT: number
+      public static TRANSLUCENT: number
   }
 
   class Polygon {
-      ellipsoid: Ellipsoid;
-      granularity: number;
-      height: number;
-      textureRotationAngle: number;
-      show: boolean;
-      material: Material;
-      id: any;
-      asynchronous: boolean;
-      debugShowBoundingVolume: boolean;
-      positions: Cartesian3[];
+      public ellipsoid: Ellipsoid
+      public granularity: number
+      public height: number
+      public textureRotationAngle: number
+      public show: boolean
+      public material: Material
+      public id: any
+      public asynchronous: boolean
+      public debugShowBoundingVolume: boolean
+      public positions: Cartesian3[]
 
       constructor(options?: { ellipsoid?: Ellipsoid; positions?: Cartesian3[]; polygonHierarchy?: any; granularity?: number; height?: number; textureRotationAngle?: number; show?: boolean; material?: Material; id?: any; asynchronous?: boolean; debugShowBoundingVolume?: boolean });
 
-      configureFromPolygonHierarchy(hierarchy: any): void;
+      public configureFromPolygonHierarchy(hierarchy: any): void
 
-      update(): void;
+      public update(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class Polyline {
-      show: boolean;
-      positions: Cartesian3[];
-      material: Material;
-      width: number;
-      loop: boolean;
-      id: any;
+      public show: boolean
+      public positions: Cartesian3[]
+      public material: Material
+      public width: number
+      public loop: boolean
+      public id: any
 
       constructor(options?: { show?: boolean; width?: number; loop?: boolean; material?: Material; positions?: Cartesian3[]; id?: any });
   }
 
   class PolylineCollection {
-      modelMatrix: Matrix4;
-      debugShowBoundingVolume: boolean;
-      length: number;
+      public modelMatrix: Matrix4
+      public debugShowBoundingVolume: boolean
+      public length: number
 
       constructor(options?: { modelMatrix?: Matrix4; debugShowBoundingVolume?: boolean });
 
-      add(polyline?: any): Polyline;
+      public add(polyline?: any): Polyline
 
-      remove(polyline: Polyline): boolean;
+      public remove(polyline: Polyline): boolean
 
-      removeAll(): void;
+      public removeAll(): void
 
-      contains(polyline: Polyline): boolean;
+      public contains(polyline: Polyline): boolean
 
-      get(index: number): Polyline;
+      public get(index: number): Polyline
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class PolylineColorAppearance {
-      material: Material;
-      translucent: boolean;
-      vertexShaderSource: string;
-      fragmentShaderSource: string;
-      renderState: any;
-      closed: boolean;
-      vertexFormat: VertexFormat;
-      static VERTEX_FORMAT: VertexFormat;
+      public static VERTEX_FORMAT: VertexFormat
+      public material: Material
+      public translucent: boolean
+      public vertexShaderSource: string
+      public fragmentShaderSource: string
+      public renderState: any
+      public closed: boolean
+      public vertexFormat: VertexFormat
 
       constructor(options?: { translucent?: boolean; vertexShaderSource?: string; fragmentShaderSource?: string; renderState?: RenderState });
 
-      getFragmentShaderSource(): void;
+      public getFragmentShaderSource(): void
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      getRenderState(): any;
+      public getRenderState(): any
   }
 
   class PolylineMaterialAppearance {
-      material: Material;
-      translucent: boolean;
-      vertexShaderSource: string;
-      fragmentShaderSource: string;
-      renderState: any;
-      closed: boolean;
-      vertexFormat: VertexFormat;
-      static VERTEX_FORMAT: VertexFormat;
+      public static VERTEX_FORMAT: VertexFormat
+      public material: Material
+      public translucent: boolean
+      public vertexShaderSource: string
+      public fragmentShaderSource: string
+      public renderState: any
+      public closed: boolean
+      public vertexFormat: VertexFormat
 
       constructor(options?: { translucent?: boolean; material?: Material; vertexShaderSource?: string; fragmentShaderSource?: string; renderState?: RenderState });
 
-      getFragmentShaderSource(): void;
+      public getFragmentShaderSource(): void
 
-      isTranslucent(): boolean;
+      public isTranslucent(): boolean
 
-      getRenderState(): any;
+      public getRenderState(): any
   }
 
   class Primitive {
-      readonly allowPicking: boolean;
-      readonly asynchronous: boolean;
-      readonly compressVertices: boolean;
-      readonly geometryInstances: GeometryInstance[] | GeometryInstance;
-      readonly interleave: boolean;
-      readonly vertexCacheOptimize: boolean;
-      readonly releaseGeometryInstances: boolean;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<Primitive>;
-      cull: boolean;
-      debugShowBoundingVolume: boolean;
-      depthFailAppearance: Appearance;
-      modelMatrix: Matrix4;
-      shadows: ShadowMode;
-      show: boolean;
-      appearance: Appearance | any;
+      public readonly allowPicking: boolean
+      public readonly asynchronous: boolean
+      public readonly compressVertices: boolean
+      public readonly geometryInstances: GeometryInstance[] | GeometryInstance
+      public readonly interleave: boolean
+      public readonly vertexCacheOptimize: boolean
+      public readonly releaseGeometryInstances: boolean
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<Primitive>
+      public cull: boolean
+      public debugShowBoundingVolume: boolean
+      public depthFailAppearance: Appearance
+      public modelMatrix: Matrix4
+      public shadows: ShadowMode
+      public show: boolean
+      public appearance: Appearance | any
 
       constructor(options?: {
           geometryInstances?: any[] | GeometryInstance;
@@ -5553,60 +5554,62 @@ declare module Cesium {
           shadows?: ShadowMode;
       });
 
-      update(): void;
+      public update(): void
 
-      getGeometryInstanceAttributes(id: any): any;
+      public getGeometryInstanceAttributes(id: any): any
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class PrimitiveCollection {
-      readonly length: number;
-      show: boolean;
-      destroyPrimitives: boolean;
+      public readonly length: number
+      public show: boolean
+      public destroyPrimitives: boolean
 
       constructor(options?: { show?: boolean; destroyPrimitives?: boolean });
 
-      add(primitive: any): any;
+      public add(primitive: any): any
 
-      remove(primitive?: any): boolean;
+      public remove(primitive?: any): boolean
 
-      removeAll(): void;
+      public removeAll(): void
 
-      contains(primitive?: any): boolean;
+      public contains(primitive?: any): boolean
 
-      raise(primitive?: any): void;
+      public raise(primitive?: any): void
 
-      raiseToTop(primitive?: any): void;
+      public raiseToTop(primitive?: any): void
 
-      lower(primitive?: any): void;
+      public lower(primitive?: any): void
 
-      lowerToBottom(primitive?: any): void;
+      public lowerToBottom(primitive?: any): void
 
-      get(index: number): any;
+      public get(index: number): any
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class GroundPrimitive {
-      static isSupported: any;
-      readonly allowPicking: boolean;
-      readonly asynchronous: boolean;
-      readonly compressVertices: boolean;
-      readonly geometryInstances: any[] | GeometryInstance;
-      readonly interleave: boolean;
-      readonly vertexCacheOptimize: boolean;
-      readonly releaseGeometryInstances: boolean;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<Primitive>;
-      classificationType: any;
-      debugShowBoundingVolume: boolean;
-      debugShowShadowVolume: boolean;
-      show: boolean;
+      public static isSupported: any
+
+      public static initializeTerrainHeights(): Promise<any>
+      public readonly allowPicking: boolean
+      public readonly asynchronous: boolean
+      public readonly compressVertices: boolean
+      public readonly geometryInstances: any[] | GeometryInstance
+      public readonly interleave: boolean
+      public readonly vertexCacheOptimize: boolean
+      public readonly releaseGeometryInstances: boolean
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<Primitive>
+      public classificationType: any
+      public debugShowBoundingVolume: boolean
+      public debugShowShadowVolume: boolean
+      public show: boolean
 
       constructor(options?: {
           geometryInstances?: any[] | GeometryInstance;
@@ -5622,107 +5625,105 @@ declare module Cesium {
           debugShowShadowVolume?: boolean;
       });
 
-      static initializeTerrainHeights(): Promise<any>;
+      public destroy(): void
 
-      destroy(): void;
+      public getGeometryInstanceAttributes(id: any): any
 
-      getGeometryInstanceAttributes(id: any): any;
+      public destroy(): boolean
 
-      destroy(): boolean;
-
-      update(): void;
+      public update(): void
   }
 
   class RectanglePrimitive {
-      ellipsoid: Ellipsoid;
-      rectangle: Rectangle;
-      granularity: number;
-      height: number;
-      rotation: number;
-      textureRotationAngle: number;
-      show: boolean;
-      material: Material;
-      id: any;
-      asynchronous: boolean;
-      debugShowBoundingVolume: boolean;
+      public ellipsoid: Ellipsoid
+      public rectangle: Rectangle
+      public granularity: number
+      public height: number
+      public rotation: number
+      public textureRotationAngle: number
+      public show: boolean
+      public material: Material
+      public id: any
+      public asynchronous: boolean
+      public debugShowBoundingVolume: boolean
 
       constructor(options?: { ellipsoid?: Ellipsoid; rectangle?: Rectangle; granularity?: number; height?: number; rotation?: number; textureRotationAngle?: number; show?: boolean; material?: Material; id?: any; asynchronous?: boolean; debugShowBoundingVolume?: boolean });
 
-      update(): void;
+      public update(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class Fog {
-      density: number;
-      enabled: boolean;
-      screenSpaceErrorFactor: number;
+      public density: number
+      public enabled: boolean
+      public screenSpaceErrorFactor: number
   }
 
   class MapMode2D {
-      static INFINITE_SCROLL: number;
-      static ROTATE: number;
+      public static INFINITE_SCROLL: number
+      public static ROTATE: number
   }
 
   class Scene {
-      backgroundColor: Color;
-      readonly camera: Camera;
-      readonly canvas: HTMLCanvasElement;
-      completeMorphOnUserInput: boolean;
-      debugCommandFilter: Function;
-      readonly debugFrustumStatistics: any;
-      debugShowCommands: boolean;
-      debugShowFramesPerSecond: boolean;
-      debugShowFrustumPlanes: boolean;
-      debugShowFrustums: boolean;
-      debugShowGlobeDepth: boolean;
-      readonly drawingBufferHeight: number;
-      readonly drawingBufferWidth: number;
-      eyeSeparation: number;
-      farToNearRatio: number;
-      focalLength: number;
-      fog: Fog;
-      fxaa: boolean;
-      globe: Globe;
-      readonly groundPrimitives: PrimitiveCollection;
-      readonly id: string;
-      readonly imageryLayers: ImageryLayerCollection;
-      imagerySplitPosition: number;
-      invertClassification: boolean;
-      invertClassificationColor: Color;
-      mapMode2D: boolean;
-      readonly mapProjection: MapProjection;
-      readonly maximumAliasedLineWidth: number;
-      readonly maximumCubeMapSize: number;
-      minimumDisableDepthTestDistance: number;
-      mode: SceneMode;
-      moon: Moon;
-      morphComplete: Event;
-      morphStart: Event;
-      morphTime: number;
-      nearToFarDistance2D: number;
-      readonly orderIndependentTranslucency: boolean;
-      readonly pickPositionSupported: boolean;
-      pickTranslucentDepth: boolean;
-      readonly postRender: Event;
-      readonly preRender: Event;
-      readonly primitives: PrimitiveCollection;
-      readonly renderError: Event;
-      rethrowRenderErrors: boolean;
-      readonly scene3DOnly: boolean;
-      readonly screenSpaceCameraController: ScreenSpaceCameraController;
-      shadowMap: ShadowMap;
-      skyAtmosphere: SkyAtmosphere;
-      skyBox: SkyBox;
-      sun: Sun;
-      sunBloom: boolean;
-      terrainExaggeration: number;
-      terrainProvider: TerrainProvider;
-      readonly terrainProviderChanged: Event;
-      useDepthPicking: boolean;
-      useWebVR: boolean;
+      public backgroundColor: Color
+      public readonly camera: Camera
+      public readonly canvas: HTMLCanvasElement
+      public completeMorphOnUserInput: boolean
+      public debugCommandFilter: Function
+      public readonly debugFrustumStatistics: any
+      public debugShowCommands: boolean
+      public debugShowFramesPerSecond: boolean
+      public debugShowFrustumPlanes: boolean
+      public debugShowFrustums: boolean
+      public debugShowGlobeDepth: boolean
+      public readonly drawingBufferHeight: number
+      public readonly drawingBufferWidth: number
+      public eyeSeparation: number
+      public farToNearRatio: number
+      public focalLength: number
+      public fog: Fog
+      public fxaa: boolean
+      public globe: Globe
+      public readonly groundPrimitives: PrimitiveCollection
+      public readonly id: string
+      public readonly imageryLayers: ImageryLayerCollection
+      public imagerySplitPosition: number
+      public invertClassification: boolean
+      public invertClassificationColor: Color
+      public mapMode2D: boolean
+      public readonly mapProjection: MapProjection
+      public readonly maximumAliasedLineWidth: number
+      public readonly maximumCubeMapSize: number
+      public minimumDisableDepthTestDistance: number
+      public mode: SceneMode
+      public moon: Moon
+      public morphComplete: Event
+      public morphStart: Event
+      public morphTime: number
+      public nearToFarDistance2D: number
+      public readonly orderIndependentTranslucency: boolean
+      public readonly pickPositionSupported: boolean
+      public pickTranslucentDepth: boolean
+      public readonly postRender: Event
+      public readonly preRender: Event
+      public readonly primitives: PrimitiveCollection
+      public readonly renderError: Event
+      public rethrowRenderErrors: boolean
+      public readonly scene3DOnly: boolean
+      public readonly screenSpaceCameraController: ScreenSpaceCameraController
+      public shadowMap: ShadowMap
+      public skyAtmosphere: SkyAtmosphere
+      public skyBox: SkyBox
+      public sun: Sun
+      public sunBloom: boolean
+      public terrainExaggeration: number
+      public terrainProvider: TerrainProvider
+      public readonly terrainProviderChanged: Event
+      public useDepthPicking: boolean
+      public useWebVR: boolean
 
       constructor(options?: {
           canvas: HTMLCanvasElement;
@@ -5736,262 +5737,262 @@ declare module Cesium {
           mapMode2D?: MapMode2D
       });
 
-      cartesianToCanvasCoordinates(position: Cartesian3, result?: Cartesian2): Cartesian2;
+      public cartesianToCanvasCoordinates(position: Cartesian3, result?: Cartesian2): Cartesian2
 
-      completeMorph(): void;
+      public completeMorph(): void
 
-      destroy(): void;
+      public destroy(): void
 
-      drillPick(windowPosition: Cartesian2, limit?: number): any[];
+      public drillPick(windowPosition: Cartesian2, limit?: number): any[]
 
-      getCompressedTextureFormatSupported(format: string): boolean;
+      public getCompressedTextureFormatSupported(format: string): boolean
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      morphTo2D(duration?: number): void;
+      public morphTo2D(duration?: number): void
 
-      morphTo3D(duration?: number): void;
+      public morphTo3D(duration?: number): void
 
-      morphToColumbusView(duration?: number): void;
+      public morphToColumbusView(duration?: number): void
 
-      pick(windowPosition: Cartesian2, width?: number, height?: number): any;
+      public pick(windowPosition: Cartesian2, width?: number, height?: number): any
 
-      pickPosition(windowPosition: Cartesian2, result?: Cartesian3): Cartesian3;
+      public pickPosition(windowPosition: Cartesian2, result?: Cartesian3): Cartesian3
 
-      requestRender(): void;
+      public requestRender(): void
   }
 
   class ScreenSpaceCameraController {
-      enableInputs: boolean;
-      enableTranslate: boolean;
-      enableZoom: boolean;
-      enableRotate: boolean;
-      enableTilt: boolean;
-      enableLook: boolean;
-      inertiaSpin: number;
-      inertiaTranslate: number;
-      inertiaZoom: number;
-      maximumMovementRatio: number;
-      bounceAnimationTime: number;
-      minimumZoomDistance: number;
-      maximumZoomDistance: number;
-      translateEventTypes: CameraEventType | any[];
-      zoomEventTypes: CameraEventType | any[];
-      rotateEventTypes: CameraEventType | any[];
-      tiltEventTypes: CameraEventType | any[];
-      lookEventTypes: CameraEventType | any[];
-      minimumPickingTerrainHeight: number;
-      minimumCollisionTerrainHeight: number;
-      minimumTrackBallHeight: number;
-      enableCollisionDetection: boolean;
+      public enableInputs: boolean
+      public enableTranslate: boolean
+      public enableZoom: boolean
+      public enableRotate: boolean
+      public enableTilt: boolean
+      public enableLook: boolean
+      public inertiaSpin: number
+      public inertiaTranslate: number
+      public inertiaZoom: number
+      public maximumMovementRatio: number
+      public bounceAnimationTime: number
+      public minimumZoomDistance: number
+      public maximumZoomDistance: number
+      public translateEventTypes: CameraEventType | any[]
+      public zoomEventTypes: CameraEventType | any[]
+      public rotateEventTypes: CameraEventType | any[]
+      public tiltEventTypes: CameraEventType | any[]
+      public lookEventTypes: CameraEventType | any[]
+      public minimumPickingTerrainHeight: number
+      public minimumCollisionTerrainHeight: number
+      public minimumTrackBallHeight: number
+      public enableCollisionDetection: boolean
 
       constructor(scene: Scene);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class ShadowMap {
-      darkness: number;
-      enabled: boolean;
-      maximumDistance: number;
-      normalOffset: boolean;
-      size: number;
-      softShadows: boolean;
+      public darkness: number
+      public enabled: boolean
+      public maximumDistance: number
+      public normalOffset: boolean
+      public size: number
+      public softShadows: boolean
 
       constructor(options: ShadowMapOptions);
   }
 
-  type ShadowMapOptions = {
-      lightCamera: Camera;
-      cascadesEnabled?: boolean;
-      darkness?: number;
-      enabled?: boolean;
-      isPointLight?: boolean;
-      maximumDistance?: number;
-      normalOffset?: boolean;
-      numberOfCascades?: number;
-      pointLightRadius?: number;
-      size?: number;
-      softShadows?: boolean;
+  interface ShadowMapOptions {
+      lightCamera: Camera
+      cascadesEnabled?: boolean
+      darkness?: number
+      enabled?: boolean
+      isPointLight?: boolean
+      maximumDistance?: number
+      normalOffset?: boolean
+      numberOfCascades?: number
+      pointLightRadius?: number
+      size?: number
+      softShadows?: boolean
   }
 
   class SingleTileImageryProvider extends ImageryProvider {
-      url: string;
-      proxy: Proxy;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      credit: Credit;
-      hasAlphaChannel: boolean;
+      public url: string
+      public proxy: Proxy
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public credit: Credit
+      public hasAlphaChannel: boolean
 
       constructor(options: { url: string; rectangle?: Rectangle; credit?: Credit | string; ellipsoid?: Ellipsoid; proxy?: any });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class SkyAtmosphere {
-      brightnessShift: number;
-      hueShift: number;
-      saturationShift: number;
-      show: boolean;
-      readonly ellipsoid: Ellipsoid;
+      public brightnessShift: number
+      public hueShift: number
+      public saturationShift: number
+      public show: boolean
+      public readonly ellipsoid: Ellipsoid
 
       constructor(ellipsoid?: Ellipsoid);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class SkyBox {
-      sources: any;
-      show: boolean;
+      public sources: any
+      public show: boolean
 
       constructor(options: { sources?: any; show?: boolean });
 
-      update(): void;
+      public update(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class Sun {
-      show: boolean;
-      glowFactor: number;
+      public show: boolean
+      public glowFactor: number
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class TileCoordinatesImageryProvider {
-      proxy: Proxy;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      credit: Credit;
-      hasAlphaChannel: boolean;
+      public proxy: Proxy
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public credit: Credit
+      public hasAlphaChannel: boolean
 
       constructor(options?: { tilingScheme?: TilingScheme; ellipsoid?: Ellipsoid; color?: Color; tileWidth?: number; tileHeight?: number });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class TileDiscardPolicy {
-      isReady(): boolean;
+      public isReady(): boolean
 
-      shouldDiscardImage(image: HTMLImageElement | Promise<HTMLImageElement>): Promise<boolean>;
+      public shouldDiscardImage(image: HTMLImageElement | Promise<HTMLImageElement>): Promise<boolean>
   }
 
   class TileMapServiceImageryProvider extends ImageryProvider {
-      readonly url: string;
-      readonly proxy: Proxy;
-      readonly tileWidth: number;
-      readonly tileHeight: number;
-      readonly maximumLevel: number;
-      readonly minimumLevel: number;
-      readonly tilingScheme: TilingScheme;
-      readonly rectangle: Rectangle;
-      readonly tileDiscardPolicy: TileDiscardPolicy;
-      readonly errorEvent: Event;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<boolean>
-      readonly credit: Credit;
-      readonly hasAlphaChannel: boolean;
+      public readonly url: string
+      public readonly proxy: Proxy
+      public readonly tileWidth: number
+      public readonly tileHeight: number
+      public readonly maximumLevel: number
+      public readonly minimumLevel: number
+      public readonly tilingScheme: TilingScheme
+      public readonly rectangle: Rectangle
+      public readonly tileDiscardPolicy: TileDiscardPolicy
+      public readonly errorEvent: Event
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public readonly credit: Credit
+      public readonly hasAlphaChannel: boolean
 
       constructor(options?: { url?: string; fileExtension?: string; proxy?: any; credit?: Credit | string; minimumLevel?: number; maximumLevel?: number; rectangle?: Rectangle; tilingScheme?: TilingScheme; ellipsoid?: Ellipsoid; tileWidth?: number; tileHeight?: number });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class ViewportQuad {
-      show: boolean;
-      rectangle: BoundingRectangle;
-      material: Material;
+      public show: boolean
+      public rectangle: BoundingRectangle
+      public material: Material
 
       constructor(rectangle?: BoundingRectangle, material?: Material);
 
-      update(): void;
+      public update(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class WebMapServiceImageryProvider extends ImageryProvider {
-      url: string;
-      proxy: Proxy;
-      layers: string;
-      tileWidth: number;
-      tileHeight: number;
-      maximumLevel: number;
-      minimumLevel: number;
-      tilingScheme: TilingScheme;
-      rectangle: Rectangle;
-      tileDiscardPolicy: TileDiscardPolicy;
-      errorEvent: Event;
-      ready: boolean;
-      readyPromise: Promise<boolean>;
-      credit: Credit;
-      hasAlphaChannel: boolean;
-      static DefaultParameters: Object;
-      static GetFeatureInfoDefaultParameters: Object;
+      public static DefaultParameters: Object
+      public static GetFeatureInfoDefaultParameters: Object
+      public url: string
+      public proxy: Proxy
+      public layers: string
+      public tileWidth: number
+      public tileHeight: number
+      public maximumLevel: number
+      public minimumLevel: number
+      public tilingScheme: TilingScheme
+      public rectangle: Rectangle
+      public tileDiscardPolicy: TileDiscardPolicy
+      public errorEvent: Event
+      public ready: boolean
+      public readyPromise: Promise<boolean>
+      public credit: Credit
+      public hasAlphaChannel: boolean
 
       constructor(options: { url: string; layers: string; parameters?: any; getFeatureInfoParameters?: any; enablePickFeatures?: boolean; getFeatureInfoFormats?: GetFeatureInfoFormat[]; rectangle?: Rectangle; tilingScheme?: TilingScheme; ellipsoid?: Ellipsoid; tileWidth?: number; tileHeight?: number; minimumLevel?: number; maximumLevel?: number; credit?: Credit | string; proxy?: any });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
   }
 
   class WebMapTileServiceImageryProvider extends ImageryProvider {
-      clock: Clock;
-      readonly credit: Credit;
-      dimensions: any;
-      readonly errorEvent: Event;
-      readonly format: string;
-      readonly hasAlphaChannel: boolean;
-      readonly maximumLevel: number;
-      readonly minimumLevel: number;
-      readonly proxy: Proxy;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<boolean>
-      readonly rectangle: Rectangle;
-      readonly tileDiscardPolicy: TileDiscardPolicy;
-      readonly tileHeight: number;
-      readonly tileWidth: number;
-      readonly tilingScheme: TilingScheme;
-      times: TimeIntervalCollection;
-      readonly url: string;
+      public clock: Clock
+      public readonly credit: Credit
+      public dimensions: any
+      public readonly errorEvent: Event
+      public readonly format: string
+      public readonly hasAlphaChannel: boolean
+      public readonly maximumLevel: number
+      public readonly minimumLevel: number
+      public readonly proxy: Proxy
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public readonly rectangle: Rectangle
+      public readonly tileDiscardPolicy: TileDiscardPolicy
+      public readonly tileHeight: number
+      public readonly tileWidth: number
+      public readonly tilingScheme: TilingScheme
+      public times: TimeIntervalCollection
+      public readonly url: string
 
       constructor(options: {
           url: string;
@@ -6015,90 +6016,90 @@ declare module Cesium {
           subdomains?: string | string[]
       });
 
-      getTileCredits(x: number, y: number, level: number): Credit[];
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
 
-      requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>;
+      public requestImage(x: number, y: number, level: number): Promise<HTMLImageElement | HTMLCanvasElement>
   }
 
   class Animation {
-      container: Element;
-      viewModel: AnimationViewModel;
+      public container: Element
+      public viewModel: AnimationViewModel
 
       constructor(container: Element | string, viewModel: AnimationViewModel);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      resize(): void;
+      public resize(): void
 
-      applyThemeChanges(): void;
+      public applyThemeChanges(): void
   }
 
   class AnimationViewModel {
-      shuttleRingDragging: boolean;
-      snapToTicks: boolean;
-      timeLabel: string;
-      dateLabel: string;
-      multiplierLabel: string;
-      shuttleRingAngle: number;
-      slower: Command;
-      faster: Command;
-      clockViewModel: ClockViewModel;
-      pauseViewModel: ToggleButtonViewModel;
-      playReverseViewModel: ToggleButtonViewModel;
-      playForwardViewModel: ToggleButtonViewModel;
-      playRealtimeViewModel: ToggleButtonViewModel;
-      dateFormatter: AnimationViewModel.DateFormatter;
-      timeFormatter: AnimationViewModel.TimeFormatter;
-      static defaultDateFormatter: AnimationViewModel.DateFormatter;
-      static defaultTicks: number[];
-      static defaultTimeFormatter: AnimationViewModel.TimeFormatter;
+      public static defaultDateFormatter: AnimationViewModel.DateFormatter
+      public static defaultTicks: number[]
+      public static defaultTimeFormatter: AnimationViewModel.TimeFormatter
+      public shuttleRingDragging: boolean
+      public snapToTicks: boolean
+      public timeLabel: string
+      public dateLabel: string
+      public multiplierLabel: string
+      public shuttleRingAngle: number
+      public slower: Command
+      public faster: Command
+      public clockViewModel: ClockViewModel
+      public pauseViewModel: ToggleButtonViewModel
+      public playReverseViewModel: ToggleButtonViewModel
+      public playForwardViewModel: ToggleButtonViewModel
+      public playRealtimeViewModel: ToggleButtonViewModel
+      public dateFormatter: AnimationViewModel.DateFormatter
+      public timeFormatter: AnimationViewModel.TimeFormatter
 
       constructor(clockViewModel: ClockViewModel);
 
-      getShuttleRingTicks(): number[];
+      public getShuttleRingTicks(): number[]
 
-      setShuttleRingTicks(positiveTicks: number[]): void;
+      public setShuttleRingTicks(positiveTicks: number[]): void
   }
 
-  module AnimationViewModel {
-      type DateFormatter = (date: JulianDate, viewModel: AnimationViewModel) => string;
-      type TimeFormatter = (date: JulianDate, viewModel: AnimationViewModel) => string;
+  namespace AnimationViewModel {
+      type DateFormatter = (date: JulianDate, viewModel: AnimationViewModel) => string
+      type TimeFormatter = (date: JulianDate, viewModel: AnimationViewModel) => string
   }
 
   class BaseLayerPicker {
-      container: Element;
-      viewModel: BaseLayerPickerViewModel;
+      public container: Element
+      public viewModel: BaseLayerPickerViewModel
 
       constructor(container: Element, options: { globe: Globe; imageryProviderViewModels?: ProviderViewModel[]; selectedImageryProviderViewModel?: ProviderViewModel; terrainProviderViewModels?: ProviderViewModel[]; selectedTerrainProviderViewModel?: ProviderViewModel });
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class BaseLayerPickerViewModel {
-      imageryProviderViewModels: ProviderViewModel[];
-      terrainProviderViewModels: ProviderViewModel[];
-      dropDownVisible: boolean;
-      buttonTooltip: string;
-      buttonImageUrl: string;
-      selectedImagery: ProviderViewModel;
-      selectedTerrain: ProviderViewModel;
-      toggleDropDown: Command;
-      globe: Globe;
+      public imageryProviderViewModels: ProviderViewModel[]
+      public terrainProviderViewModels: ProviderViewModel[]
+      public dropDownVisible: boolean
+      public buttonTooltip: string
+      public buttonImageUrl: string
+      public selectedImagery: ProviderViewModel
+      public selectedTerrain: ProviderViewModel
+      public toggleDropDown: Command
+      public globe: Globe
 
       constructor(options: { globe: Globe; imageryProviderViewModels?: ProviderViewModel[]; selectedImageryProviderViewModel?: ProviderViewModel; terrainProviderViewModels?: ProviderViewModel[]; selectedTerrainProviderViewModel?: ProviderViewModel });
   }
 
   class ProviderViewModel {
-      name: string;
-      tooltip: string;
-      iconUrl: string;
-      creationCommand: Command;
+      public name: string
+      public tooltip: string
+      public iconUrl: string
+      public creationCommand: Command
 
       constructor(options: {
           name: string;
@@ -6108,594 +6109,594 @@ declare module Cesium {
       });
   }
 
-  module ProviderViewModel {
-      type CreationFunction = () => ImageryProvider | TerrainProvider | ImageryProvider[] | TerrainProvider[];
+  namespace ProviderViewModel {
+      type CreationFunction = () => ImageryProvider | TerrainProvider | ImageryProvider[] | TerrainProvider[]
   }
 
   class CesiumInspector {
-      container: Element;
-      viewModel: CesiumInspectorViewModel;
+      public container: Element
+      public viewModel: CesiumInspectorViewModel
 
       constructor(container: Element | string, scene: Scene);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class CesiumInspectorViewModel {
-      frustums: boolean;
-      performance: boolean;
-      shaderCacheText: string;
-      primitiveBoundingSphere: boolean;
-      primitiveReferenceFrame: boolean;
-      filterPrimitive: boolean;
-      tileBoundingSphere: boolean;
-      filterTile: boolean;
-      wireframe: boolean;
-      suspendUpdates: boolean;
-      tileCoordinates: boolean;
-      frustumStatisticText: string;
-      tileText: string;
-      hasPickedPrimitive: boolean;
-      hasPickedTile: boolean;
-      pickPimitiveActive: boolean;
-      pickTileActive: boolean;
-      dropDownVisible: boolean;
-      generalVisible: boolean;
-      primitivesVisible: boolean;
-      terrainVisible: boolean;
-      generalSwitchText: string;
-      primitivesSwitchText: string;
-      terrainSwitchText: string;
-      scene: Scene;
-      performanceContainer: Element;
-      toggleDropDown: Command;
-      showFrustums: Command;
-      showPerformance: Command;
-      showPrimitiveBoundingSphere: Command;
-      showPrimitiveReferenceFrame: Command;
-      doFilterPrimitive: Command;
-      showWireframe: Command;
-      doSuspendUpdates: Command;
-      showTileCoordinates: Command;
-      showTileBoundingSphere: Command;
-      doFilterTile: Command;
-      toggleGeneral: Command;
-      togglePrimitives: Command;
-      toggleTerrain: Command;
-      pickPrimitive: Command;
-      pickTile: Command;
-      selectParent: Command;
-      selectNW: Command;
-      selectNE: Command;
-      selectSW: Command;
-      selectSE: Command;
-      primitive: Command;
-      tile: Command;
+      public frustums: boolean
+      public performance: boolean
+      public shaderCacheText: string
+      public primitiveBoundingSphere: boolean
+      public primitiveReferenceFrame: boolean
+      public filterPrimitive: boolean
+      public tileBoundingSphere: boolean
+      public filterTile: boolean
+      public wireframe: boolean
+      public suspendUpdates: boolean
+      public tileCoordinates: boolean
+      public frustumStatisticText: string
+      public tileText: string
+      public hasPickedPrimitive: boolean
+      public hasPickedTile: boolean
+      public pickPimitiveActive: boolean
+      public pickTileActive: boolean
+      public dropDownVisible: boolean
+      public generalVisible: boolean
+      public primitivesVisible: boolean
+      public terrainVisible: boolean
+      public generalSwitchText: string
+      public primitivesSwitchText: string
+      public terrainSwitchText: string
+      public scene: Scene
+      public performanceContainer: Element
+      public toggleDropDown: Command
+      public showFrustums: Command
+      public showPerformance: Command
+      public showPrimitiveBoundingSphere: Command
+      public showPrimitiveReferenceFrame: Command
+      public doFilterPrimitive: Command
+      public showWireframe: Command
+      public doSuspendUpdates: Command
+      public showTileCoordinates: Command
+      public showTileBoundingSphere: Command
+      public doFilterTile: Command
+      public toggleGeneral: Command
+      public togglePrimitives: Command
+      public toggleTerrain: Command
+      public pickPrimitive: Command
+      public pickTile: Command
+      public selectParent: Command
+      public selectNW: Command
+      public selectNE: Command
+      public selectSW: Command
+      public selectSE: Command
+      public primitive: Command
+      public tile: Command
 
       constructor(scene: Scene);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class CesiumWidget {
-      container: Element;
-      canvas: HTMLCanvasElement;
-      creditContainer: Element;
-      scene: Scene;
-      imageryLayers: ImageryLayerCollection;
-      terrainProvider: TerrainProvider;
-      camera: Camera;
-      clock: Clock;
-      screenSpaceEventHandler: ScreenSpaceEventHandler;
-      targetFrameRate: number;
-      useDefaultRenderLoop: boolean;
-      resolutionScale: number;
+      public container: Element
+      public canvas: HTMLCanvasElement
+      public creditContainer: Element
+      public scene: Scene
+      public imageryLayers: ImageryLayerCollection
+      public terrainProvider: TerrainProvider
+      public camera: Camera
+      public clock: Clock
+      public screenSpaceEventHandler: ScreenSpaceEventHandler
+      public targetFrameRate: number
+      public useDefaultRenderLoop: boolean
+      public resolutionScale: number
 
       constructor(container: Element | string, options?: CesiumWidgetOptions);
 
-      showErrorPanel(title: string, message: string, error?: string): void;
+      public showErrorPanel(title: string, message: string, error?: string): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      resize(): void;
+      public resize(): void
 
-      render(): void;
+      public render(): void
   }
 
   class CesiumWidgetOptions {
-      clock?: Clock;
-      imageryProvider?: ImageryProvider;
-      terrainProvider?: TerrainProvider;
-      skyBox?: SkyBox | boolean;
-      skyAtmosphere?: SkyAtmosphere;
-      sceneMode?: SceneMode;
-      scene3DOnly?: boolean;
-      orderIndependentTranslucency?: boolean;
-      mapProjection?: MapProjection;
-      globe?: Globe;
-      useDefaultRenderLoop?: boolean;
-      targetFrameRate?: number;
-      showRenderLoopErrors?: boolean;
-      contextOptions?: any;
-      creditContainer?: Element | string;
+      public clock?: Clock
+      public imageryProvider?: ImageryProvider
+      public terrainProvider?: TerrainProvider
+      public skyBox?: SkyBox | boolean
+      public skyAtmosphere?: SkyAtmosphere
+      public sceneMode?: SceneMode
+      public scene3DOnly?: boolean
+      public orderIndependentTranslucency?: boolean
+      public mapProjection?: MapProjection
+      public globe?: Globe
+      public useDefaultRenderLoop?: boolean
+      public targetFrameRate?: number
+      public showRenderLoopErrors?: boolean
+      public contextOptions?: any
+      public creditContainer?: Element | string
   }
 
   class ClockViewModel {
-      systemTime: JulianDate;
-      startTime: JulianDate;
-      stopTime: JulianDate;
-      currentTime: JulianDate;
-      multiplier: number;
-      clockStep: ClockStep;
-      clockRange: ClockRange;
-      canAnimate: boolean;
-      shouldAnimate: boolean;
-      clock: Clock;
+      public systemTime: JulianDate
+      public startTime: JulianDate
+      public stopTime: JulianDate
+      public currentTime: JulianDate
+      public multiplier: number
+      public clockStep: ClockStep
+      public clockRange: ClockRange
+      public canAnimate: boolean
+      public shouldAnimate: boolean
+      public clock: Clock
 
       constructor(clock?: Clock);
 
-      synchronize(): void;
+      public synchronize(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class Command {
-      canExecute: boolean;
-      beforeExecute: Event;
-      afterExecute: Event;
+      public canExecute: boolean
+      public beforeExecute: Event
+      public afterExecute: Event
   }
 
   class FullscreenButton {
-      container: Element;
-      viewModel: FullscreenButtonViewModel;
+      public container: Element
+      public viewModel: FullscreenButtonViewModel
 
       constructor(container: Element | string, fullscreenElement?: Element | string);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class FullscreenButtonViewModel {
-      isFullscreen: boolean;
-      isFullscreenEnabled: boolean;
-      tooltip: string;
-      fullscreenElement: Element;
-      command: Command;
+      public isFullscreen: boolean
+      public isFullscreenEnabled: boolean
+      public tooltip: string
+      public fullscreenElement: Element
+      public command: Command
 
       constructor(fullscreenElement?: Element | string);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class GeocoderOptions {
-      container?: Element | string
-      scene?: Scene
-      url?: string
-      key?: string
-      flightDuration?: number;
+      public container?: Element | string
+      public scene?: Scene
+      public url?: string
+      public key?: string
+      public flightDuration?: number
   }
 
   class Geocoder {
-      container: Element;
-      viewModel: GeocoderViewModel;
+      public container: Element
+      public viewModel: GeocoderViewModel
 
       constructor(options: GeocoderOptions);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class GeocoderViewModel {
-      isSearchInProgress: boolean;
-      searchText: string;
-      flightDuration: number;
-      url: string;
-      key: string;
-      complete: Event;
-      scene: Scene;
-      search: Command;
+      public isSearchInProgress: boolean
+      public searchText: string
+      public flightDuration: number
+      public url: string
+      public key: string
+      public complete: Event
+      public scene: Scene
+      public search: Command
 
       constructor(options: { scene: Scene; url?: string; key?: string; flightDuration?: number });
   }
 
   class GeocoderResult {
-      displayName: string;
-      destination: Rectangle | Cartesian3;
+      public displayName: string
+      public destination: Rectangle | Cartesian3
   }
 
   interface GeocoderService {
-      geocode(query: string): Promise<Array<GeocoderResult>>
+      geocode(query: string): Promise<GeocoderResult[]>
   }
 
   class HomeButton {
-      container: Element;
-      viewModel: HomeButtonViewModel;
+      public container: Element
+      public viewModel: HomeButtonViewModel
 
       constructor(container: Element | string, scene: Scene, duration?: number);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class HomeButtonViewModel {
-      tooltip: string;
-      scene: Scene;
-      command: Command;
-      duration: number;
+      public tooltip: string
+      public scene: Scene
+      public command: Command
+      public duration: number
 
       constructor(scene: Scene, duration?: number);
   }
 
   class InfoBox {
-      container: Element;
-      viewModel: InfoBoxViewModel;
-      frame: HTMLIFrameElement;
+      public container: Element
+      public viewModel: InfoBoxViewModel
+      public frame: HTMLIFrameElement
 
       constructor(container: Element | string);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class InfoBoxViewModel {
-      maxHeight: number;
-      enableCamera: boolean;
-      isCameraTracking: boolean;
-      showInfo: boolean;
-      titleText: string;
-      description: string;
-      cameraIconPath: string;
-      cameraClicked: Event;
-      closeClicked: Event;
+      public maxHeight: number
+      public enableCamera: boolean
+      public isCameraTracking: boolean
+      public showInfo: boolean
+      public titleText: string
+      public description: string
+      public cameraIconPath: string
+      public cameraClicked: Event
+      public closeClicked: Event
 
-      maxHeightOffset(offset: number): string;
+      public maxHeightOffset(offset: number): string
   }
 
   class NavigationHelpButton {
-      container: Element;
-      viewModel: NavigationHelpButtonViewModel;
+      public container: Element
+      public viewModel: NavigationHelpButtonViewModel
 
       constructor(options: { container: Element | string; instructionsInitiallyVisible?: boolean });
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class NavigationHelpButtonViewModel {
-      showInstructions: boolean;
-      tooltip: string;
-      command: Command;
-      showClick: Command;
-      showTouch: Command;
+      public showInstructions: boolean
+      public tooltip: string
+      public command: Command
+      public showClick: Command
+      public showTouch: Command
   }
 
   class PerformanceWatchdog {
-      container: Element;
-      viewModel: PerformanceWatchdogViewModel;
+      public container: Element
+      public viewModel: PerformanceWatchdogViewModel
 
       constructor(options?: { container: Element | string; scene: Scene; lowFrameRateMessage?: string });
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class PerformanceWatchdogViewModel {
-      lowFrameRateMessage: string;
-      lowFrameRateMessageDismissed: boolean;
-      showingLowFrameRateMessage: boolean;
-      scene: Scene;
-      dismissMessage: Command;
+      public lowFrameRateMessage: string
+      public lowFrameRateMessageDismissed: boolean
+      public showingLowFrameRateMessage: boolean
+      public scene: Scene
+      public dismissMessage: Command
 
       constructor(options?: { scene: Scene; lowFrameRateMessage?: string });
   }
 
   class SceneModePicker {
-      container: Element;
-      viewModel: SceneModePickerViewModel;
+      public container: Element
+      public viewModel: SceneModePickerViewModel
 
       constructor(container: Element | string, scene: Scene, duration?: number);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class SceneModePickerViewModel {
-      sceneMode: SceneMode;
-      dropDownVisible: boolean;
-      tooltip2D: string;
-      tooltip3D: string;
-      tooltipColumbusView: string;
-      selectedTooltip: string;
-      scene: Scene;
-      duration: number;
-      toggleDropDown: Command;
-      morphTo2D: Command;
-      morphTo3D: Command;
-      morphToColumbusView: Command;
+      public sceneMode: SceneMode
+      public dropDownVisible: boolean
+      public tooltip2D: string
+      public tooltip3D: string
+      public tooltipColumbusView: string
+      public selectedTooltip: string
+      public scene: Scene
+      public duration: number
+      public toggleDropDown: Command
+      public morphTo2D: Command
+      public morphTo3D: Command
+      public morphToColumbusView: Command
 
       constructor(scene: Scene, duration?: number);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class SelectionIndicator {
-      container: Element;
-      viewModel: SelectionIndicatorViewModel;
+      public container: Element
+      public viewModel: SelectionIndicatorViewModel
 
       constructor(container: Element | string, scene: Scene);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
   }
 
   class SelectionIndicatorViewModel {
-      position: Cartesian3;
-      showSelection: boolean;
-      isVisible: boolean;
-      computeScreenSpacePosition: SelectionIndicatorViewModel.ComputeScreenSpacePosition;
-      container: Element;
-      selectionIndicatorElement: Element;
-      scene: Scene;
+      public position: Cartesian3
+      public showSelection: boolean
+      public isVisible: boolean
+      public computeScreenSpacePosition: SelectionIndicatorViewModel.ComputeScreenSpacePosition
+      public container: Element
+      public selectionIndicatorElement: Element
+      public scene: Scene
 
       constructor(scene: Scene, selectionIndicatorElement: Element, container: Element);
 
-      update(): void;
+      public update(): void
 
-      animateAppear(): void;
+      public animateAppear(): void
 
-      animateDepart(): void;
+      public animateDepart(): void
   }
 
-  module SelectionIndicatorViewModel {
-      type ComputeScreenSpacePosition = (position: Cartesian3, result: Cartesian2) => Cartesian2;
+  namespace SelectionIndicatorViewModel {
+      type ComputeScreenSpacePosition = (position: Cartesian3, result: Cartesian2) => Cartesian2
   }
 
   class Timeline {
-      container: Element;
+      public container: Element
 
       constructor(container: Element, clock: Clock);
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      destroy(): void;
+      public destroy(): void
 
-      zoomTo(startTime: JulianDate, stopTime: JulianDate): void;
+      public zoomTo(startTime: JulianDate, stopTime: JulianDate): void
 
-      resize(): void;
+      public resize(): void
   }
 
   class ToggleButtonViewModel {
-      toggled: boolean;
-      tooltip: string;
-      command: Command;
+      public toggled: boolean
+      public tooltip: string
+      public command: Command
 
       constructor(command: Command, options?: { toggled?: boolean; tooltip?: string });
   }
 
   class ProjectionPicker {
-      container: Element;
-      viewModel: ProjectionPickerViewModel;
+      public container: Element
+      public viewModel: ProjectionPickerViewModel
 
       constructor(container: Element | String, scene: Scene);
 
-      destroy(): void;
+      public destroy(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
   }
 
   class ProjectionPickerViewModel {
-      dropDownVisible: boolean;
-      isOrthographicProjection: Command;
-      scene: Scene;
-      sceneMode: SceneMode;
-      selectedTooltip: String;
-      switchToOrthographic: Command;
-      switchToPerspective: Command;
-      toggleDropDown: Command;
-      tooltipOrthographic: String;
-      tooltipPerspective: String;
+      public dropDownVisible: boolean
+      public isOrthographicProjection: Command
+      public scene: Scene
+      public sceneMode: SceneMode
+      public selectedTooltip: String
+      public switchToOrthographic: Command
+      public switchToPerspective: Command
+      public toggleDropDown: Command
+      public tooltipOrthographic: String
+      public tooltipPerspective: String
 
       constructor(scene: Scene);
 
-      destroy(): void;
+      public destroy(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
   }
 
   class Viewer {
-      allowDataSourcesToSuspendAnimation: boolean;
-      readonly animation: Animation;
-      readonly baseLayerPicker: BaseLayerPicker;
-      readonly bottomContainer: Element;
-      readonly camera: Camera;
-      readonly canvas: HTMLCanvasElement;
-      readonly cesiumLogo: Element;
-      readonly cesiumWidget: CesiumWidget;
-      readonly clock: Clock;
-      clockTrackedDataSource: DataSource;
-      readonly clockViewModel: ClockViewModel;
-      readonly container: Element;
-      readonly dataSourceDisplay: DataSourceDisplay;
-      readonly dataSources: DataSourceCollection;
-      readonly entities: EntityCollection;
-      readonly fullscreenButton: FullscreenButton;
-      readonly geocoder: Geocoder;
-      readonly homeButton: HomeButton;
-      readonly imageryLayers: ImageryLayerCollection;
-      readonly infoBox: InfoBox;
-      readonly navigationHelpButton: NavigationHelpButton;
-      readonly projectionPicker: ProjectionPicker;
-      resolutionScale: number;
-      readonly scene: Scene;
-      readonly sceneModePicker: SceneModePicker;
-      readonly screenSpaceEventHandler: ScreenSpaceEventHandler;
-      selectedEntity: Entity;
-      readonly selectedEntityChanged: Event;
-      readonly selectionIndicator: SelectionIndicator;
-      readonly shadowMap: ShadowMap;
-      shadows: boolean;
-      targetFrameRate: number;
-      terrainProvider: TerrainProvider;
-      terrainShadows: boolean;
-      readonly timeline: Timeline;
-      trackedEntity: Entity;
-      readonly trackedEntityChanged: Event;
-      useDefaultRenderLoop: boolean;
-      readonly vrButton: VRButton;
+      public allowDataSourcesToSuspendAnimation: boolean
+      public readonly animation: Animation
+      public readonly baseLayerPicker: BaseLayerPicker
+      public readonly bottomContainer: Element
+      public readonly camera: Camera
+      public readonly canvas: HTMLCanvasElement
+      public readonly cesiumLogo: Element
+      public readonly cesiumWidget: CesiumWidget
+      public readonly clock: Clock
+      public clockTrackedDataSource: DataSource
+      public readonly clockViewModel: ClockViewModel
+      public readonly container: Element
+      public readonly dataSourceDisplay: DataSourceDisplay
+      public readonly dataSources: DataSourceCollection
+      public readonly entities: EntityCollection
+      public readonly fullscreenButton: FullscreenButton
+      public readonly geocoder: Geocoder
+      public readonly homeButton: HomeButton
+      public readonly imageryLayers: ImageryLayerCollection
+      public readonly infoBox: InfoBox
+      public readonly navigationHelpButton: NavigationHelpButton
+      public readonly projectionPicker: ProjectionPicker
+      public resolutionScale: number
+      public readonly scene: Scene
+      public readonly sceneModePicker: SceneModePicker
+      public readonly screenSpaceEventHandler: ScreenSpaceEventHandler
+      public selectedEntity: Entity
+      public readonly selectedEntityChanged: Event
+      public readonly selectionIndicator: SelectionIndicator
+      public readonly shadowMap: ShadowMap
+      public shadows: boolean
+      public targetFrameRate: number
+      public terrainProvider: TerrainProvider
+      public terrainShadows: boolean
+      public readonly timeline: Timeline
+      public trackedEntity: Entity
+      public readonly trackedEntityChanged: Event
+      public useDefaultRenderLoop: boolean
+      public readonly vrButton: VRButton
 
       constructor(container: Element | string, options?: ViewerOptions);
 
-      destroy(): void;
+      public destroy(): void
 
-      extend(mixin: Viewer.ViewerMixin, options: any): void;
+      public extend(mixin: Viewer.ViewerMixin, options: any): void
 
-      flyTo(target: Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Promise<Entity | Entity[] | EntityCollection | DataSource | ImageryLayer>,
-          options?: { duration?: number; maximumHeight?: number; offset?: HeadingPitchRange }): Promise<boolean>;
+      public flyTo(target: Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Promise<Entity | Entity[] | EntityCollection | DataSource | ImageryLayer>,
+          options?: { duration?: number; maximumHeight?: number; offset?: HeadingPitchRange }): Promise<boolean>
 
-      forceResize(): void;
+      public forceResize(): void
 
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
 
-      render(): void;
+      public render(): void
 
-      resize(): void;
+      public resize(): void
 
-      zoomTo(target: Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | Promise<(Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset)>, offset?: HeadingPitchRange): Promise<boolean>;
+      public zoomTo(target: Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | Promise<(Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset)>, offset?: HeadingPitchRange): Promise<boolean>
   }
 
-  module Viewer {
-      type ViewerMixin = (viewer: Viewer, options: any) => void;
+  namespace Viewer {
+      type ViewerMixin = (viewer: Viewer, options: any) => void
   }
 
   class ViewerOptions {
-      animation?: boolean;
-      baseLayerPicker?: boolean;
-      fullscreenButton?: boolean;
-      vrButton?: boolean;
-      geocoder?: boolean | GeocoderService[];
-      homeButton?: boolean;
-      infoBox?: boolean;
-      sceneModePicker?: boolean;
-      selectionIndicator?: boolean;
-      timeline?: boolean;
-      navigationHelpButton?: boolean;
-      navigationInstructionsInitiallyVisible?: boolean;
-      scene3DOnly?: boolean;
-      shouldAnimate?: boolean;
-      clockViewModel?: ClockViewModel;
-      selectedImageryProviderViewModel?: ProviderViewModel;
-      imageryProviderViewModels?: ProviderViewModel[];
-      selectedTerrainProviderViewModel?: ProviderViewModel;
-      terrainProviderViewModels?: ProviderViewModel[];
-      imageryProvider?: ImageryProvider | boolean;
-      terrainProvider?: TerrainProvider | boolean;
-      skyBox?: SkyBox | undefined;
-      skyAtmosphere?: SkyAtmosphere | boolean;
-      fullscreenElement?: Element | string;
-      useDefaultRenderLoop?: boolean;
-      targetFrameRate?: number;
-      showRenderLoopErrors?: boolean;
-      automaticallyTrackDataSourceClocks?: boolean;
-      contextOptions?: any;
-      sceneMode?: SceneMode;
-      mapProjection?: MapProjection;
-      globe?: Globe | boolean;
-      orderIndependentTranslucency?: boolean;
-      creditContainer?: Element | string;
-      dataSources?: DataSourceCollection;
-      terrainExaggeration?: number;
-      shadows?: boolean;
-      terrainShadows?: ShadowMode;
-      mapMode2D?: MapMode2D;
-      projectionPicker?: boolean;
-      requestRenderMode?: boolean;
-      maximumRenderTimeChange?: number;
+      public animation?: boolean
+      public baseLayerPicker?: boolean
+      public fullscreenButton?: boolean
+      public vrButton?: boolean
+      public geocoder?: boolean | GeocoderService[]
+      public homeButton?: boolean
+      public infoBox?: boolean
+      public sceneModePicker?: boolean
+      public selectionIndicator?: boolean
+      public timeline?: boolean
+      public navigationHelpButton?: boolean
+      public navigationInstructionsInitiallyVisible?: boolean
+      public scene3DOnly?: boolean
+      public shouldAnimate?: boolean
+      public clockViewModel?: ClockViewModel
+      public selectedImageryProviderViewModel?: ProviderViewModel
+      public imageryProviderViewModels?: ProviderViewModel[]
+      public selectedTerrainProviderViewModel?: ProviderViewModel
+      public terrainProviderViewModels?: ProviderViewModel[]
+      public imageryProvider?: ImageryProvider | boolean
+      public terrainProvider?: TerrainProvider | boolean
+      public skyBox?: SkyBox | undefined
+      public skyAtmosphere?: SkyAtmosphere | boolean
+      public fullscreenElement?: Element | string
+      public useDefaultRenderLoop?: boolean
+      public targetFrameRate?: number
+      public showRenderLoopErrors?: boolean
+      public automaticallyTrackDataSourceClocks?: boolean
+      public contextOptions?: any
+      public sceneMode?: SceneMode
+      public mapProjection?: MapProjection
+      public globe?: Globe | boolean
+      public orderIndependentTranslucency?: boolean
+      public creditContainer?: Element | string
+      public dataSources?: DataSourceCollection
+      public terrainExaggeration?: number
+      public shadows?: boolean
+      public terrainShadows?: ShadowMode
+      public mapMode2D?: MapMode2D
+      public projectionPicker?: boolean
+      public requestRenderMode?: boolean
+      public maximumRenderTimeChange?: number
   }
 
   class VRButton {
+
+      public readonly container: Element
+      public readonly viewModel: VRButtonViewModel
       constructor(container: Element | string, scene: Scene, vrElement: Element | string);
 
-      readonly container: Element;
-      readonly viewModel: VRButtonViewModel;
+      public destroy(): void
 
-      destroy(): void;
-
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
   }
 
   class VRButtonViewModel {
+
+      public readonly command: Command
+      public isVREnabled: boolean
+      public readonly isVRMode: boolean
+      public readonly tooltip: string
+      public vrElement: Element
       constructor(scene: Scene, vrElement: Element | string);
 
-      readonly command: Command;
-      isVREnabled: boolean;
-      readonly isVRMode: boolean;
-      readonly tooltip: string;
-      vrElement: Element;
+      public destroy(): void
 
-      destroy(): void;
-
-      isDestroyed(): boolean;
+      public isDestroyed(): boolean
   }
 
-  function barycentricCoordinates(point: Cartesian2 | Cartesian3, p0: Cartesian2 | Cartesian3, p1: Cartesian2 | Cartesian3, p2: Cartesian2 | Cartesian3, result?: Cartesian3): Cartesian3;
+  function barycentricCoordinates(point: Cartesian2 | Cartesian3, p0: Cartesian2 | Cartesian3, p1: Cartesian2 | Cartesian3, p2: Cartesian2 | Cartesian3, result?: Cartesian3): Cartesian3
 
-  function binarySearch(array: any[], itemToFind: any, comparator: binarySearch.Comparator): number;
+  function binarySearch(array: any[], itemToFind: any, comparator: binarySearch.Comparator): number
 
-  module binarySearch {
-      type Comparator = (a: any, b: any) => number;
+  namespace binarySearch {
+      type Comparator = (a: any, b: any) => number
   }
 
-  function cancelAnimationFrame(requestID: number): void;
+  function cancelAnimationFrame(requestID: number): void
 
-  function clone(object: Object, deep?: boolean): Object;
+  function clone(object: Object, deep?: boolean): Object
 
-  function combine(object1?: Object, object2?: Object, deep?: boolean): Object;
+  function combine(object1?: Object, object2?: Object, deep?: boolean): Object
 
-  function destroyObject(object: any, message?: string): void;
+  function destroyObject(object: any, message?: string): void
 
-  function formatError(object: any): string;
+  function formatError(object: any): string
 
-  function getFilenameFromUri(uri: string): string;
+  function getFilenameFromUri(uri: string): string
 
-  function getImagePixels(image: HTMLImageElement): number[];
+  function getImagePixels(image: HTMLImageElement): number[]
 
-  function isArray(value: any): boolean;
+  function isArray(value: any): boolean
 
-  function isLeapYear(year: number): boolean;
+  function isLeapYear(year: number): boolean
 
-  function jsonp(url: string, options?: { parameters?: any; callbackParameterName?: string; proxy?: any }): Promise<any>;
+  function jsonp(url: string, options?: { parameters?: any; callbackParameterName?: string; proxy?: any }): Promise<any>
 
-  function loadArrayBuffer(url: string, headers?: any): Promise<ArrayBuffer>;
+  function loadArrayBuffer(url: string, headers?: any): Promise<ArrayBuffer>
 
-  function loadBlob(url: string, headers?: any): Promise<Blob>;
+  function loadBlob(url: string, headers?: any): Promise<Blob>
 
-  function loadImage(url: string, allowCrossOrigin?: boolean): Promise<HTMLImageElement>;
+  function loadImage(url: string, allowCrossOrigin?: boolean): Promise<HTMLImageElement>
 
-  function loadImageViaBlob(url: string): Promise<HTMLImageElement>;
+  function loadImageViaBlob(url: string): Promise<HTMLImageElement>
 
-  function loadJson(url: string, headers?: any): Promise<any>;
+  function loadJson(url: string, headers?: any): Promise<any>
 
-  function loadText(url: string, headers?: any): Promise<string>;
+  function loadText(url: string, headers?: any): Promise<string>
 
   function loadWithXhr(options: {
       url: string;
@@ -6704,635 +6705,635 @@ declare module Cesium {
       data?: string | FormData;
       headers?: any;
       overrideMimeType?: string;
-  }): Promise<any>;
+  }): Promise<any>
 
-  function loadXML(url: string, headers?: any): Promise<XMLDocument>;
+  function loadXML(url: string, headers?: any): Promise<XMLDocument>
 
-  function mergeSort(array: any[], comparator: mergeSort.Comparator, userDefinedObject?: any): void;
+  function mergeSort(array: any[], comparator: mergeSort.Comparator, userDefinedObject?: any): void
 
-  module mergeSort {
-      type Comparator = (a: any, b: any, userDefinedObject?: any) => number;
+  namespace mergeSort {
+      type Comparator = (a: any, b: any, userDefinedObject?: any) => number
   }
 
-  function objectToQuery(obj: any): string;
+  function objectToQuery(obj: any): string
 
-  function pointInsideTriangle(point: Cartesian2 | Cartesian3, p0: Cartesian2 | Cartesian3, p1: Cartesian2 | Cartesian3, p2: Cartesian2 | Cartesian3): boolean;
+  function pointInsideTriangle(point: Cartesian2 | Cartesian3, p0: Cartesian2 | Cartesian3, p1: Cartesian2 | Cartesian3, p2: Cartesian2 | Cartesian3): boolean
 
-  function queryToObject(queryString: string): any;
+  function queryToObject(queryString: string): any
 
-  function requestAnimationFrame(callback: requestAnimationFrame.Callback): number;
+  function requestAnimationFrame(callback: requestAnimationFrame.Callback): number
 
-  module requestAnimationFrame {
-      type Callback = (timestamp: number) => void;
+  namespace requestAnimationFrame {
+      type Callback = (timestamp: number) => void
   }
 
-  function sampleTerrain(terrainProvider: TerrainProvider, level: number, positions: Cartographic[]): Promise<Cartographic[]>;
+  function sampleTerrain(terrainProvider: TerrainProvider, level: number, positions: Cartographic[]): Promise<Cartographic[]>
 
-  function subdivideArray<T>(array: T[], numberOfArrays: number): T[][];
+  function subdivideArray<T>(array: T[], numberOfArrays: number): T[][]
 
-  function throttleRequestByServer(url: string, requestFunction: throttleRequestByServer.RequestFunction): Promise<any>;
+  function throttleRequestByServer(url: string, requestFunction: throttleRequestByServer.RequestFunction): Promise<any>
 
-  module throttleRequestByServer {
-      type RequestFunction = (url: string) => Promise<any>;
+  namespace throttleRequestByServer {
+      type RequestFunction = (url: string) => Promise<any>
   }
 
-  function createTangentSpaceDebugPrimitive(options: { geometry: Geometry; length?: number; modelMatrix?: Matrix4 }): Primitive;
+  function createTangentSpaceDebugPrimitive(options: { geometry: Geometry; length?: number; modelMatrix?: Matrix4 }): Primitive
 
-  function viewerCesiumInspectorMixin(viewer: Viewer): void;
+  function viewerCesiumInspectorMixin(viewer: Viewer): void
 
-  function viewerDragDropMixin(viewer: Viewer, options?: { dropTarget?: Element | string; clearOnDrop?: boolean; proxy?: DefaultProxy }): void;
+  function viewerDragDropMixin(viewer: Viewer, options?: { dropTarget?: Element | string; clearOnDrop?: boolean; proxy?: DefaultProxy }): void
 
-  function viewerPerformanceWatchdogMixin(viewer: Viewer): void;
+  function viewerPerformanceWatchdogMixin(viewer: Viewer): void
 
-  function createCommand(func: Function, canExecute?: boolean): Function;
+  function createCommand(func: Function, canExecute?: boolean): Function
 
-  function createTaskProcessorWorker(workerFunction: createTaskProcessorWorker.WorkerFunction): createTaskProcessorWorker.TaskProcessorWorkerFunction;
+  function createTaskProcessorWorker(workerFunction: createTaskProcessorWorker.WorkerFunction): createTaskProcessorWorker.TaskProcessorWorkerFunction
 
-  function createWorldTerrain(options?: { requestVertexNormals?: boolean, requestWaterMask?: boolean }): CesiumTerrainProvider;
+  function createWorldTerrain(options?: { requestVertexNormals?: boolean, requestWaterMask?: boolean }): CesiumTerrainProvider
 
-  module createTaskProcessorWorker {
-      type WorkerFunction = (parameters: any, transferableObjects: any[]) => any;
-      type TaskProcessorWorkerFunction = (event: any) => void;
+  namespace createTaskProcessorWorker {
+      type WorkerFunction = (parameters: any, transferableObjects: any[]) => any
+      type TaskProcessorWorkerFunction = (event: any) => void
   }
 
   class ClockRange {
-      static UNBOUNDED: number;
-      static CLAMPED: number;
-      static LOOP_STOP: number;
+      public static UNBOUNDED: number
+      public static CLAMPED: number
+      public static LOOP_STOP: number
   }
 
   class ClockStep {
-      static TICK_DEPENDENT: number;
-      static SYSTEM_CLOCK_MULTIPLIER: number;
-      static SYSTEM_CLOCK: number;
+      public static TICK_DEPENDENT: number
+      public static SYSTEM_CLOCK_MULTIPLIER: number
+      public static SYSTEM_CLOCK: number
   }
 
   class ComponentDatatype {
-      static BYTE: number;
-      static UNSIGNED_BYTE: number;
-      static SHORT: number;
-      static UNSIGNED_SHORT: number;
-      static FLOAT: number;
-      static DOUBLE: number;
-      static INT: number;
-      static UNSIGNED_INT: number;
+      public static BYTE: number
+      public static UNSIGNED_BYTE: number
+      public static SHORT: number
+      public static UNSIGNED_SHORT: number
+      public static FLOAT: number
+      public static DOUBLE: number
+      public static INT: number
+      public static UNSIGNED_INT: number
   }
 
-  module ComponentDatatype {
-      function getSizeInBytes(componentDatatype: ComponentDatatype): number;
+  namespace ComponentDatatype {
+      function getSizeInBytes(componentDatatype: ComponentDatatype): number
 
-      function fromTypedArray(array: Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array | Float64Array): ComponentDatatype;
+      function fromTypedArray(array: Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array | Float64Array): ComponentDatatype
 
-      function validate(componentDatatype: ComponentDatatype): boolean;
+      function validate(componentDatatype: ComponentDatatype): boolean
 
-      function createTypedArray(componentDatatype: ComponentDatatype, valuesOrLength: number | any[]): Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array | Float64Array;
+      function createTypedArray(componentDatatype: ComponentDatatype, valuesOrLength: number | any[]): Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array | Float64Array
 
-      function createArrayBufferView(componentDatatype: ComponentDatatype, buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array | Float64Array;
+      function createArrayBufferView(componentDatatype: ComponentDatatype, buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array | Float64Array
   }
 
   class CornerType {
-      static ROUNDED: number;
-      static MITERED: number;
-      static BEVELED: number;
+      public static ROUNDED: number
+      public static MITERED: number
+      public static BEVELED: number
   }
 
-  module CubicRealPolynomial {
-      function computeDiscriminant(a: number, b: number, c: number, d: number): number;
+  namespace CubicRealPolynomial {
+      function computeDiscriminant(a: number, b: number, c: number, d: number): number
 
-      function computeRealRoots(a: number, b: number, c: number, d: number): number[];
+      function computeRealRoots(a: number, b: number, c: number, d: number): number[]
   }
 
   class ExtrapolationType {
-      static NONE: number;
-      static HOLD: number;
-      static EXTRAPOLATE: number;
+      public static NONE: number
+      public static HOLD: number
+      public static EXTRAPOLATE: number
   }
 
-  module FeatureDetection {
-      function supportsFullscreen(): boolean;
+  namespace FeatureDetection {
+      function supportsFullscreen(): boolean
 
-      function supportsTypedArrays(): boolean;
+      function supportsTypedArrays(): boolean
 
-      function supportsWebWorkers(): boolean;
+      function supportsWebWorkers(): boolean
   }
 
   class Fullscreen {
-      static element: any;
-      static changeEventName: string;
-      static errorEventName: string;
-      static enabled: boolean;
-      static fullscreen: boolean;
+      public static element: any
+      public static changeEventName: string
+      public static errorEventName: string
+      public static enabled: boolean
+      public static fullscreen: boolean
   }
 
-  module Fullscreen {
+  namespace Fullscreen {
 
-      function supportsFullscreen(): boolean;
+      function supportsFullscreen(): boolean
 
-      function requestFullscreen(element: any): boolean;
+      function requestFullscreen(element: any): boolean
 
-      function exitFullscreen(): boolean;
+      function exitFullscreen(): boolean
   }
 
-  module GeometryPipeline {
-      function toWireframe(geometry: Geometry): Geometry;
+  namespace GeometryPipeline {
+      function toWireframe(geometry: Geometry): Geometry
 
-      function createLineSegmentsForVectors(geometry: Geometry, attributeName?: string, length?: number): Geometry;
+      function createLineSegmentsForVectors(geometry: Geometry, attributeName?: string, length?: number): Geometry
 
-      function createAttributeLocations(geometry: Geometry): any;
+      function createAttributeLocations(geometry: Geometry): any
 
-      function reorderForPreVertexCache(geometry: Geometry): Geometry;
+      function reorderForPreVertexCache(geometry: Geometry): Geometry
 
-      function reorderForPostVertexCache(geometry: Geometry, cacheCapacity?: number): Geometry;
+      function reorderForPostVertexCache(geometry: Geometry, cacheCapacity?: number): Geometry
 
-      function fitToUnsignedShortIndices(geometry: Geometry): Geometry[];
+      function fitToUnsignedShortIndices(geometry: Geometry): Geometry[]
 
-      function projectTo2D(geometry: Geometry, attributeName: string, attributeName3D: string, attributeName2D: string, projection?: any): Geometry;
+      function projectTo2D(geometry: Geometry, attributeName: string, attributeName3D: string, attributeName2D: string, projection?: any): Geometry
 
-      function encodeAttribute(geometry: Geometry, attributeName: string, attributeHighName: string, attributeLowName: string): Geometry;
+      function encodeAttribute(geometry: Geometry, attributeName: string, attributeHighName: string, attributeLowName: string): Geometry
 
-      function transformToWorldCoordinates(instance: GeometryInstance): GeometryInstance;
+      function transformToWorldCoordinates(instance: GeometryInstance): GeometryInstance
 
-      function computeNormal(geometry: Geometry): Geometry;
+      function computeNormal(geometry: Geometry): Geometry
 
-      function computeBinormalAndTangent(geometry: Geometry): Geometry;
+      function computeBinormalAndTangent(geometry: Geometry): Geometry
 
-      function compressVertices(geometry: Geometry): Geometry;
+      function compressVertices(geometry: Geometry): Geometry
   }
 
   class HeightReference {
-      static CLAMP_TO_GROUND: number;
-      static NONE: number;
-      static RELATIVE_TO_GROUND: number;
+      public static CLAMP_TO_GROUND: number
+      public static NONE: number
+      public static RELATIVE_TO_GROUND: number
   }
 
-  module HermitePolynomialApproximation {
-      function getRequiredDataPoints(degree: number, inputOrder?: number): number;
+  namespace HermitePolynomialApproximation {
+      function getRequiredDataPoints(degree: number, inputOrder?: number): number
 
-      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[];
+      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[]
 
-      function interpolate(x: number, xTable: number[], yTable: number[], yStride: number, inputOrder: number, outputOrder: number, result?: number[]): number[];
+      function interpolate(x: number, xTable: number[], yTable: number[], yStride: number, inputOrder: number, outputOrder: number, result?: number[]): number[]
   }
 
   class IndexDatatype {
-      static UNSIGNED_BYTE: number;
-      static UNSIGNED_SHORT: number;
-      static UNSIGNED_INT: number;
+      public static UNSIGNED_BYTE: number
+      public static UNSIGNED_SHORT: number
+      public static UNSIGNED_INT: number
   }
 
-  module IndexDatatype {
-      function getSizeInBytes(indexDatatype: IndexDatatype): number;
+  namespace IndexDatatype {
+      function getSizeInBytes(indexDatatype: IndexDatatype): number
 
-      function validate(indexDatatype: IndexDatatype): boolean;
+      function validate(indexDatatype: IndexDatatype): boolean
 
-      function createTypedArray(numberOfVertices: number, indicesLengthOrArray: any): Uint16Array | Uint32Array;
+      function createTypedArray(numberOfVertices: number, indicesLengthOrArray: any): Uint16Array | Uint32Array
 
-      function createTypedArrayFromArrayBuffer(numberOfVertices: number, sourceArray: ArrayBuffer, byteOffset: number, length: number): Uint16Array | Uint32Array;
+      function createTypedArrayFromArrayBuffer(numberOfVertices: number, sourceArray: ArrayBuffer, byteOffset: number, length: number): Uint16Array | Uint32Array
   }
 
   class InterpolationAlgorithm {
-      static type: string;
+      public static type: string
   }
 
-  module InterpolationAlgorithm {
-      function getRequiredDataPoints(degree: number): number;
+  namespace InterpolationAlgorithm {
+      function getRequiredDataPoints(degree: number): number
 
-      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[];
+      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[]
 
-      function interpolate(x: number, xTable: number[], yTable: number[], yStride: number, inputOrder: number, outputOrder: number, result?: number[]): number[];
+      function interpolate(x: number, xTable: number[], yTable: number[], yStride: number, inputOrder: number, outputOrder: number, result?: number[]): number[]
   }
 
   class Intersect {
-      static OUTSIDE: number;
-      static INTERSECTING: number;
-      static INSIDE: number;
+      public static OUTSIDE: number
+      public static INTERSECTING: number
+      public static INSIDE: number
   }
 
-  module IntersectionTests {
-      function rayPlane(ray: Ray, plane: Plane, result?: Cartesian3): Cartesian3;
+  namespace IntersectionTests {
+      function rayPlane(ray: Ray, plane: Plane, result?: Cartesian3): Cartesian3
 
-      function rayTriangle(ray: Ray, p0: Cartesian3, p1: Cartesian3, p2: Cartesian3, cullBackFaces?: boolean, result?: Cartesian3): Cartesian3;
+      function rayTriangle(ray: Ray, p0: Cartesian3, p1: Cartesian3, p2: Cartesian3, cullBackFaces?: boolean, result?: Cartesian3): Cartesian3
 
-      function lineSegmentTriangle(v0: Cartesian3, v1: Cartesian3, p0: Cartesian3, p1: Cartesian3, p2: Cartesian3, cullBackFaces?: boolean, result?: Cartesian3): Cartesian3;
+      function lineSegmentTriangle(v0: Cartesian3, v1: Cartesian3, p0: Cartesian3, p1: Cartesian3, p2: Cartesian3, cullBackFaces?: boolean, result?: Cartesian3): Cartesian3
 
-      function raySphere(ray: Ray, sphere: BoundingSphere, result?: any): any;
+      function raySphere(ray: Ray, sphere: BoundingSphere, result?: any): any
 
-      function lineSegmentSphere(p0: Cartesian3, p1: Cartesian3, sphere: BoundingSphere, result?: any): any;
+      function lineSegmentSphere(p0: Cartesian3, p1: Cartesian3, sphere: BoundingSphere, result?: any): any
 
-      function rayEllipsoid(ray: Ray, ellipsoid: Ellipsoid): any;
+      function rayEllipsoid(ray: Ray, ellipsoid: Ellipsoid): any
 
-      function grazingAltitudeLocation(ray: Ray, ellipsoid: Ellipsoid): Cartesian3;
+      function grazingAltitudeLocation(ray: Ray, ellipsoid: Ellipsoid): Cartesian3
 
-      function lineSegmentPlane(endPoint0: Cartesian3, endPoint1: Cartesian3, plane: Plane, result?: Cartesian3): Cartesian3;
+      function lineSegmentPlane(endPoint0: Cartesian3, endPoint1: Cartesian3, plane: Plane, result?: Cartesian3): Cartesian3
 
-      function trianglePlaneIntersection(p0: Cartesian3, p1: Cartesian3, p2: Cartesian3, plane: Plane): any;
+      function trianglePlaneIntersection(p0: Cartesian3, p1: Cartesian3, p2: Cartesian3, plane: Plane): any
   }
 
-  module Intersections2D {
-      function clipTriangleAtAxisAlignedThreshold(threshold: number, keepAbove: boolean, u0: number, u1: number, u2: number, result?: number[]): number[];
+  namespace Intersections2D {
+      function clipTriangleAtAxisAlignedThreshold(threshold: number, keepAbove: boolean, u0: number, u1: number, u2: number, result?: number[]): number[]
 
-      function computeBarycentricCoordinates(x: number, y: number, x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, result?: Cartesian3): Cartesian3;
+      function computeBarycentricCoordinates(x: number, y: number, x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, result?: Cartesian3): Cartesian3
   }
 
   class Iso8601 {
-      static MINIMUM_VALUE: JulianDate;
-      static MAXIMUM_VALUE: JulianDate;
-      static MAXIMUM_INTERVAL: JulianDate;
+      public static MINIMUM_VALUE: JulianDate
+      public static MAXIMUM_VALUE: JulianDate
+      public static MAXIMUM_INTERVAL: JulianDate
   }
 
   class KeyboardEventModifier {
-      static SHIFT: number;
-      static CTRL: number;
-      static ALT: number;
+      public static SHIFT: number
+      public static CTRL: number
+      public static ALT: number
   }
 
-  module LagrangePolynomialApproximation {
-      function getRequiredDataPoints(degree: number): number;
+  namespace LagrangePolynomialApproximation {
+      function getRequiredDataPoints(degree: number): number
 
-      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[];
+      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[]
   }
 
-  module LinearApproximation {
-      function getRequiredDataPoints(degree: number): number;
+  namespace LinearApproximation {
+      function getRequiredDataPoints(degree: number): number
 
-      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[];
+      function interpolateOrderZero(x: number, xTable: number[], yTable: number[], yStride: number, result?: number[]): number[]
   }
 
   class Math {
-      static EPSILON1: number;
-      static EPSILON2: number;
-      static EPSILON3: number;
-      static EPSILON4: number;
-      static EPSILON5: number;
-      static EPSILON6: number;
-      static EPSILON7: number;
-      static EPSILON8: number;
-      static EPSILON9: number;
-      static EPSILON10: number;
-      static EPSILON11: number;
-      static EPSILON12: number;
-      static EPSILON13: number;
-      static EPSILON14: number;
-      static EPSILON15: number;
-      static EPSILON16: number;
-      static EPSILON17: number;
-      static EPSILON18: number;
-      static EPSILON19: number;
-      static EPSILON20: number;
-      static GRAVITATIONALPARAMETER: number;
-      static SOLAR_RADIUS: number;
-      static LUNAR_RADIUS: number;
-      static SIXTY_FOUR_KILOBYTES: number;
-      static PI: number;
-      static ONE_OVER_PI: number;
-      static PI_OVER_TWO: number;
-      static PI_OVER_THREE: number;
-      static PI_OVER_FOUR: number;
-      static PI_OVER_SIX: number;
-      static THREE_PI_OVER_TWO: number;
-      static TWO_PI: number;
-      static ONE_OVER_TWO_PI: number;
-      static RADIANS_PER_DEGREE: number;
-      static DEGREES_PER_RADIAN: number;
-      static RADIANS_PER_ARCSECOND: number;
+      public static EPSILON1: number
+      public static EPSILON2: number
+      public static EPSILON3: number
+      public static EPSILON4: number
+      public static EPSILON5: number
+      public static EPSILON6: number
+      public static EPSILON7: number
+      public static EPSILON8: number
+      public static EPSILON9: number
+      public static EPSILON10: number
+      public static EPSILON11: number
+      public static EPSILON12: number
+      public static EPSILON13: number
+      public static EPSILON14: number
+      public static EPSILON15: number
+      public static EPSILON16: number
+      public static EPSILON17: number
+      public static EPSILON18: number
+      public static EPSILON19: number
+      public static EPSILON20: number
+      public static GRAVITATIONALPARAMETER: number
+      public static SOLAR_RADIUS: number
+      public static LUNAR_RADIUS: number
+      public static SIXTY_FOUR_KILOBYTES: number
+      public static PI: number
+      public static ONE_OVER_PI: number
+      public static PI_OVER_TWO: number
+      public static PI_OVER_THREE: number
+      public static PI_OVER_FOUR: number
+      public static PI_OVER_SIX: number
+      public static THREE_PI_OVER_TWO: number
+      public static TWO_PI: number
+      public static ONE_OVER_TWO_PI: number
+      public static RADIANS_PER_DEGREE: number
+      public static DEGREES_PER_RADIAN: number
+      public static RADIANS_PER_ARCSECOND: number
   }
 
-  module Math {
-      function sign(value: number): number;
+  namespace Math {
+      function sign(value: number): number
 
-      function signNotZero(value: number): number;
+      function signNotZero(value: number): number
 
-      function toSNorm(value: number, rangeMax?: number): number;
+      function toSNorm(value: number, rangeMax?: number): number
 
-      function fromSNorm(value: number): number;
+      function fromSNorm(value: number): number
 
-      function sinh(value: number): number;
+      function sinh(value: number): number
 
-      function cosh(value: number): number;
+      function cosh(value: number): number
 
-      function lerp(p: number, q: number, time: number): number;
+      function lerp(p: number, q: number, time: number): number
 
-      function toRadians(degrees: number): number;
+      function toRadians(degrees: number): number
 
-      function toDegrees(radians: number): number;
+      function toDegrees(radians: number): number
 
-      function convertLongitudeRange(angle: number): number;
+      function convertLongitudeRange(angle: number): number
 
-      function negativePiToPi(angle: number): number;
+      function negativePiToPi(angle: number): number
 
-      function zeroToTwoPi(angle: number): number;
+      function zeroToTwoPi(angle: number): number
 
-      function mod(m: number, n: number): number;
+      function mod(m: number, n: number): number
 
-      function equalsEpsilon(left: number, right: number, relativeEpsilon: number, absoluteEpsilon?: number): boolean;
+      function equalsEpsilon(left: number, right: number, relativeEpsilon: number, absoluteEpsilon?: number): boolean
 
-      function factorial(n: number): number;
+      function factorial(n: number): number
 
-      function incrementWrap(n: number, maximumValue: number, minimumValue?: number): number;
+      function incrementWrap(n: number, maximumValue: number, minimumValue?: number): number
 
-      function isPowerOfTwo(n: number): boolean;
+      function isPowerOfTwo(n: number): boolean
 
-      function logBase(number: number, base: number): number;
+      function logBase(number: number, base: number): number
 
-      function nextPowerOfTwo(n: number): number;
+      function nextPowerOfTwo(n: number): number
 
-      function nextRandomNumber(): number;
+      function nextRandomNumber(): number
 
-      function randomBetween(min: number, max: number): number;
+      function randomBetween(min: number, max: number): number
 
-      function setRandomNumberSeed(seed: number): void;
+      function setRandomNumberSeed(seed: number): void
 
-      function clamp(value: number, min: number, max: number): number;
+      function clamp(value: number, min: number, max: number): number
 
-      function clampToLatitudeRange(angle: number): number;
+      function clampToLatitudeRange(angle: number): number
 
-      function setRandomNumberSeed(seed: number): void;
+      function setRandomNumberSeed(seed: number): void
 
-      function acosClamped(value: number): number;
+      function acosClamped(value: number): number
 
-      function asinClamped(value: number): number;
+      function asinClamped(value: number): number
 
-      function chordLength(angle: number, radius: number): number;
+      function chordLength(angle: number, radius: number): number
   }
 
   class Packable {
-      static packedLength: number;
+      public static packedLength: number
   }
 
-  module Packable {
-      function pack(value: any, array: number[], startingIndex?: number): number[];
+  namespace Packable {
+      function pack(value: any, array: number[], startingIndex?: number): number[]
 
-      function unpack(array: number[], startingIndex?: number, result?: any): any;
+      function unpack(array: number[], startingIndex?: number, result?: any): any
   }
 
   class PackableForInterpolation {
-      static packedInterpolationLength: number;
+      public static packedInterpolationLength: number
   }
 
-  module PackableForInterpolation {
-      function convertPackedArrayForInterpolation(packedArray: number[], startingIndex?: number, lastIndex?: number, result?: number[]): void;
+  namespace PackableForInterpolation {
+      function convertPackedArrayForInterpolation(packedArray: number[], startingIndex?: number, lastIndex?: number, result?: number[]): void
 
-      function unpackInterpolationResult(array: number[], sourceArray: number[], startingIndex?: number, lastIndex?: number, result?: any): any;
+      function unpackInterpolationResult(array: number[], sourceArray: number[], startingIndex?: number, lastIndex?: number, result?: any): any
   }
 
   class PixelFormat {
-      static DEPTH_COMPONENT: number;
-      static DEPTH_STENCIL: number;
-      static ALPHA: number;
-      static RGB: number;
-      static RGBA: number;
-      static RGB_DXT1: number;
-      static RGB_ETC1: number;
-      static RGB_PVRTC_2BPPV1: number;
-      static RGB_PVRTC_4BPPV1: number;
-      static RGBA_DXT1: number;
-      static RGBA_DXT3: number;
-      static RGBA_DXT5: number;
-      static RGBA_PVRTC_2BPPV1: number;
-      static RGBA_PVRTC_4BPPV1: number;
-      static LUMINANCE: number;
-      static LUMINANCE_ALPHA: number;
+      public static DEPTH_COMPONENT: number
+      public static DEPTH_STENCIL: number
+      public static ALPHA: number
+      public static RGB: number
+      public static RGBA: number
+      public static RGB_DXT1: number
+      public static RGB_ETC1: number
+      public static RGB_PVRTC_2BPPV1: number
+      public static RGB_PVRTC_4BPPV1: number
+      public static RGBA_DXT1: number
+      public static RGBA_DXT3: number
+      public static RGBA_DXT5: number
+      public static RGBA_PVRTC_2BPPV1: number
+      public static RGBA_PVRTC_4BPPV1: number
+      public static LUMINANCE: number
+      public static LUMINANCE_ALPHA: number
   }
 
   class PrimitiveType {
-      static LINE_LOOP: number;
-      static LINE_STRIP: number;
-      static LINES: number;
-      static POINTS: number;
-      static TRIANGLE_FAN: number;
-      static TRIANGLE_STRIP: number;
-      static TRIANGLES: number;
+      public static LINE_LOOP: number
+      public static LINE_STRIP: number
+      public static LINES: number
+      public static POINTS: number
+      public static TRIANGLE_FAN: number
+      public static TRIANGLE_STRIP: number
+      public static TRIANGLES: number
   }
 
-  module QuadraticRealPolynomial {
-      function computeDiscriminant(a: number, b: number, c: number): number;
+  namespace QuadraticRealPolynomial {
+      function computeDiscriminant(a: number, b: number, c: number): number
 
-      function computeRealRoots(a: number, b: number, c: number): number[];
+      function computeRealRoots(a: number, b: number, c: number): number[]
   }
 
-  module QuarticRealPolynomial {
-      function computeDiscriminant(a: number, b: number, c: number, d: number, e: number): number;
+  namespace QuarticRealPolynomial {
+      function computeDiscriminant(a: number, b: number, c: number, d: number, e: number): number
 
-      function computeRealRoots(a: number, b: number, c: number, d: number, e: number): number[];
+      function computeRealRoots(a: number, b: number, c: number, d: number, e: number): number[]
   }
 
   class ReferenceFrame {
-      static FIXED: number;
-      static INERTIAL: number;
+      public static FIXED: number
+      public static INERTIAL: number
   }
 
   class ScreenSpaceEventType {
-      static LEFT_DOWN: number;
-      static LEFT_UP: number;
-      static LEFT_CLICK: number;
-      static LEFT_DOUBLE_CLICK: number;
-      static RIGHT_DOWN: number;
-      static RIGHT_UP: number;
-      static RIGHT_CLICK: number;
-      static MIDDLE_DOWN: number;
-      static MIDDLE_UP: number;
-      static MIDDLE_CLICK: number;
-      static MOUSE_MOVE: number;
-      static WHEEL: number;
-      static PINCH_START: number;
-      static PINCH_END: number;
-      static PINCH_MOVE: number;
+      public static LEFT_DOWN: number
+      public static LEFT_UP: number
+      public static LEFT_CLICK: number
+      public static LEFT_DOUBLE_CLICK: number
+      public static RIGHT_DOWN: number
+      public static RIGHT_UP: number
+      public static RIGHT_CLICK: number
+      public static MIDDLE_DOWN: number
+      public static MIDDLE_UP: number
+      public static MIDDLE_CLICK: number
+      public static MOUSE_MOVE: number
+      public static WHEEL: number
+      public static PINCH_START: number
+      public static PINCH_END: number
+      public static PINCH_MOVE: number
   }
 
   interface PositionedEvent {
-      position: Cartesian2;
+      position: Cartesian2
   }
 
   interface MoveEvent {
-      startPosition: Cartesian2;
-      endPosition: Cartesian2;
+      startPosition: Cartesian2
+      endPosition: Cartesian2
   }
 
   interface Touch2Event {
-      position1: Cartesian2;
-      position2: Cartesian2;
+      position1: Cartesian2
+      position2: Cartesian2
   }
 
 
-  module Simon1994PlanetaryPositions {
-      function computeSunPositionInEarthInertialFrame(julianDate?: JulianDate, result?: Cartesian3): Cartesian3;
+  namespace Simon1994PlanetaryPositions {
+      function computeSunPositionInEarthInertialFrame(julianDate?: JulianDate, result?: Cartesian3): Cartesian3
 
-      function computeMoonPositionInEarthInertialFrame(julianDate?: JulianDate, result?: Cartesian3): Cartesian3;
+      function computeMoonPositionInEarthInertialFrame(julianDate?: JulianDate, result?: Cartesian3): Cartesian3
   }
 
   class TimeStandard {
-      static UTC: number;
-      static TAI: number;
+      public static UTC: number
+      public static TAI: number
   }
 
-  module Transforms {
-      function eastNorthUpToFixedFrame(origin: Cartesian3, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4;
+  namespace Transforms {
+      function eastNorthUpToFixedFrame(origin: Cartesian3, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4
 
-      function northEastDownToFixedFrame(origin: Cartesian3, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4;
+      function northEastDownToFixedFrame(origin: Cartesian3, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4
 
-      function northUpEastToFixedFrame(origin: Cartesian3, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4;
+      function northUpEastToFixedFrame(origin: Cartesian3, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4
 
-      function headingPitchRollToFixedFrame(origin: Cartesian3, heading: number, pitch: number, roll: number, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4;
+      function headingPitchRollToFixedFrame(origin: Cartesian3, heading: number, pitch: number, roll: number, ellipsoid?: Ellipsoid, result?: Matrix4): Matrix4
 
-      function headingPitchRollQuaternion(origin: Cartesian3, heading: number, pitch: number, roll: number, ellipsoid?: Ellipsoid, result?: Quaternion): Quaternion;
+      function headingPitchRollQuaternion(origin: Cartesian3, heading: number, pitch: number, roll: number, ellipsoid?: Ellipsoid, result?: Quaternion): Quaternion
 
-      function computeTemeToPseudoFixedMatrix(date: JulianDate, result?: Matrix3): Matrix3;
+      function computeTemeToPseudoFixedMatrix(date: JulianDate, result?: Matrix3): Matrix3
 
-      function preloadIcrfFixed(timeInterval: TimeInterval): Promise<void>;
+      function preloadIcrfFixed(timeInterval: TimeInterval): Promise<void>
 
-      function computeIcrfToFixedMatrix(date: JulianDate, result?: Matrix3): Matrix3;
+      function computeIcrfToFixedMatrix(date: JulianDate, result?: Matrix3): Matrix3
 
-      function computeFixedToIcrfMatrix(date: JulianDate, result?: Matrix3): Matrix3;
+      function computeFixedToIcrfMatrix(date: JulianDate, result?: Matrix3): Matrix3
 
-      function pointToWindowCoordinates(modelViewProjectionMatrix: Matrix4, viewportTransformation: Matrix4, point: Cartesian3, result?: Cartesian2): Cartesian2;
+      function pointToWindowCoordinates(modelViewProjectionMatrix: Matrix4, viewportTransformation: Matrix4, point: Cartesian3, result?: Cartesian2): Cartesian2
   }
 
-  module TridiagonalSystemSolver {
-      function solve(diagonal: number[], lower: number[], upper: number[], right: Cartesian3[]): Cartesian3[];
+  namespace TridiagonalSystemSolver {
+      function solve(diagonal: number[], lower: number[], upper: number[], right: Cartesian3[]): Cartesian3[]
   }
 
   class Visibility {
-      static NONE: number;
-      static PARTIAL: number;
-      static FULL: number;
+      public static NONE: number
+      public static PARTIAL: number
+      public static FULL: number
   }
 
   class WindingOrder {
-      static CLOCKWISE: number;
-      static COUNTER_CLOCKWISE: number;
+      public static CLOCKWISE: number
+      public static COUNTER_CLOCKWISE: number
   }
 
   class StripeOrientation {
-      static HORIZONTAL: number;
-      static VERTICAL: number;
+      public static HORIZONTAL: number
+      public static VERTICAL: number
   }
 
   class BingMapsStyle {
-      static AERIAL: string;
-      static AERIAL_WITH_LABELS: string;
-      static ROAD: string;
-      static ORDNANCE_SURVEY: string;
-      static COLLINS_BART: string;
+      public static AERIAL: string
+      public static AERIAL_WITH_LABELS: string
+      public static ROAD: string
+      public static ORDNANCE_SURVEY: string
+      public static COLLINS_BART: string
   }
 
   class BlendEquation {
-      static ADD: number;
-      static MAX: number;
-      static MIN: number;
-      static SUBTRACT: number;
-      static REVERSE_SUBTRACT: number;
+      public static ADD: number
+      public static MAX: number
+      public static MIN: number
+      public static SUBTRACT: number
+      public static REVERSE_SUBTRACT: number
   }
 
   class BlendFunction {
-      static ZERO: number;
-      static ONE: number;
-      static SOURCE_COLOR: number;
-      static ONE_MINUS_SOURCE_COLOR: number;
-      static DESTINATION_COLOR: number;
-      static ONE_MINUS_DESTINATION_COLOR: number;
-      static SOURCE_ALPHA: number;
-      static ONE_MINUS_SOURCE_ALPHA: number;
-      static DESTINATION_ALPHA: number;
-      static ONE_MINUS_DESTINATION_ALPHA: number;
-      static CONSTANT_COLOR: number;
-      static ONE_MINUS_CONSTANT_COLOR: number;
-      static CONSTANT_ALPHA: number;
-      static ONE_MINUS_CONSTANT_ALPHA: number;
-      static SOURCE_ALPHA_SATURATE: number;
+      public static ZERO: number
+      public static ONE: number
+      public static SOURCE_COLOR: number
+      public static ONE_MINUS_SOURCE_COLOR: number
+      public static DESTINATION_COLOR: number
+      public static ONE_MINUS_DESTINATION_COLOR: number
+      public static SOURCE_ALPHA: number
+      public static ONE_MINUS_SOURCE_ALPHA: number
+      public static DESTINATION_ALPHA: number
+      public static ONE_MINUS_DESTINATION_ALPHA: number
+      public static CONSTANT_COLOR: number
+      public static ONE_MINUS_CONSTANT_COLOR: number
+      public static CONSTANT_ALPHA: number
+      public static ONE_MINUS_CONSTANT_ALPHA: number
+      public static SOURCE_ALPHA_SATURATE: number
   }
 
   class BlendingState {
-      static DISABLED: any;
-      static ALPHA_BLEND: any;
-      static PRE_MULTIPLIED_ALPHA_BLEND: any;
-      static ADDITIVE_BLEND: any;
+      public static DISABLED: any
+      public static ALPHA_BLEND: any
+      public static PRE_MULTIPLIED_ALPHA_BLEND: any
+      public static ADDITIVE_BLEND: any
   }
 
   class CameraEventType {
-      static LEFT_DRAG: number;
-      static RIGHT_DRAG: number;
-      static MIDDLE_DRAG: number;
-      static WHEEL: number;
-      static PINCH: number;
+      public static LEFT_DRAG: number
+      public static RIGHT_DRAG: number
+      public static MIDDLE_DRAG: number
+      public static WHEEL: number
+      public static PINCH: number
   }
 
   class CullFace {
-      static FRONT: number;
-      static BACK: number;
-      static FRONT_AND_BACK: number;
+      public static FRONT: number
+      public static BACK: number
+      public static FRONT_AND_BACK: number
   }
 
   class DepthFunction {
-      static NEVER: number;
-      static LESS: number;
-      static EQUAL: number;
-      static LESS_OR_EQUAL: number;
-      static GREATER: number;
-      static NOT_EQUAL: number;
-      static GREATER_OR_EQUAL: number;
-      static ALWAYS: number;
+      public static NEVER: number
+      public static LESS: number
+      public static EQUAL: number
+      public static LESS_OR_EQUAL: number
+      public static GREATER: number
+      public static NOT_EQUAL: number
+      public static GREATER_OR_EQUAL: number
+      public static ALWAYS: number
   }
 
   class HorizontalOrigin {
-      static CENTER: number;
-      static LEFT: number;
-      static RIGHT: number;
+      public static CENTER: number
+      public static LEFT: number
+      public static RIGHT: number
   }
 
   class LabelStyle {
-      static FILL: number;
-      static OUTLINE: number;
-      static FILL_AND_OUTLINE: number;
+      public static FILL: number
+      public static OUTLINE: number
+      public static FILL_AND_OUTLINE: number
   }
 
   class ModelAnimationLoop {
-      static NONE: number;
-      static REPEAT: number;
-      static MIRRORED_REPEAT: number;
+      public static NONE: number
+      public static REPEAT: number
+      public static MIRRORED_REPEAT: number
   }
 
   class SceneMode {
-      static MORPHING: number;
-      static COLUMBUS_VIEW: number;
-      static SCENE2D: number;
-      static SCENE3D: number;
+      public static MORPHING: number
+      public static COLUMBUS_VIEW: number
+      public static SCENE2D: number
+      public static SCENE3D: number
   }
 
-  module SceneMode {
-      function getMorphTime(value: SceneMode): number;
+  namespace SceneMode {
+      function getMorphTime(value: SceneMode): number
   }
 
-  module SceneTransforms {
-      function wgs84ToWindowCoordinates(scene: Scene, position: Cartesian3, result?: Cartesian2): Cartesian2;
+  namespace SceneTransforms {
+      function wgs84ToWindowCoordinates(scene: Scene, position: Cartesian3, result?: Cartesian2): Cartesian2
 
-      function wgs84ToDrawingBufferCoordinates(scene: Scene, position: Cartesian3, result?: Cartesian2): Cartesian2;
+      function wgs84ToDrawingBufferCoordinates(scene: Scene, position: Cartesian3, result?: Cartesian2): Cartesian2
   }
 
   class StencilFunction {
-      static NEVER: number;
-      static LESS: number;
-      static EQUAL: number;
-      static LESS_OR_EQUAL: number;
-      static GREATER: number;
-      static NOT_EQUAL: number;
-      static GREATER_OR_EQUAL: number;
-      static ALWAYS: number;
+      public static NEVER: number
+      public static LESS: number
+      public static EQUAL: number
+      public static LESS_OR_EQUAL: number
+      public static GREATER: number
+      public static NOT_EQUAL: number
+      public static GREATER_OR_EQUAL: number
+      public static ALWAYS: number
   }
 
   class StencilOperation {
-      static ZERO: number;
-      static KEEP: number;
-      static REPLACE: number;
-      static INCREMENT: number;
-      static DECREMENT: number;
-      static INVERT: number;
-      static INCREMENT_WRAP: number;
-      static DECREMENT_WRAP: number;
+      public static ZERO: number
+      public static KEEP: number
+      public static REPLACE: number
+      public static INCREMENT: number
+      public static DECREMENT: number
+      public static INVERT: number
+      public static INCREMENT_WRAP: number
+      public static DECREMENT_WRAP: number
   }
 
   class VerticalOrigin {
-      static CENTER: number;
-      static BOTTOM: number;
-      static TOP: number;
+      public static CENTER: number
+      public static BOTTOM: number
+      public static TOP: number
   }
 
   function createTileMapServiceImageryProvider(options: {
@@ -7348,32 +7349,32 @@ declare module Cesium {
       tileWidth?: number,
       tileHeight?: number,
       flipXY?: boolean
-  }): TileMapServiceImageryProvider;
+  }): TileMapServiceImageryProvider
 
   class UrlTemplateImageryProvider extends ImageryProvider {
-      readonly url: string;
-      readonly pickFeaturesUrl: string;
-      readonly urlSchemeZeroPadding: {};
-      readonly proxy: Proxy;
-      readonly credit: Credit;
-      readonly minimumLevel: number;
-      readonly maximumLevel: number;
-      readonly rectangle: Rectangle;
-      readonly tilingScheme: TilingScheme;
-      readonly tileWidth: number;
-      readonly tileHeight: number;
-      readonly hasAlphaChannel: boolean;
-      enablePickFeatures: boolean;
-      readonly errorEvent: Event;
-      readonly ready: boolean;
-      readonly readyPromise: Promise<boolean>;
-      readonly tileDiscardPolicy: TileDiscardPolicy;
+      public readonly url: string
+      public readonly pickFeaturesUrl: string
+      public readonly urlSchemeZeroPadding: {}
+      public readonly proxy: Proxy
+      public readonly credit: Credit
+      public readonly minimumLevel: number
+      public readonly maximumLevel: number
+      public readonly rectangle: Rectangle
+      public readonly tilingScheme: TilingScheme
+      public readonly tileWidth: number
+      public readonly tileHeight: number
+      public readonly hasAlphaChannel: boolean
+      public enablePickFeatures: boolean
+      public readonly errorEvent: Event
+      public readonly ready: boolean
+      public readonly readyPromise: Promise<boolean>
+      public readonly tileDiscardPolicy: TileDiscardPolicy
 
       constructor(options: {
           url: string,
           pickFeaturesUrl?: string,
           urlSchemeZeroPadding?: {},
-          subdomains?: string | Array<string>
+          subdomains?: string | string[]
           proxy?: {},
           credit?: Credit,
           minimumLevel?: number,
@@ -7384,21 +7385,21 @@ declare module Cesium {
           tileWidth?: number,
           tileHeight?: number,
           hasAlphaChannel?: boolean,
-          getFeatureInfoFormats?: Array<GetFeatureInfoFormat>,
+          getFeatureInfoFormats?: GetFeatureInfoFormat[],
           enablePickFeatures?: boolean,
           customTags?: any
       });
 
-      getTileCredits(x: number, y: number, level: number): Array<Credit>;
+      public getTileCredits(x: number, y: number, level: number): Credit[]
 
-      pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<Array<ImageryLayerFeatureInfo>>;
+      public pickFeatures(x: number, y: number, level: number, longitude: number, latitude: number): Promise<ImageryLayerFeatureInfo[]>
 
-      reinitialize(options: Promise<Object> | Object): void;
+      public reinitialize(options: Promise<Object> | Object): void
   }
 
-  function defined(value: Object): boolean;
+  function defined(value: Object): boolean
 }
 
 declare module 'cesium/Cesium' {
-  export = Cesium;
+  export = Cesium
 }

@@ -24,6 +24,29 @@ export class RequestService {
   public static requestCatchHandle: (respone: AxiosResponse) => void
   // 全局扩展服务数组
   public static extendServices: ExtendService[] = []
+  /**
+   * 设置网络请求基础配置
+   * @param param
+   */
+  public static setConfig({ server, timeout }) {
+    RequestService.config.server = server
+    RequestService.config.timeout = timeout
+  }
+
+  public static installExtendService(service: ExtendService) {
+    RequestService.extendServices.push(service)
+  }
+
+  /**
+   * 获取服务请求单例
+   */
+  public static getInstance() {
+    if (this.instance) {
+      return this.instance
+    }
+
+    return new RequestService()
+  }
 
   private static config = {
     server: '',
@@ -51,29 +74,6 @@ export class RequestService {
         Accept: 'application/json'
       }
     })
-  }
-  /**
-   * 设置网络请求基础配置
-   * @param param
-   */
-  public static setConfig({ server, timeout }) {
-    RequestService.config.server = server
-    RequestService.config.timeout = timeout
-  }
-
-  public static installExtendService(service: ExtendService) {
-    RequestService.extendServices.push(service)
-  }
-
-  /**
-   * 获取服务请求单例
-   */
-  public static getInstance() {
-    if (this.instance) {
-      return this.instance
-    }
-
-    return new RequestService()
   }
 
   /**

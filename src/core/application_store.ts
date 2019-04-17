@@ -4,8 +4,6 @@ import Vuex from 'vuex'
  * 应用内部数据存储
  */
 export class ApplicationStore {
-
-  private static _store
   public static getStore() {
     if (!this._store) {
       this._store = this.createStore()
@@ -13,6 +11,8 @@ export class ApplicationStore {
 
     return this._store
   }
+
+  private static _store
 
   private static createStore() {
     return new Vuex.Store({
