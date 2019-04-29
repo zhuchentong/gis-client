@@ -41,8 +41,10 @@ import { Layout } from '@/core/decorator'
   components: {}
 })
 export default class extends Vue {
-  @Inject
-  private user!: User
+  private user = {
+    username:"",
+    password:""
+  }
 
   private loading = false
   private remember = false
@@ -52,7 +54,6 @@ export default class extends Vue {
   }
 
   private submitForm() {
-    console.log(window.location.href)
     this.$window.open('home', {
       size: WindowSize.normal
     })
