@@ -1,49 +1,25 @@
 <template>
-  <section
-    class="login-page fill-absolute"
-    @keydown.enter="submitForm"
-  >
+  <section class="login-page fill-absolute" @keydown.enter="submitForm">
     <div class="col center-span fill-height">
       <div class="login-title">多规合一信息综合平台</div>
       <div class="login-content">
         <div class="login-form">
-          <el-form
-            ref="login-form"
-            :model="user"
-            :rules="userRoles"
-          >
+          <el-form ref="login-form" :model="user" :rules="userRoles">
             <el-form-item prop="username">
-              <el-input
-                v-model="user.username"
-                auto-complete="off"
-                placeholder="用户名"
-              ></el-input>
+              <el-input v-model="user.username" auto-complete="off" placeholder="用户名"></el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input
-                type="password"
-                v-model="user.password"
-                placeholder="密码"
-              ></el-input>
+              <el-input type="password" v-model="user.password" placeholder="密码"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-checkbox
-                class="remember-label"
-                v-model="remember"
-              >记住用户名和密码</el-checkbox>
+              <el-checkbox class="remember-label" v-model="remember">记住用户名和密码</el-checkbox>
             </el-form-item>
             <div v-if="loading">
               <i class="el-icon-loading"></i> 资源数据更新中,请稍后...
             </div>
             <div class="text-center">
-              <el-button
-                class="login-btn"
-                @click="submitForm"
-              >登录</el-button>
-              <el-button
-                class="login-btn"
-                @click="exit"
-              >退出</el-button>
+              <el-button class="login-btn" @click="submitForm">登录</el-button>
+              <el-button class="login-btn" @click="exit">退出</el-button>
             </div>
           </el-form>
         </div>
