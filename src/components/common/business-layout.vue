@@ -1,0 +1,48 @@
+<template>
+  <section class="business-layout row">
+    <div class="layout-left">
+      <slot name="left"></slot>
+    </div>
+    <div class="layout-middle">
+      <slot name="middle"></slot>
+    </div>
+    <div class="layout-content">
+      <slot name="content"></slot>
+    </div>
+  </section>
+</template>
+
+ <style lang="less">
+</style>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component({
+  components: {
+  }
+})
+export default class extends Vue { }
+</script>
+
+<style lang="less" scoped>
+.business-layout {
+  .layout {
+    &-left {
+      flex-basis: 80px;
+    }
+    &-middle {
+      flex-basis: 300px;
+    }
+    &-content {
+      flex: 1;
+    }
+  }
+
+  .layout-left,
+  .layout-middle,
+  .layout-content {
+    border: solid 1px red;
+  }
+}
+</style>

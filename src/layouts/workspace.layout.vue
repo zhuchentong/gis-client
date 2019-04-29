@@ -1,13 +1,7 @@
 <template>
-  <div
-    class="layout fill"
-    style="overflow:hidden;"
-  >
+  <div class="layout fill" style="overflow:hidden;">
     <div class="header draggable">
-      <el-button
-        type="text"
-        @click="onExit()"
-      >退出</el-button>
+      <el-button type="text" @click="onExit()">退出</el-button>
     </div>
     <div class="content">
       <router-view />

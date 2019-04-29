@@ -1,13 +1,7 @@
 <template>
-  <div
-    class="layout fill draggable"
-    style="overflow:auto;"
-  >
+  <div class="layout fill draggable" style="overflow:auto;">
     <div class="header">
-      <el-button
-        type="text"
-        @click="onExit()"
-      >退出</el-button>
+      <el-button type="text" @click="onExit()">退出</el-button>
     </div>
     <div class="content">
       <router-view />
@@ -28,7 +22,7 @@ export default class DefaultLayout extends Vue {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @height: 40px;
 .header {
   text-align: right;

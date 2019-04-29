@@ -29,7 +29,46 @@
   </section>
 </template>
 
- <style lang="less">
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import { Inject } from 'typescript-ioc'
+import { User } from '~/models/user.model'
+import { WindowSize } from '../config/enum.config'
+import { Layout } from '@/core/decorator'
+
+@Layout('empty')
+@Component({
+  components: {}
+})
+export default class extends Vue {
+  @Inject
+  private user!: User
+
+  private loading = false
+  private remember = false
+  private userRoles: any = {
+    username: { required: true, message: '用户名不能为空', trigger: 'blur' },
+    password: { required: true, message: '密码不能为空', trigger: 'blur' }
+  }
+
+  private submitForm() {
+    console.log(window.location.href)
+    this.$window.open('home', {
+      size: WindowSize.normal
+    })
+  }
+
+  private exit() {
+    this.$electron.remote.process.exit(0)
+  }
+
+  private mounted(){
+    console.log(123)
+  }
+}
+</script>
+
+<style lang="less">
 .login-page {
   @color: #ffffff;
 
@@ -77,39 +116,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { Inject } from 'typescript-ioc'
-import { User } from '~/models/user.model'
-import { WindowSize } from '../config/enum.config'
-import { Layout } from '@/core/decorator'
-
-@Layout('empty')
-@Component({
-  components: {}
-})
-export default class extends Vue {
-  @Inject
-  private user!: User
-
-  private loading
-  private remember
-  private userRoles: any = {
-    username: { required: true, message: '用户名不能为空', trigger: 'blur' },
-    password: { required: true, message: '密码不能为空', trigger: 'blur' }
-  }
-
-  private submitForm() {
-    console.log(window.location.href)
-    this.$window.open('home', {
-      size: WindowSize.normal
-    })
-  }
-
-  private exit() {
-    this.$electron.remote.process.exit(0)
-  }
-}
-</script>
-

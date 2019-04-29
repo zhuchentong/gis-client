@@ -1,9 +1,11 @@
-.full,.fill {
+.full,
+.fill {
   height: 100%;
   width: 100%;
 }
 
-.full-absolute,.fill-absolute {
+.full-absolute,
+.fill-absolute {
   position: absolute !important;
   top: 0;
   left: 0;
@@ -11,12 +13,12 @@
   right: 0;
 }
 
-.fill-height{
-  height:100%;
+.fill-height {
+  height: 100%;
 }
 
-.fill-width{
-  width:100%;
+.fill-width {
+  width: 100%;
 }
 
 .text-right {
@@ -102,17 +104,27 @@
   margin-top: 40px;
 }
 
-// 未完成功能提示
-.working {
+.empty-block(@text) {
   text-align: center;
   margin-top: 25%;
 
   &::after {
-    content: "功能正在开发中,即将为您呈现!";
+    content: @text;
     font-size: 30px;
     color: #cccccc;
   }
 }
+
+// 未完成功能提示
+.working {
+  .empty-block("功能正在开发中,即将为您呈现!")
+}
+
+// 未完成功能提示
+.no-data {
+  .empty-block("暂无数据")
+}
+
 
 .draggable {
   -webkit-app-region: drag;

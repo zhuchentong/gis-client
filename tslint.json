@@ -6,11 +6,23 @@
     "tslint-config-prettier"
   ],
   "linterOptions": {
-    "exclude": ["*.json", "**/*.json", "typings/*.d.ts"]
+    "exclude": [
+      "*.json",
+      "**/*.json",
+      "typings/*.d.ts",
+      "node_modules"
+    ]
   },
   "rules": {
-    "semicolon": [true, "never"],
-    "no-unused-expression": [true, "allow-fast-null-checks", "allow-new"],
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "no-unused-expression": [
+      true,
+      "allow-fast-null-checks",
+      "allow-new"
+    ],
     "ordered-imports": [
       true,
       {
@@ -18,8 +30,10 @@
         "named-imports-order": "any"
       }
     ],
-    // "member-ordering": [true, { "order": "fields-first" }],
-    "no-namespace": [true, "allow-declarations"],
+    "no-namespace": [
+      true,
+      "allow-declarations"
+    ],
     "object-literal-sort-keys": false,
     "no-console": false,
     "no-string-literal": false,

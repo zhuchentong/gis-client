@@ -2,6 +2,8 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import Application from './core/application'
+// 基础组件全局引用
+import SvgIcon from "~/components/common/svg-icon.vue"
 
 // 添加基础样式
 import 'normalize-css/normalize.css'
@@ -19,6 +21,7 @@ import directives from '~/extension/directives'
 import provides from '~/extension/provides'
 import plugins from '~/extension/plugins'
 import { boot, launch } from '~/extension/boots'
+import { registerComponent } from "~/extension/global-components"
 
 Vue.config.productionTip = false
 
@@ -27,6 +30,9 @@ libs.install()
 
 // 系统初始化逻辑
 boot()
+
+// 全局注册自定义组件
+registerComponent(Vue)
 
 // 初始化应用
 new Application({

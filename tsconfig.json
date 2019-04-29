@@ -14,14 +14,31 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env"],
+    "types": [
+      "webpack-env"
+    ],
     "paths": {
-      "@/*": ["src/*"],
-      "~/*": ["src/*"],
-      "cesium/Cesium": ["node_modules/cesium"]
+      "@/*": [
+        "src/*"
+      ],
+      "~/*": [
+        "src/*"
+      ],
+      "cesium/Cesium": [
+        "node_modules/cesium"
+      ]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
-    "plugins": [{ "name": "typescript-tslint-plugin" }]
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
   },
   "include": [
     "src/**/*.ts",
@@ -31,5 +48,7 @@
     "tests/**/*.tsx",
     "typings/**/*.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
