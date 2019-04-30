@@ -1,5 +1,5 @@
 <template>
-  <section class="business-layout row">
+  <section class="base-col-three row no-warp">
     <div class="layout-left">
       <slot name="left"></slot>
     </div>
@@ -26,7 +26,7 @@ export default class extends Vue { }
 </script>
 
 <style lang="less" scoped>
-.business-layout {
+.base-col-three {
   .layout {
     &-left {
       flex-basis: 80px;

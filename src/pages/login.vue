@@ -40,10 +40,10 @@ import { Layout } from '@/core/decorator'
 @Component({
   components: {}
 })
-export default class extends Vue {
+export default class Login extends Vue {
   private user = {
-    username:"",
-    password:""
+    username: "",
+    password: ""
   }
 
   private loading = false
@@ -61,10 +61,6 @@ export default class extends Vue {
 
   private exit() {
     this.$electron.remote.process.exit(0)
-  }
-
-  private mounted(){
-    console.log(123)
   }
 }
 </script>
@@ -96,6 +92,7 @@ export default class extends Vue {
       background-repeat: round;
     }
     .login-form {
+      -webkit-app-region: no-drag;
       flex: 1;
       padding: 40px;
       box-sizing: border-box;

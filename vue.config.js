@@ -1,6 +1,4 @@
 // vue.config.js
-const path = require('path')
-const webpack = require('webpack')
 
 const aliasExtned = require('./extends/alias.extend')
 const routeExtend = require('./extends/route.extend')
@@ -42,16 +40,4 @@ module.exports = {
       }
     }
   }
-  // devServer: {
-  //   proxy: {
-  //     // proxy all requests starting with /api to jsonplaceholder
-  //     '/geoserver': {
-  //       target: 'http://192.168.3.5:8080', //设置你调用的接口域名和端口号 别忘了加http
-  //       changeOrigin: true,
-  //       pathRewrite: {
-  //         // '^/geoserver': ''    //代理的路径
-  //       }
-  //     }
-  //   }
-  // }
 }

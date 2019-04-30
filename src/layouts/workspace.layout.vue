@@ -1,6 +1,8 @@
 <template>
   <div class="layout fill" style="overflow:hidden;">
     <div class="header draggable">
+    </div>
+    <div class="layout-header-operate-block">
       <el-button type="text" @click="onExit()">退出</el-button>
     </div>
     <div class="content">

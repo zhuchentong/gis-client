@@ -1,6 +1,8 @@
 <template>
-  <div class="layout fill draggable" style="overflow:auto;">
-    <div class="header">
+  <div class="layout fill" style="overflow:auto;">
+    <div class="header draggable">
+    </div>
+    <div class="header-buttons">
       <el-button type="text" @click="onExit()">退出</el-button>
     </div>
     <div class="content">
