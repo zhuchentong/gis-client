@@ -12,14 +12,14 @@ export class WindowService {
       minimizable: false,
       maximizable: false,
       fullscreenable: false,
-      alwaysOnTop: true
+      alwaysOnTop: false
     })
 
     // 加载页面内容
     if (process.env.NODE_ENV !== 'production') {
       const [root] = window.location.href.split('#')
-      console.log(`${root}#${url}`)
       win.loadURL(`${root}#${url}`)
+      win.webContents.openDevTools()
     } else {
       win.loadURL(`app://./index.html#${url}`)
     }
