@@ -1,8 +1,12 @@
 .generateTheme(@theme) {
   .el-button.el-button--default {
-    background-color: @COLOR8;
-    color: @COLOR5;
+    color: @COLOR8;
     border-color: @COLOR8;
+
+    &:hover {
+      color: @COLOR1;
+      background-color: @COLOR8;
+    }
   }
 
   .el-button.el-button--default.is-disabled {

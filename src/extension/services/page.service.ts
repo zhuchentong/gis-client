@@ -1,5 +1,7 @@
 import { ExtendService, RequestParams } from '~/core/http'
+import { AutoWired } from 'typescript-ioc'
 
+@AutoWired
 export class PageService extends ExtendService {
   public default = {
     pageSize: 10,

@@ -10,7 +10,7 @@ export default {
   // 活动菜单
   activeMenu: null,
   // 用户token
-  userToken: '',
+  userToken: '4a8d0432-b5af-4149-91a7-6d5064528bd4',
   // token是否过期
   tokenExpire: false,
   // 用户数据

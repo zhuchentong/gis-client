@@ -26,9 +26,9 @@ export default class extends Vue {
 .label-item {
   line-height: 24px;
   height: 24px;
-  &-label{
-    &::after{
-      content:"：";
+  &-label {
+    &::after {
+      content: '：';
     }
   }
   &-value {

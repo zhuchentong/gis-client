@@ -286,22 +286,26 @@ a {
 .button-style() {
   .el-button {
     font-size: @default-fontSize;
+    border-radius: 6px;
 
     &.el-button--default {
       .setHeight;
       padding: 0 20px;
-      min-width: 100px;
       font-weight: 400;
     }
 
     &.el-button--primary {
       .setHeight;
       padding: 0 20px;
-      min-width: 100px;
       font-weight: 400;
     }
 
     &.el-button--text {
+      font-weight: 400;
+    }
+
+    &.el-button--mini {
+      padding: 0 15px;
       font-weight: 400;
     }
   }

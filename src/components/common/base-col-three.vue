@@ -6,7 +6,7 @@
     <div class="layout-middle">
       <slot name="middle"></slot>
     </div>
-    <div class="layout-content">
+    <div class="layout-content col-span">
       <slot name="content"></slot>
     </div>
   </section>
@@ -42,7 +42,7 @@ export default class extends Vue { }
   .layout-left,
   .layout-middle,
   .layout-content {
-    border: solid 1px red;
+    border: solid 1px #f3f3f3;
   }
 }
 </style>
