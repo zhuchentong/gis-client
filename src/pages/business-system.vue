@@ -10,7 +10,7 @@
       <div class="search">
         <label class="search-item-label">项目类型:</label>
         <el-select v-model="flowModel.type" class="search-worktype">
-          <el-option label="全部" value="ALL"></el-option>
+          <el-option label="全部" value=""></el-option>
           <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
         </el-select>
         <label class="search-item-label">时间排序</label>

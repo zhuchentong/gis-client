@@ -1,8 +1,8 @@
 <template>
   <section class="component file-upload">
     <el-upload :headers="headers" ref="upload" class="upload" multiple :before-upload="onBeforeUpload" :before-remove="onBeforeRemove" :file-list="fileList" :action="uploadUrl" :limit="fileNumberLimit?fileNumberLimit:null" :show-file-list="showFileList" :on-success="onSucess" :on-error="onError" :on-change="onChange" :on-remove="onRemove">
-      <el-button class="upload-button" @click="clickHandle" :disabled="disableUpload">上传文件</el-button>
       <span :class="{'ext-title':extTypeTitle}">{{extTypeTitle}}</span>
+      <el-button class="upload-button" @click="clickHandle" :disabled="disableUpload">上传文件</el-button>
     </el-upload>
   </section>
 </template>

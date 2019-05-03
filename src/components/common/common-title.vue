@@ -24,7 +24,7 @@ export default class CommonTitle extends Vue {
   public title
 
   @Prop({
-    default: 'daka'
+    default: 'edit'
   })
   public iconName!: string
 
@@ -42,9 +42,6 @@ export default class CommonTitle extends Vue {
 <style lang="less" scoped>
 .component.common-title {
   padding: 10px;
-  .title {
-    color: #43b5e0;
-  }
   .custom-card-header {
     margin-left: 5px;
     font-size: 13px;
