@@ -46,19 +46,3 @@ export default class extends Vue { }
   }
 }
 </style>
-
-<style lang="less">
-// .base-col-three {
-//   .layout-content {
-//     .el-tabs {
-//       height: 100%;
-//       .el-tabs__content {
-//         height: 100%;
-//         .el-tab-pane {
-//           height: 100%;
-//         }
-//       }
-//     }
-//   }
-// }
-</style>

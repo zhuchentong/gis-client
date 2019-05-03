@@ -1,27 +1,36 @@
 <template>
   <base-col-three class="page business-system">
-    <div slot="left">
-      <div v-for="item of menus" :key="item.label" class="business-system-menu-item" @click="flowModel.status = item.status" :class="{'business-system-menu-activated': item.status === flowModel.status}">
-        <svg-icon :iconName="item.icon" iconSize="32"></svg-icon>
-        <div class="menu-item-label">{{item.label}}</div>
+    <div slot="left" class="col between-span text-center" style="height:100%">
+      <div>
+        <div v-for="item of menus" :key="item.label" class="business-system-menu-item pointer" @click="flowModel.status = item.status" :class="{'business-system-menu-activated': item.status === flowModel.status}">
+          <svg-icon :iconName="item.icon" iconSize="32"></svg-icon>
+          <div class="menu-item-label">{{item.label}}</div>
+        </div>
+      </div>
+      <div class="add-item business-system-menu-item pointer" @click="dialog.craeteNew=true">
+        <svg-icon iconName="add-new" iconSize="32"></svg-icon>
+        <div class="menu-item-label">新增业务</div>
       </div>
     </div>
     <div slot="middle">
-      <div class="search">
-        <label class="search-item-label">项目类型:</label>
-        <el-select v-model="flowModel.type" class="search-worktype">
-          <el-option label="全部" value=""></el-option>
-          <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
-        </el-select>
-        <label class="search-item-label">时间排序</label>
-        <a @click="sortList">
-          <svg-icon iconName="sort" iconSize="12"></svg-icon>
-        </a>
-        <el-button class="search-item-label" @click="dialog.craeteNew = true" size="mini">新增</el-button>
+      <div class="search row between-span">
+        <div>
+          <label>项目类型:</label>
+          <el-select v-model="flowModel.type" class="search-worktype">
+            <el-option label="全部" value=""></el-option>
+            <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <label>时间排序</label>
+          <a @click="sortList">
+            <svg-icon iconName="sort" iconSize="12"></svg-icon>
+          </a>
+        </div>
       </div>
       <div class="no-data" v-if="!dataList.length"></div>
       <div v-else>
-        <div v-for="item of dataList" :key="item.id" class="info-item" @click="flowId = item.flowId" :class="{'info-item-activated': item.flowId === flowId}">
+        <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="flowId = item.flowId" :class="{'info-item-activated': item.flowId === flowId}">
           <label-item label="任务名称" :value="item.taskName"></label-item>
           <label-item label="外业类型" :value="item.taskType"></label-item>
           <label-item label="创建时间" :value="item.createTime "></label-item>
@@ -126,7 +135,7 @@ export default class extends Vue {
 
   private mounted() {
     this.flowModel.status = MenuItems[0].status
-    this.flowModel.type = "全部"
+    this.flowModel.type = ""
     this.refreshData()
   }
 
@@ -137,14 +146,10 @@ export default class extends Vue {
 .page.business-system {
   .business-system-menu {
     &-item {
-      text-align: center;
-      padding: 5px 0;
+      padding: 10px;
       background-color: #f2f2f2;
       .menu-item-label {
-        font-size: 16px;
-      }
-      &:hover {
-        cursor: pointer;
+        font-size: 14px;
       }
     }
     &-activated {
@@ -153,11 +158,10 @@ export default class extends Vue {
   }
 
   .search {
-    padding: 5px 0;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
     border-bottom: solid 2px #f3f3f3;
-    &-item-label {
-      margin-left: 8px;
-    }
     &-worktype {
       padding-left: 3px;
       width: 100px;
@@ -169,10 +173,6 @@ export default class extends Vue {
     &-activated {
       background-color: #ffffea;
     }
-    &:hover {
-      cursor: pointer;
-      background-color: #fdfdfd;
-    }
   }
   .content-tabs {
     height: 100%;
@@ -183,6 +183,9 @@ export default class extends Vue {
         height: 100%;
       }
     }
+  }
+  .add-item {
+    background-color: #409eff;
   }
 }
 </style>
