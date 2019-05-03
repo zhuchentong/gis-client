@@ -12,31 +12,31 @@ export const MenuItems = [
   {
     label: '新建箱',
     icon: 'wait',
-    status: 'CREATED',
+    status: 'FOUND',
     title: '已经提交业务,还未进行审批的数据'
   },
   {
     label: '打回箱',
     icon: 'return',
-    status: 'RETURN',
+    status: 'REPULSE',
     title: '审批不通过的业务'
   },
   {
     label: '待办箱',
     icon: 'businiess-wait',
-    status: 'WATTING',
+    status: 'PENDING_APPROVAL',
     title: '需要您进行审批的业务'
   },
   {
     label: '已办箱',
     icon: 'already',
-    status: 'ALREADY',
+    status: 'COMPLETE_APPROVAL',
     title: '流程全部完成的业务'
   },
   {
     label: '归档箱',
     icon: 'saved',
-    status: 'SAVED',
+    status: 'FINSH',
     title: '曾经处理完成,并且已归档的业务'
   }
 ]
@@ -73,22 +73,22 @@ export const ContentItems = [
 export const BaseInfoConfig = [
   {
     label: '报地',
-    value: 'report-land',
+    value: 'REPORT',
     component: 'ReportLand'
   },
   {
     label: '批地',
-    value: 'approve-land',
+    value: 'GRANT',
     component: 'ApproveLand'
   },
   {
     label: '征地',
-    value: 'leva-land',
+    value: 'EXPROPRIA',
     component: 'LevaLand'
   },
   {
     label: '供地',
-    value: 'provide-land',
+    value: 'SUPPLY',
     component: 'ProvideLand'
   }
 ]

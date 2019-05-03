@@ -6,7 +6,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: 'business-system'
+      redirect: 'login'
     }
   ]
 })

@@ -33,30 +33,117 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Inject } from 'typescript-ioc'
 import { User } from '~/models/user.model'
-import { WindowSize } from '../config/enum.config'
+import { WindowSize } from '~/config/enum.config'
 import { Layout } from '@/core/decorator'
+import { State, Mutation, Action, namespace } from "vuex-class"
+import { DataDict } from "~/models/data-dict.model"
+import { StorageService } from "~/utils/storage.service"
 
 @Layout('empty')
 @Component({
   components: {}
 })
 export default class Login extends Vue {
-  private user = {
-    username: "",
-    password: ""
-  }
+  @State private menuResource!: any[]
+  @Mutation private updateUserPrincipalList!: () => void
+  @Mutation private updateDictData!: (data) => void
+  @Action private updateUserLoginData!: (data) => boolean
 
-  private loading = false
-  private remember = false
+  private loading: boolean = false
+  private dataDict = new DataDict()
+  private user = new User()
   private userRoles: any = {
-    username: { required: true, message: '用户名不能为空', trigger: 'blur' },
-    password: { required: true, message: '密码不能为空', trigger: 'blur' }
+    username: { required: true, message: "用户名不能为空", trigger: "blur" },
+    password: { required: true, message: "密码不能为空", trigger: "blur" }
   }
 
-  private submitForm() {
-    this.$window.open('home', {
-      size: WindowSize.normal
+  private remember: boolean = false
+
+  private mounted() {
+    const rember: any = StorageService.getItem("remember")
+    this.remember = !!rember
+    if (rember) {
+      this.user.username = rember.username
+      this.user.password = rember.password
+    }
+
+    this.loading = true
+    this.checkDictData()
+  }
+
+  private async checkDictData() {
+    const oldHash = StorageService.getItem("dictHash")
+    const needUpdateFlag = await new Promise(resolve => {
+      this.dataDict.getHashCode().subscribe(
+        data => {
+          if (
+            !oldHash ||
+            (oldHash && data.dataDictHashCode !== oldHash.toString())
+          ) {
+            StorageService.setItem("dictHash", data.dataDictHashCode)
+            return resolve(true)
+          }
+          resolve(false)
+        },
+        () => resolve(false)
+      )
     })
+    if (needUpdateFlag) {
+      this.dataDict.getDictData().subscribe(
+        data => {
+          this.updateDictData(data)
+          this.loading = false
+        })
+    } else {
+      this.loading = false
+    }
+  }
+
+  /**
+   * 提交登录表单
+   */
+  private submitForm() {
+    const loginForm: any = this.$refs["login-form"]
+    loginForm.validate(success => {
+      if (!success) return
+      this.login()
+    })
+  }
+
+  private login() {
+    if (this.remember) {
+      StorageService.setItem("remember", {
+        username: this.user.username,
+        password: this.user.password
+      })
+    } else {
+      StorageService.removeItem("remember")
+    }
+    this.user.login().subscribe(data => {
+      const loginStatus = this.updateUserLoginData({
+        token: data.token,
+        user: data.operatorResponse
+      })
+      if (loginStatus) {
+        this.$window.open('home', {
+          size: WindowSize.normal
+        })
+        this.deleteLocalLayers()
+      }
+    })
+  }
+
+  /**
+   * 删除所有的临时发布图层
+   */
+  private deleteLocalLayers() {
+    // const tmpLayers = new TempLayers()
+    // const layerInfo = new LayerInfo()
+    // tmpLayers.layerList.forEach(item => {
+    //   layerInfo.deleteTempLayer(item.layerCode).subscribe(
+    //     () => tmpLayers.delete(item.layerCode)
+    //   )
+    // })
   }
 
   private exit() {

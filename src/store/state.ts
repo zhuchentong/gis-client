@@ -10,11 +10,11 @@ export default {
   // 活动菜单
   activeMenu: null,
   // 用户token
-  userToken: '4a8d0432-b5af-4149-91a7-6d5064528bd4',
+  userToken: '',
   // token是否过期
   tokenExpire: false,
   // 用户数据
-  userData: {},
+  userData: {} as any,
   // 当前主题样式
   theme: 'theme-default',
   // 未读取消息数量

@@ -79,8 +79,33 @@ export class BusinessFlowModel extends Model {
    * 结束流程
    */
   public finishFlow(flowId: string) {
-    return this.flowInfoService.getLayerInfoByFlowId(
+    return this.flowInfoService.finishFlow(
       new RequestParams({ flowId })
     )
+  }
+
+  /**
+   * 指定一下个审批人
+   * @param flowId 
+   * @param nextUserId 
+   */
+  public setFlowNextUser(flowId: string, nextUserId: string) {
+    return this.flowInfoService.setFlowNextUser(
+      new RequestParams({ flowId, nextUserId })
+    )
+  }
+
+  /**
+   * 当前流程节点审批
+   * @param flowId 
+   * @param status 
+   * @param comment 
+   */
+  public flowApprove(flowId: string, status: string, comment: string) {
+    return this.flowInfoService.flowApproval(new RequestParams({
+      flowId,
+      opinion: comment,
+      status
+    }))
   }
 }

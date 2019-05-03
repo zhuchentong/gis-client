@@ -58,5 +58,21 @@ export default {
     controller: CONTROLLER,
     action: 'finishFlow',
     type: RequestMethod.Post
+  },
+  /**
+   * 流程审批
+   */
+  flowApproval: {
+    controller: CONTROLLER,
+    action: 'flowApproval',
+    type: RequestMethod.Post
+  },
+  /**
+   * 指定下一个审批人
+   */
+  setFlowNextUser: {
+    controller: CONTROLLER,
+    action: 'setFlowNextUser',
+    type: RequestMethod.Post
   }
 }

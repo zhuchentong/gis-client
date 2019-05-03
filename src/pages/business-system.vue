@@ -1,33 +1,23 @@
 <template>
   <base-col-three class="page business-system">
     <div slot="left">
-      <el-tooltip v-for="item of menus" :key="item.label" :content="item.title" placement="right" :enterable="false">
-        <div class="business-system-menu-item" @click="flowModel.status = item.status" :class="{'business-system-menu-activated': item.status === flowModel.status}">
-          <svg-icon :iconName="item.icon" iconSize="32"></svg-icon>
-          <div class="menu-item-label">{{item.label}}</div>
-        </div>
-      </el-tooltip>
+      <div v-for="item of menus" :key="item.label" class="business-system-menu-item" @click="flowModel.status = item.status" :class="{'business-system-menu-activated': item.status === flowModel.status}">
+        <svg-icon :iconName="item.icon" iconSize="32"></svg-icon>
+        <div class="menu-item-label">{{item.label}}</div>
+      </div>
     </div>
     <div slot="middle">
       <div class="search">
         <label class="search-item-label">项目类型:</label>
-        <el-tooltip content="按项目类型进行查询" effect="light">
-          <el-select v-model="flowModel.type" class="search-worktype">
-            <el-option label="全部" value="全部"></el-option>
-            <el-option label="地灾巡查" value="地灾巡查"></el-option>
-            <el-option label="违法用地" value="违法用地"></el-option>
-            <el-option label="其他巡查" value="其他巡查"></el-option>
-          </el-select>
-        </el-tooltip>
+        <el-select v-model="flowModel.type" class="search-worktype">
+          <el-option label="全部" value="ALL"></el-option>
+          <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
+        </el-select>
         <label class="search-item-label">时间排序</label>
-        <el-tooltip content="对数据列表按时间进行排序" effect="light">
-          <a @click="sortList">
-            <svg-icon iconName="sort" iconSize="12"></svg-icon>
-          </a>
-        </el-tooltip>
-        <el-tooltip content="增加业务数据" effect="light">
-          <el-button class="search-item-label" @click="dialog.craeteNew = true" size="mini">新增</el-button>
-        </el-tooltip>
+        <a @click="sortList">
+          <svg-icon iconName="sort" iconSize="12"></svg-icon>
+        </a>
+        <el-button class="search-item-label" @click="dialog.craeteNew = true" size="mini">新增</el-button>
       </div>
       <div class="no-data" v-if="!dataList.length"></div>
       <div v-else>
@@ -45,13 +35,11 @@
         <create-new-business :show="dialog.craeteNew" @close="dialog.craeteNew = false"></create-new-business>
       </el-dialog>
     </div>
-    <div slot="content">
-      <el-tabs v-model="currentPanel" class="content-tabs">
-        <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label">
-          <component :is="item.component" :flowId="flowId"></component>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+    <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
+      <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
+        <component :is="item.component" :flowModel="flowModel" :flowId="flowId" class="content-tabs-panes-base"></component>
+      </el-tab-pane>
+    </el-tabs>
   </base-col-three>
 </template>
 
@@ -187,7 +175,14 @@ export default class extends Vue {
     }
   }
   .content-tabs {
+    height: 100%;
     margin-left: 10px;
+    &-panes {
+      height: 100%;
+      &-base {
+        height: 100%;
+      }
+    }
   }
 }
 </style>
@@ -213,6 +208,12 @@ export default class extends Vue {
     .el-button.el-button--default {
       line-height: @line-height!important;
     }
+  }
+  .el-pagination {
+    margin-top: 20px;
+  }
+  .content-tabs .el-tabs__content {
+    height: calc(100% - 60px);
   }
 }
 </style>

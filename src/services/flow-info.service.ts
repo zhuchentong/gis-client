@@ -85,4 +85,24 @@ export class FlowInfoService {
   public finishFlow(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
+
+  /**
+   * 流程审批
+   */
+  @Request({
+    server: FlowInfoController.flowApproval
+  })
+  public flowApproval(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
+
+  /**
+   * 指定下一个审批人
+   */
+  @Request({
+    server: FlowInfoController.setFlowNextUser
+  })
+  public setFlowNextUser(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
 }
