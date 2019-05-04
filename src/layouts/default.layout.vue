@@ -1,12 +1,12 @@
 <template>
   <div class="layout fill" style="overflow:auto;">
     <div class="header draggable">
-      <div class="header-buttons">
+      <div class="layout-header-operate-block">
         <el-button type="text" @click="onExit()">退出</el-button>
       </div>
     </div>
     <div class="content">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>

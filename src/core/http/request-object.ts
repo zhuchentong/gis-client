@@ -55,6 +55,7 @@ export class RequestObject {
    */
   public request(requestParams: RequestParams): Observable<any> {
     // 如果通讯实体未占用则发送通讯数据
+    console.log(this.requestState, requestParams)
     if (this.requestState === RequestState.Ready) {
       // 修改网络通讯状态
       this.requestState = RequestState.Loading

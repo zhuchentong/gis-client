@@ -18,8 +18,10 @@
 <script lang="ts">
 import { Component, Vue, Emit, Prop } from 'vue-property-decorator'
 import DataBox from "~/components/common/data-box.vue"
-import { BusinessFlowModel } from "~/models/business-flow.model"
 import UserSelect from "~/components/business-common/user-select.vue"
+import { FlowInfoService } from "~/services/flow-info.service"
+import { Inject } from 'typescript-ioc'
+import { RequestParams } from '~/core/http'
 
 @Component({
   components: {
@@ -29,8 +31,10 @@ import UserSelect from "~/components/business-common/user-select.vue"
 export default class extends Vue {
   @Prop()
   private flowId!: string
-  @Prop()
-  private flowModel!: BusinessFlowModel
+
+
+  @Inject
+  private service!: FlowInfoService
 
   private model = {
     nextUserId: ""
@@ -54,7 +58,11 @@ export default class extends Vue {
   private onSubmit() {
     (this.$refs.form as any).validate(v => {
       if (!v) return
-      this.flowModel.setFlowNextUser(this.flowId, this.model.nextUserId)
+      const params = new RequestParams({
+        flowId: this.flowId,
+        nextUserId: this.model.nextUserId
+      })
+      this.service.setFlowNextUser(params)
         .subscribe(this.onSuccess)
     })
   }

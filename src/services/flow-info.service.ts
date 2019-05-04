@@ -36,10 +36,8 @@ export class FlowInfoService {
   @Request({
     server: FlowInfoController.getBusinessInfoByFlowId
   })
-  public getBusinessInfoByFlowId(
-    requestParams: RequestParams
-  ): Observable<any> {
-    return requestParams.request()
+  public getBusinessInfoByFlowId(param: RequestParams): Observable<any> {
+    return param.request()
   }
 
   /**

@@ -31,9 +31,11 @@
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 import DataBox from "~/components/common/data-box.vue"
-import { BusinessFlowModel } from "~/models/business-flow.model"
 import NextSelectApprove from "~/components/business-system/detail/next-select-approve.vue"
 import FlowApprove from "~/components/business-system/detail/flow-approve.vue"
+import { FlowInfoService } from "~/services/flow-info.service"
+import { Inject } from 'typescript-ioc'
+import { RequestParams } from '~/core/http'
 
 @Component({
   components: {
@@ -46,74 +48,40 @@ export default class extends Vue {
   @Prop()
   private flowId!: string
 
-  @Prop()
-  private flowModel!: BusinessFlowModel
+  @Inject
+  private service!: FlowInfoService
 
   private dialog = {
     nextApprove: false,
     approve: false
   }
 
-  private dataSet = [
-    {
-      id: "12",
-      name: "申请",
-      user: "张晓光",
-      date: "2019-03-12 14:30:23",
-      description: "历史数据补充",
-      status: "finish"
-    },
-    {
-      id: "13",
-      name: "审批",
-      user: "业务科-斗科长",
-      date: "2019-03-12 14:30:23",
-      description: "符合业务要求",
-      status: "success"
-    },
-    {
-      id: "14",
-      name: "审批",
-      user: "调查科-李旺",
-      date: "2019-03-12 14:30:23",
-      description: "核实无误",
-      status: "success"
-    },
-    {
-      id: "5",
-      name: "审批",
-      user: "环保科-栗科长",
-      date: "2019-03-12 14:30:23",
-      description: "复合环保要求",
-      status: "success"
-    },
-    {
-      id: "16",
-      name: "拒绝",
-      user: "王局长",
-      date: "2019-03-12 14:30:23",
-      description: "资料不够详细",
-      status: "error"
-    }
-  ]
+  private dataSet: any[] = []
 
 
   @Watch('flowId', { immediate: true })
   private onIdChange() {
-    // this.dataSet = []
-    // this.flowId && this.businessFlowModel.getBaseInfo(this.flowId).subscribe(
-    //   data => this.dataSet = data
-    // )
+    if (!this.flowId) {
+      this.dataSet = []
+      return
+    }
+    this.service.getFlowApprovesByFlowId(new RequestParams({ flowId: this.flowId }))
+      .subscribe(data => this.dataSet = data)
   }
 
+
+  /**
+   * 结束流程
+   */
   private finshFlow() {
-    this.flowModel.finishFlow(this.flowId).subscribe(
-      () => {
+    this.service.finishFlow(new RequestParams({ flowId: this.flowId }))
+      .subscribe(() => {
         this.$message.success("操作成功")
         this.onIdChange()
-      }
-    )
+      })
   }
+
+
 
 }
 </script>

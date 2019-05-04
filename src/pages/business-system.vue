@@ -32,7 +32,7 @@
         <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="flowId = item.flowId" :class="{'info-item-activated': item.flowId === flowId}">
           <label-item label="项目名称" :value="item.name"></label-item>
           <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
-          <label-item label="创建时间" :value="item.createTime"></label-item>
+          <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
         </div>
       </div>
       <div class="text-center">
