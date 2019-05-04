@@ -27,24 +27,24 @@ export function Validations(rules: any) {
  * 函数去抖动
  * @param time
  */
-export function Debounce(time: number = 500) {
-  return (target, name, descriptor) => {
-    const oldValue = descriptor.value
-    let flag: any = null
-    descriptor.value = () => {
-      if (flag) {
-        return EMPTY
-      } else {
-        flag = setTimeout(() => {
-          flag = null
-        }, time)
-      }
-      return oldValue.apply(target, arguments)
-    }
+// export function Debounce(time: number = 500) {
+//   return (target, name, descriptor) => {
+//     const oldValue = descriptor.value
+//     let flag: any = null
+//     descriptor.value = () => {
+//       if (flag) {
+//         return EMPTY
+//       } else {
+//         flag = setTimeout(() => {
+//           flag = null
+//         }, time)
+//       }
+//       return oldValue.apply(target, arguments)
+//     }
 
-    return descriptor
-  }
-}
+//     return descriptor
+//   }
+// }
 
 /**
  * 设置布局
@@ -61,26 +61,26 @@ export function Layout(layout: string) {
  * 路由守卫
  * @param option
  */
-export function RouterGuard(option: { path?: RegExp | ((path) => any) }) {
-  return (target, name, descriptor) => {
-    const oldValue = descriptor.value
-    // let flag = null
-    descriptor.value = ({ store, router }, { to, from, next }) => {
-      if (!option || !option.path) {
-        return () => true
-      }
+// export function RouterGuard(option: { path?: RegExp | ((path) => any) }) {
+//   return (target, name, descriptor) => {
+//     const oldValue = descriptor.value
+//     // let flag = null
+//     descriptor.value = ({ store, router }, { to, from, next }) => {
+//       if (!option || !option.path) {
+//         return () => true
+//       }
 
-      if (option.path instanceof RegExp && option.path.test(to.path)) {
-        return oldValue.apply(target, arguments)
-      }
+//       if (option.path instanceof RegExp && option.path.test(to.path)) {
+//         return oldValue.apply(target, arguments)
+//       }
 
-      if (option.path instanceof Function && option.path(to.path)) {
-        return oldValue.apply(target, arguments)
-      }
+//       if (option.path instanceof Function && option.path(to.path)) {
+//         return oldValue.apply(target, arguments)
+//       }
 
-      return () => true
-    }
+//       return () => true
+//     }
 
-    return descriptor
-  }
-}
+//     return descriptor
+//   }
+// }
