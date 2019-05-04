@@ -21,8 +21,9 @@ export class BusinessFlowModel extends Model {
    * 根据业务类型，业务状态查询数据分页数据
    */
   public queryFollowDataByPage(page: PageService) {
+    // 是否已归档
     const request: (param: RequestParams) => Observable<any> =
-      this.status === 'SAVED'
+      this.status === 'FINSH'
         ? this.flowInfoService.queryFlowInfoFinish
         : this.flowInfoService.queryFlowInfo
 

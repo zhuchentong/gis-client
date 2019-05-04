@@ -1,13 +1,7 @@
 <template>
   <section class="home-page fill">
     <div class="menu row">
-      <a
-        v-for="(item,index) of menuList"
-        :key="item.url"
-        class="menu-item"
-        :class="`menu-item-${index+1}`"
-        @click="openWindow(item)"
-      >
+      <a v-for="(item,index) of menuList" :key="item.url" class="menu-item" :class="`menu-item-${index+1}`" @click="openWindow(item)">
         {{item.label}}
       </a>
     </div>
@@ -18,12 +12,17 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import { WindowSize } from '../config/enum.config'
+import { namespace } from "vuex-class"
+import { District } from "~/models/district.model"
+const DistrictModule = namespace('districtModule')
 
 @Layout('default')
 @Component({
   components: {}
 })
 export default class extends Vue {
+  @DistrictModule.Mutation private updateDistrictData
+
   private readonly menuList = [
     {
       label: '多规管理',
@@ -55,6 +54,10 @@ export default class extends Vue {
       },
       false
     )
+  }
+
+  private mounted() {
+    new District().getDistrictList().subscribe(this.updateDistrictData)
   }
 }
 </script>

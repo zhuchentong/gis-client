@@ -1,17 +1,8 @@
 <template>
   <!-- 报地 -->
   <el-form :model="model" :rules="rules" label-width="120px" ref="form" inline class="component report-land">
-    <el-form-item label="项目面积" prop="projectArea">
-      <el-input v-model="model.projectArea"></el-input>
-    </el-form-item>
-    <el-form-item label="行政区" prop="conturn">
-      <el-input v-model="model.conturn"></el-input>
-    </el-form-item>
-    <el-form-item label="土地用途" prop="useInfo">
-      <el-input v-model="model.useInfo"></el-input>
-    </el-form-item>
-    <el-form-item label="备注信息" prop="remark">
-      <el-input type="textarea" :rows="1" v-model="model.remark" class="inline-full-textarea"></el-input>
+    <el-form-item label="申报日期" prop="applyTime">
+      <el-date-picker v-model="model.applyTime"></el-date-picker>
     </el-form-item>
   </el-form>
 </template>
@@ -32,17 +23,11 @@ import { Form } from "element-ui"
 export default class extends Vue {
 
   private model = {
-    projectArea: "",
-    conturn: "",
-    useInfo: "",
-    remark: ""
+    applyTime: new Date()
   }
 
   private rules = {
-    projectArea: { required: true, message: "请输入信息" },
-    conturn: { required: true, message: "请输入信息" },
-    useInfo: { required: true, message: "请输入信息" },
-    remark: { required: true, message: "请输入信息" }
+    applyTime: { required: true, message: "请选择申报日期" }
   }
 
   public validate() {
@@ -50,7 +35,9 @@ export default class extends Vue {
   }
 
   public getData() {
-    return { ...this.model }
+    return {
+      applyTime: this.$filter.dateFormat(this.model.applyTime)
+    }
   }
 
   public reset() {

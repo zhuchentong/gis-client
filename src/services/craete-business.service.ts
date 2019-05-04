@@ -49,4 +49,24 @@ export class CraeteBusinessService {
     return requestParams.request()
   }
 
+
+  /**
+   * 根据批地code 模糊查询
+   */
+  @Request({
+    server: BusinessController.getGrantInfoByCode
+  })
+  public getGrantInfoByCode(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
+
+  /**
+   * 根据名称查询报地信息
+   */
+  @Request({
+    server: BusinessController.getReportByName
+  })
+  public getReportByName(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

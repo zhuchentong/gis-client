@@ -27,8 +27,6 @@
   </section>
 </template>
 
- <style lang="less">
-</style>
 
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'

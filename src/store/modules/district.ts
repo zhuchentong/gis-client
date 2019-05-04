@@ -11,6 +11,10 @@ export default {
     }
   },
   getters: {
+    /**
+     * 获取行政区划树
+     * @param state 
+     */
     districtTreeData(state) {
       const option = {
         keyName: 'id',

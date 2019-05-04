@@ -9,7 +9,7 @@ import { AutoWired } from 'typescript-ioc'
 // @AutoWired
 export class FlowInfoService {
   /**
-   * 查询所有的业务图层
+   * 根据流程查询业务数据列表
    * @param requestParams
    */
   @Request({
