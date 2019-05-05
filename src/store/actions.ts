@@ -42,6 +42,5 @@ export default {
     commit('updateTokenExpire', false)
     // 关闭消息推送
     ReminderService.disConnect()
-    router.push("/")
   }
 }

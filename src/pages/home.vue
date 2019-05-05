@@ -7,9 +7,7 @@
         class="menu-item"
         :class="`menu-item-${index+1}`"
         @click="openWindow(item)"
-      >
-        {{item.label}}
-      </a>
+      >{{item.label}}</a>
     </div>
   </section>
 </template>
@@ -53,7 +51,11 @@ export default class extends Vue {
       {
         size: WindowSize.large
       },
-      false
+      {
+        replace: false,
+        parent: true
+      },
+      this
     )
   }
 }

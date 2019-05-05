@@ -35,9 +35,9 @@ import { Inject } from 'typescript-ioc'
 import { User } from '~/models/user.model'
 import { WindowSize } from '~/config/enum.config'
 import { Layout } from '@/core/decorator'
-import { State, Mutation, Action, namespace } from "vuex-class"
-import { DataDict } from "~/models/data-dict.model"
-import { StorageService } from "~/utils/storage.service"
+import { State, Mutation, Action, namespace } from 'vuex-class'
+import { DataDict } from '~/models/data-dict.model'
+import { StorageService } from '~/utils/storage.service'
 
 @Layout('empty')
 @Component({
@@ -53,14 +53,14 @@ export default class Login extends Vue {
   private dataDict = new DataDict()
   private user = new User()
   private userRoles: any = {
-    username: { required: true, message: "用户名不能为空", trigger: "blur" },
-    password: { required: true, message: "密码不能为空", trigger: "blur" }
+    username: { required: true, message: '用户名不能为空', trigger: 'blur' },
+    password: { required: true, message: '密码不能为空', trigger: 'blur' }
   }
 
   private remember: boolean = false
 
   private mounted() {
-    const rember: any = StorageService.getItem("remember")
+    const rember: any = StorageService.getItem('remember')
     this.remember = !!rember
     if (rember) {
       this.user.username = rember.username
@@ -72,7 +72,7 @@ export default class Login extends Vue {
   }
 
   private async checkDictData() {
-    const oldHash = StorageService.getItem("dictHash")
+    const oldHash = StorageService.getItem('dictHash')
     const needUpdateFlag = await new Promise(resolve => {
       this.dataDict.getHashCode().subscribe(
         data => {
@@ -80,7 +80,7 @@ export default class Login extends Vue {
             !oldHash ||
             (oldHash && data.dataDictHashCode !== oldHash.toString())
           ) {
-            StorageService.setItem("dictHash", data.dataDictHashCode)
+            StorageService.setItem('dictHash', data.dataDictHashCode)
             return resolve(true)
           }
           resolve(false)
@@ -89,11 +89,10 @@ export default class Login extends Vue {
       )
     })
     if (needUpdateFlag) {
-      this.dataDict.getDictData().subscribe(
-        data => {
-          this.updateDictData(data)
-          this.loading = false
-        })
+      this.dataDict.getDictData().subscribe(data => {
+        this.updateDictData(data)
+        this.loading = false
+      })
     } else {
       this.loading = false
     }
@@ -103,7 +102,7 @@ export default class Login extends Vue {
    * 提交登录表单
    */
   private submitForm() {
-    const loginForm: any = this.$refs["login-form"]
+    const loginForm: any = this.$refs['login-form']
     loginForm.validate(success => {
       if (!success) return
       this.login()
@@ -112,12 +111,12 @@ export default class Login extends Vue {
 
   private login() {
     if (this.remember) {
-      StorageService.setItem("remember", {
+      StorageService.setItem('remember', {
         username: this.user.username,
         password: this.user.password
       })
     } else {
-      StorageService.removeItem("remember")
+      StorageService.removeItem('remember')
     }
     this.user.login().subscribe(data => {
       const loginStatus = this.updateUserLoginData({
@@ -125,9 +124,16 @@ export default class Login extends Vue {
         user: data.operatorResponse
       })
       if (loginStatus) {
-        this.$window.open('home', {
-          size: WindowSize.normal
-        })
+        this.$window.open(
+          'home',
+          {
+            size: WindowSize.normal
+          },
+          {
+            replace: true
+          },
+          this
+        )
         this.deleteLocalLayers()
       }
     })
