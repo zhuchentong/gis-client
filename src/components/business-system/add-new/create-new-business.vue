@@ -22,6 +22,8 @@
         <el-input type="textarea" :rows="1" :maxlength="250" v-model="baseModel.remark" class="inline-full-textarea"></el-input>
       </el-form-item>
     </el-form>
+    <common-title v-if="currentBase" title="业务信息"> </common-title>
+    <component v-if="currentBase" :is="currentBase.component" :ref="baseModel.type"></component>
     <common-title title="流程审批" iconName="flow"></common-title>
     <el-form :model="baseModel" inline label-width="120px" ref="whether-form">
       <el-form-item label="是否开启流程" prop="whether">
@@ -33,8 +35,6 @@
         <user-select v-model="baseModel.nextUserId"></user-select>
       </el-form-item>
     </el-form>
-    <common-title v-if="currentBase" title="业务信息"> </common-title>
-    <component v-if="currentBase" :is="currentBase.component" :ref="baseModel.type"></component>
     <upload-attach :attachFileDataSet="attachDataList" ref="upload-attach"></upload-attach>
     <upload-layer ref="upload-layer"></upload-layer>
     <div class="operate-buttons">

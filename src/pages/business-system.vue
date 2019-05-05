@@ -45,7 +45,7 @@
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
       <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
-        <component :is="item.component" :flowModel="flowModel" :flowId="flowId" class="content-tabs-panes-base"></component>
+        <component :is="item.component" @success="refreshData" :status="flowModel.status" :flowId="flowId" class="content-tabs-panes-base"></component>
       </el-tab-pane>
     </el-tabs>
   </base-col-three>
@@ -97,6 +97,7 @@ export default class extends Vue {
    * 查询数据
    */
   private refreshData() {
+    this.flowId = ""
     this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
       data => this.dataList = data.content
     )

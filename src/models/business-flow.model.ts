@@ -41,25 +41,4 @@ export class BusinessFlowModel extends Model {
       )
     )
   }
-  /**
-   * 根据流程id查询对应的业务文件信息
-   */
-  public getBusinessFileByFlowId(flowId: string) {
-    return this.flowInfoService.getBusinessFileByFlowId(
-      new RequestParams({ flowId })
-    )
-  }
-
-
-  /**
-   * 根据流程id查询图层信息
-   */
-  public getLayerInfoByFlowId(flowId: string) {
-    return this.flowInfoService.getLayerInfoByFlowId(
-      new RequestParams({ flowId })
-    )
-  }
-
-
-
 }

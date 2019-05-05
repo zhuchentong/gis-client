@@ -17,6 +17,7 @@
     "@stomp/stompjs": "^5.3.0",
     "@turf/area": "^6.0.1",
     "@turf/turf": "^5.1.6",
+    "@zct1989/vue-component": "^0.0.3",
     "axios": "^0.18.0",
     "cesium": "^1.56.1",
     "class-transformer": "^0.2.0",

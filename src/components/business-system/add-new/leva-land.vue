@@ -7,8 +7,18 @@
     <el-form-item label="征收日期" prop="levyTime">
       <el-date-picker v-model="model.levyTime" placeholder="请选择征收日期"></el-date-picker>
     </el-form-item>
-    <el-form-item label="批文编号" prop="grantName">
+    <el-form-item label="批文编号" prop="grantCode">
       <el-autocomplete v-model="grantInfo" value-key="code" placeholder="输入3个字符开始搜索" :trigger-on-focus="false" :fetch-suggestions="querySearchAsync" @select="handleSelect"></el-autocomplete>
+    </el-form-item>
+    <el-form-item label="批地项目" prop="grantName">
+      <el-input v-model="model.grantName" :maxlength="50" disabled placeholder="请输入批文编号查询">
+        <el-popover slot="append" v-if="model.grantId" title="批地详情" placement="left-start" trigger="click">
+          <approve-detail :data="approveInfo"></approve-detail>
+          <a slot="reference" title="点击查看批地详情">
+            <i class="el-icon-info"></i>
+          </a>
+        </el-popover>
+      </el-input>
     </el-form-item>
   </el-form>
 </template>
@@ -18,30 +28,33 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import DataBox from "~/components/common/data-box.vue"
 import { Form } from "element-ui"
 import { CreateBusinessModel } from "~/models/create-business.model"
+import ApproveDetail from "~/components/business-system/detail/approve-detail.vue"
 
 @Component({
   components: {
-    DataBox
+    ApproveDetail
   }
 })
 export default class extends Vue {
 
   private businessModel = new CreateBusinessModel()
+
+  private approveInfo: any = {}
   private model = {
     code: "",
     levyTime: new Date(),
-    grantName: "",
-    grantId: ""
+    grantCode: "",
+    grantId: "",
+    grantName: ""
   }
 
   private rules = {
     code: { required: true, message: "请输入征地文号" },
     conturn: { required: true, message: "请输入信息" },
     useInfo: { required: true, message: "请输入信息" },
-    grantName: [
+    grantCode: [
       { required: true, message: "请输入批地编号" },
       { validator: this.validateGrantId }
     ]
@@ -60,10 +73,10 @@ export default class extends Vue {
   }
 
   private get grantInfo() {
-    return this.model.grantName
+    return this.model.grantCode
   }
   private set grantInfo(value) {
-    this.model.grantName = value
+    this.model.grantCode = value
     if (!value) this.model.grantId = ""
   }
 
@@ -76,12 +89,15 @@ export default class extends Vue {
   }
 
   private handleSelect(item) {
-    this.model.grantName = item.code
+    this.model.grantCode = item.code
     this.model.grantId = item.id
+    this.model.grantName = item.name
+    this.approveInfo = item
   }
 
   private querySearchAsync(queryStr, callback) {
     this.model.grantId = ""
+    this.approveInfo = {}
     if (queryStr.length < 3) callback([])
     this.businessModel.getGrantInfoByCode(queryStr).subscribe(callback)
   }
@@ -89,7 +105,10 @@ export default class extends Vue {
 </script>
 
 <style lang="less" scoped>
-.component.report-land {
+.component.leva-land {
+  .grant-view-button {
+    padding: auto 0;
+  }
 }
 </style>
 
