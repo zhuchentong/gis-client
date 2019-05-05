@@ -1,14 +1,18 @@
 import { Model } from '~/core/model'
 import { RequestParams } from '~/core/http'
-import { PageService } from '@/extension/services/page.service'
 import { CraeteBusinessService } from '~/services/craete-business.service'
 import { Observable } from 'rxjs'
 
 // @AutoWired
-export class CreateBusiness extends Model {
+export class CreateBusinessModel extends Model {
 
   public name: string = ""
   public type: string = ""
+  public remark: string = ""
+  public region: string = ""
+  public acreage: string = ""
+  public whether: string = "NO"
+  public nextUserId: string = ""
 
   private serivce = new CraeteBusinessService()
 
@@ -18,7 +22,7 @@ export class CreateBusiness extends Model {
    * @param fileList 
    * @param shpFile 
    */
-  public create(otherBaseInfo: any, fileList: any[], shpFile: any) {
+  public createBusiness(otherBaseInfo: any, fileList: any[], layerInfo: any): Observable<any> {
     let func: any = this.serivce.addReportInfo
     switch (this.type) {
       case "REPORT":
@@ -34,7 +38,36 @@ export class CreateBusiness extends Model {
         func = this.serivce.addSupplyInfo
         break
     }
-    return func()
+
+    const requestData = {
+      name: this.name,
+      type: this.type,
+      remark: this.remark,
+      region: this.region,
+      acreage: Number.parseFloat(this.acreage),
+      whether: this.whether,
+      nextUserId: this.nextUserId,
+      ...otherBaseInfo,
+      fileIds: fileList.map(v => v.id),
+      layerBaseRequest: layerInfo
+    }
+    return func(new RequestParams(requestData))
+  }
+
+  /**
+   * 模糊查询批地文号
+   * @param code
+   */
+  public getGrantInfoByCode(code) {
+    return this.serivce.getGrantInfoByCode(new RequestParams({ code }))
+  }
+
+
+  /**
+   * 根据名称查询报地信息
+   */
+  public getReportByName(name) {
+    return this.serivce.getReportByName(new RequestParams({ name }))
   }
 
 }

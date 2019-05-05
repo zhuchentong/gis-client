@@ -27,7 +27,7 @@ export default class extends Vue {
   private flowId!: string
   private businessFlowModel = new BusinessFlowModel()
   private load = false
-  private layerInfo:any = {
+  private layerInfo: any = {
     layerCode: "123",
     layerName: "白牙村报地-陕政土报[2019]03号"
   }
@@ -38,10 +38,12 @@ export default class extends Vue {
 
   @Watch('flowId', { immediate: true })
   private onIdChange(value) {
-    this.layerInfo = {}
-    value && this.businessFlowModel.getBaseInfo(value).subscribe(
-      data => this.layerInfo = data || {}
-    )
+    // this.layerInfo = {}
+    //   value && this.businessFlowModel.getBaseInfo(value).subscribe(
+    //     data => this.
+    //   )
+    // console.log(d)
+    // d.subscribe(console.log, console.log, console.log)
   }
 }
 </script>

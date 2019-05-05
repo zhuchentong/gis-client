@@ -112,3 +112,13 @@ export const NewBusinessComponents = {
   LevaLand,
   ProvideLand
 }
+
+/**
+ * 设置流程状态颜色类型。element-ui timeline
+ */
+export const FlowTypeSetting = {
+  'FOUND': "primary", // 新建
+  'PENDING_APPROVAL': "warning", // 待审批
+  'AGREE': "success", // 已审批 (同意)
+  'REFUSE': "danger" // 打回
+}

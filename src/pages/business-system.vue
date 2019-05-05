@@ -17,7 +17,6 @@
         <div>
           <label>项目类型:</label>
           <el-select v-model="flowModel.type" class="search-worktype">
-            <el-option label="全部" value=""></el-option>
             <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
           </el-select>
         </div>
@@ -31,9 +30,9 @@
       <div class="no-data" v-if="!dataList.length"></div>
       <div v-else>
         <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="flowId = item.flowId" :class="{'info-item-activated': item.flowId === flowId}">
-          <label-item label="任务名称" :value="item.taskName"></label-item>
-          <label-item label="外业类型" :value="item.taskType"></label-item>
-          <label-item label="创建时间" :value="item.createTime "></label-item>
+          <label-item label="项目名称" :value="item.name"></label-item>
+          <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
+          <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
         </div>
       </div>
       <div class="text-center">
@@ -41,12 +40,12 @@
         </el-pagination>
       </div>
       <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="800px" :show-close="false" :close-on-click-modal="false">
-        <create-new-business :show="dialog.craeteNew" @close="dialog.craeteNew = false"></create-new-business>
+        <create-new-business :show="dialog.craeteNew" @close="dialog.craeteNew = false" @success="refreshData"></create-new-business>
       </el-dialog>
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
       <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
-        <component :is="item.component" :flowModel="flowModel" :flowId="flowId" class="content-tabs-panes-base"></component>
+        <component :is="item.component" @success="refreshData" :status="flowModel.status" :flowId="flowId" class="content-tabs-panes-base"></component>
       </el-tab-pane>
     </el-tabs>
   </base-col-three>
@@ -84,32 +83,7 @@ export default class extends Vue {
     craeteNew: false
   }
 
-  @Watch("flowModel.status", { immediate: true })
-  private onTypeChange() {
-    this.dataList = [
-      {
-        flowId: "1233442134132133212",
-        taskName: "姚店村地灾巡查",
-        taskType: "地灾巡查",
-        createTime: '2018-04-30 14:00:02'
-      },
-      {
-        flowId: "323234324324",
-        taskName: "姚店村违法用地巡查",
-        taskType: "违法用地巡查",
-        createTime: '2018-04-30 14:00:02'
-      },
-      {
-        flowId: "234534dfsg3",
-        taskName: "姚店村其他巡查",
-        taskType: "其他巡查",
-        createTime: '2018-04-30 14:00:02'
-      }
-    ]
-    if (this.dataList.length) {
-      this.flowId = this.dataList[0].flowId
-    }
-  }
+
 
   /**
    * 监听查询model变化
@@ -123,6 +97,7 @@ export default class extends Vue {
    * 查询数据
    */
   private refreshData() {
+    this.flowId = ""
     this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
       data => this.dataList = data.content
     )
@@ -135,7 +110,7 @@ export default class extends Vue {
 
   private mounted() {
     this.flowModel.status = MenuItems[0].status
-    this.flowModel.type = ""
+    this.flowModel.type = "ALL"
     this.refreshData()
   }
 

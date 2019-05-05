@@ -2,8 +2,6 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import Application from './core/application'
-// 基础组件全局引用
-import SvgIcon from "~/components/common/svg-icon.vue"
 
 // 添加基础样式
 import 'normalize-css/normalize.css'
@@ -12,7 +10,7 @@ import '~/assets/styles/layout.less'
 import '~/assets/styles/common.less'
 import '~/assets/styles/theme.less'
 import 'cesium/Widgets/widgets.css'
-// import '@zct1989/vue-component/dist/index.css'
+import '@zct1989/vue-component/dist/index.css'
 
 // 添加扩展模块
 import libs from '~/extension/libs'
@@ -21,6 +19,7 @@ import directives from '~/extension/directives'
 import provides from '~/extension/provides'
 import plugins from '~/extension/plugins'
 import { boot, launch } from '~/extension/boots'
+// 全局注册其他基础组件
 import { registerComponent } from "~/extension/global-components"
 
 Vue.config.productionTip = false

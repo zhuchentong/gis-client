@@ -2,21 +2,56 @@
   <section class="component business-detail-info">
     <div class="detail-item">
       <common-title title="基础信息" :showIcon="false"></common-title>
-      <label-item label="项目名称" :value="info.projectName"></label-item>
-      <label-item label="项目类型" :value="info.projectType"></label-item>
-      <label-item label="创建时间" :value="info.createTime"></label-item>
+      <label-item label="项目名称" :value="projectName"></label-item>
+      <label-item label="项目类型" :value="info.type | dictConvert('FlowType')"></label-item>
+      <label-item label="项目面积" :value="info.acreage ? `${info.acreage} 亩` : ''"></label-item>
+      <label-item label="行政区" :value="info.region | districtName"></label-item>
+      <label-item label="备注信息" :value="info.remark"></label-item>
     </div>
     <div class="detail-item">
-      <common-title title="业务相关信息" :showIcon="false"></common-title>
-      <label-item label="项目名称" :value="info.projectName"></label-item>
-      <label-item label="项目类型" :value="info.projectType"></label-item>
-      <label-item label="创建时间" :value="info.createTime"></label-item>
+      <common-title title="业务关联信息" :showIcon="false"></common-title>
+      <label-item v-if="info.type === 'GRANT'" label="报地名称" :value="info.reportName"></label-item>
+      <label-item v-if="['EXPROPRIA','SUPPLY'].includes(info.type)" label="批地名称" :value="info.grantName">
+
+      </label-item>
+      <el-popover title="报地详情" placement="right" trigger="click">
+        <report-detail :data="reportInfo"></report-detail>
+        <a slot="reference" title="点击查看报地详情" @click="queryReportInfo">
+          <i class="el-icon-info"></i>
+        </a>
+      </el-popover>
     </div>
     <div class="detail-item">
       <common-title title="业务专属字段" :showIcon="false"></common-title>
-      <label-item label="项目名称" :value="info.projectName"></label-item>
-      <label-item label="项目类型" :value="info.projectType"></label-item>
-      <label-item label="创建时间" :value="info.createTime"></label-item>
+      <!-- 报地 -->
+      <div v-if="info.type === 'REPORT'">
+        <label-item label="申报日期" :value="info.applyTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+      </div>
+      <!-- 批地 -->
+      <div v-if="info.type === 'GRANT'">
+        <label-item label="批复日期" :value="info.grantTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+        <label-item label="批文编号" :value="info.grantCode"></label-item>
+        <label-item label="报地项目" :value="info.grantName"></label-item>
+        <label-item label="批复结果" :value="info.result | dictConvert('GrantResult')"></label-item>
+        <label-item label="批复信息" :value="info.grantRemark"></label-item>
+      </div>
+      <!-- 征地 -->
+      <div v-if="info.type === 'EXPROPRIA'">
+        <label-item label="征收日期" :value="info.levyTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+        <label-item label="征地文号" :value="info.grantName"></label-item>
+        <label-item label="批文编号" :value="info.grantCode"></label-item>
+      </div>
+      <!-- 供地 -->
+      <div v-if="info.type === 'SUPPLY'">
+        <label-item label="供地日期" :value="info.supplyTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+        <label-item label="宗地编号" :value="info.supplyCode"></label-item>
+        <label-item label="供地方式" :value="info.supplyWay | dictConvert('ProvisionType')"></label-item>
+        <label-item label="供地文号" :value="info.supplyCode"></label-item>
+        <label-item label="批文编号" :value="info.grantCode"></label-item>
+        <label-item label="发布公告" :value="info.notice | dictConvert('CommonShow')"></label-item>
+        <label-item label="土地用途" :value="info.nature | dictConvert('LandNature')"></label-item>
+        <label-item label="具体地址" :value="info.address"></label-item>
+      </div>
     </div>
   </section>
 </template>
@@ -27,9 +62,15 @@
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 import { BusinessFlowModel } from "~/models/business-flow.model"
+import { FlowInfoService } from "~/services/flow-info.service"
+import { ReportInfoService } from "~/services/report-info.service"
+import { Inject } from 'typescript-ioc'
+import { RequestParams } from '~/core/http'
+import ReportDetail from "~/components/business-system/detail/report-detail.vue"
 
 @Component({
   components: {
+    ReportDetail
   }
 })
 export default class extends Vue {
@@ -39,18 +80,44 @@ export default class extends Vue {
 
   private businessFlowModel = new BusinessFlowModel()
 
-  private info: any = {
-    projectName: "姚店村商用地",
-    projectType: "报地",
-    createTime: "2019-04-21 18:32:10"
-  }
+  @Inject
+  private flowService!: FlowInfoService
+
+  @Inject
+  private reportService!: ReportInfoService
+
+  private info: any = {}
+  private reportInfo: any = {}
 
   @Watch('flowId', { immediate: true })
   private onIdChange(value) {
-    this.info = {}
-    value && this.businessFlowModel.getBaseInfo(value).subscribe(
-      data => this.info = data || {}
-    )
+    if (!value) {
+      this.info = {}
+      this.reportInfo = {}
+      return
+    }
+    this.flowService.getBusinessInfoByFlowId(new RequestParams({ flowId: value }))
+      .subscribe(data => this.info = data)
+  }
+
+  /**
+   * 当前项目名称
+   */
+  private get projectName() {
+    if (!this.info.type) return ""
+    const key = (this.info.type as string).toLowerCase() + 'Name'
+    return this.info[key]
+  }
+
+  /**
+   * 查询报地信息
+   */
+  private queryReportInfo() {
+    const reportId = this.info.reportId
+    if (!reportId) return
+    if (this.reportInfo.id) return
+    this.reportService.getReportById(new RequestParams(null, { append: [reportId] }))
+      .subscribe(data => this.reportInfo = data)
   }
 
 }

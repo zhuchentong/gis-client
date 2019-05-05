@@ -1,6 +1,8 @@
 <template>
   <div class="label-item row">
-    <label :style="{minWidth}" class="label-item-label">{{label}}</label><label class="label-item-value">{{value}}</label>
+    <label :style="{minWidth}" class="label-item-label">{{label}}</label>
+    <label class="label-item-value">{{value}}</label>
+    <slot></slot>
   </div>
 </template>
 

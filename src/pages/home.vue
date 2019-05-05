@@ -16,12 +16,17 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import { WindowSize } from '../config/enum.config'
+import { namespace } from "vuex-class"
+import { District } from "~/models/district.model"
+const DistrictModule = namespace('districtModule')
 
 @Layout('default')
 @Component({
   components: {}
 })
 export default class extends Vue {
+  @DistrictModule.Mutation private updateDistrictData
+
   private readonly menuList = [
     {
       label: '多规管理',
@@ -57,6 +62,10 @@ export default class extends Vue {
       },
       this
     )
+  }
+
+  private mounted() {
+    new District().getDistrictList().subscribe(this.updateDistrictData)
   }
 }
 </script>

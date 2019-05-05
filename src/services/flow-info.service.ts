@@ -9,7 +9,7 @@ import { AutoWired } from 'typescript-ioc'
 // @AutoWired
 export class FlowInfoService {
   /**
-   * 查询所有的业务图层
+   * 根据流程查询业务数据列表
    * @param requestParams
    */
   @Request({
@@ -36,10 +36,8 @@ export class FlowInfoService {
   @Request({
     server: FlowInfoController.getBusinessInfoByFlowId
   })
-  public getBusinessInfoByFlowId(
-    requestParams: RequestParams
-  ): Observable<any> {
-    return requestParams.request()
+  public getBusinessInfoByFlowId(param: RequestParams): Observable<any> {
+    return param.request()
   }
 
   /**
