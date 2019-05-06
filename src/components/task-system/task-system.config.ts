@@ -6,17 +6,20 @@ export const MenuItems = [
   {
     label: '未巡查',
     icon: 'wait',
-    status: 'PENDING_PATROL'
+    status: 'PENDING_PATROL',
+    hiddenPage: ['taskResult', 'taskData']
   },
   {
     label: '已巡查',
     icon: 'already',
-    status: 'COMPLETE_PATROL'
+    status: 'COMPLETE_PATROL',
+    hiddenPage: []
   },
   {
     label: '已归档',
     icon: 'saved',
-    status: 'ARCHIVE'
+    status: '',
+    hiddenPage: []
   }
 ]
 

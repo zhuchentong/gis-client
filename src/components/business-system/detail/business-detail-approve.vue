@@ -103,7 +103,7 @@ export default class extends Vue {
    * 结束流程
    */
   private finshFlow() {
-    this.service.finishFlow(new RequestParams({ flowId: this.flowId }))
+    this.service.finishFlow(new RequestParams(null, { append: [this.flowId] }))
       .subscribe(() => {
         this.$message.success("操作成功")
         this.onIdChange()
@@ -139,7 +139,7 @@ export default class extends Vue {
   }
   .approve-steps {
     position: absolute;
-    top: 50px;
+    top: 20px;
     left: 40px;
     right: 0;
     bottom: 0;
@@ -156,6 +156,7 @@ export default class extends Vue {
 .component.business-detail-approve {
   .approve-steps {
     .el-timeline {
+      margin-top: 10px;
       font-size: 12px;
       .el-timeline-item__tail {
         margin-top: 50px;

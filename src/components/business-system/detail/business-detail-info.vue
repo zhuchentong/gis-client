@@ -10,7 +10,7 @@
     </div>
     <div class="detail-item">
       <common-title title="业务关联信息" :showIcon="false"></common-title>
-      <label-item v-if="info.reportId" label="报地名称" :value="info.reportName">
+      <label-item v-if="info.type !== 'REPORT' && info.reportId" label="报地名称" :value="info.reportName">
         <el-popover title="报地详情" placement="right">
           <report-detail :data="reportInfo"></report-detail>
           <a slot="reference" title="点击查看报地详情" @click="queryReportInfo">
@@ -18,7 +18,7 @@
           </a>
         </el-popover>
       </label-item>
-      <label-item v-if="info.grantId" label="批地名称" :value="info.grantName">
+      <label-item v-if="['EXPROPRIA','SUPPLY'].includes(info.type)  && info.grantId" label="批地名称" :value="info.grantName">
         <el-popover title="批地详情">
           <approve-detail :data="grantInfo"></approve-detail>
           <a slot="reference" title="点击查看批地详情" @click="queryGrantInfo">

@@ -2,21 +2,19 @@
   <section class="component task-detail-info">
     <div class="detail-item">
       <common-title title="基础信息" :showIcon="false"></common-title>
-      <label-item label="项目名称" :value="info.projectName"></label-item>
-      <label-item label="项目类型" :value="info.projectType"></label-item>
-      <label-item label="创建时间" :value="info.createTime"></label-item>
+      <label-item label="任务名称" :value="info.name"></label-item>
+      <label-item label="外业类型" :value="info.type | dictConvert('PatrolType')"></label-item>
+      <label-item label="任务地点" :value="info.site"></label-item>
+      <label-item label="创建时间" :value="info.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+      <label-item label="任务备注" :value="info.remark"></label-item>
     </div>
     <div class="detail-item">
-      <common-title title="业务相关信息" :showIcon="false"></common-title>
-      <label-item label="项目名称" :value="info.projectName"></label-item>
-      <label-item label="项目类型" :value="info.projectType"></label-item>
-      <label-item label="创建时间" :value="info.createTime"></label-item>
-    </div>
-    <div class="detail-item">
-      <common-title title="业务专属字段" :showIcon="false"></common-title>
-      <label-item label="项目名称" :value="info.projectName"></label-item>
-      <label-item label="项目类型" :value="info.projectType"></label-item>
-      <label-item label="创建时间" :value="info.createTime"></label-item>
+      <common-title title="任务计划" :showIcon="false"></common-title>
+      <label-item label="巡查人员" :value="info.userName"></label-item>
+      <label-item label="计划时间" :value="info.planTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
+      <label-item label="需要拍摄照片" :value="info.image | dictConvert('CommonShow')"></label-item>
+      <label-item label="需要拍摄影像" :value="info.video | dictConvert('CommonShow')"></label-item>
+      <label-item label="需要采集数据" :value="info.collectData | dictConvert('CommonShow')"></label-item>
     </div>
   </section>
 </template>
@@ -26,8 +24,9 @@
 
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-import { BusinessFlowModel } from "~/models/business-flow.model"
-
+import { PatrolInfoService } from "~/services/patrol-info.service"
+import { RequestParams } from '~/core/http'
+import { Inject } from 'typescript-ioc'
 @Component({
   components: {
   }
@@ -35,29 +34,27 @@ import { BusinessFlowModel } from "~/models/business-flow.model"
 export default class extends Vue {
 
   @Prop()
-  private flowId!: string
+  private id!: string
 
-  private businessFlowModel = new BusinessFlowModel()
+  @Inject
+  private sevice!: PatrolInfoService
 
-  private info: any = {
-    projectName: "姚店村商用地",
-    projectType: "报地",
-    createTime: "2019-04-21 18:32:10"
+  private info: any = {}
+
+  @Watch('id', { immediate: true })
+  private onIdChange(value) {
+    this.info = {}
+    const params = new RequestParams({
+      id: this.id
+    })
+    value && this.sevice.getPatrolInfoBase(params).subscribe(data => this.info = data)
   }
-
-  // @Watch('flowId', { immediate: true })
-  // private onIdChange(value) {
-  //   this.info = {}
-  //   value && this.businessFlowModel.getBaseInfo(value).subscribe(
-  //     data => this.info = data || {}
-  //   )
-  // }
 
 }
 </script>
 
 <style lang="less" scoped>
-.component.business-detail-info {
+.component.task-detail-info {
   .detail-item {
     padding: 20px;
     border-bottom: solid 2px #f3f3f3;
