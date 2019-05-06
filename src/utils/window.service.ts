@@ -1,13 +1,19 @@
 import { remote } from 'electron'
 import { WindowSize } from '@/config/enum.config'
-import Vue, { VueConstructor} from 'vue';
-
+import Vue, { VueConstructor } from 'vue'
+import qs from 'qs'
 export class WindowService {
+  
+  public static get params() {
+    const params = window.location.href.split('?')
+    return params.length > 1 ? qs.parse(params[1]) : {}
+  }
+
   public static open(
     url,
     { size = WindowSize.normal, width, height },
-    { replace, parent },
-    component:Vue
+    { replace, parent, params },
+    component: Vue
   ) {
     const { BrowserWindow, getCurrentWindow } = remote
     const currentWindow = getCurrentWindow()
@@ -28,10 +34,14 @@ export class WindowService {
       text: '加载中,请稍候...',
       spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.7)'
-    });
+    })
 
     if (parent) {
       win.setParentWindow(currentWindow)
+    }
+
+    if (params) {
+      url = `${url}?${qs.stringify(params)}`
     }
 
     // 加载页面内容
@@ -44,7 +54,7 @@ export class WindowService {
     }
 
     win.once('ready-to-show', () => {
-      loading.close();
+      loading.close()
       win && win.show()
       replace && currentWindow.close()
     })
