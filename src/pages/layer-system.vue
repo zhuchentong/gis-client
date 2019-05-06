@@ -1,10 +1,12 @@
 <template>
   <section class="layer-system-page fill">
-    <div class="menu-panel">
-      <layer-menu></layer-menu>
+    <div class="menu-list">
+      <layer-menu-list></layer-menu-list>
     </div>
-    <div class="layer-tree-panel"></div>
-    <div class="layer-view-panel">
+    <div class="menu-panel">
+      <layer-menu-panel></layer-menu-panel>
+    </div>
+    <div class="layer-view">
       <map-view></map-view>
     </div>
     <div class="bottom-panel"></div>
@@ -16,12 +18,14 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import { Cesium } from 'cesium'
-import LayerMenu from '~/components/layer-system/layer-menu.vue'
+import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
+import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'
 import MapView from '~/components/layer-view/map-view.vue'
 @Layout('workspace')
 @Component({
   components: {
-    LayerMenu,
+    LayerMenuList,
+    LayerMenuPanel,
     MapView
   }
 })
@@ -32,26 +36,27 @@ export default class extends Vue {}
  <style lang="less" scoped>
 .layer-system-page {
   display: grid;
-  grid-template-rows: 80px auto 20px;
-  grid-template-columns: 200px auto;
+  grid-template-rows: auto 20px;
+  grid-template-columns: 60px 250px auto;
 
-  .menu-panel {
-    grid-area: ~'1/1/span 1/span 2';
+  .menu-list {
+    grid-area: ~'1/1/span 1/span 1';
     background: red;
   }
 
-  .layer-tree-panel {
-    grid-area: ~'2/1/span 1/span 1';
+  .menu-panel {
+    grid-area: ~'1/2/span 1/span 1';
     background: yellow;
   }
 
-  .layer-view-panel {
-    grid-area: ~'2/2/span 1/span 1';
+
+  .layer-view {
+    grid-area: ~'1/3/span 1/span 1';
     background: green;
   }
 
   .bottom-panel {
-    grid-area: ~'3/1/span 1/span 2';
+    grid-area: ~'2/1/span 1/span 3';
     background: gray;
   }
 }
