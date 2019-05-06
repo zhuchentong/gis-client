@@ -1,7 +1,7 @@
 <template>
   <section class="component flow-approve">
     <el-form :model="model" :rules="rules" label-width="90px" ref="form">
-      <el-form-item label="审批人" prop="status">
+      <el-form-item label="审批结果" prop="status">
         <el-select v-model="model.status">
           <el-option v-for="{code,name} of $dict.getDictData('ApprovalStatus')" :key="code" :label="name" :value="code"></el-option>
         </el-select>

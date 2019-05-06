@@ -2,7 +2,7 @@
   <base-col-three class="page task-system">
     <div slot="left" class="col between-span text-center" style="height:100%">
       <div>
-        <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="taskModel.status = item.status" :class="{'system-menu-activated': item.status === taskModel.status}">
+        <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === currentMenu.status}">
           <svg-icon :iconName="item.icon" iconSize="32"></svg-icon>
           <div class="menu-item-label">{{item.label}}</div>
         </div>
@@ -16,7 +16,7 @@
       <div class="search row between-span">
         <div>
           <label>外业类型:</label>
-          <el-select v-model="taskModel.type" class="search-worktype">
+          <el-select v-model="queryModel.type" class="search-worktype">
             <el-option label="全部" value=""></el-option>
             <el-option v-for="{code,name} of $dict.getDictData('PatrolType')" :key="code" :label="name" :value="code"></el-option>
           </el-select>
@@ -30,23 +30,23 @@
       </div>
       <div class="no-data" v-if="!dataList.length"></div>
       <div v-else>
-        <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="flowId = item.flowId" :class="{'info-item-activated': item.flowId === flowId}">
-          <label-item label="任务名称" :value="item.taskName"></label-item>
-          <label-item label="外业类型" :value="item.taskType"></label-item>
-          <label-item label="创建时间" :value="item.createTime "></label-item>
+        <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="id = item.id" :class="{'info-item-activated': item.id === id}">
+          <label-item label="任务名称" :value="item.name"></label-item>
+          <label-item label="外业类型" :value="item.type | dictConvert('PatrolType')"></label-item>
+          <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
         </div>
       </div>
       <div class="text-center">
         <el-pagination @current-change="refreshData" :current-page.sync="pageService.pageIndex" :pager-count="5" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
         </el-pagination>
       </div>
-      <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="800px" :show-close="false" :close-on-click-modal="false">
-        <create-new-business :show="dialog.craeteNew" @close="dialog.craeteNew = false"></create-new-business>
+      <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="750px" :show-close="false" :close-on-click-modal="false">
+        <create-new-task @close="dialog.craeteNew = false"></create-new-task>
       </el-dialog>
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
-      <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
-        <component :is="item.component" :taskModel="taskModel" :flowId="flowId" class="content-tabs-panes-base"></component>
+      <el-tab-pane v-for="item of tabs.filter( x => !currentMenu.hiddenPage.includes(x.name))" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
+        <component :is="item.component" :queryModel="queryModel" :id="id" class="content-tabs-panes-base"></component>
       </el-tab-pane>
     </el-tabs>
   </base-col-three>
@@ -57,75 +57,75 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import BaseColThree from "~/components/common/base-col-three.vue"
 import { MenuItems, DetailComponents, ContentItems } from "~/components/task-system/task-system.config"
-import CreateNewBusiness from "~/components/business-system/add-new/create-new-business.vue"
-import { TaskSystemModel } from "~/models/task-system.model"
-import { Inject, Container } from 'typescript-ioc'
+import { Inject } from 'typescript-ioc'
 import { PageService } from "~/extension/services/page.service"
+import { PatrolInfoService } from '~/services/patrol-info.service'
+import { RequestParams } from '~/core/http'
+import CreateNewTask from "~/components/task-system/add-new/create-new-task.vue"
 
 @Layout('workspace')
 @Component({
   components: {
     BaseColThree,
     ...DetailComponents,
-    CreateNewBusiness
+    CreateNewTask
   }
 })
 export default class extends Vue {
-  // @Inject
-  private taskModel = new TaskSystemModel()
+  private queryModel = {
+    status: "PENDING_PATROL", // 待巡查
+    type: "" // 全部
+  }
   private pageService = new PageService()
   private menus = MenuItems
-  private dataList: any[] = []
-  private workType = ""
   private tabs = ContentItems
-  private flowId = ""
+
+  // 查询到的数据列表
+  private dataList: any[] = []
+  private id = ""
+
+  // 当前tab页
   private currentPanel = ContentItems[0].name
+
+  private currentMenu = MenuItems[0]
+
   private dialog = {
     craeteNew: false
   }
 
-  @Watch("taskModel.status", { immediate: true })
-  private onTypeChange() {
-    this.dataList = [
-      {
-        flowId: "1233442134132133212",
-        taskName: "姚店村地灾巡查",
-        taskType: "地灾巡查",
-        createTime: '2018-04-30 14:00:02'
-      },
-      {
-        flowId: "323234324324",
-        taskName: "姚店村违法用地巡查",
-        taskType: "违法用地巡查",
-        createTime: '2018-04-30 14:00:02'
-      },
-      {
-        flowId: "234534dfsg3",
-        taskName: "姚店村其他巡查",
-        taskType: "其他巡查",
-        createTime: '2018-04-30 14:00:02'
-      }
-    ]
-    if (this.dataList.length) {
-      this.flowId = this.dataList[0].flowId
-    }
-  }
+
+  @Inject
+  private patrolService!: PatrolInfoService
 
   /**
    * 监听查询model变化
    */
-  @Watch('taskModel', { deep: true })
-  private ontaskModelChange() {
+  @Watch('queryModel', { deep: true })
+  private onqueryModelChange() {
     this.refreshData()
   }
 
-  /**
-   * 查询数据
-   */
+
+  private menuClick(item) {
+    this.currentMenu = item
+    this.queryModel.status = item.status
+  }
+
   private refreshData() {
-    this.taskModel.queryFollowDataByPage(this.pageService).subscribe(
-      data => this.dataList = data.content
+    this.id = ""
+    // 是否归档
+    const isArchive = this.queryModel.status ? 0 : 1
+    const params = new RequestParams(
+      { ...this.queryModel, isArchive },
+      { page: this.pageService }
     )
+    this.patrolService.queryPatrolInfoAll(params)
+      .subscribe(
+        data => {
+          this.dataList = data.content
+          if (this.dataList.length) this.id = this.dataList[0].id
+        }
+      )
   }
 
 
@@ -134,8 +134,6 @@ export default class extends Vue {
   }
 
   private mounted() {
-    this.taskModel.status = MenuItems[0].status
-    this.taskModel.type = ""
     this.refreshData()
   }
 

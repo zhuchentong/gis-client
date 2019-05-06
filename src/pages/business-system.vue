@@ -17,6 +17,7 @@
         <div>
           <label>项目类型:</label>
           <el-select v-model="flowModel.type" class="search-worktype">
+            <el-option label="全部" value=""></el-option>
             <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
           </el-select>
         </div>
@@ -99,7 +100,10 @@ export default class extends Vue {
   private refreshData() {
     this.flowId = ""
     this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
-      data => this.dataList = data.content
+      data => {
+        this.dataList = data.content
+        if (this.dataList.length) this.flowId = this.dataList[0].flowId
+      }
     )
   }
 
@@ -110,7 +114,7 @@ export default class extends Vue {
 
   private mounted() {
     this.flowModel.status = MenuItems[0].status
-    this.flowModel.type = "ALL"
+    this.flowModel.type = ""
     this.refreshData()
   }
 

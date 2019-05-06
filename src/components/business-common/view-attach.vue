@@ -11,15 +11,21 @@
         <el-table-column label="操作" :min-width="$helper.getOperateWidth(1)">
           <template slot-scope="scope">
             <el-button type="text" @click="pdfView(scope.row)" v-if="isPdf(scope.row.extensionName)">预览</el-button>
-            <el-button type="text" @click="() => $common.viewImage($common.getLocalServerFilePath(scope.row.fileName),scope.row.originalName)" v-else-if="isImage(scope.row.extensionName)">预览</el-button>
-            <el-button type="text" @click="() => $common.viewVideo($common.getLocalServerFilePath(scope.row.fileName),scope.row.originalName)" v-else-if="isVideo(scope.row.extensionName)">预览</el-button>
+            <el-button type="text" @click="imageView(scope.row)" v-else-if="isImage(scope.row.extensionName)">预览</el-button>
+            <el-button type="text" @click="videoView(scope.row)" v-else-if="isVideo(scope.row.extensionName)">预览</el-button>
             <el-button type="text" @click="downLoadFile(scope.row)">下载</el-button>
           </template>
         </el-table-column>
       </template>
     </data-box>
     <!-- pdf预览 -->
-    <pdf-view :visible.sync="dialog.pdf" :src="$common.getLocalServerFilePath(pdf.fileName)" :fileName="pdf.originalName"></pdf-view>
+    <pdf-view :visible.sync="dialog.pdf" :src="$common.getLocalServerFilePath(fileInfo.fileName)" :fileName="fileInfo.originalName"></pdf-view>
+    <el-dialog :title="fileInfo.originalName" class="media-info" :visible.sync="dialog.img" :center="true" @close="onImgClose">
+      <img class="img-info-content" :src="$common.getLocalServerFilePath(fileInfo.fileName)" :alt="fileInfo.originalName" v-img>
+    </el-dialog>
+    <el-dialog :title="fileInfo.originalName" class="media-info" :visible.sync="dialog.video" :center="true" @close="onVideoClose">
+      <video class="video-info-content" :src="$common.getLocalServerFilePath(fileInfo.fileName)" controls ref="video"></video>
+    </el-dialog>
   </section>
 </template>
 
@@ -42,18 +48,40 @@ export default class ViewAttach extends Vue {
   private data!: any[]
 
   private dialog = {
-    pdf: false
+    pdf: false,
+    img: false,
+    video: false
   }
 
-  private pdf: any = {}
+  private fileInfo: any = {}
 
 
   /**
    * PDF预览
    */
   private pdfView(file: any) {
-    this.pdf = file
+    this.fileInfo = file
     this.dialog.pdf = true
+  }
+
+  private imageView(file: any) {
+    this.fileInfo = file
+    this.dialog.img = true
+  }
+
+  private videoView(file: any) {
+    this.fileInfo = file
+    this.dialog.video = true
+  }
+
+
+  private onVideoClose() {
+    const video = this.$refs.video as any
+    if (!video.paused) video.pause()
+  }
+
+  private onImgClose() {
+    this.dialog.img = false
   }
 
   /**
@@ -81,4 +109,28 @@ export default class ViewAttach extends Vue {
 </script>
 
 <style lang="less" scoped>
+.component.view-attach {
+  .img-info-content,
+  .video-info-content {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+</style>
+
+<style lang="less">
+.component.view-attach {
+  .media-info {
+    .el-dialog__body {
+      padding: 15px;
+      padding-bottom: 20px;
+      height: 420px;
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
 </style>

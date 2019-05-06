@@ -7,7 +7,7 @@
     <data-grid-item :span="2" label="备注">{{data.remark}}</data-grid-item>
     <data-grid-item :span="1" label="批文编号">{{data.code}}</data-grid-item>
     <data-grid-item :span="1" label="报地项目">
-      {{data.reportInfo.name}}
+      {{reportName}}
       <el-popover v-if="data.reportInfo" title="报地详情" placement="right" trigger="click">
         <report-detail :data="data.reportInfo"></report-detail>
         <a slot="reference" title="点击查看报地详情">
@@ -41,6 +41,11 @@ export default class extends Vue {
   @Prop()
   private data!: any
 
+  private get reportName(){
+    if(!this.data) return ""
+    if(!this.data.reportInfo) return ""
+    return this.data.reportInfo.name
+  }
 
 }
 </script>
