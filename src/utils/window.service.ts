@@ -3,7 +3,7 @@ import { WindowSize } from '@/config/enum.config'
 import Vue, { VueConstructor } from 'vue'
 import qs from 'qs'
 export class WindowService {
-  
+
   public static get params() {
     const params = window.location.href.split('?')
     return params.length > 1 ? qs.parse(params[1]) : {}
@@ -26,7 +26,8 @@ export class WindowService {
       minimizable: false,
       maximizable: false,
       fullscreenable: false,
-      alwaysOnTop: false
+      alwaysOnTop: false,
+      parent
     })
 
     const loading = component.$loading({
@@ -36,9 +37,10 @@ export class WindowService {
       background: 'rgba(0, 0, 0, 0.7)'
     })
 
-    if (parent) {
-      win.setParentWindow(currentWindow)
-    }
+    // if (parent) {
+    //   console.log(win)
+    //   win.setParentWindow(currentWindow)
+    // }
 
     if (params) {
       url = `${url}?${qs.stringify(params)}`

@@ -99,7 +99,10 @@ export default class extends Vue {
   private refreshData() {
     this.flowId = ""
     this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
-      data => this.dataList = data.content
+      data => {
+        this.dataList = data.content
+        if(this.dataList.length) this.flowId = this.dataList[0].flowId
+      }
     )
   }
 
