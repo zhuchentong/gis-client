@@ -1,13 +1,13 @@
 <template>
-  <div class="layout fill" style="overflow:auto;">
+  <div class="default-layout fill" style="overflow:auto;">
     <div class="header draggable">
       <div class="layout-header-operate-block">
-        <el-button type="text" @click="onLogout()">注销</el-button>
+        <el-button color="white" type="text" @click="onLogout()">注销</el-button>
         <el-button type="text" @click="onExit()">退出</el-button>
       </div>
     </div>
     <div class="content">
-      <router-view />
+      <router-view/>
     </div>
   </div>
 </template>
@@ -37,18 +37,33 @@ export default class DefaultLayout extends Vue {
       },
       {
         replace: true
-      }, this
+      },
+      this
     )
   }
 }
 </script>
+<style lang="less">
+.default-layout {
+  .header {
+    .el-button--text {
+      color: white;
+    }
+  }
+}
+</style>
 
 <style lang="less" scoped>
 @height: 40px;
+.default-layout {
+  background: url('../assets/images/home/background.png');
+  background-size: 100% auto;
+}
 .header {
   text-align: right;
   margin: 0 10px;
   height: @height;
+  color: white;
 }
 .content {
   position: relative;

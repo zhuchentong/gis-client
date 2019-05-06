@@ -1,13 +1,23 @@
 <template>
   <section class="home-page fill">
+    <div class="system-title">
+      <div>延安市高新区</div>
+      <div>多规合一综合信息平台</div>
+    </div>
     <div class="menu row">
       <a
         v-for="(item,index) of menuList"
         :key="item.url"
+        :style="item.style"
         class="menu-item"
         :class="`menu-item-${index+1}`"
         @click="openWindow(item)"
-      >{{item.label}}</a>
+      >
+        <div class="menu-icon">
+          <svg-icon :iconSize="32" :iconName="item.icon"></svg-icon>
+        </div>
+        <div class="“menu-title“">{{item.label}}</div>
+      </a>
     </div>
   </section>
 </template>
@@ -16,8 +26,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import { WindowSize } from '../config/enum.config'
-import { namespace } from "vuex-class"
-import { District } from "~/models/district.model"
+import { namespace } from 'vuex-class'
+import { District } from '~/models/district.model'
 const DistrictModule = namespace('districtModule')
 
 @Layout('default')
@@ -30,23 +40,43 @@ export default class extends Vue {
   private readonly menuList = [
     {
       label: '多规管理',
-      url: 'layer-system'
+      url: 'layer-system',
+      icon: 'layer',
+      style: {
+        background: '#409CE7'
+      }
     },
     {
       label: '业务管理',
-      url: 'business-system'
+      url: 'business-system',
+      icon: 'business',
+      style: {
+        background: '#819BEC'
+      }
     },
     {
       label: '外业管理',
-      url: 'task-system'
+      url: 'task-system',
+      icon: 'task',
+      style: {
+        background: '#72CA50'
+      }
     },
     {
       label: '统计管理',
-      url: 'statistic-system'
+      url: 'statistic-system',
+      icon: 'statistic',
+      style: {
+        background: '#F0C239'
+      }
     },
     {
       label: '运维管理',
-      url: 'manage-system'
+      url: 'manage-system',
+      icon: 'manage',
+      style: {
+        background: '#955FF1'
+      }
     }
   ]
 
@@ -73,6 +103,22 @@ export default class extends Vue {
 
  <style lang="less">
 .home-page {
+  background: url('../assets/images/home/background.png');
+  background-size: 100% auto;
+  .system-title {
+    color: white;
+    font-size: 30px;
+    text-shadow: 5px 5px 5px gray;
+    position: absolute;
+    top: 120px;
+    left: 30px;
+    div:nth-child(1) {
+    }
+    div:nth-child(2) {
+      margin-top: 10px;
+      margin-left: 30px;
+    }
+  }
   .menu {
     position: absolute;
     left: 200px;
@@ -87,15 +133,31 @@ export default class extends Vue {
       font-weight: bold;
       height: 150px;
       width: 150px;
-      background: red;
-      box-shadow: 5px 5px 5px gray;
+      box-shadow: 2px 2px 2px gray;
       border-radius: 10px;
       margin: 10px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+
       &:active {
-        box-shadow: 2px 2px 2px gray;
+        box-shadow: 0px 0px 0px gray;
+      }
+
+      .menu-title {
+        font-size: 18px;
+      }
+
+      .menu-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+        width: 80px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 100%;
+        margin-bottom: 10px;
       }
     }
   }
