@@ -28,7 +28,8 @@ export default class SvgIcon extends Vue {
 
   get iconStyle() {
     return {
-      fontSize: `${this.iconSize}px`
+      fontSize: `${this.iconSize}px`,
+      color:'black'
     }
   }
 }
