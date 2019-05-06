@@ -1,11 +1,19 @@
 <template>
   <section class="component view-file-info">
     <img v-img v-if="isImage" :src="url">
-    <img v-else :src="baseImgUrl" @click="onOtherFileClick">
+    <img v-else-if="isMusic" :src="`${publicPath}video.jpg`" @click="dialog.audio = true">
+    <img v-else-if="isVideo" :src="`${publicPath}video.jpg`" @click="dialog.video = true">
+    <img v-else-if="isPdf" :src="`${publicPath}video.jpg`" @click="dialog.pdf = true">
+    <img v-else :src="`${publicPath}video.jpg`" @click="downLoadFile">
+    {{fileInfo.originName}}
+
     <!-- pdf预览 -->
-    <pdf-view :visible.sync="dialog.pdf" :src="url" :fileName="pdf.originalName"></pdf-view>
+    <pdf-view :visible.sync="dialog.pdf" :src="url" :fileName="fileInfo.originalName"></pdf-view>
     <el-dialog :title="fileInfo.originalName" class="media-info" :center="true" :visible="dialog.video" @close="onVideoClose">
       <video class="video-info-content" :src="url" controls ref="video"></video>
+    </el-dialog>
+    <el-dialog :title="fileInfo.originalName" class="media-info" :center="true" :visible="dialog.audio" @close="onAudioClose">
+      <video class="video-info-content" :src="url" controls ref="audio"></video>
     </el-dialog>
   </section>
 </template>
@@ -29,56 +37,92 @@ export default class ViewAttach extends Vue {
   private fileInfo!: any
 
   private baseImgUrl = "12312321312312312"
+  private publicPath = process.env.BASE_URL
+
+  private baseImages = {
+    video: 'video',
+    pdf: 'pdf',
+    other: 'other',
+    music: 'music'
+  }
+
+  private canViewTypes = [...FileType.PICTURE.value, ...FileType.MP3.value, ...FileType.MP4.value]
+  private fileType = FileType
 
   private dialog = {
     pdf: false,
-    video: false
+    video: false,
+    audio: false
   }
 
   private get extStr() {
     let str: string = this.fileInfo.extensionName
-    if (str) str = str.toUpperCase()
+    if (str) str = str.toLowerCase()
     return str
   }
 
   /**
    * 下载文件
    */
-  private downLoadFile(file: any) {
+  private downLoadFile() {
     // 下载文件
-    const url = CommonService.getLocalServerFilePath(file.fileName)
-    this.$electron.ipcRenderer.send('downloadFile', { url, filename: file.originalName })
-  }
-
-  private onOtherFileClick() {
-    if (this.extStr && this.extStr === "pdf") {
-      this.dialog.pdf = true
-      return
+    const downLoadOption = {
+      url: this.url,
+      filename: this.fileInfo.fileName,
+      originalName: this.fileInfo.originalName
     }
-    if (FileType.MP4.value.findIndex(x => x === this.extStr) > -1) {
-      this.dialog.video = true
-      return
-    }
+    this.$electron.ipcRenderer.send('downloadFile', downLoadOption)
   }
 
   private onVideoClose() {
     const video = this.$refs.video as any
     if (!video.paused) video.pause()
+    this.dialog.video = false
   }
 
-  private get isImage() {
-    return FileType.PICTURE.value.findIndex(x => x === this.extStr) > -1
+  private onAudioClose() {
+    const audio = this.$refs.audio as any
+    if (!audio.paused) audio.pause()
+    this.dialog.audio = false
   }
+
 
   private get url() {
     return CommonService.getLocalServerFilePath(this.fileInfo.fileName)
   }
 
+  private get isImage() {
+    return FileType.PICTURE.value.includes(this.extStr)
+  }
+
+  private get isMusic() {
+    return FileType.MP3.value.includes(this.extStr)
+  }
+
+  private get isVideo() {
+    return FileType.MP4.value.includes(this.extStr)
+  }
+
+  private get isPdf() {
+    return this.extStr === 'pdf'
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .component.view-file-info {
+  height: 120px;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px #f2f2f2;
+
+  > img {
+    height: 120px;
+    width: 120px;
+  }
+
   .media-info {
     .el-dialog__body {
       padding: 15px;

@@ -69,7 +69,7 @@ export default class UploadAttach extends Vue {
     })
   }
 
-  public clear(){
+  public clear() {
     (this.$refs['attach-upload'] as FileUpload).reset()
   }
 

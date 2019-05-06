@@ -1,10 +1,15 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, DownloadItem } from 'electron'
 import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+
+import { download } from "electron-dl"
+import path from "path"
+import { exec } from 'child_process'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -31,6 +36,32 @@ function createWindow() {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+
+  ipcMain.on("downloadFile", (e, args) => {
+    function dounloadFileProccess(percentage) {
+      e.sender.send("downloadFile", { id: args.id, percentage })
+    }
+
+    if (!win) return
+
+    // download(win, args.url, {
+    //   filename: args.filename,
+    //   onProgress: dounloadFileProccess
+    // }).then((downloadItem: DownloadItem) => {
+    //   switch (process.platform) {
+    //     case "darwin":
+    //       exec(`open ${path.resolve(downloadItem.getSavePath())}`)
+    //       break
+    //     case "win32":
+    //       exec(
+    //         `explorer /e, /select,"${path.resolve(
+    //           downloadItem.getSavePath()
+    //         )}"`
+    //       )
+    //       break
+    //   }
+    // }).catch()
+  })
 
   win.on('closed', () => {
     win = null

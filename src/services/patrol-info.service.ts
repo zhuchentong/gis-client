@@ -41,4 +41,13 @@ export class PatrolInfoService {
   }
 
 
+  /**
+   * 根据id查询巡查结果
+   */
+  @Request({
+    server: PatrolServer.getPatrolResultById
+  })
+  public getPatrolResultById(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

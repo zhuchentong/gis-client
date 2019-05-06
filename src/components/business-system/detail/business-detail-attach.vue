@@ -1,6 +1,6 @@
 <template>
   <section class="component business-detail-attach">
-    <view-attach :data="dataSet"></view-attach>
+    <view-file-info v-for="item of dataSet" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
   </section>
 </template>
 
@@ -9,15 +9,14 @@
 
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-import DataBox from "~/components/common/data-box.vue"
-import ViewAttach from "~/components/business-common/view-attach.vue"
 import { FlowInfoService } from "~/services/flow-info.service"
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
+import ViewFileInfo from "~/components/common/view-file-info.vue"
 
 @Component({
   components: {
-    ViewAttach
+    ViewFileInfo
   }
 })
 export default class extends Vue {
@@ -42,6 +41,14 @@ export default class extends Vue {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.component.business-detail-attach {
+  .content-file {
+    margin: 0 30px 15px 0;
+  }
+}
+</style>
 
 
 

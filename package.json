@@ -23,6 +23,7 @@
     "class-transformer": "^0.2.0",
     "core-js": "^2.6.5",
     "echarts": "^4.2.1",
+    "electron-dl": "^1.14.0",
     "element-ui": "^2.7.2",
     "exjs": "^1.2.1",
     "normalize-css": "^2.3.1",

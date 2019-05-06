@@ -26,6 +26,14 @@ export default {
     controller: CONTROLLER,
     action: 'createPatrolInfo',
     type: RequestMethod.Post
+  },
+  /**
+   * 根据id查询巡查结果
+   */
+  getPatrolResultById: {
+    controller: CONTROLLER,
+    action: 'getPatrolInfoById',
+    type: RequestMethod.Get
   }
 
 }
