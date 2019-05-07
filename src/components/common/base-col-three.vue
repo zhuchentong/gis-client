@@ -43,6 +43,7 @@ export default class extends Vue {
       flex-basis: 300px;
     }
     &-content {
+      padding:0;
       flex: 1;
     }
   }

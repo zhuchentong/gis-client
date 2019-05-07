@@ -29,7 +29,7 @@ export class LayerInfo extends Model {
    * 保存图层文件信息
    */
   public saveLayer() {
-    return this.layerInfoService.saveLayerInfo(new RequestParams({
+    return this.layerInfoService.createLayerInfo(new RequestParams({
       id: this.id,
       pellucidity: this.pellucidity,
       fileId: this.fileId,

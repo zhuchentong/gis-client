@@ -57,7 +57,7 @@ export default {
   finishFlow: {
     controller: CONTROLLER,
     action: 'finishFlow',
-    type: RequestMethod.Post
+    type: RequestMethod.Put
   },
   /**
    * 流程审批

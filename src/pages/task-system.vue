@@ -3,12 +3,12 @@
     <div slot="left" class="col between-span text-center" style="height:100%">
       <div>
         <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === currentMenu.status}">
-          <svg-icon :iconName="item.icon" iconSize="32"></svg-icon>
+          <svg-icon :iconName="item.icon" iconSize="24"></svg-icon>
           <div class="menu-item-label">{{item.label}}</div>
         </div>
       </div>
       <div class="add-item system-menu-item pointer" @click="dialog.craeteNew=true">
-        <svg-icon iconName="add-new" iconSize="32"></svg-icon>
+        <svg-icon iconName="add-new" iconSize="24"></svg-icon>
         <div class="menu-item-label">新增业务</div>
       </div>
     </div>

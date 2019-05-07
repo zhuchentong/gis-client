@@ -11,10 +11,10 @@ export class LayerInfoService {
    * @param requestParams 
    */
   @Request({
-    server: Controller.saveLayerInfo,
+    server: Controller.createLayerInfo,
     model: LayerInfo
   })
-  public saveLayerInfo(requestParams): Observable<any> {
+  public createLayerInfo(requestParams): Observable<any> {
     return requestParams.request()
   }
 

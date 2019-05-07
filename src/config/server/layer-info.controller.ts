@@ -9,9 +9,9 @@ export default {
   /**
    * 保存图层
    */
-  saveLayerInfo: {
+  createLayerInfo: {
     controller: CONTROLLER,
-    action: 'saveLayerInfo',
+    action: 'createLayerInfo',
     type: RequestMethod.Post
   },
   /**

@@ -8,19 +8,19 @@ export const MenuItems = [
   {
     label: '机构用户',
     name: 'deptUser',
-    icon: 'dept',
+    icon: 'manage-fenzhijigou',
     component: 'UserManage'
   },
   {
     label: '角色管理',
     name: 'roleManage',
-    icon: 'user',
+    icon: 'manage-jiaoseguanli',
     component: 'RoleManage'
   },
   {
     label: '数据管理',
     name: 'layerManage',
-    icon: 'layer',
+    icon: 'manage-shujuguanli',
     component: 'LayerManage'
   }
 ]

@@ -92,18 +92,5 @@
     "cz-customizable": {
       "config": ".cz-config.js"
     }
-  },
-  "build": {
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ]
-    }
   }
 }

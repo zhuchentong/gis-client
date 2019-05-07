@@ -151,3 +151,12 @@ export default class UserManage extends Vue {
   }
 }
 </style>
+
+<style lang="less">
+.page.user-manage {
+  .organization-tree ,
+  .department-tree .el-tree{
+    background-color: #f9f8f4;
+  }
+}
+</style>
