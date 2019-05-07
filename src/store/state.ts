@@ -1,8 +1,4 @@
 export default {
-  // 启动状态
-  ready: false,
-  // 页面布局
-  layout: 'default',
   // 字典数据
   dictData: {},
   // 菜单资源

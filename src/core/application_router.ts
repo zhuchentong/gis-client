@@ -118,7 +118,7 @@ export class ApplicationRouter {
    */
   private layoutCheck(component) {
     if (component) {
-      const targetLayout = component['$layout'] || 'default'
+      const targetLayout = component['$layout'] || 'loading'
       if (this.applicationStore.state.layout !== targetLayout) {
         this.applicationStore.commit('updateLayout', targetLayout)
       }

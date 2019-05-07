@@ -1,7 +1,5 @@
 <template>
-  <section>
-
-  </section>
+  <section></section>
 </template>
 
  <style lang="less">
@@ -9,7 +7,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { Layout } from '@/core/decorator'
 
+@Layout('workspace')
 @Component({
   components: {}
 })

@@ -20,7 +20,7 @@ import { WindowSize } from '@/config/enum.config'
 @Component({
   components: {}
 })
-export default class DefaultLayout extends Vue {
+export default class RootLayout extends Vue {
   @Action private clearUserLoginData!: () => boolean
 
   private onExit() {

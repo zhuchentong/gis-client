@@ -1,6 +1,6 @@
 import appConfig from '~/config/app.config'
 import { MessageBox, Dialog } from 'element-ui'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 import store from '~/store'
 import UUID from 'uuidjs'
 
@@ -95,19 +95,21 @@ export class CommonService {
    * 下载文件
    */
   public static downloadFile(fileInfo: { url: string; filename: string }) {
+    // 获取当前窗口
+    const win = remote.getCurrentWindow()
     if (!fileInfo.filename) {
       console.error('下载文件缺少文件名')
       return
     }
-    const downloadInfo = { ...fileInfo, id: UUID.generate() }
-    ipcRenderer.send('downloadFile', downloadInfo)
+    const downloadInfo = { ...fileInfo, id: UUID.generate(), window: win }
+    ipcRenderer.send('main-download-file', downloadInfo)
     // 添加下载任务
     store.commit('downloadProcessModule/addDownLoadInfo', {
       percentage: 0,
       ...downloadInfo
     })
 
-    ipcRenderer.on('downloadFile', (e, args) => {
+    ipcRenderer.on('render-download-process', (e, args) => {
       // 更新下载进度
       store.commit('downloadProcessModule/updateDownLoadPercentage', args)
     })

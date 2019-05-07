@@ -30,7 +30,7 @@ import { namespace } from 'vuex-class'
 import { District } from '~/models/district.model'
 const DistrictModule = namespace('districtModule')
 
-@Layout('default')
+@Layout('root')
 @Component({
   components: {}
 })

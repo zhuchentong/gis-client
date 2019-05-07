@@ -20,7 +20,7 @@ export class ApplicationStore {
         // 系统准备状态
         ready: false,
         // 当前布局
-        layout: 'default'
+        layout: 'loading'
       },
       getters: {
         layout(state) {

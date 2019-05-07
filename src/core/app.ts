@@ -1,7 +1,6 @@
 // 实现动态入口
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import DefaultLayout from '~/layouts/default.layout.vue'
 @Component({
   components: {},
   beforeCreate() {
@@ -38,6 +37,7 @@ export default class App extends Vue {
   public render(h, props) {
     // const loadingEl = h('nuxt-loading', { ref: 'loading' })
     // 创建布局元素
+    console.log(this.$app.store.getters.layout)
     const layoutEl = h(this.$app.store.getters.layout)
     // 创建模板元素
     const templateEl = h(
