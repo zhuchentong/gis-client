@@ -1,13 +1,6 @@
 <template>
   <section class="component data-form">
-    <el-form
-      ref="data-form"
-      label-width="120px"
-      :inline="true"
-      :rules="rules"
-      label-position="right"
-      :model="model"
-    >
+    <el-form ref="data-form" label-width="120px" :inline="true" :rules="rules" label-position="right" :model="model">
       <div ref="inputs" class="inputs">
         <slot name="inputs"></slot>
       </div>
@@ -21,18 +14,10 @@
         <slot name="default-button"></slot>
       </el-form-item>
 
-      <div
-        class="row middle-span center-span collapse-icon more-container"
-        @click="changeCollapseHandle"
-        v-if="showCollapseIcon"
-      >
+      <div class="row middle-span center-span collapse-icon more-container" @click="changeCollapseHandle" v-if="showCollapseIcon">
         <div class="more-content">
           <span class="more-button">{{`${showCollapseContext ? '收起' :'更多'}搜索`}}</span>
-          <svg-icon
-            :class="[showCollapseContext ? 'arrow-up':'arrow-down']"
-            class="more-button"
-            iconName="xiala"
-          ></svg-icon>
+          <svg-icon :class="[showCollapseContext ? 'arrow-up':'arrow-down']" class="more-button" iconName="xiala"></svg-icon>
         </div>
       </div>
     </el-form>
@@ -109,14 +94,14 @@ export default class DataForm extends Vue {
         this.showCollapseIcon = false
         return
       }
-      for (let index = hiddenMaxCount; index < elformItems.length index++) {
+      for (let index = hiddenMaxCount; index < elformItems.length; index++) {
         const item = elformItems.item(index)
-        if (item && !item.classList.contains("hidden-item")){
+        if (item && !item.classList.contains("hidden-item")) {
           item.classList.add("hidden-item")
         }
       }
     } else {
-      for (let index = 0; index < elformItems.length index++) {
+      for (let index = 0; index < elformItems.length; index++) {
         const item = elformItems.item(index)
         if (item) item.classList.remove("hidden-item")
       }
@@ -162,7 +147,7 @@ export default class DataForm extends Vue {
 
 <style lang="less" scoped>
 .component.data-form {
-  padding: 10px
+  padding: 10px;
   .inputs {
     display: contents;
   }

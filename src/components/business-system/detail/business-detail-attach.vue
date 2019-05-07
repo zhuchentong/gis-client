@@ -45,7 +45,7 @@ export default class extends Vue {
 <style lang="less" scoped>
 .component.business-detail-attach {
   .content-file {
-    margin: 0 30px 15px 0;
+    margin: 0 10px 10px 0;
   }
 }
 </style>

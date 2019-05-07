@@ -34,6 +34,14 @@ export default {
     controller: CONTROLLER,
     action: 'getPatrolInfoById',
     type: RequestMethod.Get
+  },
+  /**
+   * 添加巡查文件
+   */
+  addPatrolFile: {
+    controller: CONTROLLER,
+    action: 'addPatrolFile',
+    type: RequestMethod.Post
   }
 
 }

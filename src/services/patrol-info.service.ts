@@ -50,4 +50,14 @@ export class PatrolInfoService {
   public getPatrolResultById(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
+
+  /**
+   * 添加巡查文件
+   */
+  @Request({
+    server: PatrolServer.addPatrolFile
+  })
+  public addPatrolFile(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

@@ -3,7 +3,7 @@
     <div class="layout-left">
       <slot name="left"></slot>
     </div>
-    <div class="layout-middle">
+    <div class="layout-middle" v-if="!hiddenMiddle">
       <slot name="middle"></slot>
     </div>
     <div class="layout-content col-span">
@@ -22,7 +22,15 @@ import { Component, Vue } from 'vue-property-decorator'
   components: {
   }
 })
-export default class extends Vue { }
+export default class extends Vue {
+
+  private hiddenMiddle = false
+
+  private mounted() {
+    this.hiddenMiddle = !this.$slots.middle
+  }
+
+}
 </script>
 
 <style lang="less" scoped>

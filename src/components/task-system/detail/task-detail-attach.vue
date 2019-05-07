@@ -3,7 +3,7 @@
     <div class="text-right">
       <el-button @click="dialog.appendAttach = true">添加附件</el-button>
     </div>
-    <div class="content">
+    <div class="container-full-page">
       <common-title title="巡查信息" iconName="info"></common-title>
       <p style="text-indent: 2em;">{{result.content}}</p>
       <common-title title="巡查照片" iconName="info"></common-title>
@@ -72,16 +72,8 @@ export default class extends Vue {
 <style lang="less" scoped>
 .component.task-detail-attach {
   position: relative;
-  .content {
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    overflow: auto;
-    &-file {
-      margin: 0 30px 15px 0;
-    }
+  .content-file {
+    margin: 0 10px 10px 0;
   }
 }
 </style>

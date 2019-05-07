@@ -56,7 +56,7 @@ export default class DataBox extends Vue {
   @Prop()
   private selectionRow!: any
   // 最大高度
-  @Prop({ default: 528 })
+  @Prop({ default: 480 })
   private maxHeight!: number
   // 默认高度
   @Prop()

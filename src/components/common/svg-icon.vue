@@ -21,6 +21,8 @@ export default class SvgIcon extends Vue {
   public iconName!: string
   @Prop({ default: "18" })
   public iconSize!: string
+  @Prop()
+  public iconColor!: string
 
   get iconClass() {
     return `#icon-${this.iconName}`
@@ -29,7 +31,7 @@ export default class SvgIcon extends Vue {
   get iconStyle() {
     return {
       fontSize: `${this.iconSize}px`,
-      color:'black'
+      color: this.iconColor || 'unset'
     }
   }
 }

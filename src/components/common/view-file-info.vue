@@ -5,7 +5,7 @@
     <img v-else-if="isVideo" :src="`${publicPath}video.jpg`" @click="dialog.video = true">
     <img v-else-if="isPdf" :src="`${publicPath}video.jpg`" @click="dialog.pdf = true">
     <img v-else :src="`${publicPath}video.jpg`" @click="downLoadFile">
-    {{fileInfo.originName}}
+    <div class="file-name">{{fileInfo.originalName}}</div>
 
     <!-- pdf预览 -->
     <pdf-view :visible.sync="dialog.pdf" :src="url" :fileName="fileInfo.originalName"></pdf-view>
@@ -36,7 +36,6 @@ export default class ViewAttach extends Vue {
   @Prop({ default: () => new Array<any>() })
   private fileInfo!: any
 
-  private baseImgUrl = "12312321312312312"
   private publicPath = process.env.BASE_URL
 
   private baseImages = {
@@ -111,16 +110,19 @@ export default class ViewAttach extends Vue {
 
 <style lang="less" scoped>
 .component.view-file-info {
-  height: 120px;
-  width: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: solid 1px #f2f2f2;
+  position: relative;
+  display: inline-block;
+  border: solid 1px #c6c6c6;
+  &:hover {
+    .file-name {
+      display: block;
+    }
+  }
 
   > img {
     height: 120px;
-    width: 120px;
+    width: 180px;
+    object-fit: cover;
   }
 
   .media-info {
@@ -138,6 +140,20 @@ export default class ViewAttach extends Vue {
   .video-info-content {
     max-width: 100%;
     max-height: 100%;
+  }
+
+  .file-name {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-overflow: ellipsis;
+    height: 20px;
+    line-height: 20px;
+    background-color: #eeffbb54;
+    overflow-y: hidden;
+    text-indent: 2px;
   }
 }
 </style>

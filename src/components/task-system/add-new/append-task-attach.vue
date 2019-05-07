@@ -45,8 +45,21 @@ export default class extends Vue {
   }
 
   private onSubmit() {
-    // 
-    this.onSuccess()
+    if (!this.attachDataList.length) {
+      this.$message('您还没有选择附件')
+      return
+    }
+
+    // 文件挑拣
+    const picFiles = this.attachDataList.filter(x => FileType.PICTURE.value.includes(x.extensionName.toLowerCase()))
+    const videoFiles = this.attachDataList.filter(x => FileType.MP4.value.includes(x.extensionName.toLowerCase()))
+
+    const params = {
+      id: this.id,
+      imageFileIds: picFiles.map(v => v.id),
+      videoFileIds: videoFiles.map(v => v.id)
+    }
+    this.service.addPatrolFile(new RequestParams(params)).subscribe(this.onSuccess)
   }
 
 }
