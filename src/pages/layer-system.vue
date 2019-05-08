@@ -49,7 +49,6 @@ export default class extends Vue {}
     background: yellow;
   }
 
-
   .layer-view {
     grid-area: ~'1/3/span 1/span 1';
     background: green;

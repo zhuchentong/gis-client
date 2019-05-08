@@ -1,13 +1,23 @@
 <template>
-  <div class="default-layout fill" style="overflow:auto;">
+  <div
+    class="default-layout fill"
+    style="overflow:auto;"
+  >
     <div class="header draggable">
       <div class="layout-header-operate-block">
-        <el-button color="white" type="text" @click="onLogout()">注销</el-button>
-        <el-button type="text" @click="onExit()">退出</el-button>
+        <el-button
+          color="white"
+          type="text"
+          @click="onLogout()"
+        >注销</el-button>
+        <el-button
+          type="text"
+          @click="onExit()"
+        >退出</el-button>
       </div>
     </div>
     <div class="content">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>

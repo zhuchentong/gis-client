@@ -1,19 +1,25 @@
 <template>
-  <div class="layout fill" style="overflow:hidden;">
+  <div
+    class="layout fill"
+    style="overflow:hidden;"
+  >
     <div class="header draggable row middle-span">
-      <img class="logo" src="../assets/images/logo.png">
+      <img
+        class="logo"
+        src="../assets/images/logo.png"
+      >
       <div class="title">多规合一综合信息平台</div>
     </div>
     <div class="layout-header-operate-block header-text">
       <a @click="onExit()">退出</a>
     </div>
     <div class="content">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
 
-<script lang = "ts">
+<script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 
 @Component({
@@ -27,7 +33,7 @@ export default class WorkspaceLayout extends Vue {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @height: 40px;
 .header {
   text-align: right;

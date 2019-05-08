@@ -14,7 +14,10 @@
         @click="openWindow(item)"
       >
         <div class="menu-icon">
-          <svg-icon :iconSize="32" :iconName="item.icon"></svg-icon>
+          <svg-icon
+            :iconSize="32"
+            :iconName="item.icon"
+          ></svg-icon>
         </div>
         <div class="“menu-title“">{{item.label}}</div>
       </a>
@@ -103,8 +106,6 @@ export default class extends Vue {
 
  <style lang="less">
 .home-page {
-  background: url('../assets/images/home/background.png');
-  background-size: 100% auto;
   .system-title {
     color: white;
     font-size: 30px;
