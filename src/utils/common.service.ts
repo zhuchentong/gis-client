@@ -74,24 +74,6 @@ export class CommonService {
   }
 
   /**
-   * 查看图片
-   * @param url 图片URL
-   * @param alt 图片 alt
-   */
-  public static viewImage(url: string, alt: string, extStr?: string) {
-    store.commit('mediaViewModule/updateImgInfo', { url, title: alt })
-  }
-
-  /**
-   * 查看视频
-   * @param url
-   * @param title
-   */
-  public static viewVideo(url: string, title: string) {
-    store.commit('mediaViewModule/updateVideoInfo', { url, title })
-  }
-
-  /**
    * 下载文件
    */
   public static downloadFile(fileInfo: { url: string; filename: string }) {
