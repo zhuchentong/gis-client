@@ -106,7 +106,7 @@ export default class extends Vue {
     this.service.finishFlow(new RequestParams(null, { append: [this.flowId] }))
       .subscribe(() => {
         this.$message.success("操作成功")
-        this.onIdChange()
+        this.emitSuccess()
       })
   }
 

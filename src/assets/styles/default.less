@@ -380,10 +380,6 @@ a {
 }
 
 .tree-style() {
-  .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
-    background-color: #21ccff!important;
-  }
-
   .el-tree {
     .el-tree-node__content {
       height: 22px;
@@ -413,6 +409,15 @@ a {
   line-height: @default-height + @additional;
 }
 
+.pagination-style(){
+  .el-pagination{
+    .el-pager > li,
+    .btn-prev,.btn-next{
+      background-color: unset;
+    }
+  }
+}
+
 
 #app,
 .el-dialog {
@@ -427,6 +432,7 @@ a {
     .card-style();
     .fixed-style();
     .tree-style();
+    .pagination-style();
   }
 }
 

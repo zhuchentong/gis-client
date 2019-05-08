@@ -3,7 +3,7 @@
     <div class="layer-tree">
       <common-title :showIcon="false" title="图层分组" class="layer-tree-title">
         <template slot="append">
-          <el-button type="text" @click="append"  v-if="!treeData.length">添加分组</el-button>
+          <el-button type="text" @click="append" v-if="!treeData.length">添加分组</el-button>
         </template>
       </common-title>
       <el-tree :data="treeData" node-key="id" :props="{label:'groupName'}" ref="groupTree" highlight-current @current-change="onCurrentChange">
@@ -11,7 +11,7 @@
           <span>{{ node.label }}</span>
           <span class="node-item" v-show="currentId === data.id">
             <a @click="() => append(data)" title="增加">
-             <svg-icon iconName="add-round" iconSize="13" iconColor="#13227a"></svg-icon>
+              <svg-icon iconName="add-round" iconSize="13" iconColor="#13227a"></svg-icon>
             </a>
             <a @click="() => edit(node, data)" title="修改">
               <svg-icon iconName="edit-round" iconSize="13"></svg-icon>
@@ -54,10 +54,10 @@
       </data-box>
     </div>
 
-    <el-dialog title="添加图层" :center="true" :visible.sync="dialog.modifyLayer" :show-close="false">
+    <el-dialog title="添加图层" :center="true" :visible.sync="dialog.modifyLayer" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
       <modify-layer :layer="layer" @close="dialog.modifyLayer = false" @success="refreshLayers"></modify-layer>
     </el-dialog>
-    <el-dialog :title="`${layerGroup.id ? '维护' : '添加'}组`" :center="true" :visible.sync="dialog.modifyLayerGroup" :close-on-press-escape="false" :close-on-click-modal="false" :show-close="false">
+    <el-dialog :title="`${layerGroup.id ? '维护' : '添加'}组`" :center="true" :visible.sync="dialog.modifyLayerGroup" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
       <modify-layer-group :layerGroup="layerGroup" @close="dialog.modifyLayerGroup = false" @success="data => groupList = data"></modify-layer-group>
     </el-dialog>
   </section>
@@ -213,9 +213,9 @@ export default class LayerManage extends Vue {
 <style lang="less" scoped>
 .page.layer-manage {
   .layer-tree {
-     flex-basis: 220px;
+    flex-basis: 220px;
   }
-  .layer-tree-title{  
+  .layer-tree-title {
     padding: 20px 10px;
   }
   .node-item {
@@ -231,8 +231,8 @@ export default class LayerManage extends Vue {
 
 <style lang="less">
 .page.layer-manage {
-  .layer-tree ,
-  .el-tree{
+  .layer-tree,
+  .el-tree {
     background-color: #f9f8f4;
   }
 }

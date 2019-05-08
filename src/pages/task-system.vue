@@ -1,6 +1,6 @@
 <template>
   <base-col-three class="page task-system">
-    <div slot="left" class="col between-span text-center" style="height:100%">
+    <div slot="left" class="col between-span system-menu text-center" style="height:100%">
       <div>
         <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === currentMenu.status}">
           <svg-icon :iconName="item.icon" iconSize="24"></svg-icon>
@@ -40,7 +40,7 @@
         <el-pagination @current-change="refreshData" :current-page.sync="pageService.pageIndex" :pager-count="5" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
         </el-pagination>
       </div>
-      <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="750px" :show-close="false" :close-on-click-modal="false">
+      <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="750px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
         <create-new-task @close="dialog.craeteNew = false"></create-new-task>
       </el-dialog>
     </div>
@@ -144,14 +144,10 @@ export default class extends Vue {
 .page.task-system {
   .system-menu {
     &-item {
-      padding: 10px;
-      background-color: #f2f2f2;
-      .menu-item-label {
-        font-size: 14px;
-      }
+      padding: 15px 10px;
     }
-    &-activated {
-      background-color: aquamarine;
+    .menu-item-label {
+      font-size: 14px;
     }
   }
 
@@ -183,7 +179,7 @@ export default class extends Vue {
     }
   }
   .add-item {
-    background-color: #409eff;
+    background-color: #955FF1;
   }
 }
 </style>

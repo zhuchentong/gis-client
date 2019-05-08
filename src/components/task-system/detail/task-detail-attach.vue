@@ -1,6 +1,6 @@
 <template>
   <section class="component task-detail-attach">
-    <div class="text-right">
+    <div class="text-right add-attach-btn">
       <el-button @click="dialog.appendAttach = true">添加附件</el-button>
     </div>
     <div class="container-full-page">
@@ -13,7 +13,7 @@
       <view-file-info v-for="item of result.video" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
     </div>
 
-    <el-dialog title="添加附件" :center="true" :visible.sync="dialog.appendAttach" width="750px" :show-close="false" :close-on-click-modal="false">
+    <el-dialog title="添加附件" :center="true" :visible.sync="dialog.appendAttach" width="750px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
       <append-task-attach :id="id" @close="dialog.appendAttach = false" @success="onIdChange"></append-task-attach>
       <div></div>
     </el-dialog>
@@ -74,6 +74,9 @@ export default class extends Vue {
   position: relative;
   .content-file {
     margin: 0 10px 10px 0;
+  }
+  .add-attach-btn {
+    padding-right: 30px;
   }
 }
 </style>
