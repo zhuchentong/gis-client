@@ -19,7 +19,7 @@
     "@turf/turf": "^5.1.6",
     "@zct1989/vue-component": "^0.0.3",
     "axios": "^0.18.0",
-    "cesium": "^1.56.1",
+    "cesium": "^1.57.0",
     "class-transformer": "^0.2.0",
     "core-js": "^2.6.5",
     "echarts": "^4.2.1",

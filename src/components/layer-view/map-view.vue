@@ -1,21 +1,15 @@
 <template>
   <section class="map-view fill">
-    <div
-      id="cesium-view"
-      class="col-span no-padding fill"
-    >
+    <div id="cesium-view" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div
-      id="credit"
-      style="display:none"
-    ></div>
+    <div id="credit" style="display:none"></div>
   </section>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator'
-import { Viewer, SceneMode } from 'cesium/Cesium'
+import Cesium from 'cesium/Cesium'
 import WMSCapabilities from 'wms-capabilities'
 import appConfig from '../../config/app.config'
 @Component({
@@ -25,7 +19,7 @@ export default class MapView extends Vue {
   // 默认样式
   public defaultStyle = 'test001'
   // Cesium视图
-  private viewer!: Viewer
+  private viewer!: Cesium.Viewer
   // Camera视图
   private cameraView
   // Map视图
@@ -141,7 +135,7 @@ export default class MapView extends Vue {
   private initMap() {
     this.viewer = new Cesium.Viewer(this.mapId, {
       sceneModePicker: false,
-      sceneMode: SceneMode.SCENE3D,
+      sceneMode: Cesium.SceneMode.SCENE3D,
       baseLayerPicker: false,
       selectionIndicator: false,
       fullscreenButton: false,
