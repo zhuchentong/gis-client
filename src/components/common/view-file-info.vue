@@ -1,10 +1,10 @@
 <template>
   <section class="component view-file-info">
     <img v-img v-if="isImage" :src="url">
-    <img v-else-if="isMusic" :src="`${publicPath}video.jpg`" @click="dialog.audio = true">
-    <img v-else-if="isVideo" :src="`${publicPath}video.jpg`" @click="dialog.video = true">
-    <img v-else-if="isPdf" :src="`${publicPath}video.jpg`" @click="dialog.pdf = true">
-    <img v-else :src="`${publicPath}video.jpg`" @click="downLoadFile">
+    <img v-else-if="isMusic" :src="`${publicPath}images/audio.png`" :alt="fileInfo.originalName" @click="dialog.audio = true">
+    <img v-else-if="isVideo" :src="`${publicPath}images/video.png`" :alt="fileInfo.originalName" @click="dialog.video = true">
+    <img v-else-if="isPdf" :src="`${publicPath}images/pdf.png`" :alt="fileInfo.originalName" @click="dialog.pdf = true">
+    <img v-else :src="`${publicPath}images/file.png`" :alt="fileInfo.originalName" @click="downLoadFile">
     <div class="file-name">{{fileInfo.originalName}}</div>
 
     <!-- pdf预览 -->
@@ -70,7 +70,7 @@ export default class ViewAttach extends Vue {
       filename: this.fileInfo.fileName,
       originalName: this.fileInfo.originalName
     }
-    this.$electron.ipcRenderer.send('downloadFile', downLoadOption)
+    CommonService.downloadFile(downLoadOption)
   }
 
   private onVideoClose() {

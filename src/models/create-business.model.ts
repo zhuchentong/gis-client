@@ -2,6 +2,7 @@ import { Model } from '~/core/model'
 import { RequestParams } from '~/core/http'
 import { CraeteBusinessService } from '~/services/craete-business.service'
 import { Observable } from 'rxjs'
+import { BusinessLayerStyle } from "~/config/business-config"
 
 // @AutoWired
 export class CreateBusinessModel extends Model {
@@ -38,6 +39,8 @@ export class CreateBusinessModel extends Model {
         func = this.serivce.addSupplyInfo
         break
     }
+    // 设置图层样式
+    layerInfo.styleName = BusinessLayerStyle[this.type]
 
     const requestData = {
       name: this.name,

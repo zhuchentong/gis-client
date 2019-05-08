@@ -16,13 +16,13 @@ export class LayerInfo extends Model {
   public fileId: string = ""
   public fileType: string = "BASIC_FILE"
   public styleId: string = ""
-  private readonly tempSpace = "cache"
+  private readonly tempSpace = "temp-space"
 
   // service
   private layerInfoService = new LayerInfoService()
   private businessLayerService = new BusinessLayerService()
 
-  private defaultSpace = "space01"
+  private defaultSpace = "base-space"
 
 
   /**

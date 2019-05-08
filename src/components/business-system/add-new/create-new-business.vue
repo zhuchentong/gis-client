@@ -1,5 +1,5 @@
 <template>
-  <section class="component create-new-business">
+  <section class="component create-new-business" v-loading="loading">
     <common-title title="基本信息"></common-title>
     <el-form :model="baseModel" :rules="baseRules" inline label-width="120px" ref="baseForm">
       <el-form-item label="项目名称" prop="name">
@@ -73,6 +73,7 @@ export default class extends Vue {
   private attachDataList: any[] = []
   // 基础信息
   private baseModel = new CreateBusinessModel()
+  private loading = false
 
   private baseRules = {
     name: { required: true, message: "请输入项目名称" },
@@ -101,6 +102,7 @@ export default class extends Vue {
   @Emit('success')
   private onSuccess() {
     this.$message.success(`${this.currentBase.label}业务操作成功`)
+    this.loading = false
     this.onClose()
   }
 
@@ -138,8 +140,9 @@ export default class extends Vue {
     const layerComponent = this.$refs['upload-layer'] as UploadLayer
     const layerData = layerComponent.getData()
 
+    this.loading = true
     this.baseModel.createBusiness(data, this.attachDataList, layerData)
-      .subscribe(this.onSuccess)
+      .subscribe(this.onSuccess, () => this.loading = false)
   }
 
 }
