@@ -43,7 +43,9 @@ a {
 
 /*-----el-picker type="datetime" 去掉“此刻”按钮-----*/
 
-.el-picker-panel.el-date-picker.has-time .el-picker-panel__footer .el-picker-panel__link-btn:first-child {
+.el-picker-panel.el-date-picker.has-time
+  .el-picker-panel__footer
+  .el-picker-panel__link-btn:first-child {
   display: none;
 }
 
@@ -64,7 +66,7 @@ a {
   color: #333;
   font-weight: 600;
 
-  >span:first-of-type {
+  > span:first-of-type {
     color: #00bbca;
     margin: 0 5px;
   }
@@ -73,7 +75,6 @@ a {
 // form样式
 .form-style() {
   .el-form {
-
     // 表单项高度设置
     .el-form-item {
       .el-form-item__label {
@@ -110,7 +111,7 @@ a {
         }
 
         .el-input-number {
-          .setHeight(-2)
+          .setHeight(-2);
         }
 
         .span-a {
@@ -125,7 +126,7 @@ a {
     text-align: left;
 
     .el-form {
-      .el-form-item~ {
+      .el-form-item ~ {
         margin: 5px 5px 10px 0;
       }
     }
@@ -180,7 +181,6 @@ a {
 
 //input样式
 .input-style() {
-
   // 基础input样式
   .el-input:not(.el-input--mini) {
     height: @default-height;
@@ -261,7 +261,7 @@ a {
           line-height: 28px;
           padding: 0;
 
-          &>*:only-child {
+          & > *:only-child {
             padding: 0 4px;
           }
         }
@@ -271,7 +271,7 @@ a {
         }
 
         padding: 0;
-        font-size:@default-fontSize;
+        font-size: @default-fontSize;
 
         .el-button.el-button--text {
           padding: 0 4px;
@@ -322,7 +322,6 @@ a {
 }
 
 .select-style() {
-
   .el-select,
   .el-cascader {
     font-size: @default-fontSize;
@@ -344,7 +343,6 @@ a {
 }
 
 .fixed-style() {
-
   // 全局弹出框样式修正
   .el-dialog {
     .el-dialog__body {
@@ -368,6 +366,7 @@ a {
 
 .card-style() {
   .el-card {
+    margin-bottom: 10px;
     .el-card__header {
       padding: 10px !important;
     }
@@ -408,15 +407,15 @@ a {
   line-height: @default-height + @additional;
 }
 
-.pagination-style(){
-  .el-pagination{
+.pagination-style() {
+  .el-pagination {
     .el-pager > li,
-    .btn-prev,.btn-next{
+    .btn-prev,
+    .btn-next {
       background-color: unset;
     }
   }
 }
-
 
 #app,
 .el-dialog {
