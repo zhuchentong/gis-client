@@ -38,9 +38,12 @@ export default class extends Vue {
   .layout {
     &-left {
       flex-basis: 80px;
+      height: inherit;
     }
     &-middle {
       flex-basis: 300px;
+      height: inherit;
+      overflow-y: auto;
       background-color: #fafafa;
     }
     &-content {

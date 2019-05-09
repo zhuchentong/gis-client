@@ -2,7 +2,7 @@
   <base-col-three class="page business-system">
     <div slot="left" class="col between-span system-menu text-center" style="height:100%">
       <div>
-        <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="flowModel.status = item.status" :class="{'system-menu-activated': item.status === flowModel.status}">
+        <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === flowModel.status}">
           <svg-icon :iconName="item.icon" iconSize="24"></svg-icon>
           <div class="menu-item-label">{{item.label}}</div>
         </div>
@@ -29,16 +29,16 @@
         </div>
       </div>
       <div class="no-data" v-if="!dataList.length"></div>
-      <div v-else>
+      <div v-else class="middle-content">
         <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="currentItem = item" :class="{'info-item-activated': item.flowId === currentItem.flowId}">
           <label-item label="项目名称" :value="item.name"></label-item>
           <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
           <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
         </div>
-      </div>
-      <div class="text-center">
-        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size.sync="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
-        </el-pagination>
+        <div class="text-center">
+          <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size.sync="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+          </el-pagination>
+        </div>
       </div>
       <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="800px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
         <create-new-business :show="dialog.craeteNew" @close="dialog.craeteNew = false" @success="refreshData"></create-new-business>
@@ -99,6 +99,11 @@ export default class extends Vue {
     this.mCurrentPanel = value
   }
 
+  private menuClick(item) {
+    this.flowModel.status = item.status
+    this.pageService.reset()
+  }
+
   /**
    * 监听查询model变化
    */
@@ -136,6 +141,7 @@ export default class extends Vue {
 
 <style lang="less" scoped>
 .page.business-system {
+  height: 100%;
   .system-menu {
     &-item {
       padding: 15px 10px;
@@ -154,6 +160,10 @@ export default class extends Vue {
       padding-left: 3px;
       width: 100px;
     }
+  }
+  .middle-content {
+    height: calc(100% - 40px);
+    overflow-y: auto;
   }
   .info-item {
     padding: 5px 0 5px 10px;

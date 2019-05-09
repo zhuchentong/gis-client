@@ -7,13 +7,15 @@
       </div>
       <div class="container-full-page">
         <el-card header="巡查信息">
-          <p style="text-indent: 2em;">{{result.content}}</p>
+          <p style="text-indent: 2em;">{{result.content || "暂无巡查信息!"}}</p>
         </el-card>
         <el-card header="巡查照片">
-          <view-file-info v-for="item of result.image" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
+          <p style="text-indent: 2em;" v-if="!result.image.length"> 暂无数据!</p>
+          <view-file-info v-else v-for="item of result.image" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
         </el-card>
         <el-card header="巡查视频">
-          <view-file-info v-for="item of result.video" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
+          <p style="text-indent: 2em;" v-if="!result.video.length"> 暂无数据!</p>
+          <view-file-info v-else v-for="item of result.video" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
         </el-card>
       </div>
     </div>
@@ -76,7 +78,7 @@ export default class extends Vue {
 .component.task-detail-attach {
   position: relative;
   .content-file {
-    margin: 0 10px 10px 0;
+    margin: 0 9px 9px 0;
   }
   .add-attach-btn {
     padding-right: 30px;

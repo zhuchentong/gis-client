@@ -21,7 +21,7 @@
           <el-table-column prop="username" label="用户名"></el-table-column>
           <el-table-column prop="userTitle" label="职称" :formatter="(row) => $filter.dictConvert(row.userTitle,'UserTitle')"></el-table-column>
           <el-table-column prop="userStatus" label="状态" :formatter="(row) => $filter.dictConvert(row.userStatus,'CommonState')"></el-table-column>
-          <el-table-column label="操作" :min-width="$helper.getOperateWidth(3)">
+          <el-table-column label="操作" width="180px">
             <template slot-scope="scope">
               <el-button type="text" @click="onRoleAllot(scope.row)">分配角色</el-button>
               <el-button type="text" @click="onResetPwd(scope.row)">密码重置</el-button>
@@ -144,7 +144,9 @@ export default class UserManage extends Vue {
 <style lang="less" scoped>
 .page.user-manage {
   .organization-tree {
-    flex-basis: 220px;
+    // flex-basis: 220px;
+    width: 300px;
+    overflow-x: auto;
   }
   .user-list {
     flex: 1;
@@ -154,8 +156,8 @@ export default class UserManage extends Vue {
 
 <style lang="less">
 .page.user-manage {
-  .organization-tree ,
-  .department-tree .el-tree{
+  .organization-tree,
+  .department-tree .el-tree {
     background-color: #f9f8f4;
   }
 }

@@ -1,13 +1,13 @@
 <template>
   <section class="component business-detail-layer">
-    <div class="no-data" v-if="!flowId"></div>
-    <div v-else>
+    <div class="no-data"></div>
+    <!-- <div v-else>
       <div v-if="layerInfo && layerInfo.layerCode"></div>
 
       <common-title :title="layerInfo.layerName" :showIcon="false">
         <el-button slot="append" @click="preview">预览</el-button>
       </common-title>
-    </div>
+    </div> -->
 
     <div v-if="load"></div>
   </section>

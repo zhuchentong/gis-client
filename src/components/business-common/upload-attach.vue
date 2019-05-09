@@ -2,7 +2,7 @@
   <section class="component upload-attach">
     <common-title :title="title" iconName="files">
       <template slot="append">
-        <file-upload ref="attach-upload" :fileList.sync="attachList" :showFileList="false" @onUploadSuccess="onFileUploadSuccess">上传文件</file-upload>
+        <file-upload ref="attach-upload" :AllowExtension="AllowExtension" :fileList.sync="attachList" :showFileList="false" @onUploadSuccess="onFileUploadSuccess">上传文件</file-upload>
       </template>
     </common-title>
     <data-box class="select-data-box" :data="attachFileDataSet" ref="report-file-table" :maxHeight="120">
@@ -26,6 +26,7 @@ import { CommonService } from "~/utils/common.service"
 import DataBox from "~/components/common/data-box.vue"
 import FileUpload from "~/components/common/file-upload.vue"
 import { ValidatorService } from '@/utils/validator.service'
+import { IFileType } from '~/models/interface/i-file-type.interface'
 
 @Component({
   components: {
@@ -38,6 +39,11 @@ export default class UploadAttach extends Vue {
   @Prop({ default: "附件资料" })
   private title!: string
 
+  // 允许的文件后缀类型
+  @Prop({
+    type: Array
+  })
+  private AllowExtension!: Array<string | IFileType>
 
 
   private attachList: any[] = []

@@ -1,6 +1,6 @@
 <template>
   <section class="component append-task-attach">
-    <upload-attach :attachFileDataSet="attachDataList" ref="upload-attach"></upload-attach>
+    <upload-attach :attachFileDataSet="attachDataList" :AllowExtension="fileTypes" ref="upload-attach"></upload-attach>
     <div class="operate-buttons">
       <el-button @click="onCancel">取消</el-button>
       <el-button @click="onSubmit">确定</el-button>
@@ -8,7 +8,7 @@
   </section>
 </template>
 
- <style lang="less">
+<style lang="less">
 </style>
 
 <script lang="ts">
@@ -30,6 +30,8 @@ export default class extends Vue {
 
   @Inject
   private service!: PatrolInfoService
+
+  private fileTypes = [FileType.PICTURE, FileType.MP4]
 
   private attachDataList: any = []
 

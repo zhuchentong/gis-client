@@ -110,6 +110,7 @@ export default class extends Vue {
     this.currentPanel = ContentItems[0].name
     this.currentMenu = item
     this.queryModel.status = item.status
+    this.pageService.reset()
   }
 
   private refreshData() {
