@@ -44,15 +44,9 @@ export default class extends Vue {
       background-color: #fafafa;
     }
     &-content {
-      padding:0;
+      padding: 0;
       flex: 1;
     }
-  }
-
-  .layout-left,
-  .layout-middle,
-  .layout-content {
-    border: solid 1px #f3f3f3;
   }
 }
 </style>

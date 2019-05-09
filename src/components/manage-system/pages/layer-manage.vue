@@ -3,7 +3,7 @@
     <div class="layer-tree">
       <common-title :showIcon="false" title="图层分组" class="layer-tree-title">
         <template slot="append">
-          <el-button type="text" @click="append" v-if="!treeData.length">添加分组</el-button>
+          <el-button type="text" @click="append">添加根目录</el-button>
         </template>
       </common-title>
       <el-tree :data="treeData" node-key="id" :props="{label:'groupName'}" ref="groupTree" highlight-current @current-change="onCurrentChange">
@@ -43,7 +43,7 @@
           <el-table-column prop="layerName" label="图层名称"></el-table-column>
           <el-table-column prop="layerRemark" label="图层描述" show-overflow-tooltip></el-table-column>
           <el-table-column prop="layerShow" label="默认显示" :formatter="row => $filter.dictConvert(row.layerShow,'CommonShow')"></el-table-column>
-          <el-table-column prop="createDate" label="添加日期" :formatter="row => $filter.dateTimeFormat(row.createDate)"></el-table-column>
+          <el-table-column prop="createDate" label="添加日期" :formatter="row => $filter.dateFormat(row.createDate)"></el-table-column>
           <el-table-column prop="operatorName" label="添加人"></el-table-column>
           <el-table-column label=" 操作" :min-width="$helper.getOperateWidth(1)">
             <template slot-scope="scope">

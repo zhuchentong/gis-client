@@ -12,7 +12,7 @@ import LayerListPanel from './menu-panel/layer-list-panel.vue'
 import LayerContrlPanel from './menu-panel/layer-control-panel.vue'
 import SearchPanel from './menu-panel/search-panel.vue'
 import CheckPanel from './menu-panel/check-panel.vue'
-import MuestruePanel from './menu-panel/musetrue-panel.vue'
+import MeasurePanel from './menu-panel/measure-panel.vue'
 import ViewerPanel from './menu-panel/viewer-panel.vue'
 import TaskPanel from './menu-panel/task-panel.vue'
 import ProjectPanel from './menu-panel/project-panel.vue'
@@ -22,13 +22,13 @@ const MenuModule = namespace('menuModule')
   components: {
     'layer-list': LayerListPanel,
     'layer-control': LayerContrlPanel,
-    SearchPanel,
-    CheckPanel,
-    MuestruePanel,
-    ViewerPanel,
-    TaskPanel,
-    ProjectPanel,
-    SitePanel
+    search: SearchPanel,
+    check: CheckPanel,
+    measure: MeasurePanel,
+    viewer: ViewerPanel,
+    task: TaskPanel,
+    project: ProjectPanel,
+    site: SitePanel
   }
 })
 export default class extends Vue {

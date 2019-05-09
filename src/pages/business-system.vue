@@ -21,7 +21,7 @@
             <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
           </el-select>
         </div>
-        <div>
+        <div v-show="false">
           <label>时间排序</label>
           <a @click="sortList">
             <svg-icon iconName="sort" iconSize="12"></svg-icon>
@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="text-center">
-        <el-pagination @current-change="refreshData" :current-page.sync="pageService.pageIndex" :pager-count="5" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+        <el-pagination @current-change="refreshData" :current-page.sync="pageService.pageIndex" :page-size.sync="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
         </el-pagination>
       </div>
       <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="800px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
@@ -73,7 +73,7 @@ import { PageService } from "~/extension/services/page.service"
 export default class extends Vue {
   // @Inject
   private flowModel = new BusinessFlowModel()
-  private pageService = new PageService()
+  private pageService = new PageService({ pageSize: 8 })
   private menus = MenuItems
   private dataList: any[] = []
   private workType = ""
@@ -125,7 +125,7 @@ export default class extends Vue {
 .page.business-system {
   .system-menu {
     &-item {
-      padding: 15px 10px;  
+      padding: 15px 10px;
     }
     .menu-item-label {
       font-size: 14px;
@@ -160,7 +160,7 @@ export default class extends Vue {
     }
   }
   .add-item {
-    background-color: #955FF1;
+    background-color: #955ff1;
   }
 }
 </style>
@@ -188,7 +188,7 @@ export default class extends Vue {
     }
   }
   .el-pagination {
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .content-tabs .el-tabs__content {
     height: calc(100% - 60px);
