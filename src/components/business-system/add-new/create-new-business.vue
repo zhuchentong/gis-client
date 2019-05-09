@@ -10,9 +10,11 @@
           <el-option v-for="item of baseInfoConfig" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="项目面积" prop="acreage">
-        <el-input v-model="baseModel.acreage" type="number" :min="0.1" :max="100000">
-          <span slot="append">亩</span>
+      <el-form-item label="项目面积" class="area" prop="acreage">
+        <el-input v-model="baseModel.acreage" class="area-input" type="number" :min="0.1" :max="100000">
+          <el-select slot="append" class="area-unit" v-model="baseModel.unit">
+            <el-option v-for="{code,name} of $dict.getDictData('AreaUnit')" :key="code" :label="name" :value="code"></el-option>
+          </el-select>
         </el-input>
       </el-form-item>
       <el-form-item label="行政区" prop="region">
@@ -152,11 +154,32 @@ export default class extends Vue {
 }
 </script>
 
-
 <style lang="less">
 .component.create-new-business {
   .el-form .el-form-item .el-form-item__content .inline-full-textarea {
     width: 500px;
+  }
+
+  .area {
+    .area-input {
+      .el-input-group__append {
+        padding: 0 !important;
+        .el-select.area-unit {
+          margin-left: 0px;
+          margin-right: 0px;
+          .el-input.el-input--suffix {
+            width: 65px !important;
+            .el-input__inner {
+              padding: 0;
+              padding-left: 5px;
+            }
+            .el-input__suffix {
+              right: -4px;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>

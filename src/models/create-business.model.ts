@@ -14,6 +14,7 @@ export class CreateBusinessModel extends Model {
   public acreage: string = ""
   public whether: string = "NO"
   public nextUserId: string = ""
+  public unit: string = "SQUARE_METRE" // 平方米
 
   private serivce = new CraeteBusinessService()
 
@@ -45,6 +46,7 @@ export class CreateBusinessModel extends Model {
     }
 
     const requestData = {
+      unit: this.unit,
       name: this.name,
       type: this.type,
       remark: this.remark,

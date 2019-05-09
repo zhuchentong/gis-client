@@ -6,7 +6,7 @@
         <label-container :column="2">
           <label-item label="项目名称" :value="info.name"></label-item>
           <label-item label="项目类型" :value="info.type | dictConvert('FlowType')"></label-item>
-          <label-item label="项目面积" :value="info.acreage ? `${info.acreage} 亩` : ''"></label-item>
+          <label-item label="项目面积" :value="info.acreage ">{{info.unit | dictConvert('AreaUnit')}}</label-item>
           <label-item label="行政区" :value="info.region | districtName"></label-item>
           <label-item label="备注信息" :value="info.remark"></label-item>
         </label-container>
