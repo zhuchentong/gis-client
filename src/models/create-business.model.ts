@@ -40,7 +40,9 @@ export class CreateBusinessModel extends Model {
         break
     }
     // 设置图层样式
-    layerInfo.styleName = BusinessLayerStyle[this.type]
+    if (layerInfo) {
+      layerInfo.styleName = BusinessLayerStyle[this.type]
+    }
 
     const requestData = {
       name: this.name,
