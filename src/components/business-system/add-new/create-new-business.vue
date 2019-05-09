@@ -27,7 +27,7 @@
     <common-title title="流程审批" iconName="flow"></common-title>
     <el-form :model="baseModel" inline label-width="120px" ref="whether-form">
       <el-form-item label="是否开启流程" prop="whether">
-        <el-radio-group v-model="baseModel.whether">
+        <el-radio-group v-model="baseModel.whether" @change="onWhetherChange">
           <el-radio v-for="{code,name} of $dict.getDictData('CommonShow')" :key="code" :label="code">{{name}}</el-radio>
         </el-radio-group>
       </el-form-item>
@@ -111,6 +111,10 @@ export default class extends Vue {
    */
   private onTypeChange(type) {
     this.currentBase = BaseInfoConfig.find(x => x.value === type)
+  }
+
+  private onWhetherChange(value) {
+    if (value === 'NO') this.baseModel.nextUserId = ""
   }
 
   /**

@@ -1,8 +1,8 @@
 <template>
   <!-- 供地 -->
   <el-form :model="model" :rules="rules" label-width="120px" ref="form" inline class="component provide-land">
-    <el-form-item label="宗地编号" prop="supplyCode">
-      <el-input v-model="model.supplyCode"></el-input>
+    <el-form-item label="宗地编号" prop="supplyNumber">
+      <el-input v-model="model.supplyNumber"></el-input>
     </el-form-item>
     <el-form-item label="供地方式" prop="supplyWay">
       <el-select v-model="model.supplyWay">
@@ -52,7 +52,7 @@ export default class extends Vue {
   private businessModel = new CreateBusinessModel()
 
   private model = {
-    supplyCode: "",
+    supplyNumber: "",
     supplyWay: "",
     code: "",
     supplyTime: "",
@@ -64,7 +64,7 @@ export default class extends Vue {
   }
 
   private rules = {
-    supplyCode: { required: true, message: "请输入宗地编号" },
+    supplyNumber: { required: true, message: "请输入宗地编号" },
     supplyWay: { required: true, message: "请选择供地方式" },
     supplyTime: { required: true, message: "请选择供地日期" },
     code: { required: true, message: "请输入供地文号" },

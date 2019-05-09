@@ -55,7 +55,7 @@
           <!-- 供地 -->
           <div v-if="info.type === 'SUPPLY'">
             <label-item label="供地日期" :value="info.supplyTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
-            <label-item label="宗地编号" :value="info.supplyCode"></label-item>
+            <label-item label="宗地编号" :value="info.supplyNumber"></label-item>
             <label-item label="供地方式" :value="info.supplyWay | dictConvert('ProvisionType')"></label-item>
             <label-item label="供地文号" :value="info.supplyCode"></label-item>
             <label-item label="批文编号" :value="info.grantCode"></label-item>

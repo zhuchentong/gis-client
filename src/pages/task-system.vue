@@ -41,7 +41,7 @@
         </el-pagination>
       </div>
       <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="750px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-        <create-new-task @close="dialog.craeteNew = false"></create-new-task>
+        <create-new-task @close="dialog.craeteNew = false" @success="refreshData"></create-new-task>
       </el-dialog>
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
