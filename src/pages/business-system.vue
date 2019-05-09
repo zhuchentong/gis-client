@@ -30,7 +30,7 @@
       </div>
       <div class="no-data" v-if="!dataList.length"></div>
       <div v-else>
-        <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="flowId = item.flowId" :class="{'info-item-activated': item.flowId === flowId}">
+        <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="currentItem = item" :class="{'info-item-activated': item.flowId === currentItem.flowId}">
           <label-item label="项目名称" :value="item.name"></label-item>
           <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
           <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
@@ -46,7 +46,7 @@
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
       <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
-        <component :is="item.component" @success="refreshData" :status="flowModel.status" :flowId="flowId" class="content-tabs-panes-base"></component>
+        <component :is="item.component" @success="refreshData" :status="flowModel.status" :flowId="currentItem.flowId" class="content-tabs-panes-base"></component>
       </el-tab-pane>
     </el-tabs>
   </base-col-three>
@@ -77,14 +77,27 @@ export default class extends Vue {
   private menus = MenuItems
   private dataList: any[] = []
   private workType = ""
-  private tabs = ContentItems
-  private flowId = ""
-  private currentPanel = ContentItems[0].name
+  private mCurrentPanel!: string
   private dialog = {
     craeteNew: false
   }
 
+  private currentItem: any = {}
 
+  private get tabs() {
+    return ContentItems.filter(x => !(x.name === 'approveInfo' && this.currentItem.whether !== 'YES'))
+  }
+
+  private get currentPanel() {
+    if (!this.tabs.map(v => v.name).includes(this.mCurrentPanel)) {
+      this.mCurrentPanel = this.tabs[0].name
+    }
+    return this.mCurrentPanel
+  }
+
+  private set currentPanel(value) {
+    this.mCurrentPanel = value
+  }
 
   /**
    * 监听查询model变化
@@ -98,11 +111,11 @@ export default class extends Vue {
    * 查询数据
    */
   private refreshData() {
-    this.flowId = ""
+    this.currentItem = {}
     this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
       data => {
         this.dataList = data.content
-        if (this.dataList.length) this.flowId = this.dataList[0].flowId
+        if (this.dataList.length) this.currentItem = this.dataList[0]
       }
     )
   }
@@ -151,7 +164,7 @@ export default class extends Vue {
   }
   .content-tabs {
     height: 100%;
-    margin-left: 10px;
+    margin: 0 10px;
     &-panes {
       height: 100%;
       &-base {

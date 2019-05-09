@@ -107,6 +107,7 @@ export default class extends Vue {
 
 
   private menuClick(item) {
+    this.currentPanel = ContentItems[0].name
     this.currentMenu = item
     this.queryModel.status = item.status
   }

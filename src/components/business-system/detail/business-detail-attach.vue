@@ -1,6 +1,7 @@
 <template>
   <section class="component business-detail-attach">
-    <view-file-info v-for="item of dataSet" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
+    <div class="no-data" v-if="!flowId"></div>
+    <view-file-info v-else v-for="item of dataSet" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
   </section>
 </template>
 

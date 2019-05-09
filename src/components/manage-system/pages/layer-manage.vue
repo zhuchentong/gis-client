@@ -3,13 +3,15 @@
     <div class="layer-tree">
       <common-title :showIcon="false" title="图层分组" class="layer-tree-title">
         <template slot="append">
-          <el-button type="text" @click="append">添加根目录</el-button>
+          <!-- 开发人员开启此功能 -->
+          <el-button type="text" @click="append" v-if="visabledAddGroupFlag">添加根目录</el-button>
         </template>
       </common-title>
-      <el-tree :data="treeData" node-key="id" :props="{label:'groupName'}" ref="groupTree" highlight-current @current-change="onCurrentChange">
+      <el-tree :data="treeData" node-key="id" :props="{label:'groupName'}" ref="groupTree" highlight-current @current-change="onCurrentChange" :default-expand-all="true">
         <span slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
-          <span class="node-item" v-show="currentId === data.id">
+          <!-- 开发人员开启此功能 -->
+          <span class="node-item" v-show="visabledAddGroupFlag && currentId === data.id">
             <a @click="() => append(data)" title="增加">
               <svg-icon iconName="add-round" iconSize="13" iconColor="#13227a"></svg-icon>
             </a>
@@ -40,11 +42,11 @@
           <el-button @click="addLayerClick" :disabled="!currentId">新增图层</el-button>
         </template>
         <template slot="columns">
-          <el-table-column prop="layerName" label="图层名称"></el-table-column>
-          <el-table-column prop="layerRemark" label="图层描述" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="layerShow" label="默认显示" :formatter="row => $filter.dictConvert(row.layerShow,'CommonShow')"></el-table-column>
-          <el-table-column prop="createDate" label="添加日期" :formatter="row => $filter.dateFormat(row.createDate)"></el-table-column>
-          <el-table-column prop="operatorName" label="添加人"></el-table-column>
+          <el-table-column prop="layerName" label="图层名称" show-overflow-tooltip min-width="180px"></el-table-column>
+          <el-table-column prop="layerRemark" label="图层描述" show-overflow-tooltip min-width="180px"></el-table-column>
+          <el-table-column prop="layerShow" label="默认显示" :formatter="row => $filter.dictConvert(row.layerShow,'CommonShow')" min-width="90px"></el-table-column>
+          <el-table-column prop="createDate" label="添加日期" :formatter="row => $filter.dateFormat(row.createDate)" min-width="90px"></el-table-column>
+          <!-- <el-table-column prop="operatorName" label="添加人"></el-table-column> -->
           <el-table-column label=" 操作" :min-width="$helper.getOperateWidth(1)">
             <template slot-scope="scope">
               <el-button @click="deleteLayerClick(scope.row)" type="text">删除</el-button>
@@ -91,6 +93,9 @@ const LayerGroupModule = namespace('layerGroupModule')
 export default class LayerManage extends Vue {
   @LayerGroupModule.Mutation private updateGroupList!: (data) => void
   private pageService = new PageService()
+
+  // 开发人员可以开启此功能操作图层列表
+  private visabledAddGroupFlag = false
 
   private layerGroup = new LayerGroup()
   private layer = new LayerInfo()

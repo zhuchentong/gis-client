@@ -1,7 +1,8 @@
 export default {
-  server: process.env.VUE_APP_SERVER,
-  attch: process.env.VUE_APP_ATTACH,
-  geoServer: process.env.VUE_APP_GEO_SERVER,
+  server: process.env.VUE_APP_SERVER, // 后端服务地址
+  attch: process.env.VUE_APP_ATTACH,  // 存放附件地址
+  geoServer: process.env.VUE_APP_GEO_SERVER, // geoserver地址
+  mapResouce: process.env.VUE_APP_MAP_RESOUCE,  // 地图其他资源 3dtileset raster terrain
   rabbitmq: {
     socket: process.env.VUE_APP_RABBITMQ_SOCKET,
     vhost: process.env.VUE_APP_RABBITMQ_VHOST,

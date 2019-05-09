@@ -8,7 +8,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { Container } from 'element-ui'
 
 @Component({
   components: {}

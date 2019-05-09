@@ -1,76 +1,72 @@
 <template>
   <section class="component business-detail-info">
-    <el-card header="基础信息">
-      <label-container :column="2">
-        <label-item label="项目名称" :value="info.name"></label-item>
-        <label-item label="项目类型" :value="info.type | dictConvert('FlowType')"></label-item>
-        <label-item label="项目面积" :value="info.acreage ? `${info.acreage} 亩` : ''"></label-item>
-        <label-item label="行政区" :value="info.region | districtName"></label-item>
-        <label-item label="备注信息" :value="info.remark"></label-item>
-      </label-container>
-    </el-card>
-    <el-card header="业务关联信息">
-      <label-container :column="2">
-        <label-item
-          v-if="info.type !== 'REPORT' && info.reportId"
-          label="报地名称"
-          :value="info.reportName"
-        >
-          <el-popover title="报地详情" placement="right">
-            <report-detail :data="reportInfo"></report-detail>
-            <a slot="reference" title="点击查看报地详情" @click="queryReportInfo">
-              <i class="el-icon-info"></i>
-            </a>
-          </el-popover>
-        </label-item>
-        <label-item
-          v-if="['EXPROPRIA','SUPPLY'].includes(info.type)  && info.grantId"
-          label="批地名称"
-          :value="info.grantName"
-        >
-          <el-popover title="批地详情">
-            <approve-detail :data="grantInfo"></approve-detail>
-            <a slot="reference" title="点击查看批地详情" @click="queryGrantInfo">
-              <i class="el-icon-info"></i>
-            </a>
-          </el-popover>
-        </label-item>
-        <div v-else>暂无关联信息</div>
-      </label-container>
-    </el-card>
-    <el-card header="业务专属字段">
-      <label-container :column="2">
-        <!-- 报地 -->
-        <div v-if="info.type === 'REPORT'">
-          <label-item label="申报日期" :value="info.applyTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
-        </div>
-        <!-- 批地 -->
-        <div v-if="info.type === 'GRANT'">
-          <label-item label="批复日期" :value="info.grantTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
-          <label-item label="批文编号" :value="info.grantCode"></label-item>
-          <label-item label="报地项目" :value="info.grantName"></label-item>
-          <label-item label="批复结果" :value="info.result | dictConvert('GrantResult')"></label-item>
-          <label-item label="批复信息" :value="info.grantRemark"></label-item>
-        </div>
-        <!-- 征地 -->
-        <div v-if="info.type === 'EXPROPRIA'">
-          <label-item label="征收日期" :value="info.levyTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
-          <label-item label="征地文号" :value="info.grantName"></label-item>
-          <label-item label="批文编号" :value="info.grantCode"></label-item>
-        </div>
-        <!-- 供地 -->
-        <div v-if="info.type === 'SUPPLY'">
-          <label-item label="供地日期" :value="info.supplyTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
-          <label-item label="宗地编号" :value="info.supplyCode"></label-item>
-          <label-item label="供地方式" :value="info.supplyWay | dictConvert('ProvisionType')"></label-item>
-          <label-item label="供地文号" :value="info.supplyCode"></label-item>
-          <label-item label="批文编号" :value="info.grantCode"></label-item>
-          <label-item label="发布公告" :value="info.notice | dictConvert('CommonShow')"></label-item>
-          <label-item label="土地用途" :value="info.nature | dictConvert('LandNature')"></label-item>
-          <label-item label="具体地址" :value="info.address"></label-item>
-        </div>
-      </label-container>
-    </el-card>
+    <div class="no-data" v-if="!flowId"></div>
+    <div v-else>
+      <el-card header="基础信息">
+        <label-container :column="2">
+          <label-item label="项目名称" :value="info.name"></label-item>
+          <label-item label="项目类型" :value="info.type | dictConvert('FlowType')"></label-item>
+          <label-item label="项目面积" :value="info.acreage ? `${info.acreage} 亩` : ''"></label-item>
+          <label-item label="行政区" :value="info.region | districtName"></label-item>
+          <label-item label="备注信息" :value="info.remark"></label-item>
+        </label-container>
+      </el-card>
+      <el-card header="业务关联信息">
+        <label-container v-if="info.type !== 'REPORT' && (info.reportId || info.grantId)" :column="2">
+          <label-item v-if="info.reportId" label="报地名称" :value="info.reportName">
+            <el-popover title="报地详情" placement="right">
+              <report-detail :data="reportInfo"></report-detail>
+              <a slot="reference" title="点击查看报地详情" @click="queryReportInfo">
+                <i class="el-icon-info"></i>
+              </a>
+            </el-popover>
+          </label-item>
+          <label-item v-if="['EXPROPRIA','SUPPLY'].includes(info.type)  && info.grantId" label="批地名称" :value="info.grantName">
+            <el-popover title="批地详情">
+              <approve-detail :data="grantInfo"></approve-detail>
+              <a slot="reference" title="点击查看批地详情" @click="queryGrantInfo">
+                <i class="el-icon-info"></i>
+              </a>
+            </el-popover>
+          </label-item>
+        </label-container>
+        <div v-else style="padding-left:80px">暂无关联信息</div>
+      </el-card>
+      <el-card header="业务专属字段">
+        <label-container :column="2">
+          <!-- 报地 -->
+          <div v-if="info.type === 'REPORT'">
+            <label-item label="申报日期" :value="info.applyTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
+          </div>
+          <!-- 批地 -->
+          <div v-if="info.type === 'GRANT'">
+            <label-item label="批复日期" :value="info.grantTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
+            <label-item label="批文编号" :value="info.grantCode"></label-item>
+            <label-item label="报地项目" :value="info.grantName"></label-item>
+            <label-item label="批复结果" :value="info.result | dictConvert('GrantResult')"></label-item>
+            <label-item label="批复信息" :value="info.grantRemark"></label-item>
+          </div>
+          <!-- 征地 -->
+          <div v-if="info.type === 'EXPROPRIA'">
+            <label-item label="征收日期" :value="info.levyTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
+            <label-item label="征地文号" :value="info.grantName"></label-item>
+            <label-item label="批文编号" :value="info.grantCode"></label-item>
+          </div>
+          <!-- 供地 -->
+          <div v-if="info.type === 'SUPPLY'">
+            <label-item label="供地日期" :value="info.supplyTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
+            <label-item label="宗地编号" :value="info.supplyCode"></label-item>
+            <label-item label="供地方式" :value="info.supplyWay | dictConvert('ProvisionType')"></label-item>
+            <label-item label="供地文号" :value="info.supplyCode"></label-item>
+            <label-item label="批文编号" :value="info.grantCode"></label-item>
+            <label-item label="发布公告" :value="info.notice | dictConvert('CommonShow')"></label-item>
+            <label-item label="土地用途" :value="info.nature | dictConvert('LandNature')"></label-item>
+            <label-item label="具体地址" :value="info.address"></label-item>
+          </div>
+        </label-container>
+      </el-card>
+    </div>
+
   </section>
 </template>
 
@@ -149,10 +145,5 @@ export default class extends Vue {
   }
 }
 </script>
-
-<style lang="less" scoped>
-.component.business-detail-info {
-}
-</style>
 
 

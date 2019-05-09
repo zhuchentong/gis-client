@@ -1,21 +1,9 @@
 <template>
   <section class="layer-menu">
-    <el-tabs
-      type="border-card"
-      class="fill"
-    >
-      <el-tab-pane
-        v-for="(tools,key) of menuList"
-        :key="key"
-        :label="key"
-      >
+    <el-tabs type="border-card" class="fill">
+      <el-tab-pane v-for="(tools,key) of menuList" :key="key" :label="key">
         <div class="row middle-span no-padding no-margin tool-panel">
-          <el-button
-            v-for="item of tools"
-            :key="item.label"
-            class="tool-item"
-            type="text"
-          >{{item.label}}</el-button>
+          <el-button v-for="item of tools" :key="item.label" class="tool-item" type="text">{{item.label}}</el-button>
         </div>
       </el-tab-pane>
     </el-tabs>

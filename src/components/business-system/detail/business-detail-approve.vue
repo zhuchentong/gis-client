@@ -1,23 +1,25 @@
 <template>
   <section class="component business-detail-approve">
-    <div class="text-right">
-      <el-button v-show="showNextBtn" @click="dialog.nextApprove = true">指定审批</el-button>
-      <el-button v-show="showApproveBtn" @click="dialog.approve = true">审批</el-button>
-      <el-button v-show="showDoneBtn" @click="finshFlow">结束流程</el-button>
+    <div class="no-data" v-if="!flowId"></div>
+    <div v-else>
+      <div class="text-right">
+        <el-button v-show="showNextBtn" @click="dialog.nextApprove = true">指定审批</el-button>
+        <el-button v-show="showApproveBtn" @click="dialog.approve = true">审批</el-button>
+        <el-button v-show="showDoneBtn" @click="finshFlow">结束流程</el-button>
+      </div>
+      <div class="approve-steps">
+        <el-timeline>
+          <el-timeline-item v-for="(item,index) of dataSet" :hide-timestamp="true" size="large" :key="index" :icon="item.icon" :type="item.type">
+            <el-card class="approve-steps-item">
+              <label-item label="流程节点" :value="item.status | dictConvert('FlowChartStatus')"></label-item>
+              <label-item :label="item.status === 'PENDING_APPROVAL' ? '待审批人'  : '操作人'" :value="item.userName"></label-item>
+              <label-item label="操作时间" :value="item.time | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+              <label-item label="说明" :value="item.opinion"></label-item>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+      </div>
     </div>
-    <div class="approve-steps">
-      <el-timeline>
-        <el-timeline-item v-for="(item,index) of dataSet" :hide-timestamp="true" size="large" :key="index" :icon="item.icon" :type="item.type">
-          <el-card class="approve-steps-item">
-            <label-item label="流程节点" :value="item.status | dictConvert('FlowChartStatus')"></label-item>
-            <label-item :label="item.status === 'PENDING_APPROVAL' ? '待审批人'  : '操作人'" :value="item.userName"></label-item>
-            <label-item label="操作时间" :value="item.time | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
-            <label-item label="说明" :value="item.opinion"></label-item>
-          </el-card>
-        </el-timeline-item>
-      </el-timeline>
-    </div>
-
     <el-dialog title="选择下一个审批人" :center="true" :visible.sync="dialog.nextApprove" width="500px" :show-close="false" :close-on-click-modal="false">
       <next-select-approve :flowId="flowId" @close="dialog.nextApprove = false" @success="emitSuccess"></next-select-approve>
     </el-dialog>

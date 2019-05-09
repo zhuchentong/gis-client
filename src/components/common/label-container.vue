@@ -19,18 +19,3 @@ export default class LabelContainer extends Vue {
 }
 </script>
 
-<style lang="less" scoped>
-.label-item {
-  line-height: 24px;
-  height: 24px;
-  &-label {
-    &::after {
-      content: '：';
-    }
-  }
-  &-value {
-    padding-left: 2px;
-    overflow: hidden;
-  }
-}
-</style>
