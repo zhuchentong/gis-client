@@ -1,23 +1,26 @@
 <template>
   <section class="component task-detail-attach">
-    <div class="text-right add-attach-btn">
-      <el-button @click="dialog.appendAttach = true">添加附件</el-button>
+    <div v-if="!id" class="no-data"></div>
+    <div v-else>
+      <div class="text-right add-attach-btn">
+        <el-button @click="dialog.appendAttach = true">添加附件</el-button>
+      </div>
+      <div class="container-full-page">
+        <el-card header="巡查信息">
+          <p style="text-indent: 2em;">{{result.content}}</p>
+        </el-card>
+        <el-card header="巡查照片">
+          <view-file-info v-for="item of result.image" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
+        </el-card>
+        <el-card header="巡查视频">
+          <view-file-info v-for="item of result.video" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
+        </el-card>
+      </div>
     </div>
-    <div class="container-full-page">
-      <common-title title="巡查信息" iconName="info"></common-title>
-      <p style="text-indent: 2em;">{{result.content}}</p>
-      <common-title title="巡查照片" iconName="info"></common-title>
-      <view-file-info v-for="item of result.image" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
-
-      <common-title title="巡查视频" iconName="info"></common-title>
-      <view-file-info v-for="item of result.video" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
-    </div>
-
     <el-dialog title="添加附件" :center="true" :visible.sync="dialog.appendAttach" width="750px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
       <append-task-attach :id="id" @close="dialog.appendAttach = false" @success="onIdChange"></append-task-attach>
       <div></div>
     </el-dialog>
-
   </section>
 </template>
 

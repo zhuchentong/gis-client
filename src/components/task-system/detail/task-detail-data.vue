@@ -1,10 +1,13 @@
 <template>
   <section class="component business-detail-layer">
-    <div v-if="layerInfo && layerInfo.layerCode"></div>
-    <common-title :title="layerInfo.layerName" :showIcon="false">
-      <el-button slot="append" @click="preview">预览</el-button>
-    </common-title>
-    <div v-if="load"></div>
+    <div v-if="!id" class="no-data"></div>
+    <div v-else>
+      <div v-if="layerInfo && layerInfo.layerCode"></div>
+      <common-title :title="layerInfo.layerName" :showIcon="false">
+        <el-button slot="append" @click="preview">预览</el-button>
+      </common-title>
+      <div v-if="load"></div>
+    </div>
   </section>
 </template>
 

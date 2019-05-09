@@ -1,10 +1,10 @@
 <template>
   <section class="component view-file-info">
     <img v-img v-if="isImage" :src="url">
-    <img v-else-if="isMusic" :src="`${publicPath}images/audio.png`" :alt="fileInfo.originalName" @click="dialog.audio = true">
-    <img v-else-if="isVideo" :src="`${publicPath}images/video.png`" :alt="fileInfo.originalName" @click="dialog.video = true">
-    <img v-else-if="isPdf" :src="`${publicPath}images/pdf.png`" :alt="fileInfo.originalName" @click="dialog.pdf = true">
-    <img v-else :src="`${publicPath}images/file.png`" :alt="fileInfo.originalName" @click="downLoadFile">
+    <img v-else-if="isMusic" :src="baseImages.audio" :alt="fileInfo.originalName" @click="dialog.audio = true">
+    <img v-else-if="isVideo" :src="baseImages.video" :alt="fileInfo.originalName" @click="dialog.video = true">
+    <img v-else-if="isPdf" :src="baseImages.pdf" :alt="fileInfo.originalName" @click="dialog.pdf = true">
+    <img v-else :src="baseImages.file" :alt="fileInfo.originalName" @click="downLoadFile">
     <div class="file-name">{{fileInfo.originalName}}</div>
 
     <!-- pdf预览 -->
@@ -39,10 +39,10 @@ export default class ViewAttach extends Vue {
   private publicPath = process.env.BASE_URL
 
   private baseImages = {
-    video: 'video',
-    pdf: 'pdf',
-    other: 'other',
-    music: 'music'
+    video: require("~/assets/images/video.png"),
+    pdf: require('~/assets/images/pdf.png'),
+    file: require('~/assets/images/file.png'),
+    audio: require('~/assets/images/audio.png')
   }
 
   private canViewTypes = [...FileType.PICTURE.value, ...FileType.MP3.value, ...FileType.MP4.value]
@@ -113,11 +113,11 @@ export default class ViewAttach extends Vue {
   position: relative;
   display: inline-block;
   border: solid 1px #c6c6c6;
-  &:hover {
-    .file-name {
-      display: block;
-    }
-  }
+  // &:hover {
+  //   .file-name {
+  //     display: block;
+  //   }
+  // }
 
   > img {
     height: 120px;
@@ -143,7 +143,7 @@ export default class ViewAttach extends Vue {
   }
 
   .file-name {
-    display: none;
+    // display: none;
     position: absolute;
     left: 0;
     right: 0;
