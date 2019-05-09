@@ -1,57 +1,100 @@
 import * as turf from '@turf/turf'
-import Cesium from 'cesium'
+import Cesium from 'cesium/Cesium'
 /**
  * 公共函数
  */
-export class CesiumService {
-  /**
-   * 绘制多边形带孔洞
-   * @param viewer
-   * @param positions
-   * @param color 默认颜色为红色
-   * @param borderColor 边框颜色 默认宽度为1，颜色为红色
-   */
-  public static drawPolygon(
-    viewer: Cesium.Viewer,
-    positions: Cesium.PolygonHierarchy,
-    color?: Cesium.Color,
-    borderColor?: Cesium.Color
-  ): Cesium.Entity
+export class DrawService {
+  // Cesium视图
+  private viewer: Cesium.Viewer
+  // 颜色配置
+  private readonly color = {
+    label: Cesium.Color.BLACK,
+    point: Cesium.Color.RED,
+    outline: Cesium.Color.YELLOW,
+    polygon: Cesium.Color.RED,
+    polyline: Cesium.Color.RED,
+    border: Cesium.Color.YELLOW
+  }
+  // 构造函数
+  constructor(viewer: Cesium.Viewer) {
+    this.viewer = viewer
+  }
 
   /**
-   * 绘制多边形 采用弧度坐标
-   * @param viewer
-   * @param positions
-   * @param color 默认颜色为红色
+   * 绘制文字
+   * @param cartesian3
+   * @param label
+   * @param labelColor
    */
-  public static drawPolygon(
-    viewer: Cesium.Viewer,
-    positions: Cesium.Cartographic[],
-    color?: Cesium.Color
-  ): Cesium.Entity
+  public drawLabel(cartesian3: Cesium.Cartesian3, label: string) {
+    const entity = new Cesium.Entity()
+    entity.position = cartesian3
+    entity.label = DrawService.createLabel(label, this.color.label)
+    return this.viewer.entities.add(entity)
+  }
 
-  public static drawPolygon(
-    viewer: Cesium.Viewer,
-    positions: Cesium.PolygonHierarchy | Cesium.Cartographic[],
-    color = Cesium.Color.RED,
-    borderColor = Cesium.Color.RED
+  /**
+   * 绘制点数据
+   * @param cartesian3
+   * @param label
+   * @param labelColor
+   */
+  public drawPoint(cartesian3: Cesium.Cartesian3, label?: string) {
+    // 建立实体
+    const entity = new Cesium.Entity()
+
+    // 设置实体坐标
+    entity.position = cartesian3
+
+    // 设置实体高度
+    const heightReference =
+      Cesium.Cartographic.fromCartesian(cartesian3).height > 0
+        ? Cesium.HeightReference.RELATIVE_TO_GROUND
+        : Cesium.HeightReference.CLAMP_TO_GROUND
+
+    // 设置点数据信息
+    entity.point = new Cesium.PointGraphics({
+      heightReference,
+      color: this.color.point,
+      pixelSize: 6,
+      outlineColor: this.color.outline,
+      outlineWidth: 3
+    })
+
+    // 设置文字内容
+    if (label && label.trim()) {
+      entity.label = DrawService.createLabel(label, this.color.label)
+    }
+
+    return this.viewer.entities.add(entity)
+  }
+
+  /**
+   * 绘制多边形
+   * @param positions
+   */
+  public drawPolygon(
+    positions: Cesium.PolygonHierarchy | Cesium.Cartographic[]
   ) {
-    let hierarchy = new Cesium.PolygonHierarchy()
+    let hierarchy
+    // 创建多边形实体
     if (positions instanceof Cesium.PolygonHierarchy) {
       hierarchy = positions
     } else {
-      hierarchy.positions = positions.map(p =>
-        CesiumService.DegressToCartesian3(viewer, p)
+      hierarchy = new Cesium.PolygonHierarchy(
+        positions.map(position =>
+          DrawService.DegressToCartesian3(this.viewer, position)
+        )
       )
     }
 
-    return viewer.entities.add({
+    return this.viewer.entities.add({
       polygon: {
         hierarchy,
-        material: color,
+        material: this.color.polygon,
         height: 0,
         outline: true,
-        outlineColor: borderColor
+        outlineColor: this.color.border
       }
     })
   }
@@ -62,76 +105,22 @@ export class CesiumService {
    * @param positions
    * @param color 线条颜色
    */
-  public static drawPolyline(
-    viewer: Cesium.Viewer,
-    positions: Cesium.Cartographic[],
-    color = Cesium.Color.RED,
-    clampToGround = false
-  ) {
+  public drawPolyline(positions: Cesium.Cartographic[], clampToGround = false) {
     const polylineOption: any = {
       polyline: {
         width: 3,
-        material: color,
+        material: this.color.polyline,
         clampToGround // 开启贴地模式
       }
     }
     polylineOption.polyline.positions = new Cesium.CallbackProperty(
       () =>
         positions.map(cartographic =>
-          CesiumService.DegressToCartesian3(viewer, cartographic)
+          DrawService.DegressToCartesian3(this.viewer, cartographic)
         ),
       false
     )
-    return viewer.entities.add(polylineOption)
-  }
-
-  /**
-   * 绘制点数据
-   * @param viewer
-   * @param position 位置
-   * @param label 描述文字
-   * @param labelColor 文字颜色
-   */
-  public static drawPoint(
-    viewer: Cesium.Viewer,
-    cartesian3: Cesium.Cartesian3,
-    label: string,
-    labelColor?
-  ) {
-    const entity = new Cesium.Entity()
-    // 实体对应的点位置
-    entity.position = cartesian3
-
-    const heightReference =
-      Cesium.Cartographic.fromCartesian(cartesian3).height > 0
-        ? Cesium.HeightReference.RELATIVE_TO_GROUND
-        : Cesium.HeightReference.CLAMP_TO_GROUND
-    // 点信息
-    entity.point = new Cesium.PointGraphics({
-      heightReference,
-      color: Cesium.Color.RED,
-      pixelSize: 6,
-      outlineColor: Cesium.Color.YELLOW,
-      outlineWidth: 3
-    })
-
-    if (label && label.trim() !== '') {
-      // 标签信息
-      entity.label = CesiumService.createLabel(label, labelColor)
-    }
-    return viewer.entities.add(entity)
-  }
-
-  public static drawLabel(
-    viewer: Cesium.Viewer,
-    cartesian3: Cesium.Cartesian3,
-    label: string,
-    labelColor?
-  ) {
-    const entity = new Cesium.Entity()
-    entity.position = cartesian3
-    entity.label = CesiumService.createLabel(label, labelColor)
-    return viewer.entities.add(entity)
+    return this.viewer.entities.add(polylineOption)
   }
 
   /**
@@ -139,7 +128,7 @@ export class CesiumService {
    * @param label
    * @param labelColor
    */
-  public static createLabel(label: string, labelColor = Cesium.Color.BLACK) {
+  public createLabel(label: string, labelColor = Cesium.Color.BLACK) {
     // 判断文字颜色是否与背景色一致，否则就换个背景色
     let labelBackgroudColor = Cesium.Color.WHITE
     if (labelBackgroudColor.equals(labelColor)) {
@@ -263,9 +252,9 @@ export class CesiumService {
     if (feature && viewer.scene.pickPositionSupported) {
       viewer.scene.pickPosition(postion, result)
     } else {
-      const cartographic = CesiumService.getViewCartesianPoint(viewer, postion)
+      const cartographic = DrawService.getViewCartesianPoint(viewer, postion)
       if (cartographic) {
-        result = CesiumService.DegressToCartesian3(viewer, cartographic)
+        result = DrawService.DegressToCartesian3(viewer, cartographic)
       }
     }
     return result
@@ -295,14 +284,14 @@ export class CesiumService {
     const polygonHierarchy = new Cesium.PolygonHierarchy()
     // 如果有孔洞，就取第一组数据
     const outLineCoord = hasHoles ? coordinate[0] : coordinate
-    polygonHierarchy.positions = CesiumService.coordinateToCartesian3Array(
+    polygonHierarchy.positions = DrawService.coordinateToCartesian3Array(
       outLineCoord
     )
     if (hasHoles) {
       // 设置孔洞
       polygonHierarchy.holes = coordinate.slice(1).map(v => {
         return new Cesium.PolygonHierarchy(
-          CesiumService.coordinateToCartesian3Array(v)
+          DrawService.coordinateToCartesian3Array(v)
         )
       })
     }
