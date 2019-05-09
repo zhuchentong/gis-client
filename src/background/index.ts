@@ -20,6 +20,11 @@ let win: BrowserWindow | null
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
 function createWindow() {
+  // 如果已经启动页面则不再启动
+  if (BrowserWindow.getAllWindows().length) {
+    console.log('browser is launched')
+    return
+  }
   // Create the browser window.
   win = new BrowserWindow({
     center: true,
