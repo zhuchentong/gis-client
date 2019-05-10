@@ -87,7 +87,8 @@ export default class extends Vue {
     this.$window.open(
       item.url,
       {
-        size: WindowSize.large
+        width: WindowSize.large.width,
+        height: Math.min(WindowSize.large.height, window.screen.height - 40)
       },
       {
         replace: false,
