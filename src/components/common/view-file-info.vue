@@ -1,106 +1,35 @@
 <template>
-  <section
-    class="component view-file-info"
-    :title="fileInfo.originalName"
-  >
-    <img
-      v-img
-      v-if="isImage"
-      :src="url"
-    >
-    <img
-      v-else-if="isMusic"
-      :src="baseImages.audio"
-      :alt="fileInfo.originalName"
-      @click="dialog.audio = true"
-    >
-    <img
-      v-else-if="isVideo"
-      :src="baseImages.video"
-      :alt="fileInfo.originalName"
-      @click="dialog.video = true"
-    >
-    <img
-      v-else-if="isPdf"
-      :src="baseImages.pdf"
-      :alt="fileInfo.originalName"
-      @click="dialog.pdf = true"
-    >
-    <img
-      v-else
-      :src="baseImages.file"
-      :alt="fileInfo.originalName"
-    >
+  <section class="component view-file-info" :title="fileInfo.originalName">
+    <img v-img v-if="isImage" :src="url">
+    <img v-else-if="isMusic" :src="baseImages.audio" :alt="fileInfo.originalName" @click="dialog.audio = true">
+    <img v-else-if="isVideo" :src="baseImages.video" :alt="fileInfo.originalName" @click="dialog.video = true">
+    <img v-else-if="isPdf" :src="baseImages.pdf" :alt="fileInfo.originalName" @click="dialog.pdf = true">
+    <img v-else :src="baseImages.file" :alt="fileInfo.originalName">
     <div class="file-bottom row between-span">
       <div class='file-name'>
         {{fileInfo.originalName}}
       </div>
       <div class="file-action">
-        <span
-          title="预览"
-          v-if="isImage||isMusic||isPdf||isVideo"
-        >
-          <svg-icon
-            iconName="preview"
-            @click.native="previewFile"
-          ></svg-icon>
+        <span title="预览" v-if="isImage||isMusic||isPdf||isVideo">
+          <svg-icon iconName="preview" @click.native="previewFile"></svg-icon>
         </span>
         <span title="下载">
-          <svg-icon
-            iconName="download"
-            @click.native="downLoadFile"
-          ></svg-icon>
+          <svg-icon iconName="download" @click.native="downLoadFile"></svg-icon>
         </span>
 
       </div>
     </div>
 
     <!-- pdf预览 -->
-    <pdf-view
-      :visible.sync="dialog.pdf"
-      :src="url"
-      :fileName="fileInfo.originalName"
-    ></pdf-view>
-    <el-dialog
-      :title="fileInfo.originalName"
-      class="media-info"
-      :center="true"
-      :visible="dialog.video"
-      @close="onVideoClose"
-    >
-      <video
-        class="video-info-content"
-        :src="url"
-        controls
-        ref="video"
-      ></video>
+    <pdf-view :visible.sync="dialog.pdf" :src="url" :fileName="fileInfo.originalName"></pdf-view>
+    <el-dialog :title="fileInfo.originalName" class="media-info" width="900px" :center="true" :visible="dialog.video" @close="onVideoClose">
+      <video class="video-info-content" :src="url" controls ref="video"></video>
     </el-dialog>
-    <el-dialog
-      :title="fileInfo.originalName"
-      class="media-info"
-      :center="true"
-      :visible="dialog.audio"
-      @close="onAudioClose"
-    >
-      <video
-        class="video-info-content"
-        :src="url"
-        controls
-        ref="audio"
-      ></video>
+    <el-dialog :title="fileInfo.originalName" class="media-info" :center="true" :visible="dialog.audio" @close="onAudioClose">
+      <audio class="video-info-content" :src="url" controls ref="audio"></audio>
     </el-dialog>
-    <el-dialog
-      :title="fileInfo.originalName"
-      class="media-info"
-      :visible.sync="dialog.img"
-      :center="true"
-    >
-      <img
-        class="img-info-content"
-        :src="$common.getLocalServerFilePath(fileInfo.fileName)"
-        :alt="fileInfo.originalName"
-        v-img
-      >
+    <el-dialog :title="fileInfo.originalName" class="media-info" :visible.sync="dialog.img" :center="true">
+      <img class="img-info-content" :src="$common.getLocalServerFilePath(fileInfo.fileName)" :alt="fileInfo.originalName" v-img>
     </el-dialog>
   </section>
 </template>

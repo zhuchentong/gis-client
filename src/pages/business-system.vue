@@ -183,7 +183,7 @@ export default class extends Vue {
     }
   }
   .add-item {
-    background-color: #955ff1;
+    background-color: #64a1eb;
   }
 }
 </style>

@@ -2,7 +2,7 @@
 export default {
   namespaced: true,
   state: {
-    currentMenuItem: '',
+    currentMenu: {},
   },
   mutations: {
     /**
@@ -10,8 +10,16 @@ export default {
      * @param state 
      * @param data 
      */
-    updateCurrentMenuItem(state,menuItem) {
-      state.currentMenuItem = menuItem
+    updateCurrentMenu(state, menuItem) {
+      state.currentMenu = menuItem
+    }
+  },
+  getters: {
+    currentMenuKey(state) {
+      return state.currentMenu.key
+    },
+    currentComponentName(state) {
+      return state.currentMenu.compentName
     }
   }
 }

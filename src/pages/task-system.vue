@@ -76,7 +76,7 @@ export default class extends Vue {
     status: "PENDING_PATROL", // 待巡查
     type: "" // 全部
   }
-  private pageService = new PageService()
+  private pageService = new PageService({ pageSize: 8 })
   private menus = MenuItems
   private tabs = ContentItems
 
@@ -144,6 +144,8 @@ export default class extends Vue {
 
 <style lang="less" scoped>
 .page.task-system {
+  height: 100%;
+
   .system-menu {
     &-item {
       padding: 15px 10px;
@@ -181,7 +183,7 @@ export default class extends Vue {
     }
   }
   .add-item {
-    background-color: #955ff1;
+    background-color: #64a1eb;
   }
 }
 </style>

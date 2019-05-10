@@ -18,5 +18,23 @@ export const BusinessLayerStyle = {
   /**
    * 供地图层 多边形
    */
-  'RESUPPLYPORT': "business-supply-polygon"
+  'SUPPLY': "business-supply-polygon"
+}
+
+/**
+ * 图层空间配置
+ */
+export const LayerSpace = {
+  /**
+   * 基础图层空间
+   */
+  base: "base-space",
+  /**
+   * 业务图层空间
+   */
+  business: "business-space",
+  /**
+   * 临时图层空间
+   */
+  temp: "temp-space"
 }

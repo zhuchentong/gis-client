@@ -4,7 +4,7 @@ import TaskDetailInfo from "./detail/task-detail-info.vue"
 
 export const MenuItems = [
   {
-    label: '未巡查',
+    label: '待巡查',
     icon: 'task-wait',
     status: 'PENDING_PATROL',
     hiddenPage: ['taskResult', 'taskData']
