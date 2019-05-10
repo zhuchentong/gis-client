@@ -8,7 +8,7 @@
           <label-item label="项目类型" :value="info.type | dictConvert('FlowType')"></label-item>
           <label-item label="项目面积" :value="info.acreage ">{{info.unit | dictConvert('AreaUnit')}}</label-item>
           <label-item label="行政区" :value="info.region | districtName"></label-item>
-          <label-item label="备注信息" :value="info.remark"></label-item>
+          <label-item label="备注信息" :span="2" :value="info.remark"></label-item>
         </label-container>
       </el-card>
       <el-card header="业务关联信息">
@@ -61,7 +61,7 @@
             <label-item label="批文编号" :value="info.grantCode"></label-item>
             <label-item label="发布公告" :value="info.notice | dictConvert('CommonShow')"></label-item>
             <label-item label="土地用途" :value="info.nature | dictConvert('LandNature')"></label-item>
-            <label-item label="具体地址" :value="info.address"></label-item>
+            <label-item label="具体地址" :span="2" :value="info.address"></label-item>
           </div>
         </label-container>
       </el-card>

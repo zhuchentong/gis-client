@@ -8,7 +8,7 @@
           <label-item label="外业类型" :value="info.type | dictConvert('PatrolType')"></label-item>
           <label-item label="任务地点" :value="info.site"></label-item>
           <label-item label="创建时间" :value="info.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
-          <label-item label="任务备注" :value="info.remark"></label-item>
+          <label-item label="任务备注" :span="2" :value="info.remark"></label-item>
         </label-container>
       </el-card>
       <el-card header="任务计划">
