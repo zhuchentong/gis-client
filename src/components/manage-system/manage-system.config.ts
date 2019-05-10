@@ -3,6 +3,7 @@
 import LayerManage from "./pages/layer-manage.vue"
 import RoleManage from "./pages/role-manage.vue"
 import UserManage from "./pages/user-manage.vue"
+import LayerThreeDimensionalManage from "./pages/layer-three-dimensional-manage.vue"
 
 export const MenuItems = [
   {
@@ -22,6 +23,12 @@ export const MenuItems = [
     name: 'layerManage',
     icon: 'manage-shujuguanli',
     component: 'LayerManage'
+  },
+  {
+    label: '三维数据',
+    name: 'layer-three-dimensional-manage',
+    icon: 'manage-three-layer',
+    component: 'LayerThreeDimensionalManage'
   }
 ]
 
@@ -32,5 +39,6 @@ export const MenuItems = [
 export const PageComponents = {
   UserManage,
   RoleManage,
-  LayerManage
+  LayerManage,
+  LayerThreeDimensionalManage
 }

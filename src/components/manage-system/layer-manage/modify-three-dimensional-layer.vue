@@ -2,10 +2,12 @@
   <section class="component modify-three-dimensional-layer">
     <el-form ref="form" :model="layer" :rules="rules" label-width="120px">
       <el-form-item prop="name" label="图层名称">
-        <el-input v-model="layer.name" :maxlength="50"></el-input>
+        <el-input v-model="layer.name" :maxlength="50" placeholder="请输入图层名称"></el-input>
       </el-form-item>
       <el-form-item prop="heightOffset" label="高度偏移量">
-        <el-input type="number" v-model="layer.heightOffset"></el-input>
+        <el-input type="number" v-model="layer.heightOffset" placeholder="请输入高度偏移量">
+          <span slot="append">米</span>
+        </el-input>
       </el-form-item>
       <el-form-item prop="url" label="图层路径">
         <el-input type="textarea" v-model="layer.url" :rows="1" :maxlength="300" placeholder="请输入json文件的url地址"></el-input>
@@ -25,6 +27,9 @@
 import { Component, Vue, Emit, Prop, Watch } from "vue-property-decorator"
 import { Form } from 'element-ui'
 import { ThreeDimensionalLayerInfo } from '@/models/three-dimensional-layer-info.model'
+import { ThreeDimensionalLayerService } from "~/services/three-dimensional-layer.service.ts"
+import { Inject } from "typescript-ioc"
+import { RequestParams } from "~/core/http"
 
 @Component({
   components: {}
@@ -47,6 +52,9 @@ export default class ModifyThreeDimensionalLayer extends Vue {
     heightOffset: { required: true, message: "请输入高度偏移量" }
   }
 
+  @Inject
+  private service!: ThreeDimensionalLayerService
+
   @Emit("close")
   private emitClose() {
     const form = this.$refs.form as Form
@@ -63,7 +71,8 @@ export default class ModifyThreeDimensionalLayer extends Vue {
     const form = this.$refs.form as Form
     form.validate(v => {
       if (!v) return
-      this.layer.save().subscribe(this.emitSuccess, () => this.loading = false)
+      const func = this.layer.id ? this.service.updateLayer3D : this.service.createLayer3D
+      func(new RequestParams(this.layer)).subscribe(this.emitSuccess, () => this.loading = false)
     })
   }
 }
