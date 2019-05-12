@@ -60,4 +60,15 @@ export class PatrolInfoService {
   public addPatrolFile(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
+
+
+  /**
+   * 查询巡查信息
+   */
+  @Request({
+    server: PatrolServer.queryPatrolInfoListByApp
+  })
+  public queryPatrolInfoListByApp(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

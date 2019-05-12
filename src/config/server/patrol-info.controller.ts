@@ -42,6 +42,14 @@ export default {
     controller: CONTROLLER,
     action: 'addPatrolFile',
     type: RequestMethod.Post
+  },
+  /**
+   * 查询巡查信息
+   */
+  queryPatrolInfoListByApp: {
+    controller: CONTROLLER,
+    action: 'queryPatrolInfoByApp',
+    type: RequestMethod.Get
   }
 
 }

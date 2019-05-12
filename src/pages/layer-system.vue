@@ -18,18 +18,27 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import { Cesium } from 'cesium'
+import { namespace } from 'vuex-class'
 import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
 import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'
 import MapView from '~/components/layer-view/map-view.vue'
+const MenuModule = namespace('menuModule')
+
 @Layout('workspace')
 @Component({
   components: {
     LayerMenuList,
     LayerMenuPanel,
-    MapView
+    // MapView
   }
 })
-export default class LayerSystem extends Vue { }
+export default class LayerSystem extends Vue {
+  @MenuModule.Mutation private updateCurrentMenu
+
+  private mounted() {
+    this.updateCurrentMenu({})
+  }
+}
 </script>
 
 

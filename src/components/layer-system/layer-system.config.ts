@@ -58,7 +58,7 @@ export const MenuList = [
   {
     key: 'site',
     compentName: "site-panel",
-    label: '地点',
+    label: '隐患点',
     icon: 'site'
   },
   {

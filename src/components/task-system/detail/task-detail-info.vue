@@ -3,7 +3,7 @@
     <div v-if="!id" class="no-data"></div>
     <div v-else>
       <el-card header="基础信息">
-        <label-container :columns="2">
+        <label-container :column="2">
           <label-item label="任务名称" :value="info.name"></label-item>
           <label-item label="外业类型" :value="info.type | dictConvert('PatrolType')"></label-item>
           <label-item label="任务地点" :value="info.site"></label-item>
@@ -12,7 +12,7 @@
         </label-container>
       </el-card>
       <el-card header="任务计划">
-        <label-container :columns="2">
+        <label-container :column="2">
           <label-item label="巡查人员" :value="info.userName"></label-item>
           <label-item label="计划时间" :value="info.planTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
           <label-item label="需要拍摄照片" :value="info.image | dictConvert('CommonShow')"></label-item>

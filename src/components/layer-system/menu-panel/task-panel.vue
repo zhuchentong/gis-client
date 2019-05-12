@@ -23,15 +23,14 @@
         <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
         <div class="text-right item-operate">
           <el-button type="text" @click="viewTaskDetail">查看详情</el-button>
-          <el-button type="text" :disabled="!item.layerId">显示图层</el-button>
+          <el-button type="text" :disabled="item.show === 'NO'">显示图层</el-button>
         </div>
       </div>
+      <div class="text-center">
+        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+        </el-pagination>
+      </div>
     </div>
-    <div class="text-center">
-      <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
-      </el-pagination>
-    </div>
-
   </section>
 </template>
 
@@ -84,7 +83,7 @@ export default class TaskPanel extends Vue {
       )
   }
 
-  private viewBusinessDetail() {
+  private viewTaskDetail() {
     if (!this.id) return
     this.$window.open('task-system',
       {
@@ -98,13 +97,15 @@ export default class TaskPanel extends Vue {
       }, this)
   }
 
-
+  private mounted() {
+    this.refreshData()
+  }
 }
 </script>
 
 
 <style lang="less" scoped>
-.page.task-system {
+.component.task-panel {
   height: 100%;
   .search {
     padding: 0 10px;
@@ -117,10 +118,16 @@ export default class TaskPanel extends Vue {
     }
   }
   .info-item {
-    padding: 5px 0 5px 10px;
+    padding-top: 5px;
     border-bottom: solid 2px #f3f3f3;
     &-activated {
       background-color: #ffffea;
+    }
+    .item-operate {
+      padding-right: 15px;
+      .el-button {
+        padding: 5px 0;
+      }
     }
   }
 }
