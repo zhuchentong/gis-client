@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
-import { Cesium } from 'cesium'
+import Cesium from 'cesium/Cesium'
 import { namespace } from 'vuex-class'
 import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
 import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'

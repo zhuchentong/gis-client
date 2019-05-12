@@ -1,7 +1,17 @@
 <template>
   <section class="layer-menu-list">
-    <div v-for="item in menuList" :class="{'active':currentMenuKey === item.key}" class="layer-menu-item col middle-span center-span" :key="item.key" @click="onSelectMenuItem(item)">
-      <svg-icon class="menu-item-icon" :iconSize="18" :iconName="item.icon"></svg-icon>
+    <div
+      v-for="item in menuList"
+      :class="{'active':currentMenu === item.key}"
+      class="layer-menu-item col middle-span center-span"
+      :key="item.key"
+      @click="updateCurrentMenu(item.key)"
+    >
+      <svg-icon
+        class="menu-item-icon"
+        :iconSize="18"
+        :iconName="item.icon"
+      ></svg-icon>
       <div class="menu-item-label">{{item.label}}</div>
     </div>
   </section>
@@ -11,20 +21,16 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { State, Mutation, namespace } from 'vuex-class'
-import { MenuList } from "./layer-system.config"
+import { MenuList } from './layer-system.config'
 const MenuModule = namespace('menuModule')
 @Component({
   components: {}
 })
 export default class extends Vue {
-  @MenuModule.Getter private currentMenuKey!: string
+  @MenuModule.State private currentMenu!: string
   @MenuModule.Mutation private updateCurrentMenu
 
   private readonly menuList = MenuList
-
-  private onSelectMenuItem(menuItem) {
-    this.updateCurrentMenu(menuItem)
-  }
 }
 </script>
 

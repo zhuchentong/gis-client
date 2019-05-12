@@ -2,24 +2,16 @@
 export default {
   namespaced: true,
   state: {
-    currentMenu: {},
+    currentMenu: 'layer-list-panel'
   },
   mutations: {
     /**
      * 更新图层分组数据
-     * @param state 
-     * @param data 
+     * @param state
+     * @param data
      */
-    updateCurrentMenu(state, menuItem) {
-      state.currentMenu = menuItem
-    }
-  },
-  getters: {
-    currentMenuKey(state) {
-      return state.currentMenu.key
-    },
-    currentComponentName(state) {
-      return state.currentMenu.compentName
+    updateCurrentMenu(state, key) {
+      state.currentMenu = key
     }
   }
 }

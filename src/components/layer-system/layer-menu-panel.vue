@@ -1,7 +1,10 @@
 <template>
   <section class="layer-menu-panel">
     <keep-alive>
-      <component :is="currentComponentName" :viewer="viewer"></component>
+      <component
+        :is="currentMenu"
+        :viewer="viewer"
+      ></component>
     </keep-alive>
   </section>
 </template>
@@ -19,7 +22,7 @@ const MenuModule = namespace('menuModule')
   }
 })
 export default class extends Vue {
-  @MenuModule.Getter private currentComponentName!: string
+  @MenuModule.State private currentMenu!: string
 
   @Prop()
   private viewer

@@ -1,9 +1,15 @@
 <template>
-  <section class="map-view fill">
-    <div id="cesium-viewer" class="col-span no-padding fill">
+  <section class="map-viewer fill">
+    <div
+      id="cesium-viewer"
+      class="col-span no-padding fill"
+    >
       <div id="slider"></div>
     </div>
-    <div id="credit" style="display:none"></div>
+    <div
+      id="credit"
+      style="display:none"
+    ></div>
   </section>
 </template>
 
@@ -207,13 +213,15 @@ export default class MapViewer extends Vue {
     this.viewer = new Cesium.Viewer(this.mapId, {
       sceneModePicker: false,
       sceneMode: Cesium.SceneMode.SCENE3D,
-      baseLayerPicker: false,
+      baseLayerPicker: true,
       selectionIndicator: false,
       fullscreenButton: false,
       navigationHelpButton: false,
       geocoder: false,
       animation: false,
       timeline: false,
+      imageryProviderViewModels: this.getImageViewModels(),
+      // terrainProviderViewModels: this.getTerrainViewModels(),
       creditContainer: 'credit'
     })
     // 清除默认图层
@@ -312,6 +320,40 @@ export default class MapViewer extends Vue {
       })
   }
 
+  private getImageViewModels() {
+    return [
+      new Cesium.ProviderViewModel({
+        name: '遥感影像',
+        iconUrl: Cesium.buildModuleUrl(
+          'Widgets/Images/ImageryProviders/naturalEarthII.png'
+        ),
+        tooltip:
+          'Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/',
+        creationFunction() {
+          return Cesium.createTileMapServiceImageryProvider({
+            url: Cesium.buildModuleUrl(`${appConfig.mapResouce}/raster`)
+          })
+        }
+      })
+    ]
+  }
+
+  private getTerrainViewModels() {
+    return [
+      new Cesium.ProviderViewModel({
+        name: '地形数据',
+        iconUrl: 'Widgets/Images/ImageryProviders/naturalEarthII.png',
+        tooltip: '加载地形数据',
+        creationFunction() {
+          return new Cesium.CesiumTerrainProvider({
+            url: `${appConfig.mapResouce}/raster/{z}/{x}/{y}.png`,
+            requestWaterMask: true
+          })
+        }
+      })
+    ]
+  }
+
   /**
    * 创建图层
    */
@@ -329,19 +371,29 @@ export default class MapViewer extends Vue {
       }
     })
   }
+
+  private addToolBar() {
+    const targetElement = document.querySelector(
+      '.cesium-viewer .cesium-button.cesium-toolbar-button'
+    ) as Element
+    targetElement.append()
+  }
 }
 </script>
 
 <style lang="less" >
-.map-view {
+.map-viewer {
   .cesium-viewer-bottom {
+    display: none;
+  }
+  .cesium-baseLayerPicker-sectionTitle {
     display: none;
   }
 }
 </style>
 <style lang="less" scoped>
-.map-view {
-  .cesium-view {
+.map-viewer {
+  .cesium-viewer {
     height: 100%;
     width: 100%;
   }

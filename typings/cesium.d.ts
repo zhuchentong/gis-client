@@ -7398,6 +7398,8 @@ declare namespace Cesium {
   }
 
   function defined(value: Object): boolean
+
+  function buildModuleUrl(value:string):string
 }
 
 declare module 'cesium/Cesium' {
