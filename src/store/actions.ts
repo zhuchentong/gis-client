@@ -10,8 +10,6 @@ export default {
     commit('updateUserMenuResource', user.resourceResponses)
     // 清除下载任务列表
     commit('downloadProcessModule/clearDownLoadTasks')
-    // 设置媒体查看初始状态
-    commit('mediaViewModule/resetState')
     // 更新用户数据
     commit('updateUserData', {
       id: user.id,

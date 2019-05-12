@@ -1,20 +1,158 @@
 <template>
-  <section>
-    
+  <section class="component project-panel">
+    <div class="search row between-span">
+      <div>
+        <label>项目类型:</label>
+        <el-select v-model="flowModel.type" class="search-worktype">
+          <el-option label="全部" value=""></el-option>
+          <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
+        </el-select>
+      </div>
+      <div v-show="false">
+        <label>时间排序</label>
+        <a>
+          <svg-icon iconName="sort" iconSize="12"></svg-icon>
+        </a>
+      </div>
+    </div>
+    <div class="no-data" v-if="!dataList.length"></div>
+    <div v-else class="middle-content">
+      <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="currentItem = item" :class="{'info-item-activated': item.flowId === currentItem.flowId}">
+        <label-item label="项目名称" :value="item.name"></label-item>
+        <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
+        <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+        <div class="text-right item-operate">
+          <el-button type="text" @click="viewBusinessDetail">查看详情</el-button>
+          <el-button type="text" :disabled="!item.layerId">显示图层</el-button>
+        </div>
+      </div>
+      <div class="text-center">
+        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size.sync="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+        </el-pagination>
+      </div>
+    </div>
   </section>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { BusinessFlowModel } from "~/models/business-flow.model"
+import { PageService } from "~/extension/services/page.service.ts"
+import { WindowSize } from '~/config/enum.config'
+
 @Component({
   components: {}
 })
-export default class extends Vue {
+export default class ProjectPanel extends Vue {
+
+  private dataList: any[] = []
+  private currentItem: any = {}
+  private flowModel: BusinessFlowModel = new BusinessFlowModel()
+  private pageService = new PageService({ pageSize: 6 })
+
+
+
+
+  /**
+   * 监听查询model变化
+   */
+  @Watch('flowModel', { deep: true })
+  private onFlowModelChange() {
+    this.refreshData()
+  }
+
+  /**
+   * 查询数据
+   */
+  private refreshData() {
+    this.currentItem = {}
+    this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
+      data => {
+        this.dataList = data.content
+        if (this.dataList.length) this.currentItem = this.dataList[0]
+      }
+    )
+  }
+
+
+  private mounted() {
+    // 只查询已办理的
+    this.flowModel.status = 'FINSH'
+  }
+
+  private viewBusinessDetail() {
+    if (!this.currentItem.flowId) return
+    this.$window.open('business-system',
+      {
+        width: WindowSize.large.width,
+        height: Math.min(WindowSize.large.height, window.screen.height - 40)
+      },
+      {
+        replace: false,
+        parent: null,
+        params: { flowId: this.currentItem.flowId }
+      }, this)
+  }
+
 
 }
 </script>
 
 <style lang="less" scoped>
+.component.project-panel {
+  .search {
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: solid 2px #f3f3f3;
+    &-worktype {
+      padding-left: 3px;
+      width: 100px;
+    }
+  }
+  .middle-content {
+    height: calc(100% - 40px);
+    overflow-y: auto;
+  }
+  .info-item {
+    padding-top: 5px;
+    border-bottom: solid 2px #f3f3f3;
+    &-activated {
+      background-color: #ffffea;
+    }
+    .item-operate {
+      padding-right: 15px;
+      .el-button {
+        padding: 5px 0;
+      }
+    }
+  }
+}
 </style>
 
+
+<style lang="less">
+.component.project-panel {
+  @line-height: 20px;
+  .search {
+    .el-input {
+      /*
+        设置局部按钮行内高度
+      */
+      line-height: @line-height!important;
+      .el-input__inner {
+        line-height: @line-height!important;
+        height: @line-height!important;
+      }
+      .el-input__icon {
+        height: @line-height!important;
+        line-height: @line-height!important;
+      }
+    }
+    .el-button.el-button--default {
+      line-height: @line-height!important;
+    }
+  }
+}
+</style>

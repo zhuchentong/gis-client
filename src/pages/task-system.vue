@@ -1,5 +1,5 @@
 <template>
-  <base-col-three class="page task-system">
+  <base-col-three class="page task-system" :class="{'only-detail':onlyShowDetail}">
     <div slot="left" class="col between-span system-menu text-center" style="height:100%">
       <div>
         <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === currentMenu.status}">
@@ -83,11 +83,12 @@ export default class extends Vue {
   // 查询到的数据列表
   private dataList: any[] = []
   private id = ""
-
+  // 仅显示详情，从一张图跳转过来
+  private onlyShowDetail = false
   // 当前tab页
   private currentPanel = ContentItems[0].name
 
-  private currentMenu = MenuItems[0]
+  private currentMenu: any = MenuItems[0]
 
   private dialog = {
     craeteNew: false
@@ -136,7 +137,16 @@ export default class extends Vue {
   }
 
   private mounted() {
-    this.refreshData()
+    // 从其他系统调用此系统
+    const id = this.$route.query.id as string
+    if (id) {
+      this.currentMenu = MenuItems.find(x => !x.status)
+      this.queryModel.status = ""
+      this.id = id
+      this.onlyShowDetail = true
+    } else {
+      this.refreshData()
+    }
   }
 
 }
@@ -215,6 +225,13 @@ export default class extends Vue {
   }
   .content-tabs .el-tabs__content {
     height: calc(100% - 60px);
+  }
+}
+// 隐藏左侧。中间列表
+.page.task-system.only-detail {
+  .layout-left,
+  .layout-middle {
+    display: none;
   }
 }
 </style>

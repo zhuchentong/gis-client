@@ -9,7 +9,7 @@
     <div class="layer-view">
       <map-viewer @map-ready="onMapReady"></map-viewer>
     </div>
-    <div class="bottom-panel"></div>
+    <div class="bottom-panel"></div>-->
   </section>
 </template>
 
@@ -18,6 +18,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import { Cesium } from 'cesium'
+import { namespace } from 'vuex-class'
 import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
 import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'

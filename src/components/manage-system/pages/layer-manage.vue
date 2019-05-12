@@ -60,7 +60,7 @@
       <modify-layer :layer="layer" @close="dialog.modifyLayer = false" @success="refreshLayers"></modify-layer>
     </el-dialog>
     <el-dialog :title="`${layerGroup.id ? '维护' : '添加'}组`" :center="true" :visible.sync="dialog.modifyLayerGroup" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-      <modify-layer-group :layerGroup="layerGroup" @close="dialog.modifyLayerGroup = false" @success="data => groupList = data"></modify-layer-group>
+      <modify-layer-group :layerGroup="layerGroup" @close="dialog.modifyLayerGroup = false" @success="refreshGroupList"></modify-layer-group>
     </el-dialog>
   </section>
 </template>
@@ -95,7 +95,7 @@ export default class LayerManage extends Vue {
   private pageService = new PageService()
 
   // 开发人员可以开启此功能操作图层列表
-  private visabledAddGroupFlag = false
+  private visabledAddGroupFlag = true
 
   private layerGroup = new LayerGroup()
   private layer = new LayerInfo()
@@ -128,6 +128,7 @@ export default class LayerManage extends Vue {
       this.layerGroup.delete().subscribe(d => {
         this.groupList = d
         this.currentId = ""
+        this.refreshGroupList()
       })
     }).catch()
   }

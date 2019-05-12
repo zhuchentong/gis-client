@@ -1,6 +1,6 @@
 <template>
   <section class="base-col-three row no-warp">
-    <div class="layout-left">
+    <div class="layout-left" v-if="!hiddlenLeft">
       <slot name="left"></slot>
     </div>
     <div class="layout-middle" v-if="!hiddenMiddle">
@@ -25,9 +25,11 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class extends Vue {
 
   private hiddenMiddle = false
+  private hiddlenLeft = false
 
   private mounted() {
     this.hiddenMiddle = !this.$slots.middle
+    this.hiddlenLeft = !this.$slots.left
   }
 
 }
