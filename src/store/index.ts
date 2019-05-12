@@ -6,7 +6,6 @@ import actions from './actions'
 import getters from './getters'
 import Modules from './modules'
 import createPersistedState from 'vuex-persistedstate'
-import { type } from 'os'
 
 Vue.use(Vuex)
 
