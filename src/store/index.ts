@@ -4,8 +4,9 @@ import state from './state'
 import mutations from './mutations'
 import actions from './actions'
 import getters from './getters'
-import Modules from "./modules"
+import Modules from './modules'
 import createPersistedState from 'vuex-persistedstate'
+import { type } from 'os'
 
 Vue.use(Vuex)
 
@@ -20,7 +21,10 @@ export default new Vuex.Store({
     // 持久化存储插件
     createPersistedState({
       key: 'vuex',
-      storage: localStorage
+      storage: localStorage,
+      filter: ({ type }) => {
+        return !['menuModule/updateCurrentMenu'].includes(type)
+      }
     })
   ]
 })
