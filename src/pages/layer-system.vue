@@ -4,10 +4,10 @@
       <layer-menu-list></layer-menu-list>
     </div>
     <div class="menu-panel">
-      <layer-menu-panel></layer-menu-panel>
+      <layer-menu-panel :viewer="mapViewer"></layer-menu-panel>
     </div>
     <div class="layer-view">
-      <map-view></map-view>
+      <map-viewer @map-ready="onMapReady"></map-viewer>
     </div>
     <div class="bottom-panel"></div>
   </section>
@@ -20,16 +20,22 @@ import { Layout } from '@/core/decorator'
 import { Cesium } from 'cesium'
 import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
 import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'
-import MapView from '~/components/layer-view/map-view.vue'
+import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 @Layout('workspace')
 @Component({
   components: {
     LayerMenuList,
     LayerMenuPanel,
-    MapView
+    MapViewer
   }
 })
-export default class extends Vue {}
+export default class extends Vue {
+  public mapViewer: MapViewer | null = null
+
+  private onMapReady(viewer) {
+    this.mapViewer = viewer
+  }
+}
 </script>
 
 
@@ -46,7 +52,6 @@ export default class extends Vue {}
 
   .menu-panel {
     grid-area: ~'1/2/span 1/span 1';
-    background: yellow;
   }
 
   .layer-view {

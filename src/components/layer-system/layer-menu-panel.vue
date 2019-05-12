@@ -1,14 +1,16 @@
 <template>
   <section class="layer-menu-panel">
-    <component :is="currentComponentName"></component>
+    <keep-alive>
+      <component :is="currentComponentName" :viewer="viewer"></component>
+    </keep-alive>
   </section>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { State, Mutation, namespace } from 'vuex-class'
-import { PanelComponents } from "./layer-system.config"
+import { PanelComponents } from './layer-system.config'
 const MenuModule = namespace('menuModule')
 
 @Component({
@@ -19,7 +21,8 @@ const MenuModule = namespace('menuModule')
 export default class extends Vue {
   @MenuModule.Getter private currentComponentName!: string
 
-
+  @Prop()
+  private viewer
 }
 </script>
 

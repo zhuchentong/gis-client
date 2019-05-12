@@ -1,29 +1,40 @@
 <template>
   <section>
-    <el-tree show-checkbox ref="layerTree" node-key="id" :props="{label:'name'}" :data="layerList" :render-after-expand="false" :default-expanded-keys="expendKeys">
-    </el-tree>
+    <el-tree
+      show-checkbox
+      ref="layerTree"
+      node-key="id"
+      :props="{label:'name'}"
+      :data="layerList"
+      :render-after-expand="false"
+      :default-expanded-keys="expendKeys"
+      @check-change="onCheckChange"
+    ></el-tree>
   </section>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { LayerGroupService } from "~/services/layer-group.service"
-import { LayerInfoService } from "~/services/layer-info.service.ts"
-import { Inject } from "typescript-ioc"
-import { RequestParams } from "~/core/http"
-import { CommonService } from "~/utils/common.service"
-import { LayerSpace } from "~/config/business-config.ts"
-import { BusinessLayerService } from "~/services/business-layer.service.ts"
-import { ThreeDimensionalLayerService } from "~/services/three-dimensional-layer.service.ts"
-import { BaseInfoConfig } from "~/components/business-system/business-system.config.ts"
-import AppConfig from "~/config/app.config"
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import { LayerGroupService } from '~/services/layer-group.service'
+import { LayerInfoService } from '~/services/layer-info.service.ts'
+import { Inject } from 'typescript-ioc'
+import { RequestParams } from '~/core/http'
+import { CommonService } from '~/utils/common.service'
+import { LayerSpace } from '~/config/business-config.ts'
+import { BusinessLayerService } from '~/services/business-layer.service.ts'
+import { ThreeDimensionalLayerService } from '~/services/three-dimensional-layer.service.ts'
+import { BaseInfoConfig } from '~/components/business-system/business-system.config.ts'
+import AppConfig from '~/config/app.config'
+import { zip } from 'rxjs'
+import MapViewer from '@/components/layer-viewer/map-viewer.vue'
 
 @Component({
   components: {}
 })
 export default class extends Vue {
-
+  @Prop()
+  public viewer!: MapViewer
   @Inject
   private groupService!: LayerGroupService
   @Inject
@@ -34,108 +45,127 @@ export default class extends Vue {
   private threeDimensinalService!: ThreeDimensionalLayerService
 
   private layerList: any[] = []
-
+  private expendKeys: string[] = []
 
   private mounted() {
-    // this.generateBaseLayers().then(data => this.layerList = data)
-    Promise.all([this.generateBaseLayers(), this.queryThreeDimensionalLayers(), this.getRasterLayers()])
-      .then(data => this.layerList = [...data])
-
+    this.generateLayerList()
   }
 
+  /**
+   * 商城图层
+   */
+  private generateLayerList() {
+    Promise.all([
+      // 获取基础图层
+      this.getLayerList(),
+      this.getTilesetList()
+    ]).then(([layerList, tilesetList]) => {
+      // 默认展开
+      layerList.forEach(x => this.expendKeys.push(x.id))
 
-
-  private queryLayerGroups() {
-    return new Promise((resolve, reject) => {
-      this.groupService.getLayerGroupList(new RequestParams(null)).subscribe(resolve, reject)
+      this.layerList = [...layerList, tilesetList]
     })
   }
 
-  private queryBaseLayers() {
-    const params = new RequestParams({ layerSpace: LayerSpace.base })
-    return new Promise((resolve, reject) => {
-      this.layerService.getLayerInfoList(new RequestParams(null)).subscribe(resolve, reject)
-    })
-  }
+  /**
+   * 生成基础图层
+   */
+  private async getLayerList() {
+    // 获取图层目录
+    // 获取图层列表
+    const [groupList, layerList] = await zip(
+      this.groupService.getLayerGroupList(new RequestParams()),
+      this.layerService.getLayerInfoList(
+        new RequestParams({ layerSpace: LayerSpace.base })
+      )
+    ).toPromise()
 
-  // 生成基础图层
-  private async generateBaseLayers() {
-    const [groupList, baseLayers] = await Promise.all([this.queryLayerGroups(), this.queryBaseLayers()]).then(datas => datas)
-
-    const groupOption = {
-      keyName: 'id',
-      parentKeyName: 'parentId'
-    }
-
-    const groupTree = CommonService.generateTreeData(groupList, groupOption)
-
-    // 生成图层文件叶子节点
-    const getChildrenLayer = (groupId) => {
-      return (baseLayers as any[]).filter(x => x.groupId === groupId).map(v => {
-        return {
-          id: v.id,
-          parentId: groupId,
-          type: 'shp',
-          name: v.layerName,
-          layerCode: v.layerCode,
-          layerSpace: v.layerSpace
-        }
-      })
-    }
-
-    // 生成图层组
-    const setGroupItemInfo = (group) => {
-      group.name = group.groupName
-      group.type = 'group'
-      if (group.children) {
-        group.children.forEach(setGroupItemInfo)
+    // 关联图层数据
+    layerList.forEach(layer => {
+      // 设置图层数据
+      const item = {
+        id: layer.id,
+        name: layer.layerName,
+        data: layer,
+        type: 'layer'
       }
-      group.children = [getChildrenLayer(group.id), ...group.children || []]
+
+      const group = groupList.find(x => x.id === layer.groupId)
+
+      if (!group.children) {
+        group.children = [item]
+      } else {
+        group.children.push(item)
+      }
+    })
+
+    const gerateGroupTree = (id?) => {
+      // 设置目录名称
+      const children = groupList
+        .filter(x => (id ? x.parentId === id : !x.parentId))
+        .map(x => ({
+          id: x.id,
+          name: x.groupName,
+          type: 'group',
+          children: gerateGroupTree(x.id) || x.children
+        }))
+
+      if (children && children.length) {
+        return children
+      }
     }
 
-    return groupTree
+    return gerateGroupTree()
   }
 
-  // 三维图层
-  private queryThreeDimensionalLayers() {
-    return new Promise((resolve, reject) => {
-      this.threeDimensinalService.getAllLayers(new RequestParams(null)).subscribe(data => {
-        const children = data.map(v => {
-          return {
-            id: v.id,
-            parentId: 'layer-3d-0101010101',
-            name: v.name,
-            heightOffset: v.heightOffset,
-            url: v.url,
-            type: "tileset"
-          }
-        })
+  /**
+   * 三维图层
+   */
+  private async getTilesetList() {
+    const tilesetList = await this.threeDimensinalService
+      .getAllLayers(new RequestParams())
+      .toPromise()
 
-        const groupInfo = {
-          id: 'layer-3d-0101010101',
-          parentId: null,
-          name: "三维图层",
-          type: "group",
-          children
-        }
-        resolve([groupInfo])
-      }, reject)
-    })
+    return {
+      name: '三维图层',
+      type: 'group',
+      children: tilesetList.map(x => ({
+        name: x.name,
+        data: x,
+        type: 'tileset'
+      }))
+    }
+  }
+
+  /**
+   * 图层变更检测
+   */
+  private onCheckChange(node, checked, indeterminate) {
+    switch (node.type) {
+      case 'layer':
+        checked
+          ? this.viewer.addLayer(node.data)
+          : this.viewer.removeLayer(node.data)
+        break
+      case 'tileset':
+        checked
+          ? this.viewer.addTileset(node.data)
+          : this.viewer.removeTileset(node.data.id)
+        break
+    }
   }
 
   // 遥感影像
-  private getRasterLayers() {
-    const groupInfo = {
-      id: 'raster-0101010101',
-      parentId: null,
-      name: "遥感影像",
-      type: "raster",
-      url: `${AppConfig.mapResouce}/raster/{z}/{x}/{y}.png`
-    }
-    return Promise.resolve([groupInfo])
-  }
-
-
+  // private getRasterLayers() {
+  //   const groupInfo = {
+  //     id: 'raster-0101010101',
+  //     parentId: null,
+  //     name: '遥感影像',
+  //     type: 'raster',
+  //     url: `${AppConfig.mapResouce}/raster/{z}/{x}/{y}.png`
+  //   }
+  //   return Promise.resolve([groupInfo])
+  // }
 }
 </script>
 

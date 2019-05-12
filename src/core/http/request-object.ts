@@ -1,4 +1,4 @@
-import { Observable, EMPTY } from 'rxjs'
+import { Observable, EMPTY, Subscriber } from 'rxjs'
 import { RequestParams } from './request-params'
 import { RequestOption } from './request-option'
 import { IRequestServerConfig } from './interfaces'
@@ -21,7 +21,7 @@ export class RequestObject {
   public readonly requestServer: IRequestServerConfig
 
   // 请求观察者
-  private requestObserver
+  private requestObserver!: Subscriber<any>
 
   private responseModel
 
@@ -81,6 +81,7 @@ export class RequestObject {
 
           // 通讯结果正常
           this.requestObserver.next(data)
+          this.requestObserver.complete()
         })
         .finally(() => {
           // 重置通讯状态

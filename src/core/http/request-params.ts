@@ -17,8 +17,8 @@ export class RequestParams {
    * @param data
    * @param options
    */
-  constructor(data, options?: IRequestParamsOption) {
-    this.data = data instanceof Model ? classToPlain(data) : data
+  constructor(data?, options?: IRequestParamsOption) {
+    this.data = data instanceof Model ? classToPlain(data) : data || {}
     this.options = options || {}
   }
 

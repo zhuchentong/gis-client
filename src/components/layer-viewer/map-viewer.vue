@@ -1,6 +1,6 @@
 <template>
   <section class="map-view fill">
-    <div id="cesium-view" class="col-span no-padding fill">
+    <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
     <div id="credit" style="display:none"></div>
@@ -15,7 +15,7 @@ import appConfig from '../../config/app.config'
 @Component({
   components: {}
 })
-export default class MapView extends Vue {
+export default class MapViewer extends Vue {
   // 默认样式
   public defaultStyle = 'test001'
   // Cesium视图
@@ -23,18 +23,18 @@ export default class MapView extends Vue {
   // Camera视图
   private cameraView
   // Map视图
-  private mapView!: MapView
+  private mapViewer!: MapViewer
   // geoserver服务地址
   private geoServer = appConfig.geoServer
   // 默认工作区
-  private workspace = 'space01'
+  private workspace = 'base-space'
   // 矢量图层列表
   private layerList: any[] = []
   // 三维图层列表
-  private layer3dList: any[] = []
+  private tilesetList: any[] = []
 
   // 地图ID
-  private mapId = 'cesium-view'
+  private mapId = 'cesium-viewer'
 
   public getLayerList() {
     return this.layerList
@@ -43,8 +43,8 @@ export default class MapView extends Vue {
   /**
    * 获取当前3d层列表
    */
-  public getLayer3dList() {
-    return this.layer3dList
+  public getTilesetList() {
+    return this.tilesetList
   }
 
   /**
@@ -70,6 +70,7 @@ export default class MapView extends Vue {
         alpha: provider.alpha
       }
     })
+
     this.setCamera(layer.layerSpace, layer.layerCode)
     this.emitLayerListChange(this.layerList)
     return provider
@@ -107,11 +108,81 @@ export default class MapView extends Vue {
   }
 
   /**
+   * 加载3d地图
+   */
+  public async addTileset({ id, url, heightOffset }) {
+    // 添加3d图层
+    const tileset = this.viewer.scene.primitives.add(
+      new Cesium.Cesium3DTileset({
+        url
+        // maximumScreenSpaceError: 10, //最大的屏幕空间误差
+        // maximumNumberOfLoadedTiles: 1000 //最大加载瓦片个数
+      })
+    )
+    // 调整3d图层位置
+    tileset.allTilesLoaded.addEventListener(() => {
+      const boundingSphere = tileset.boundingSphere
+      const cartographic = Cesium.Cartographic.fromCartesian(
+        boundingSphere.center
+      )
+      const surface = Cesium.Cartesian3.fromRadians(
+        cartographic.longitude,
+        cartographic.latitude,
+        0.0
+      )
+      const offset = Cesium.Cartesian3.fromRadians(
+        cartographic.longitude,
+        cartographic.latitude,
+        parseFloat(heightOffset)
+      )
+      const translation = Cesium.Cartesian3.subtract(
+        offset,
+        surface,
+        new Cesium.Cartesian3()
+      )
+      tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
+    })
+
+    // 调整视角
+    await this.viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0, -0.5, 0))
+
+    // 添加到图层列表
+    this.tilesetList.push({
+      id,
+      url,
+      heightOffset
+    })
+  }
+
+  /**
+   * 删除3d图层
+   */
+  public removeTileset(id) {
+    // 查询tileset
+    const item = this.tilesetList.find(x => x.id === id)
+    if (!item) return
+
+    for (let index = 0; index < this.viewer.scene.primitives.length; index++) {
+      const primitive = this.viewer.scene.primitives.get(index)
+
+      if (
+        primitive instanceof Cesium.Cesium3DTileset &&
+        primitive.url === item.url
+      ) {
+        this.viewer.scene.primitives.remove(primitive)
+        break
+      }
+    }
+
+    this.tilesetList = this.tilesetList.filter(x => x.id !== id)
+  }
+
+  /**
    * 地图准备完成
    */
   @Emit('map-ready')
   private emitMapReady() {
-    return
+    return this.mapViewer
   }
 
   /**
@@ -124,7 +195,7 @@ export default class MapView extends Vue {
 
   // 组件创建
   private created() {
-    this.mapView = this
+    this.mapViewer = this
   }
 
   // 初始化cesium
@@ -139,6 +210,7 @@ export default class MapView extends Vue {
       baseLayerPicker: false,
       selectionIndicator: false,
       fullscreenButton: false,
+      navigationHelpButton: false,
       geocoder: false,
       animation: false,
       timeline: false,
