@@ -6,10 +6,10 @@
     <div class="menu-panel">
       <layer-menu-panel></layer-menu-panel>
     </div>
-    <div class="layer-view">
+    <!-- <div class="layer-view">
       <map-view></map-view>
     </div>
-    <div class="bottom-panel"></div>
+    <div class="bottom-panel"></div> -->
   </section>
 </template>
 
@@ -29,7 +29,7 @@ import MapView from '~/components/layer-view/map-view.vue'
     MapView
   }
 })
-export default class extends Vue {}
+export default class LayerSystem extends Vue { }
 </script>
 
 
@@ -46,7 +46,7 @@ export default class extends Vue {}
 
   .menu-panel {
     grid-area: ~'1/2/span 1/span 1';
-    background: yellow;
+    background: #fafafa;
   }
 
   .layer-view {

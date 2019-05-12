@@ -1,8 +1,11 @@
 <template>
-  <div class="label-item" :style="itemStyle">
-    <label :style="labelStyle" class="label-item-label">{{label}}</label>
-    <label class="label-item-value">{{value}}</label>
-    <slot></slot>
+  <div class="label-item row" :style="itemStyle">
+    <div :style="labelStyle" class="label-item-label">{{label}}</div>
+    <div class="label-item-value">
+      {{value}}
+      <slot></slot>
+    </div>
+
   </div>
 </template>
 
@@ -43,7 +46,7 @@ export default class extends Vue {
   private get labelStyle() {
     const labelWidth = this.container.labelWidth
     return {
-      minWidth: `${labelWidth}px`
+      flexBasis: `${labelWidth}px`
     }
   }
 
@@ -69,15 +72,14 @@ export default class extends Vue {
 .label-item {
   line-height: 24px;
   height: 24px;
-  display: inline-block;
   &-label {
     text-align: right;
-    display: inline-block;
     &::after {
       content: '：';
     }
   }
   &-value {
+    flex: 1;
     padding-left: 2px;
     overflow: hidden;
   }

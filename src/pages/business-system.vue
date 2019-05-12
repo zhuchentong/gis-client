@@ -1,5 +1,5 @@
 <template>
-  <base-col-three class="page business-system">
+  <base-col-three class="page business-system" :class="{'only-detail':onlyShowDetail}">
     <div slot="left" class="col between-span system-menu text-center" style="height:100%">
       <div>
         <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === flowModel.status}">
@@ -77,6 +77,10 @@ export default class extends Vue {
   private menus = MenuItems
   private dataList: any[] = []
   private workType = ""
+
+  // 仅显示详情，从一张图跳转过来
+  private onlyShowDetail = false
+
   private mCurrentPanel!: string
   private dialog = {
     craeteNew: false
@@ -131,9 +135,16 @@ export default class extends Vue {
   }
 
   private mounted() {
-    this.flowModel.status = MenuItems[0].status
-    this.flowModel.type = ""
-    this.refreshData()
+    // 从其他系统调用此系统
+    const flowId = this.$route.query.flowId
+    if (flowId) {
+      this.flowModel.status = 'FINSH'
+      this.currentItem.flowId = flowId
+      this.onlyShowDetail = true
+    } else {
+      this.flowModel.status = MenuItems[0].status
+      this.refreshData()
+    }
   }
 
 }
@@ -215,6 +226,13 @@ export default class extends Vue {
   }
   .content-tabs .el-tabs__content {
     height: calc(100% - 60px);
+  }
+}
+// 隐藏左侧。中间列表
+.page.business-system.only-detail {
+  .layout-left,
+  .layout-middle {
+    display: none;
   }
 }
 </style>

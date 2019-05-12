@@ -22,7 +22,7 @@ import AppConfig from "~/config/app.config"
 @Component({
   components: {}
 })
-export default class extends Vue {
+export default class LayerListPanel extends Vue {
 
   @Inject
   private groupService!: LayerGroupService
