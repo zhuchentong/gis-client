@@ -1,21 +1,15 @@
 <template>
   <section class="map-viewer fill">
-    <div
-      id="cesium-viewer"
-      class="col-span no-padding fill"
-    >
+    <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div
-      id="credit"
-      style="display:none"
-    ></div>
+    <div id="credit" style="display:none"></div>
   </section>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator'
-import Cesium from 'cesium/Cesium'
+import Cesium, { CesiumTerrainProvider } from 'cesium/Cesium'
 import WMSCapabilities from 'wms-capabilities'
 import appConfig from '../../config/app.config'
 @Component({
@@ -38,7 +32,10 @@ export default class MapViewer extends Vue {
   private layerList: any[] = []
   // 三维图层列表
   private tilesetList: any[] = []
-
+  // 影像图层
+  private imageProvider
+  // 地形数据
+  private terrainProvider
   // 地图ID
   private mapId = 'cesium-viewer'
 
@@ -184,6 +181,54 @@ export default class MapViewer extends Vue {
   }
 
   /**
+   * 添加遥感影像
+   */
+  public addImageProvider() {
+    const rectangle = new Cesium.Rectangle(
+      Cesium.Math.toRadians(109.55151),
+      Cesium.Math.toRadians(36.611866),
+      Cesium.Math.toRadians(109.76861),
+      Cesium.Math.toRadians(36.73161)
+    )
+
+    const provider = new Cesium.UrlTemplateImageryProvider({
+      url: `${appConfig.mapResouce}/raster/{z}/{x}/{y}.png`,
+      tilingScheme: new Cesium.WebMercatorTilingScheme(),
+      minimumLevel: 0,
+      rectangle,
+      maximumLevel: 17
+    })
+    this.imageProvider = this.viewer.imageryLayers.addImageryProvider(provider)
+    this.viewer.scene.imageryLayers.lowerToBottom(this.imageProvider)
+  }
+
+  /**
+   * 删除遥感影像
+   */
+  public removeImageProvider() {
+    this.viewer.scene.imageryLayers.remove(this.imageProvider, true)
+    this.imageProvider = null
+  }
+
+  /**
+   * 添加地形数据
+   */
+  public addTerrainProvider() {
+    this.terrainProvider = new Cesium.CesiumTerrainProvider({
+      url: `${appConfig.mapResouce}/terrain`
+    })
+    this.viewer.terrainProvider = this.terrainProvider
+  }
+
+  /**
+   * 删除地形数据
+   */
+  public removeTerrainProvider() {
+    this.viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider({})
+    this.terrainProvider = null
+  }
+
+  /**
    * 地图准备完成
    */
   @Emit('map-ready')
@@ -213,14 +258,14 @@ export default class MapViewer extends Vue {
     this.viewer = new Cesium.Viewer(this.mapId, {
       sceneModePicker: false,
       sceneMode: Cesium.SceneMode.SCENE3D,
-      baseLayerPicker: true,
+      baseLayerPicker: false,
       selectionIndicator: false,
       fullscreenButton: false,
       navigationHelpButton: false,
       geocoder: false,
       animation: false,
       timeline: false,
-      imageryProviderViewModels: this.getImageViewModels(),
+      // imageryProviderViewModels: this.getImageViewModels(),
       // terrainProviderViewModels: this.getTerrainViewModels(),
       creditContainer: 'credit'
     })
@@ -244,6 +289,39 @@ export default class MapViewer extends Vue {
     this.initCamera()
 
     this.emitMapReady()
+
+    this.addToolBar(
+      'imagery',
+      '遥感影像',
+      'Widgets/Images/ImageryProviders/naturalEarthII.png',
+      () => {
+        this.updateToolbarIcon('imagery')
+        this.imageProvider
+          ? this.removeImageProvider()
+          : this.addImageProvider()
+      },
+      true
+    )
+
+    this.addToolBar(
+      'terrain',
+      '地形数据',
+      'Widgets/Images/TerrainProviders/CesiumWorldTerrain.png',
+      () => {
+        this.updateToolbarIcon('terrain')
+        this.terrainProvider
+          ? this.removeTerrainProvider()
+          : this.addTerrainProvider()
+      },
+      true
+    )
+  }
+
+  private updateToolbarIcon(id) {
+    const element = document.querySelector(`#${id} img`) as HTMLElement
+    if (element) {
+      element.classList.toggle('close')
+    }
   }
 
   /**
@@ -276,6 +354,29 @@ export default class MapViewer extends Vue {
       .catch(ex => {
         console.log(ex)
       })
+  }
+
+  private addToolBar(id, title, image, handle, open?) {
+    const container = document.querySelector(
+      '.cesium-viewer-toolbar'
+    ) as HTMLElement
+    const element = document.createElement('button')
+    element.id = id
+    element.classList.add('cesium-button')
+    element.classList.add('cesium-toolbar-button')
+    element.title = title
+    element.onclick = () => handle(element)
+    const img = new Image()
+    img.src = image
+    img.width = 28
+    img.height = 28
+    open || img.classList.add('close')
+    open && handle(element)
+
+    element.append(img)
+    container.append(element)
+
+    return element
   }
 
   /**
@@ -320,40 +421,6 @@ export default class MapViewer extends Vue {
       })
   }
 
-  private getImageViewModels() {
-    return [
-      new Cesium.ProviderViewModel({
-        name: '遥感影像',
-        iconUrl: Cesium.buildModuleUrl(
-          'Widgets/Images/ImageryProviders/naturalEarthII.png'
-        ),
-        tooltip:
-          'Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/',
-        creationFunction() {
-          return Cesium.createTileMapServiceImageryProvider({
-            url: Cesium.buildModuleUrl(`${appConfig.mapResouce}/raster`)
-          })
-        }
-      })
-    ]
-  }
-
-  private getTerrainViewModels() {
-    return [
-      new Cesium.ProviderViewModel({
-        name: '地形数据',
-        iconUrl: 'Widgets/Images/ImageryProviders/naturalEarthII.png',
-        tooltip: '加载地形数据',
-        creationFunction() {
-          return new Cesium.CesiumTerrainProvider({
-            url: `${appConfig.mapResouce}/raster/{z}/{x}/{y}.png`,
-            requestWaterMask: true
-          })
-        }
-      })
-    ]
-  }
-
   /**
    * 创建图层
    */
@@ -371,13 +438,6 @@ export default class MapViewer extends Vue {
       }
     })
   }
-
-  private addToolBar() {
-    const targetElement = document.querySelector(
-      '.cesium-viewer .cesium-button.cesium-toolbar-button'
-    ) as Element
-    targetElement.append()
-  }
 }
 </script>
 
@@ -386,8 +446,15 @@ export default class MapViewer extends Vue {
   .cesium-viewer-bottom {
     display: none;
   }
-  .cesium-baseLayerPicker-sectionTitle {
-    display: none;
+  .cesium-viewer-toolbar {
+    img.close {
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      filter: grayscale(100%);
+      filter: gray;
+    }
   }
 }
 </style>

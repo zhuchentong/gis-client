@@ -1,7 +1,7 @@
 <template>
   <section class="login-page fill-absolute" @keydown.enter="submitForm">
     <div class="col center-span fill-height">
-      <div class="login-title">多规合一信息综合平台</div>
+      <div class="login-title">多规合一综合信息平台</div>
       <div class="login-content">
         <div class="login-form">
           <el-form ref="login-form" :model="user" :rules="userRoles">
