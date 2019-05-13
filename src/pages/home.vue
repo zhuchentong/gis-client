@@ -1,7 +1,7 @@
 <template>
   <section class="home-page fill">
     <div class="system-title">
-      <div>延安市高新区</div>
+      <div>延安高新区</div>
       <div>多规合一综合信息平台</div>
     </div>
     <div class="menu row">

@@ -180,9 +180,8 @@ export default class MapViewer extends Vue {
     this.tilesetList = this.tilesetList.filter(x => x.id !== id)
   }
 
-
   /**
-   *
+   * 添加遥感影像
    */
   public addImageProvider() {
     const rectangle = new Cesium.Rectangle(
@@ -203,21 +202,29 @@ export default class MapViewer extends Vue {
     this.viewer.scene.imageryLayers.lowerToBottom(this.imageProvider)
   }
 
+  /**
+   * 删除遥感影像
+   */
   public removeImageProvider() {
     this.viewer.scene.imageryLayers.remove(this.imageProvider, true)
     this.imageProvider = null
   }
 
+  /**
+   * 添加地形数据
+   */
   public addTerrainProvider() {
     this.terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: `${appConfig.mapResouce}/terrain`,
-      requestWaterMask: true
+      url: `${appConfig.mapResouce}/terrain`
     })
     this.viewer.terrainProvider = this.terrainProvider
   }
 
-  public removeTerrainProvider(){
-     this.viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider({})
+  /**
+   * 删除地形数据
+   */
+  public removeTerrainProvider() {
+    this.viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider({})
     this.terrainProvider = null
   }
 
@@ -302,9 +309,9 @@ export default class MapViewer extends Vue {
       'Widgets/Images/TerrainProviders/CesiumWorldTerrain.png',
       () => {
         this.updateToolbarIcon('terrain')
-        this.terrainProvider?
-        this.addTerrainProvider():
-        this.removeTerrainProvider()
+        this.terrainProvider
+          ? this.removeTerrainProvider()
+          : this.addTerrainProvider()
       },
       true
     )
