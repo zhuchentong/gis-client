@@ -9,7 +9,7 @@
     <div class="layer-view">
       <map-viewer @map-ready="onMapReady"></map-viewer>
     </div>
-    <div class="bottom-panel"></div>-->
+    <div class="bottom-panel"></div>
   </section>
 </template>
 

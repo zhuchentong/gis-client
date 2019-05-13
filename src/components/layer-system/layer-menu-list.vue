@@ -1,17 +1,7 @@
 <template>
   <section class="layer-menu-list">
-    <div
-      v-for="item in menuList"
-      :class="{'active':currentMenu === item.key}"
-      class="layer-menu-item col middle-span center-span"
-      :key="item.key"
-      @click="updateCurrentMenu(item.key)"
-    >
-      <svg-icon
-        class="menu-item-icon"
-        :iconSize="18"
-        :iconName="item.icon"
-      ></svg-icon>
+    <div v-for="item in menuList" :class="{'active':currentMenu === item.key}" class="layer-menu-item col middle-span center-span" :key="item.key" @click="updateCurrentMenu(item.key)">
+      <svg-icon class="menu-item-icon" :iconSize="18" :iconName="item.icon"></svg-icon>
       <div class="menu-item-label">{{item.label}}</div>
     </div>
   </section>
@@ -26,7 +16,7 @@ const MenuModule = namespace('menuModule')
 @Component({
   components: {}
 })
-export default class extends Vue {
+export default class LayerMenuList extends Vue {
   @MenuModule.State private currentMenu!: string
   @MenuModule.Mutation private updateCurrentMenu
 

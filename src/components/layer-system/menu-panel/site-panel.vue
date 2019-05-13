@@ -2,7 +2,8 @@
   <section class="component site-panel">
     <div class="search row between-span">
       <div>
-        <label>外业类型:</label>
+        <el-checkbox v-model="selectAll" class="search-select-all-checkbox" :indeterminate="getIndeterminate"></el-checkbox>
+        <label>隐患级别:</label>
         <el-select v-model="queryModel.grade" class="search-worktype">
           <el-option label="全部" value=""></el-option>
           <el-option v-for="{code,name} of $dict.getDictData('DisasterGrade')" :key="code" :label="name" :value="code"></el-option>
@@ -10,26 +11,22 @@
       </div>
       <div>
         <a @click="addNew">
-          <svg-icon iconName="sort" iconSize="12"></svg-icon>
+          <svg-icon iconName="add-new" iconSize="12"></svg-icon>
+          添加
         </a>
       </div>
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
     <div v-else>
-      <div>
-        <el-checkbox v-model="selectAll" :indeterminate="getIndeterminate">全部显示</el-checkbox>
-      </div>
-      <div v-for="item of dataList" :key="item.id" class="info-item" :class="{'info-item-activated': item.id === id}">
-        <el-checkbox v-model="item.selected"></el-checkbox>
+      <div v-for="item of dataList" :key="item.id" class="info-item row no-warp" :class="{'info-item-disabled': item.status === 'DISABLED' }">
+        <el-checkbox v-model="item.selected" class="info-item-check-box"></el-checkbox>
         <div>
-          <div class="row between-span">
+          <div class="row between-span info-item-title">
             <label>{{item.name}}</label>
-            <el-button type="text" @click="onItemClick(item)">编辑</el-button>
+            <el-button type="text" v-if="item.selected" @click="onItemClick(item)">编辑</el-button>
           </div>
-          <label-container>
-            <label-item label="所属行政区" :value="item.prefecture | districtName"></label-item>
-            <label-item label="等级" :value="item.grade | dictConvert('DisasterGrade')"></label-item>
-          </label-container>
+          <label-item label="隐患级别" :value="item.grade | dictConvert('DisasterGrade')"></label-item>
+          <label-item label="所属行政区" :value="item.prefecture | districtName"></label-item>
         </div>
       </div>
       <div class="text-center">
@@ -60,14 +57,14 @@ import { CommonService } from '~/utils/common.service'
     ModifyDangerSite
   }
 })
-export default class extends Vue {
+export default class SitePanel extends Vue {
 
   private queryModel = {
     name: '',
     grade: ''
   }
 
-  private pageService = new PageService()
+  private pageService = new PageService({ pageSize: 8 })
 
   private editModel = new DangerSiteModel()
 
@@ -81,7 +78,6 @@ export default class extends Vue {
   @Inject
   private service!: LandDisasterService
 
-
   private get selectAll() {
     return this.dataList.every(x => x.selected)
   }
@@ -91,11 +87,12 @@ export default class extends Vue {
   }
 
   private get getIndeterminate() {
-    return this.dataList.some(x => x.selected)
+    return this.dataList.some(x => x.selected) && !this.selectAll
   }
 
   private onItemClick(item) {
     CommonService.revertData(this.editModel, item)
+    this.dialog.modify = true
   }
 
   private addNew() {
@@ -115,28 +112,15 @@ export default class extends Vue {
   }
 
   private refreshData() {
-    // const requestParam = new RequestParams(this.queryModel, { page: this.pageService })
-    // this.service.queryLandDisasterAll(requestParam).subscribe(data => this.dataList = data)
-    this.dataList = [
-      {
-        id: "11111",
-        name: "姚店村三组滑坡点",
-        prefecture: '200',
-        grade: 'ONE'
-      },
-      {
-        id: "11122211",
-        name: "姚店村三组滑坡点",
-        prefecture: '200',
-        grade: 'TWO'
-      },
-      {
-        id: "333333",
-        name: "姚店村三组滑坡点",
-        prefecture: '200',
-        grade: 'THREE'
-      }
-    ]
+    const requestParam = new RequestParams(this.queryModel, { page: this.pageService })
+    this.service.queryLandDisasterAll(requestParam).subscribe(data => {
+      this.dataList = data.content.map(v => {
+        return {
+          ...v,
+          selected: false
+        }
+      })
+    })
   }
 
 }
@@ -147,23 +131,38 @@ export default class extends Vue {
 .component.site-panel {
   height: 100%;
   .search {
-    padding: 0 10px;
-    height: 40px;
+    padding: 0 5px;
     line-height: 40px;
+    background-color: #f3f3f3;
     border-bottom: solid 2px #f3f3f3;
     &-worktype {
       padding-left: 3px;
       width: 100px;
     }
+    &-select-all-checkbox {
+      margin-right: 10px;
+    }
   }
   .info-item {
-    padding-top: 5px;
+    padding: 5px 5px 0 5px;
     border-bottom: solid 2px #f3f3f3;
-    &-activated {
-      background-color: #ffffea;
+    &:hover {
+      &:not(.info-item-disabled) {
+        background-color: #ffffea;
+      }
+    }
+    &-disabled {
+      background-color: #f3f3f3;
     }
     .el-button {
-      padding: 5px 0;
+      padding: 0;
+    }
+    &-check-box {
+      margin-right: 8px;
+      padding-top: 4px;
+    }
+    &-title {
+      line-height: 24px;
     }
   }
 }
