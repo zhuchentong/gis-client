@@ -58,10 +58,14 @@ export default class ModifySite extends Vue {
   private service!: LandDisasterService
 
   @Emit('close')
-  private onClose() { return }
+  private onClose() {
+    return
+  }
 
   @Emit('success')
   private onSuccess() {
+    this.loading = false
+    this.$message.success("操作成功");
     (this.$refs.form as Form).resetFields()
     this.onClose()
   }

@@ -49,7 +49,7 @@ export const MenuList = [
     icon: 'compute'
   },
   {
-    compentName: 'site-panel',
+    key: 'site-panel',
     label: '隐患点',
     icon: 'site'
   },

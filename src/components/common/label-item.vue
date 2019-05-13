@@ -1,7 +1,7 @@
 <template>
   <div class="label-item" :style="itemStyle">
     <label :style="labelStyle" class="label-item-label">{{label}}</label>
-    <label class="label-item-value">{{value}}</label>
+    <label class="label-item-value" :title="value" :style="{width:`calc(100% - ${defulatConfig.labelWidth + 5}px)`}">{{value}}</label>
     <slot></slot>
   </div>
 </template>
@@ -68,7 +68,6 @@ export default class extends Vue {
 <style lang="less" scoped>
 .label-item {
   line-height: 24px;
-  height: 24px;
   display: inline-block;
   &-label {
     text-align: right;
@@ -79,6 +78,10 @@ export default class extends Vue {
   }
   &-value {
     padding-left: 2px;
+    display: inline-block;
+    vertical-align: top;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     overflow: hidden;
   }
 }
