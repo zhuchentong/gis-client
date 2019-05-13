@@ -234,4 +234,52 @@ export class FilterService {
     const getDistrictName = store.getters['districtModule/getDistrictName']
     return getDistrictName ? getDistrictName(id) : ''
   }
+
+  /**
+   * 金额除以一万
+   * @param value 
+   * @param d 要格式化的小数位数
+   */
+  public static toTenThousand(value: number | string, d: number = 4) {
+    if (!value) return ""
+    let data: number
+    if (typeof value === "string") {
+      data = Number.parseFloat(value)
+    } else {
+      data = value
+    }
+    return (data / 10000).toFixed(d)
+  }
+
+  /**
+   * 平方米转亩制
+   * @param value 
+   * @param d 
+   */
+  public static squareMeterToMu(value: number | string, d: number = 2) {
+    if (!value) return ""
+    let data: number
+    if (typeof value === "string") {
+      data = Number.parseFloat(value)
+    } else {
+      data = value
+    }
+    return (data * 0.0015).toFixed(d)
+  }
+
+  /**
+   * 平方米转公顷
+   * @param value 
+   * @param d 
+   */
+  public static squareMeterToHectare(value: number | string, d: number = 4) {
+    if (!value) return ""
+    let data: number
+    if (typeof value === "string") {
+      data = Number.parseFloat(value)
+    } else {
+      data = value
+    }
+    return (data / 10000).toFixed(d)
+  }
 }

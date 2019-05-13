@@ -48,7 +48,7 @@ import { PageService } from "~/extension/services/page.service"
 import { Inject } from 'typescript-ioc'
 import { LandDisasterService } from '~/services/land-disaster.service'
 import { RequestParams } from '~/core/http'
-import ModifyDangerSite from "~/components/layer-system/modify/modify-danger-site.vue"
+import ModifyDangerSite from "~/components/layer-system/site-panel/modify-danger-site.vue"
 import { DangerSiteModel } from "~/models/danger-site.model"
 import { CommonService } from '~/utils/common.service'
 
