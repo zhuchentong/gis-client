@@ -54,3 +54,20 @@ export default class ComputePanel extends Vue {
 }
 </style>
 
+<style lang="less">
+.component.compute-panel {
+  .el-dialog {
+    .el-form .el-form-item .el-form-item__content .el-input {
+      width: 280px !important;
+    }
+    .el-form .el-form-item .el-form-item__content .el-input.inline {
+      width: 130px !important;
+    }
+    .multiply {
+      display: inline-block;
+      padding: 0 8px;
+      font-weight: 900;
+    }
+  }
+}
+</style>

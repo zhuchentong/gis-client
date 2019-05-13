@@ -21,11 +21,15 @@ export const ComputItems = [
 ]
 
 import CostLand from "./cost-land.vue"
+import CostHouse from "./cost-house.vue"
+import ComputeEarning from "./compute-earning.vue"
 /**
  * 计算相关的组件
  */
 export const ComputeComponents = {
-  CostLand
+  CostLand,
+  CostHouse,
+  ComputeEarning
 }
 
 /**
