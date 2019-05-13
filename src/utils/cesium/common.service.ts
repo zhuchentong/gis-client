@@ -1,3 +1,5 @@
+import Cesium from 'cesium/Cesium'
+
 export class CesiumCommonService {
   /**
    * DegressToCartesian3

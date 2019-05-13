@@ -2,55 +2,117 @@
   <section class="component site-panel">
     <div class="search row between-span">
       <div>
-        <el-checkbox v-model="selectAll" class="search-select-all-checkbox" :indeterminate="getIndeterminate"></el-checkbox>
+        <el-checkbox
+          v-model="selectAll"
+          class="search-select-all-checkbox"
+          :indeterminate="getIndeterminate"
+        ></el-checkbox>
         <label>隐患级别:</label>
-        <el-select v-model="queryModel.grade" class="search-worktype">
-          <el-option label="全部" value=""></el-option>
-          <el-option v-for="{code,name} of $dict.getDictData('DisasterGrade')" :key="code" :label="name" :value="code"></el-option>
+        <el-select
+          v-model="queryModel.grade"
+          class="search-worktype"
+        >
+          <el-option
+            label="全部"
+            value=""
+          ></el-option>
+          <el-option
+            v-for="{code,name} of $dict.getDictData('DisasterGrade')"
+            :key="code"
+            :label="name"
+            :value="code"
+          ></el-option>
         </el-select>
       </div>
       <div>
         <a @click="addNew">
-          <svg-icon iconName="add-new" iconSize="12"></svg-icon>
+          <svg-icon
+            iconName="add-new"
+            iconSize="12"
+          ></svg-icon>
           添加
         </a>
       </div>
     </div>
-    <div class="no-data" v-if="!dataList.length"></div>
+    <div
+      class="no-data"
+      v-if="!dataList.length"
+    ></div>
     <div v-else>
-      <div v-for="item of dataList" :key="item.id" class="info-item row no-warp" :class="{'info-item-disabled': item.status === 'DISABLED' }">
-        <el-checkbox v-model="item.selected" class="info-item-check-box"></el-checkbox>
+      <div
+        v-for="item of dataList"
+        :key="item.id"
+        class="info-item row no-warp"
+        :class="{'info-item-disabled': item.status === 'DISABLED' }"
+      >
+        <el-checkbox
+          v-model="item.selected"
+          class="info-item-check-box"
+        ></el-checkbox>
         <div>
           <div class="row between-span info-item-title">
             <label>{{item.name}}</label>
-            <el-button type="text" v-if="item.selected" @click="onItemClick(item)">编辑</el-button>
+            <el-button
+              type="text"
+              v-if="item.selected"
+              @click="onItemClick(item)"
+            >编辑</el-button>
           </div>
-          <label-item label="隐患级别" :value="item.grade | dictConvert('DisasterGrade')"></label-item>
-          <label-item label="所属行政区" :value="item.prefecture | districtName"></label-item>
+          <label-item
+            label="隐患级别"
+            :value="item.grade | dictConvert('DisasterGrade')"
+          ></label-item>
+          <label-item
+            label="所属行政区"
+            :value="item.prefecture | districtName"
+          ></label-item>
         </div>
       </div>
       <div class="text-center">
-        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+        <el-pagination
+          @current-change="refreshData"
+          small
+          :pager-count="5"
+          :current-page.sync="pageService.pageIndex"
+          :page-size="pageService.pageSize"
+          layout="total, prev, pager, next"
+          :total="pageService.total"
+        >
         </el-pagination>
       </div>
     </div>
 
-    <el-dialog title="维护地灾点" :center="true" :visible.sync="dialog.modify" width="500px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-      <modify-danger-site :model="editModel" @close="dialog.modify = false" @success="refreshData"></modify-danger-site>
+    <el-dialog
+      title="维护地灾点"
+      :center="true"
+      :visible.sync="dialog.modify"
+      width="500px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <modify-danger-site
+        :model="editModel"
+        @close="dialog.modify = false"
+        @success="refreshData"
+      ></modify-danger-site>
     </el-dialog>
   </section>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { PageService } from "~/extension/services/page.service"
+import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
+import { PageService } from '~/extension/services/page.service'
 import { Inject } from 'typescript-ioc'
 import { LandDisasterService } from '~/services/land-disaster.service'
 import { RequestParams } from '~/core/http'
-import ModifyDangerSite from "~/components/layer-system/site-panel/modify-danger-site.vue"
-import { DangerSiteModel } from "~/models/danger-site.model"
+import ModifyDangerSite from '~/components/layer-system/site-panel/modify-danger-site.vue'
+import { DangerSiteModel } from '~/models/danger-site.model'
 import { CommonService } from '~/utils/common.service'
+import MapViewer from '../../layer-viewer/map-viewer.vue'
+import { CesiumCommonService } from '@/utils/cesium/common.service'
+import { CesiumInteractService } from '../../../utils/cesium/interact.service'
 
 @Component({
   components: {
@@ -58,6 +120,8 @@ import { CommonService } from '~/utils/common.service'
   }
 })
 export default class SitePanel extends Vue {
+  @Prop()
+  private viewer!: MapViewer
 
   private queryModel = {
     name: '',
@@ -72,7 +136,6 @@ export default class SitePanel extends Vue {
     modify: false
   }
 
-
   private dataList: any[] = []
 
   @Inject
@@ -83,7 +146,7 @@ export default class SitePanel extends Vue {
   }
 
   private set selectAll(val) {
-    this.dataList.forEach(x => x.selected = val)
+    this.dataList.forEach(x => (x.selected = val))
   }
 
   private get getIndeterminate() {
@@ -96,8 +159,14 @@ export default class SitePanel extends Vue {
   }
 
   private addNew() {
-    this.editModel = new DangerSiteModel()
-    this.dialog.modify = true
+    // this.editModel = new DangerSiteModel()
+    // this.dialog.modify = true
+    const interactService = new CesiumInteractService(this.viewer)
+    interactService.startDrawPolyline({closed : true}).subscribe({
+      next: (data) => {
+        console.log(data)
+      }
+    })
   }
 
   /**
@@ -112,7 +181,9 @@ export default class SitePanel extends Vue {
   }
 
   private refreshData() {
-    const requestParam = new RequestParams(this.queryModel, { page: this.pageService })
+    const requestParam = new RequestParams(this.queryModel, {
+      page: this.pageService
+    })
     this.service.queryLandDisasterAll(requestParam).subscribe(data => {
       this.dataList = data.content.map(v => {
         return {
@@ -122,7 +193,6 @@ export default class SitePanel extends Vue {
       })
     })
   }
-
 }
 </script>
 

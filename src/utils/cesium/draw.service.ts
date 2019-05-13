@@ -75,7 +75,13 @@ export class CesiumDrawService {
    * @param positions
    */
   public drawPolygon(
-    positions: Cesium.PolygonHierarchy | Cesium.Cartographic[]
+    positions:
+      | Cesium.PolygonHierarchy
+      | Array<Cesium.Cartographic | Cesium.Cartesian3>,
+    {
+      borderColor,
+      fillColor
+    }: { borderColor?: Cesium.Color; fillColor?: Cesium.Color } = {}
   ) {
     let hierarchy
     // 创建多边形实体
@@ -83,19 +89,23 @@ export class CesiumDrawService {
       hierarchy = positions
     } else {
       hierarchy = new Cesium.PolygonHierarchy(
-        positions.map(position =>
-          CesiumCommonService.DegressToCartesian3(this.viewer, position)
-        )
+        positions.map(point => {
+          if (point instanceof Cesium.Cartographic) {
+            return CesiumCommonService.DegressToCartesian3(this.viewer, point)
+          } else {
+            return point
+          }
+        })
       )
     }
 
     return this.viewer.entities.add({
       polygon: {
         hierarchy,
-        material: this.color.polygon,
+        material: fillColor || this.color.polygon,
         height: 0,
         outline: true,
-        outlineColor: this.color.border
+        outlineColor: borderColor || this.color.border
       }
     })
   }
@@ -106,7 +116,10 @@ export class CesiumDrawService {
    * @param positions
    * @param color 线条颜色
    */
-  public drawPolyline(positions: Cesium.Cartographic[], clampToGround = false) {
+  public drawPolyline(
+    positions: Array<Cesium.Cartographic | Cesium.Cartesian3>,
+    clampToGround = false
+  ) {
     const polylineOption: any = {
       polyline: {
         width: 3,
@@ -116,11 +129,16 @@ export class CesiumDrawService {
     }
     polylineOption.polyline.positions = new Cesium.CallbackProperty(
       () =>
-        positions.map(cartographic =>
-          CesiumCommonService.DegressToCartesian3(this.viewer, cartographic)
-        ),
+        positions.map(point => {
+          if (point instanceof Cesium.Cartographic) {
+            return CesiumCommonService.DegressToCartesian3(this.viewer, point)
+          } else {
+            return point
+          }
+        }),
       false
     )
+    console.log(this.viewer)
     return this.viewer.entities.add(polylineOption)
   }
 
