@@ -12,7 +12,7 @@
         </label-container>
       </el-card>
       <el-card header="任务计划">
-        <label-container :column="2">
+        <label-container :labelWidth="90">
           <label-item label="巡查人员" :value="info.userName"></label-item>
           <label-item label="计划时间" :value="info.planTime | dateTimeFormat('yyyy年MM月dd日')"></label-item>
           <label-item label="需要拍摄照片" :value="info.image | dictConvert('CommonShow')"></label-item>

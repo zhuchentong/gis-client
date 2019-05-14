@@ -51,15 +51,23 @@ export default class extends Vue {
   @Inject
   private service!: PatrolInfoService
 
-  private result = {}
+  private result: any
   private dialog = {
     appendAttach: false
+  }
+
+  private resetResult() {
+    this.result = {
+      content: "",
+      image: [],
+      video: []
+    }
   }
 
 
   @Watch('id', { immediate: true })
   private onIdChange() {
-    this.result = {}
+    this.resetResult()
     const params = { id: this.id }
     this.id && this.service.getPatrolResultById(new RequestParams(params))
       .subscribe(data => {
@@ -71,6 +79,9 @@ export default class extends Vue {
       })
   }
 
+  private created() {
+    this.resetResult()
+  }
 }
 </script>
 

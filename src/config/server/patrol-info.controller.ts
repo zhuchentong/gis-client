@@ -50,6 +50,14 @@ export default {
     controller: CONTROLLER,
     action: 'queryPatrolInfoByApp',
     type: RequestMethod.Get
+  },
+  /**
+   * 获取巡查数据
+   */
+  getPatrolTrack: {
+    controller: CONTROLLER,
+    action: 'getPatrolTrack',
+    type: RequestMethod.Get
   }
 
 }

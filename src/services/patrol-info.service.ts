@@ -71,4 +71,15 @@ export class PatrolInfoService {
   public queryPatrolInfoListByApp(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
+
+  /**
+   * 获取巡查数据
+   */
+  @Request({
+    server: PatrolServer.getPatrolTrack
+  })
+  public getPatrolTrack(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
+
 }

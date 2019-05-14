@@ -1,7 +1,7 @@
 <template>
   <div class="label-item" :style="itemStyle">
-    <label :style="labelStyle" class="label-item-label">{{label}}</label>
-    <label class="label-item-value" :title="value" :style="{width:`calc(100% - ${defulatConfig.labelWidth + 5}px)`}">{{value}}</label>
+    <label ref="label" :style="{minWidth:labelMinWidth}" class="label-item-label">{{label}}</label>
+    <label class="label-item-value" :class="{'label-item-no-warp': !noWarp}" :title="!showTitle ? value: ''" :style="{width:valueWidth}">{{value}}</label>
     <slot></slot>
   </div>
 </template>
@@ -22,6 +22,12 @@ export default class extends Vue {
   @Prop({ default: 1 })
   private span!: number
 
+  @Prop({ default: true })
+  private noWarp!: boolean
+
+  @Prop({ default: true })
+  private showTitle!: boolean
+
   private defulatConfig = {
     column: 1,
     labelWidth: 80
@@ -40,11 +46,12 @@ export default class extends Vue {
     }
   }
 
-  private get labelStyle() {
-    const labelWidth = this.container.labelWidth
-    return {
-      minWidth: `${labelWidth}px`
-    }
+  private get labelMinWidth() {
+    return this.container.labelWidth
+  }
+
+  private get valueWidth() {
+    return `calc(100% - ${this.labelMinWidth + 5}px)`
   }
 
   get container(): any {
@@ -80,6 +87,8 @@ export default class extends Vue {
     padding-left: 2px;
     display: inline-block;
     vertical-align: top;
+  }
+  &-no-warp {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
