@@ -12,6 +12,7 @@ import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator'
 import Cesium, { CesiumTerrainProvider } from 'cesium/Cesium'
 import WMSCapabilities from 'wms-capabilities'
 import appConfig from '../../config/app.config'
+import { FilterService } from '../../utils/filter.service'
 @Component({
   components: {}
 })
@@ -435,8 +436,61 @@ export default class MapViewer extends Vue {
         transparent: 'true',
         format: 'image/png',
         service: 'WMS'
+      },
+      getFeatureInfoFormats: [
+        new Cesium.GetFeatureInfoFormat(
+          'json',
+          'application/json',
+          this.geoJsonToFeatureInfo
+        )
+      ]
+    })
+  }
+
+  /**
+   * 格式化Featrue信息
+   */
+  private geoJsonToFeatureInfo(json) {
+    const result: Cesium.ImageryLayerFeatureInfo[] = []
+
+    const features = json.features
+
+    for (const feature of features) {
+      const featureInfo = new Cesium.ImageryLayerFeatureInfo()
+      const properties = this.formatFeatureProperties(feature.properties)
+      featureInfo.data = feature
+      featureInfo.name = '属性信息'
+      featureInfo.properties = feature.properties
+      featureInfo.configureNameFromProperties(properties)
+      featureInfo.configureDescriptionFromProperties(properties)
+
+      if (
+        Cesium.defined(feature.geometry) &&
+        feature.geometry.type === 'Point'
+      ) {
+        const [longitude, latitude] = feature.geometry.coordinates
+        featureInfo.position = Cesium.Cartographic.fromDegrees(
+          longitude,
+          latitude
+        )
+      }
+
+      result.push(featureInfo)
+    }
+
+    return result
+  }
+
+  private formatFeatureProperties(properties) {
+    const data = {}
+    const filterKey = ['fid']
+    Object.entries(properties).forEach(([key, value]) => {
+      key = FilterService.convertShpCode(key)
+      if (!filterKey.includes(key)) {
+        data[key] = value
       }
     })
+    return data
   }
 }
 </script>
