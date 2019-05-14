@@ -1,15 +1,9 @@
 <template>
   <section class="component business-detail-layer">
-    <div class="no-data"></div>
-    <!-- <div v-else>
-      <div v-if="layerInfo && layerInfo.layerCode"></div>
-
-      <common-title :title="layerInfo.layerName" :showIcon="false">
-        <el-button slot="append" @click="preview">预览</el-button>
-      </common-title>
-    </div> -->
-
-    <div v-if="load"></div>
+    <div v-if="!flowId" class="no-data"></div>
+    <div v-else class="map-container">
+      <map-viewer @map-ready="onMapReady"></map-viewer>
+    </div>
   </section>
 </template>
 
@@ -19,35 +13,46 @@
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 import DataBox from "~/components/common/data-box.vue"
-import { BusinessFlowModel } from "~/models/business-flow.model"
+import MapViewer from "~/components/layer-viewer/map-viewer.vue"
+import { FlowInfoService } from "~/services/flow-info.service.ts"
+import { RequestParams } from "~/core/http"
+import { Inject } from "typescript-ioc"
+import Cesium from "cesium/Cesium"
 
 @Component({
   components: {
-    DataBox
+    DataBox,
+    MapViewer
   }
 })
 export default class extends Vue {
   @Prop()
   private flowId!: string
-  private businessFlowModel = new BusinessFlowModel()
   private load = false
-  private layerInfo: any = {
-    layerCode: "123",
-    layerName: "白牙村报地-陕政土报[2019]03号"
-  }
 
-  private preview() {
-    this.load = true
-  }
+  private layerInfo!: any
+  private mapView!: MapViewer
+
+  @Inject
+  private service!: FlowInfoService
 
   @Watch('flowId', { immediate: true })
   private onIdChange(value) {
-    // this.layerInfo = {}
-    //   value && this.businessFlowModel.getBaseInfo(value).subscribe(
-    //     data => this.
-    //   )
-    // console.log(d)
-    // d.subscribe(console.log, console.log, console.log)
+    if (this.layerInfo && this.mapView) {
+      this.mapView.removeLayer(this.layerInfo)
+    }
+    this.layerInfo = null
+    if (!value) return
+    const requestParams = new RequestParams({ flowId: this.flowId })
+    this.service.getLayerInfoByFlowId(requestParams).subscribe(data => {
+      this.layerInfo = data
+      this.mapView && this.mapView.addLayer(this.layerInfo)
+    })
+  }
+
+  private onMapReady(value) {
+    this.mapView = value
+    if (this.layerInfo) this.mapView.addLayer(this.layerInfo)
   }
 }
 </script>
@@ -57,6 +62,9 @@ export default class extends Vue {
   .detail-item {
     padding: 20px;
     border-bottom: solid 2px #f3f3f3;
+  }
+  .map-container {
+    height: 100%;
   }
 }
 </style>

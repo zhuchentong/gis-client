@@ -35,6 +35,7 @@ export default class extends Vue {
 
   private drawService!: CesiumDrawService
   private mapView!: MapViewer
+  private lastEntityId = ""
 
   @Inject
   private service!: PatrolInfoService
@@ -61,8 +62,12 @@ export default class extends Vue {
   }
 
   private drawEntity() {
+    if (this.lastEntityId) {
+      this.mapView.getViewer().entities.removeById(this.lastEntityId)
+    }
     const entity = this.drawService.drawPolygon(this.dataList)
     this.mapView.getViewer().zoomTo(entity)
+    this.lastEntityId = entity.id
   }
 }
 </script>

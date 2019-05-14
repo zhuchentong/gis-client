@@ -1,8 +1,5 @@
 import { Model } from '~/core/model'
-import { RequestParams } from '~/core/http'
-import { PageService } from '@/extension/services/page.service'
-import { PatrolInfoService } from '~/services/patrol-info.service'
-import { Inject } from 'typescript-ioc'
+import Cesium from "cesium/Cesium"
 
 /**
  * 外业查询实体
@@ -18,4 +15,17 @@ export class PatrolInfoModel extends Model {
   public type: string = ""
   public userId: string = ""
   public remark: string = ""
+
+  private cartographic: Cesium.Cartographic | null = null
+
+  public get positionX() {
+    if (!this.cartographic) return 0
+    return Cesium.Math.toDegrees(this.cartographic.latitude)
+  }
+
+  public get positionY() {
+    if (!this.cartographic) return 0
+    return Cesium.Math.toDegrees(this.cartographic.longitude)
+  }
+
 }

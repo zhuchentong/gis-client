@@ -46,7 +46,9 @@
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
       <el-tab-pane v-for="item of tabs.filter( x => !currentMenu.hiddenPage.includes(x.name))" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
-        <component :is="item.component" :queryModel="queryModel" :id="id" class="content-tabs-panes-base"></component>
+        <keep-alive>
+          <component :is="item.component" :queryModel="queryModel" :id="id" class="content-tabs-panes-base"></component>
+        </keep-alive>
       </el-tab-pane>
     </el-tabs>
   </base-col-three>

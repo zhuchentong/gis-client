@@ -15,8 +15,12 @@
       <el-form-item label="巡查时间" prop="planTime">
         <el-date-picker v-model="baseModel.planTime"></el-date-picker>
       </el-form-item>
-      <el-form-item label="任务地点" prop="site">
-        <el-input type="textarea" :rows="1" :maxlength="250" v-model="baseModel.site" class="inline-full-textarea"></el-input>
+      <el-form-item label="任务地点" prop="cartographic">
+        <el-input readonly :value="siteValue" class="inline-full-textarea">
+          <a slot="append" title="点击选择任务地点" @click="dialog.selectPoint = true">
+            <i class="el-icon-location"></i>
+          </a>
+        </el-input>
       </el-form-item>
       <el-form-item label="需要拍摄照片" prop="image">
         <el-select v-model="baseModel.image">
@@ -37,11 +41,14 @@
         <el-input type="textarea" :rows="1" :maxlength="250" v-model="baseModel.remark" class="inline-full-textarea"></el-input>
       </el-form-item>
     </el-form>
-
     <div class="operate-buttons">
       <el-button @click="onClose">取消</el-button>
       <el-button @click="onSubmit">提交</el-button>
     </div>
+
+    <el-dialog title="选择巡查点" :center="true" :visible.sync="dialog.selectPoint" width="850px" :close-on-click-modal="false" :close-on-press-escape="false" append-to-body>
+      <select-point v-model="baseModel.cartographic" @submit="dialog.selectPoint = false"></select-point>
+    </el-dialog>
   </section>
 </template>
 
@@ -56,11 +63,15 @@ import UserSelect from "~/components/business-common/user-select.vue"
 import { PatrolInfoService } from "~/services/patrol-info.service"
 import { RequestParams } from '~/core/http'
 import { Inject } from "typescript-ioc"
+import MapViewer from "~/components/layer-viewer/map-viewer.vue"
+import { CesiumInteractService } from "~/utils/cesium/interact.service.ts"
+import SelectPoint from "~/components/layer-viewer/select-point.vue"
 
 @Component({
   components: {
     District,
-    UserSelect
+    UserSelect,
+    SelectPoint
   }
 })
 export default class extends Vue {
@@ -70,12 +81,14 @@ export default class extends Vue {
   @Inject
   private service!: PatrolInfoService
 
+  private dialog = { selectPoint: false }
+
   private baseRules = {
     name: { required: true, message: "请输入项目名称" },
     type: { required: true, message: "请选择项目类型" },
     userId: { required: true, message: "请选择巡查人员" },
     planTime: { required: true, message: "请选择巡查时间" },
-    site: { required: true, message: "请输入巡查地点" },
+    cartographic: { required: true, message: "请选择巡查地点" },
   }
 
   @Emit('close')
@@ -88,6 +101,11 @@ export default class extends Vue {
   private onSuccess() {
     this.$message.success(`创建任务成功`)
     this.onClose()
+  }
+
+  private get siteValue() {
+    if (!this.baseModel.positionX) return ''
+    return `${this.baseModel.positionX.toFixed(4)},${this.baseModel.positionY.toFixed(4)}`
   }
 
 
@@ -107,8 +125,6 @@ export default class extends Vue {
       .subscribe(this.onSuccess)
 
   }
-
-
 }
 </script>
 

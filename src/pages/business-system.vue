@@ -46,7 +46,9 @@
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
       <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
-        <component :is="item.component" @success="refreshData" :status="flowModel.status" :flowId="currentItem.flowId" class="content-tabs-panes-base"></component>
+        <keep-alive>
+          <component :is="item.component" @success="refreshData" :status="flowModel.status" :flowId="currentItem.flowId" class="content-tabs-panes-base"></component>
+        </keep-alive>
       </el-tab-pane>
     </el-tabs>
   </base-col-three>

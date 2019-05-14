@@ -1,8 +1,11 @@
 <template>
   <div class="label-item" :style="itemStyle">
-    <label ref="label" :style="{minWidth:labelMinWidth}" class="label-item-label">{{label}}</label>
-    <label class="label-item-value" :class="{'label-item-no-warp': !noWarp}" :title="!showTitle ? value: ''" :style="{width:valueWidth}">{{value}}</label>
-    <slot></slot>
+    <label ref="label" :style="{minWidth:`${labelMinWidth}px`}" class="label-item-label">{{label}}</label>
+    <label class="label-item-value" :class="{'label-item-no-warp': !noWarp}" :title="!showTitle ? value: ''" :style="{width:valueWidth}">
+      {{value}}
+      <slot></slot>
+    </label>
+
   </div>
 </template>
 

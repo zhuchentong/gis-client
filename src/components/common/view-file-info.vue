@@ -16,7 +16,6 @@
         <span title="下载">
           <svg-icon iconName="download" @click.native="downLoadFile"></svg-icon>
         </span>
-
       </div>
     </div>
 
@@ -158,21 +157,10 @@ export default class ViewAttach extends Vue {
     object-fit: cover;
   }
 
-  .media-info {
-    .el-dialog__body {
-      padding: 15px;
-      padding-bottom: 20px;
-      height: 420px;
-      text-align: center;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-
   .img-info-content,
   .video-info-content {
+    height: 100%;
+    width: auto;
     max-width: 100%;
     max-height: 100%;
   }
@@ -211,6 +199,23 @@ export default class ViewAttach extends Vue {
         text-shadow: 0px 0px 10px;
         cursor: pointer;
       }
+    }
+  }
+}
+</style>
+
+<style lang="less">
+.component.view-file-info {
+  .media-info {
+    .el-dialog__body {
+      padding: 15px;
+      padding-bottom: 20px;
+      height: 420px;
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
