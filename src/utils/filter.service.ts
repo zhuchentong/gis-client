@@ -1,6 +1,6 @@
 import store from '~/store'
 import * as enumData from '~/config/enum.config'
-import shpCode from '~/assets/json/code.json'
+import shpDict from '~/assets/json/shp-dict.json'
 
 export class FilterService {
   /**
@@ -220,8 +220,8 @@ export class FilterService {
   }
 
   public static convertShpCode(code: string) {
-    if (!shpCode) return code
-    const item = shpCode.find(x => x.code === code)
+    if (!shpDict) return code
+    const item = shpDict.find(x => x.code === code)
     return item ? item.name : code
   }
 
@@ -237,13 +237,13 @@ export class FilterService {
 
   /**
    * 金额除以一万
-   * @param value 
+   * @param value
    * @param d 要格式化的小数位数
    */
   public static toTenThousand(value: number | string, d: number = 4) {
-    if (!value) return ""
+    if (!value) return ''
     let data: number
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       data = Number.parseFloat(value)
     } else {
       data = value
@@ -253,13 +253,13 @@ export class FilterService {
 
   /**
    * 平方米转亩制
-   * @param value 
-   * @param d 
+   * @param value
+   * @param d
    */
   public static squareMeterToMu(value: number | string, d: number = 2) {
-    if (!value) return ""
+    if (!value) return ''
     let data: number
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       data = Number.parseFloat(value)
     } else {
       data = value
@@ -269,13 +269,13 @@ export class FilterService {
 
   /**
    * 平方米转公顷
-   * @param value 
-   * @param d 
+   * @param value
+   * @param d
    */
   public static squareMeterToHectare(value: number | string, d: number = 4) {
-    if (!value) return ""
+    if (!value) return ''
     let data: number
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       data = Number.parseFloat(value)
     } else {
       data = value

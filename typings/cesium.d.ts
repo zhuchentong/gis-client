@@ -4688,7 +4688,7 @@ declare namespace Cesium {
   }
 
   class GetFeatureInfoFormat {
-      constructor(type: string, format?: string);
+      constructor(type: string, format?: string, callback?:Function);
   }
 
   class Globe {
@@ -4947,6 +4947,7 @@ declare namespace Cesium {
       public name: string
       public description: string
       public position: Cartographic
+      public properties: any
       public data: any
 
       public configureNameFromProperties(properties: any): void
