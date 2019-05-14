@@ -31,7 +31,7 @@ export class CesiumDrawService {
     const entity = new Cesium.Entity()
     entity.position = cartesian3
     entity.label = this.createLabel(label)
-    return this.viewer.entities.add(entity)
+    return this.viewer.drawEntities.add(entity)
   }
 
   /**
@@ -67,7 +67,7 @@ export class CesiumDrawService {
       entity.label = this.createLabel(label)
     }
 
-    return this.viewer.entities.add(entity)
+    return this.viewer.drawEntities.add(entity)
   }
 
   /**
@@ -99,7 +99,7 @@ export class CesiumDrawService {
       )
     }
 
-    return this.viewer.entities.add({
+    return this.viewer.drawEntities.add({
       polygon: {
         hierarchy,
         material: fillColor || this.color.polygon,
@@ -138,8 +138,7 @@ export class CesiumDrawService {
         }),
       false
     )
-    console.log(this.viewer)
-    return this.viewer.entities.add(polylineOption)
+    return this.viewer.drawEntities.add(polylineOption)
   }
 
   /**

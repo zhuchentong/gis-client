@@ -3301,6 +3301,7 @@ declare namespace Cesium {
   }
 
   class EntityCollection {
+      constructor(owner: DataSource | CompositeEntityCollection)
       public collectionChanged: Event
       public id: string
       public owner: DataSource | CompositeEntityCollection

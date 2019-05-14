@@ -1,9 +1,53 @@
 <template>
   <section class="map-viewer fill">
-    <div id="cesium-viewer" class="col-span no-padding fill">
+    <div
+      id="cesium-viewer"
+      class="col-span no-padding fill"
+    >
       <div id="slider"></div>
     </div>
-    <div id="credit" style="display:none"></div>
+    <div
+      v-if="isDrawing"
+      class="draw-tool-bar icon-button-group"
+    >
+      <div
+        class="icon-button"
+        @click="onDrawEvent('close')"
+      >
+        <svg-icon
+          iconColor="white"
+          iconName="close"
+        ></svg-icon>
+      </div>
+      <div
+        class="icon-button"
+        @click="onDrawEvent('reset')"
+      >
+        <svg-icon
+          iconColor="white"
+          iconName="reset"
+        ></svg-icon>
+      </div>
+      <div
+        class="icon-button"
+        @click="onDrawEvent('submit')"
+      >
+        <svg-icon
+          iconColor="white"
+          iconName="right"
+        ></svg-icon>
+      </div>
+    </div>
+    <div
+      v-if="isDrawing&&drawTipInfo"
+      class="draw-tip-panel"
+    >
+      {{drawTipInfo}}
+    </div>
+    <div
+      id="credit"
+      style="display:none"
+    ></div>
   </section>
 </template>
 
@@ -17,8 +61,16 @@ import { FilterService } from '../../utils/filter.service'
   components: {}
 })
 export default class MapViewer extends Vue {
-  // 默认样式
-  public defaultStyle = 'test001'
+  // 绘制状态
+  public isDrawing = false
+  // 绘制数据源
+  public drawDataSource = new Cesium.DataSource()
+  // 绘制实体数据
+  public drawEntities = new Cesium.EntityCollection(this.drawDataSource)
+  // 绘制事件监听
+  private drawEventListener: Array<(event: string) => void> = []
+  // 绘制提示信息
+  private drawTipInfo = ''
   // Cesium视图
   private viewer!: Cesium.Viewer
   // Camera视图
@@ -230,6 +282,17 @@ export default class MapViewer extends Vue {
   }
 
   /**
+   * 开启绘制模式
+   */
+  private startDrawMode(handle: () => void, tipInfo) {
+    this.isDrawing = true
+    this.drawEntities = new Cesium.EntityCollection(this.drawDataSource)
+    this.drawEventListener.push(handle)
+    this.drawTipInfo = tipInfo
+    return this.drawEntities
+  }
+
+  /**
    * 地图准备完成
    */
   @Emit('map-ready')
@@ -287,10 +350,13 @@ export default class MapViewer extends Vue {
     // 设置地球背景色
     this.viewer.scene.globe.baseColor = Cesium.Color.WHITE
 
+    this.viewer.dataSources.add(this.drawDataSource)
+  
     this.initCamera()
 
     this.emitMapReady()
 
+    // 添加遥感影像按钮
     this.addToolBar(
       'imagery',
       '遥感影像',
@@ -304,6 +370,7 @@ export default class MapViewer extends Vue {
       true
     )
 
+    // 添加地形数据按钮
     this.addToolBar(
       'terrain',
       '地形数据',
@@ -425,7 +492,7 @@ export default class MapViewer extends Vue {
   /**
    * 创建图层
    */
-  private createLayer(space, layer, style = this.defaultStyle) {
+  private createLayer(space, layer) {
     return new Cesium.WebMapServiceImageryProvider({
       url: `${this.geoServer}/${space}/wms`,
       layers: layer,
@@ -483,7 +550,8 @@ export default class MapViewer extends Vue {
 
   private formatFeatureProperties(properties) {
     const data = {}
-    const filterKey = ['fid']
+    // 不需要转译的过滤字段
+    const filterKey = ['fid', 'OBJECTID', 'Shape_Leng', 'Shape_Area']
     Object.entries(properties).forEach(([key, value]) => {
       key = FilterService.convertShpCode(key)
       if (!filterKey.includes(key)) {
@@ -491,6 +559,38 @@ export default class MapViewer extends Vue {
       }
     })
     return data
+  }
+
+  /**
+   * 关闭绘制模式
+   */
+  private closeDrawMode() {
+    this.isDrawing = false
+    this.drawEntities.removeAll()
+    this.drawEventListener = []
+    this.drawTipInfo = ''
+  }
+
+  /**
+   * 绘制工具事件监听
+   */
+  private onDrawEvent(event) {
+    switch (event) {
+      case 'close': {
+        this.closeDrawMode()
+        break
+      }
+      case 'reset': {
+        this.drawEntities.removeAll()
+        break
+      }
+      case 'sumbit': {
+        this.closeDrawMode()
+        break
+      }
+    }
+
+    this.drawEventListener.forEach(handle => handle(event))
   }
 }
 </script>
@@ -514,9 +614,33 @@ export default class MapViewer extends Vue {
 </style>
 <style lang="less" scoped>
 .map-viewer {
+  position: relative;
   .cesium-viewer {
     height: 100%;
     width: 100%;
+  }
+
+  .draw-tool-bar {
+    position: absolute;
+    bottom: 50px;
+    right: 5px;
+    .icon-button {
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      border: solid 1px white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .draw-tip-panel {
+    position: absolute;
+    top: 100px;
+    left: 5px;
+    width: 100px;
+    height: 80px;
   }
 }
 </style>
