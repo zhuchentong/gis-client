@@ -22,7 +22,12 @@ export default new Vuex.Store({
       key: 'vuex',
       storage: localStorage,
       filter: ({ type }) => {
-        return !['menuModule/updateCurrentMenu'].includes(type)
+        return ![
+          'menuModule/updateCurrentMenu',
+          'layerTableModule/addLayerAttrTable',
+          'layerTableModule/removeLayerAttrTable',
+          'layerTableModule/updateTableVisibility'
+        ].includes(type)
       }
     })
   ]

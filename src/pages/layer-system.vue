@@ -8,6 +8,7 @@
     </div>
     <div class="layer-view">
       <map-viewer @map-ready="onMapReady"></map-viewer>
+      <layer-attr-table class="layer-table"></layer-attr-table>
     </div>
     <div class="bottom-panel"></div>
   </section>
@@ -21,13 +22,15 @@ import Cesium from 'cesium/Cesium'
 import { namespace } from 'vuex-class'
 import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
 import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'
+import LayerAttrTable from '~/components/layer-system/layer-attr-table.vue'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 @Layout('workspace')
 @Component({
   components: {
     LayerMenuList,
     LayerMenuPanel,
-    MapViewer
+    MapViewer,
+    LayerAttrTable
   }
 })
 export default class extends Vue {
@@ -57,7 +60,13 @@ export default class extends Vue {
 
   .layer-view {
     grid-area: ~'1/3/span 1/span 1';
-    background: green;
+    position: relative;
+    background: black;
+    .layer-table {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
   }
 
   .bottom-panel {

@@ -1,21 +1,51 @@
 <template>
   <section class="map-viewer fill">
-    <div id="cesium-viewer" class="col-span no-padding fill">
+    <div
+      id="cesium-viewer"
+      class="col-span no-padding fill"
+    >
       <div id="slider"></div>
     </div>
-    <div v-if="isDrawing" class="draw-tool-bar icon-button-group">
-      <div class="icon-button" @click="onDrawEvent('close')">
-        <svg-icon iconColor="white" iconName="close"></svg-icon>
+    <div
+      v-if="isDrawing"
+      class="draw-tool-bar icon-button-group"
+    >
+      <div
+        class="icon-button"
+        @click="onDrawEvent('close')"
+      >
+        <svg-icon
+          iconColor="white"
+          iconName="close"
+        ></svg-icon>
       </div>
-      <div class="icon-button" @click="onDrawEvent('reset')">
-        <svg-icon iconColor="white" iconName="reset"></svg-icon>
+      <div
+        class="icon-button"
+        @click="onDrawEvent('reset')"
+      >
+        <svg-icon
+          iconColor="white"
+          iconName="reset"
+        ></svg-icon>
       </div>
-      <div class="icon-button" @click="onDrawEvent('submit')">
-        <svg-icon iconColor="white" iconName="right"></svg-icon>
+      <div
+        class="icon-button"
+        @click="onDrawEvent('submit')"
+      >
+        <svg-icon
+          iconColor="white"
+          iconName="right"
+        ></svg-icon>
       </div>
     </div>
-    <div v-if="isDrawing&&drawTipInfo" class="draw-tip-panel">{{drawTipInfo}}</div>
-    <div id="credit" style="display:none"></div>
+    <div
+      v-if="isDrawing&&drawTipInfo"
+      class="draw-tip-panel"
+    >{{drawTipInfo}}</div>
+    <div
+      id="credit"
+      style="display:none"
+    ></div>
   </section>
 </template>
 
@@ -25,6 +55,8 @@ import Cesium, { CesiumTerrainProvider } from 'cesium/Cesium'
 import WMSCapabilities from 'wms-capabilities'
 import appConfig from '../../config/app.config'
 import { FilterService } from '../../utils/filter.service'
+import { namespace } from 'vuex-class'
+const LayerTableModule = namespace('layerTableModule')
 @Component({
   components: {}
 })
@@ -58,6 +90,10 @@ export default class MapViewer extends Vue {
   // 地图ID
   private mapId = 'cesium-viewer'
 
+  @LayerTableModule.Action
+  private getLayerAttrData
+  @LayerTableModule.Mutation
+  private removeLayerAttrTable
   public get drawEntities() {
     return this.drawDataSource.entities
   }
@@ -99,6 +135,7 @@ export default class MapViewer extends Vue {
 
     this.setCamera(layer.layerSpace, layer.layerCode)
     this.emitLayerListChange(this.layerList)
+    this.getLayerAttrData(layer)
     return provider
   }
 
@@ -113,6 +150,7 @@ export default class MapViewer extends Vue {
       this.layerList.findIndex(x => x.layer.id === target.id),
       1
     )
+    this.removeLayerAttrTable(target.id)
     this.emitLayerListChange(this.layerList)
   }
 
