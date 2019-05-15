@@ -1,11 +1,13 @@
-import Cesium from 'cesium/Cesium'
+import Cesium, { Entity } from 'cesium/Cesium'
 import { CesiumCommonService } from './common.service'
+import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 /**
  * 公共函数
  */
 export class CesiumDrawService {
   // Cesium视图
   private viewer: Cesium.Viewer
+  private mapViewer: any
   // 颜色配置
   private readonly color = {
     label: Cesium.Color.BLACK,
@@ -17,8 +19,9 @@ export class CesiumDrawService {
     background: Cesium.Color.WHITE
   }
   // 构造函数
-  constructor(viewer: Cesium.Viewer) {
-    this.viewer = viewer
+  constructor(mapViewer) {
+    this.mapViewer = mapViewer
+    this.viewer = mapViewer.getViewer()
   }
 
   /**
@@ -31,7 +34,7 @@ export class CesiumDrawService {
     const entity = new Cesium.Entity()
     entity.position = cartesian3
     entity.label = this.createLabel(label)
-    return this.viewer.drawEntities.add(entity)
+    return this.mapViewer.drawEntities.add(entity)
   }
 
   /**
@@ -67,7 +70,7 @@ export class CesiumDrawService {
       entity.label = this.createLabel(label)
     }
 
-    return this.viewer.drawEntities.add(entity)
+    return this.mapViewer.drawEntities.add(entity)
   }
 
   /**
@@ -99,7 +102,7 @@ export class CesiumDrawService {
       )
     }
 
-    return this.viewer.drawEntities.add({
+    return this.mapViewer.drawEntities.add({
       polygon: {
         hierarchy,
         material: fillColor || this.color.polygon,
@@ -120,14 +123,14 @@ export class CesiumDrawService {
     positions: Array<Cesium.Cartographic | Cesium.Cartesian3>,
     clampToGround = false
   ) {
-    const polylineOption: any = {
+    const polylineEntity = new Entity({
       polyline: {
         width: 3,
         material: this.color.polyline,
         clampToGround // 开启贴地模式
       }
-    }
-    polylineOption.polyline.positions = new Cesium.CallbackProperty(
+    })
+    polylineEntity.polyline.positions = new Cesium.CallbackProperty(
       () =>
         positions.map(point => {
           if (point instanceof Cesium.Cartographic) {
@@ -138,7 +141,8 @@ export class CesiumDrawService {
         }),
       false
     )
-    return this.viewer.drawEntities.add(polylineOption)
+
+    return this.mapViewer.drawEntities.add(polylineEntity)
   }
 
   /**

@@ -64,7 +64,6 @@ import { PatrolInfoService } from "~/services/patrol-info.service"
 import { RequestParams } from '~/core/http'
 import { Inject } from "typescript-ioc"
 import MapViewer from "~/components/layer-viewer/map-viewer.vue"
-import { CesiumInteractService } from "~/utils/cesium/interact.service.ts"
 import SelectPoint from "~/components/layer-viewer/select-point.vue"
 
 @Component({

@@ -1,53 +1,21 @@
 <template>
   <section class="map-viewer fill">
-    <div
-      id="cesium-viewer"
-      class="col-span no-padding fill"
-    >
+    <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div
-      v-if="isDrawing"
-      class="draw-tool-bar icon-button-group"
-    >
-      <div
-        class="icon-button"
-        @click="onDrawEvent('close')"
-      >
-        <svg-icon
-          iconColor="white"
-          iconName="close"
-        ></svg-icon>
+    <div v-if="isDrawing" class="draw-tool-bar icon-button-group">
+      <div class="icon-button" @click="onDrawEvent('close')">
+        <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
-      <div
-        class="icon-button"
-        @click="onDrawEvent('reset')"
-      >
-        <svg-icon
-          iconColor="white"
-          iconName="reset"
-        ></svg-icon>
+      <div class="icon-button" @click="onDrawEvent('reset')">
+        <svg-icon iconColor="white" iconName="reset"></svg-icon>
       </div>
-      <div
-        class="icon-button"
-        @click="onDrawEvent('submit')"
-      >
-        <svg-icon
-          iconColor="white"
-          iconName="right"
-        ></svg-icon>
+      <div class="icon-button" @click="onDrawEvent('submit')">
+        <svg-icon iconColor="white" iconName="right"></svg-icon>
       </div>
     </div>
-    <div
-      v-if="isDrawing&&drawTipInfo"
-      class="draw-tip-panel"
-    >
-      {{drawTipInfo}}
-    </div>
-    <div
-      id="credit"
-      style="display:none"
-    ></div>
+    <div v-if="isDrawing&&drawTipInfo" class="draw-tip-panel">{{drawTipInfo}}</div>
+    <div id="credit" style="display:none"></div>
   </section>
 </template>
 
@@ -64,9 +32,7 @@ export default class MapViewer extends Vue {
   // 绘制状态
   public isDrawing = false
   // 绘制数据源
-  public drawDataSource = new Cesium.DataSource()
-  // 绘制实体数据
-  public drawEntities = new Cesium.EntityCollection(this.drawDataSource)
+  public drawDataSource = new Cesium.CustomDataSource('draw')
   // 绘制事件监听
   private drawEventListener: Array<(event: string) => void> = []
   // 绘制提示信息
@@ -91,6 +57,10 @@ export default class MapViewer extends Vue {
   private terrainProvider
   // 地图ID
   private mapId = 'cesium-viewer'
+
+  public get drawEntities() {
+    return this.drawDataSource.entities
+  }
 
   public getLayerList() {
     return this.layerList
@@ -286,7 +256,7 @@ export default class MapViewer extends Vue {
    */
   private startDrawMode(handle: () => void, tipInfo) {
     this.isDrawing = true
-    this.drawEntities = new Cesium.EntityCollection(this.drawDataSource)
+    this.drawEntities.removeAll()
     this.drawEventListener.push(handle)
     this.drawTipInfo = tipInfo
     return this.drawEntities
@@ -351,7 +321,7 @@ export default class MapViewer extends Vue {
     this.viewer.scene.globe.baseColor = Cesium.Color.WHITE
 
     this.viewer.dataSources.add(this.drawDataSource)
-  
+
     this.initCamera()
 
     this.emitMapReady()
