@@ -110,7 +110,7 @@ export default class TaskPanel extends Vue {
   private mounted() {
     this.refreshData()
     if (this.viewer) {
-      this.drawService = new CesiumDrawService(this.viewer.getViewer())
+      this.drawService = new CesiumDrawService(this.viewer)
     }
   }
 

@@ -17,7 +17,7 @@ export class BusinessFlowModel extends Model {
   public status: string = ''
 
   @Inject
-  private flowInfoService!: FlowInfoService
+  public flowInfoService!: FlowInfoService
 
   /**
    * 根据业务类型，业务状态查询数据分页数据

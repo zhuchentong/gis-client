@@ -5,7 +5,7 @@ import Cesium from 'cesium/Cesium'
 import { CesiumDrawService } from '../draw.service'
 
 export class DrawInteractPoint extends DrawInteract {
-  private drawService
+  private drawService: CesiumDrawService
   private position
 
   constructor(mapViewer) {

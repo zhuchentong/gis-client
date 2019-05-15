@@ -2,20 +2,11 @@
   <section class="component site-panel">
     <div class="search row between-span">
       <div>
-        <el-checkbox
-          v-model="selectAll"
-          class="search-select-all-checkbox"
-          :indeterminate="getIndeterminate"
-        ></el-checkbox>
+        <el-checkbox v-model="selectAll" class="search-select-all-checkbox" :indeterminate="getIndeterminate"></el-checkbox>
         <label>隐患级别:</label>
         <el-select v-model="queryModel.grade" class="search-worktype">
           <el-option label="全部" value></el-option>
-          <el-option
-            v-for="{code,name} of $dict.getDictData('DisasterGrade')"
-            :key="code"
-            :label="name"
-            :value="code"
-          ></el-option>
+          <el-option v-for="{code,name} of $dict.getDictData('DisasterGrade')" :key="code" :label="name" :value="code"></el-option>
         </el-select>
       </div>
       <div>
@@ -26,13 +17,8 @@
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
     <div v-else>
-      <div
-        v-for="item of dataList"
-        :key="item.id"
-        class="info-item row no-warp"
-        :class="{'info-item-disabled': item.status === 'DISABLED' }"
-      >
-        <el-checkbox v-model="item.selected" class="info-item-check-box"></el-checkbox>
+      <div v-for="item of dataList" :key="item.id" class="info-item row no-warp" :class="{'info-item-disabled': item.status === 'DISABLED' }">
+        <el-checkbox v-model="item.selected" @change="sitStatusChange" class="info-item-check-box"></el-checkbox>
         <div>
           <div class="row between-span info-item-title">
             <label>{{item.name}}</label>
@@ -43,28 +29,12 @@
         </div>
       </div>
       <div class="text-center">
-        <el-pagination
-          @current-change="refreshData"
-          small
-          :pager-count="5"
-          :current-page.sync="pageService.pageIndex"
-          :page-size="pageService.pageSize"
-          layout="total, prev, pager, next"
-          :total="pageService.total"
-        ></el-pagination>
+        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total"></el-pagination>
       </div>
     </div>
 
-    <el-dialog
-      title="维护地灾点"
-      :center="true"
-      :visible.sync="dialog.modify"
-      width="500px"
-      :show-close="false"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <modify-danger-site :model="editModel" @close="dialog.modify = false" @success="refreshData"></modify-danger-site>
+    <el-dialog title="维护地灾点" :center="true" :visible.sync="dialog.modify" width="500px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
+      <modify-danger-site :model="editModel" @close="dialog.modify = false" @success="onAppendSuccess"></modify-danger-site>
     </el-dialog>
   </section>
 </template>
@@ -79,9 +49,10 @@ import { RequestParams } from '~/core/http'
 import ModifyDangerSite from '~/components/layer-system/site-panel/modify-danger-site.vue'
 import { DangerSiteModel } from '~/models/danger-site.model'
 import { CommonService } from '~/utils/common.service'
-import MapViewer from '../../layer-viewer/map-viewer.vue'
+import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
-import { DrawInteractPolyline } from '@/utils/cesium/interact'
+import { DrawInteractPoint } from '@/utils/cesium/interact'
+import { CesiumDrawService } from "~/utils/cesium/draw.service"
 
 @Component({
   components: {
@@ -98,6 +69,8 @@ export default class SitePanel extends Vue {
   }
 
   private pageService = new PageService({ pageSize: 8 })
+  private drawService: CesiumDrawService | null = null
+  private pointEntitys: any[] = []
 
   private editModel = new DangerSiteModel()
 
@@ -115,7 +88,14 @@ export default class SitePanel extends Vue {
   }
 
   private set selectAll(val) {
-    this.dataList.forEach(x => (x.selected = val))
+    if (!this.viewer || !this.drawService) {
+      this.$message.error('绘制服务未加载')
+      return
+    }
+    this.dataList.forEach(item => {
+      this.showSite(val, item)
+      item.selected = val
+    })
   }
 
   private get getIndeterminate() {
@@ -128,14 +108,47 @@ export default class SitePanel extends Vue {
   }
 
   private addNew() {
-    // this.editModel = new DangerSiteModel()
-    // this.dialog.modify = true
-    const drawInteractPolyline = new DrawInteractPolyline(this.viewer)
-    let position
-    drawInteractPolyline.start().subscribe({
-      next:({positions}) => position = positions,
-      complete:()=>console.log(position)
+    this.editModel = new DangerSiteModel()
+    const draw = new DrawInteractPoint(this.viewer)
+    draw.start().subscribe({
+      next: data => {
+        const location = CesiumCommonService.cartesian3ToLocation(data.position)
+        this.editModel.positionX = location.latitude
+        this.editModel.positionY = location.longitude
+      },
+      complete: () => {
+        this.dialog.modify = true
+      }
     })
+  }
+
+
+  private showSite(value, data) {
+    if (!this.drawService) return
+    if (value) {
+      const position = CesiumCommonService.degreesToCartesian3Array([
+        {
+          x: data.positionX,
+          y: data.positionY
+        }
+      ])[0]
+      const entity = this.drawService.drawPoint(position, data.name)
+      this.viewer.getViewer().flyTo(entity)
+      // 坐标点添加到记录里面
+      this.pointEntitys.push({
+        id: data.id,
+        entityId: entity.id
+      })
+    } else {
+      const item = this.pointEntitys.find(x => x.id === data.id)
+      if (!item) return
+      this.viewer.drawDataSource.entities.removeById(item.entityId)
+      this.pointEntitys.splice(this.pointEntitys.findIndex(x => x.id === item.id), 1)
+    }
+  }
+
+  private sitStatusChange(value) {
+    this.showSite(value, this.editModel)
   }
 
   /**
@@ -147,9 +160,16 @@ export default class SitePanel extends Vue {
   }
   private mounted() {
     this.refreshData()
+    if (this.viewer) this.drawService = new CesiumDrawService(this.viewer)
   }
 
   private refreshData() {
+    // 删除已经加载的点
+    if (this.viewer) {
+      this.viewer.getViewer().entities.removeAll()
+      this.pointEntitys = []
+    }
+    // 查询数据
     const requestParam = new RequestParams(this.queryModel, {
       page: this.pageService
     })
@@ -161,6 +181,11 @@ export default class SitePanel extends Vue {
         }
       })
     })
+  }
+
+  private onAppendSuccess() {
+    this.viewer.drawDataSource.entities.removeAll()
+    this.refreshData()
   }
 }
 </script>
