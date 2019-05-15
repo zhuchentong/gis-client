@@ -60,6 +60,7 @@ export class DrawInteractPolyline extends DrawInteract {
    * @param e
    */
   public endDraw(e) {
+    // TODO: 添加绘制状态
     this.clioseEventListener()
 
     if (this.closed) {
