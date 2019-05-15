@@ -13,10 +13,10 @@
 
 <script lang="ts">
 import { Component, Vue, Watch, Emit, Model } from 'vue-property-decorator'
-import MapViewer from "~/components/layer-viewer/map-viewer.vue"
-import { CesiumInteractService } from "~/utils/cesium/interact.service.ts"
-import { CesiumDrawService } from "~/utils/cesium/draw.service.ts"
-import Cesium from "cesium/Cesium"
+import MapViewer from '~/components/layer-viewer/map-viewer.vue'
+import { DrawInteractPoint } from '~/utils/cesium/interact'
+import { CesiumDrawService } from '~/utils/cesium/draw.service.ts'
+import Cesium from 'cesium/Cesium'
 
 @Component({
   components: {
@@ -24,10 +24,9 @@ import Cesium from "cesium/Cesium"
   }
 })
 export default class SelectPoint extends Vue {
+  private mapViewer!: MapViewer
 
-  private mapView!: MapViewer
-
-  private interactService!: CesiumInteractService
+  private drawInteractPoint!: DrawInteractPoint
 
   @Model('point-selected')
   private position!: Cesium.Cartographic
@@ -42,36 +41,37 @@ export default class SelectPoint extends Vue {
     if (!value) this.startSelecte()
   }
 
-
   @Emit('submit')
-  private onSubmit() { return }
+  private onSubmit() {
+    return
+  }
 
   private onMapReady(value) {
-    this.mapView = value
-    this.interactService = new CesiumInteractService(this.mapView)
+    this.mapViewer = value
+    this.drawInteractPoint = new DrawInteractPoint(this.mapViewer)
 
-    this.interactService.startDrawPoint().subscribe((data: any) => {
+    this.drawInteractPoint.start().subscribe((data: any) => {
       this.onPointSelected(data.cartographic)
     })
 
     if (this.position) {
-      const cartesian = this.mapView.getViewer().scene.globe.ellipsoid.cartographicToCartesian(this.position)
-      const drawService = new CesiumDrawService(this.mapView.getViewer())
+      const cartesian = this.mapViewer
+        .getViewer()
+        .scene.globe.ellipsoid.cartographicToCartesian(this.position)
+      const drawService = new CesiumDrawService(this.mapViewer)
       drawService.drawPoint(cartesian)
     }
   }
 
-
   private startSelecte() {
-    if (this.mapView) {
-      this.mapView.getViewer().entities.removeAll()
+    if (this.mapViewer) {
+      this.mapViewer.getViewer().entities.removeAll()
       this.onPointSelected(null)
-      this.interactService.startDrawPoint().subscribe((data: any) => {
+      this.drawInteractPoint.start().subscribe((data: any) => {
         this.onPointSelected(data.cartographic)
       })
     }
   }
-
 }
 </script>
 

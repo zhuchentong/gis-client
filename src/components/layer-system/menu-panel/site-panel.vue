@@ -8,14 +8,8 @@
           :indeterminate="getIndeterminate"
         ></el-checkbox>
         <label>隐患级别:</label>
-        <el-select
-          v-model="queryModel.grade"
-          class="search-worktype"
-        >
-          <el-option
-            label="全部"
-            value=""
-          ></el-option>
+        <el-select v-model="queryModel.grade" class="search-worktype">
+          <el-option label="全部" value></el-option>
           <el-option
             v-for="{code,name} of $dict.getDictData('DisasterGrade')"
             :key="code"
@@ -26,18 +20,11 @@
       </div>
       <div>
         <a @click="addNew">
-          <svg-icon
-            iconName="add-new"
-            iconSize="12"
-          ></svg-icon>
-          添加
+          <svg-icon iconName="add-new" iconSize="12"></svg-icon>添加
         </a>
       </div>
     </div>
-    <div
-      class="no-data"
-      v-if="!dataList.length"
-    ></div>
+    <div class="no-data" v-if="!dataList.length"></div>
     <div v-else>
       <div
         v-for="item of dataList"
@@ -45,27 +32,14 @@
         class="info-item row no-warp"
         :class="{'info-item-disabled': item.status === 'DISABLED' }"
       >
-        <el-checkbox
-          v-model="item.selected"
-          class="info-item-check-box"
-        ></el-checkbox>
+        <el-checkbox v-model="item.selected" class="info-item-check-box"></el-checkbox>
         <div>
           <div class="row between-span info-item-title">
             <label>{{item.name}}</label>
-            <el-button
-              type="text"
-              v-if="item.selected"
-              @click="onItemClick(item)"
-            >编辑</el-button>
+            <el-button type="text" v-if="item.selected" @click="onItemClick(item)">编辑</el-button>
           </div>
-          <label-item
-            label="隐患级别"
-            :value="item.grade | dictConvert('DisasterGrade')"
-          ></label-item>
-          <label-item
-            label="所属行政区"
-            :value="item.prefecture | districtName"
-          ></label-item>
+          <label-item label="隐患级别" :value="item.grade | dictConvert('DisasterGrade')"></label-item>
+          <label-item label="所属行政区" :value="item.prefecture | districtName"></label-item>
         </div>
       </div>
       <div class="text-center">
@@ -77,8 +51,7 @@
           :page-size="pageService.pageSize"
           layout="total, prev, pager, next"
           :total="pageService.total"
-        >
-        </el-pagination>
+        ></el-pagination>
       </div>
     </div>
 
@@ -91,11 +64,7 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
-      <modify-danger-site
-        :model="editModel"
-        @close="dialog.modify = false"
-        @success="refreshData"
-      ></modify-danger-site>
+      <modify-danger-site :model="editModel" @close="dialog.modify = false" @success="refreshData"></modify-danger-site>
     </el-dialog>
   </section>
 </template>
@@ -112,7 +81,7 @@ import { DangerSiteModel } from '~/models/danger-site.model'
 import { CommonService } from '~/utils/common.service'
 import MapViewer from '../../layer-viewer/map-viewer.vue'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
-import { CesiumInteractService } from '../../../utils/cesium/interact.service'
+import { DrawInteractPolyline } from '@/utils/cesium/interact'
 
 @Component({
   components: {
@@ -161,11 +130,11 @@ export default class SitePanel extends Vue {
   private addNew() {
     // this.editModel = new DangerSiteModel()
     // this.dialog.modify = true
-    const interactService = new CesiumInteractService(this.viewer)
-    interactService.startDrawPolyline({closed : true}).subscribe({
-      next: (data) => {
-        console.log(data)
-      }
+    const drawInteractPolyline = new DrawInteractPolyline(this.viewer)
+    let position
+    drawInteractPolyline.start().subscribe({
+      next:({positions}) => position = positions,
+      complete:()=>console.log(position)
     })
   }
 

@@ -12,13 +12,13 @@
 
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-import DataBox from "~/components/common/data-box.vue"
+import DataBox from '~/components/common/data-box.vue'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
-import { PatrolInfoService } from "~/services/patrol-info.service"
-import { RequestParams } from "~/core/http"
-import { Inject } from "typescript-ioc"
-import { CesiumDrawService } from "~/utils/cesium/draw.service"
-import Cesium from "cesium/Cesium"
+import { PatrolInfoService } from '~/services/patrol-info.service'
+import { RequestParams } from '~/core/http'
+import { Inject } from 'typescript-ioc'
+import { CesiumDrawService } from '~/utils/cesium/draw.service'
+import Cesium from 'cesium/Cesium'
 
 @Component({
   components: {
@@ -30,43 +30,41 @@ export default class extends Vue {
   @Prop()
   private id!: string
 
-
   private dataList: any[] = []
 
   private drawService!: CesiumDrawService
-  private mapView!: MapViewer
-  private lastEntityId = ""
+  private mapViewer!: MapViewer
+  private lastEntityId = ''
 
   @Inject
   private service!: PatrolInfoService
 
   private onMapReady(value) {
-    this.mapView = value
-    this.drawService = new CesiumDrawService(this.mapView.getViewer())
+    this.mapViewer = value
+    this.drawService = new CesiumDrawService(this.mapViewer)
     this.dataList.length && this.drawEntity()
   }
-
 
   @Watch('id', { immediate: true })
   private onIdChange(value) {
     this.dataList = []
     if (!value) return
     const requestParams = new RequestParams({ id: this.id })
-    this.service.getPatrolTrack(requestParams).subscribe(
-      data => {
-        if (!data.length) return
-        this.dataList = data.map(v => Cesium.Cartesian3.fromRadians(v.positionY, v.positionX))
-        this.mapView && this.drawEntity()
-      }
-    )
+    this.service.getPatrolTrack(requestParams).subscribe(data => {
+      if (!data.length) return
+      this.dataList = data.map(v =>
+        Cesium.Cartesian3.fromRadians(v.positionY, v.positionX)
+      )
+      this.mapViewer && this.drawEntity()
+    })
   }
 
   private drawEntity() {
     if (this.lastEntityId) {
-      this.mapView.getViewer().entities.removeById(this.lastEntityId)
+      this.mapViewer.getViewer().entities.removeById(this.lastEntityId)
     }
     const entity = this.drawService.drawPolygon(this.dataList)
-    this.mapView.getViewer().zoomTo(entity)
+    this.mapViewer.getViewer().zoomTo(entity)
     this.lastEntityId = entity.id
   }
 }
