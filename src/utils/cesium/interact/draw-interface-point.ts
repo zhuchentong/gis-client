@@ -5,7 +5,7 @@ import Cesium from 'cesium/Cesium'
 import { CesiumDrawService } from '../draw.service'
 
 export class DrawInteractPoint extends DrawInteract {
-  private drawService
+  private drawService: CesiumDrawService
 
   constructor(mapViewer) {
     super(mapViewer, {
@@ -33,7 +33,7 @@ export class DrawInteractPoint extends DrawInteract {
       cartographic
     )
     // 添加坐标点
-    this.drawService.drawPoint(position)
+    this.drawService.drawPoint(position, '地灾点')
     this.observer.next({ cartographic, position })
   }
 

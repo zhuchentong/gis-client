@@ -70,7 +70,7 @@ export class CesiumDrawService {
       entity.label = this.createLabel(label)
     }
 
-    return this.mapViewer.drawEntities.add(entity)
+    return this.mapViewer.drawEntities.add(entity) as Cesium.Entity
   }
 
   /**

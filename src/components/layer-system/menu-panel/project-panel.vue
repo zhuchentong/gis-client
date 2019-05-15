@@ -17,13 +17,13 @@
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
     <div v-else class="middle-content">
-      <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="currentItem = item" :class="{'info-item-activated': item.flowId === currentItem.flowId}">
+      <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="itemClick(item)" :class="{'info-item-activated': item.flowId === flowId}">
         <label-item label="项目名称" noWarp showTitle :value="item.name"></label-item>
         <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
         <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
         <div class="text-right item-operate">
           <el-button type="text" @click="viewBusinessDetail">查看详情</el-button>
-          <el-button type="text" :disabled="!item.layerId">显示图层</el-button>
+          <el-button type="text" :disabled="!item.layerId" @click="addLayer">显示图层</el-button>
         </div>
       </div>
       <div class="text-center">
@@ -36,21 +36,28 @@
 
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 import { BusinessFlowModel } from "~/models/business-flow.model"
 import { PageService } from "~/extension/services/page.service.ts"
 import { WindowSize } from '~/config/enum.config'
+import MapViewer from "~/components/layer-viewer/map-viewer.vue"
+import { LayerSpace } from "~/config/business-config.ts"
+import { RequestParams, Request } from "~/core/http"
 
 @Component({
   components: {}
 })
 export default class ProjectPanel extends Vue {
 
+  @Prop()
+  private viewer!: MapViewer
+
   private dataList: any[] = []
-  private currentItem: any = {}
+  private flowId = ""
   private flowModel: BusinessFlowModel = new BusinessFlowModel()
   private pageService = new PageService({ pageSize: 6 })
 
+  private layerInfo: any = null
 
 
 
@@ -66,11 +73,11 @@ export default class ProjectPanel extends Vue {
    * 查询数据
    */
   private refreshData() {
-    this.currentItem = {}
+    this.flowId = ""
     this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
       data => {
         this.dataList = data.content
-        if (this.dataList.length) this.currentItem = this.dataList[0]
+        if (this.dataList.length) this.flowId = this.dataList[0].flowId
       }
     )
   }
@@ -82,7 +89,7 @@ export default class ProjectPanel extends Vue {
   }
 
   private viewBusinessDetail() {
-    if (!this.currentItem.flowId) return
+    if (!this.flowId) return
     this.$window.open('business-system',
       {
         width: WindowSize.large.width,
@@ -91,8 +98,28 @@ export default class ProjectPanel extends Vue {
       {
         replace: false,
         parent: null,
-        params: { flowId: this.currentItem.flowId }
+        params: { flowId: this.flowId }
       }, this)
+  }
+
+  private itemClick(item) {
+    if (this.flowId === item.flowId) return
+    // 删除之前的layer信息
+    if (this.layerInfo && this.viewer) {
+      this.viewer.removeLayer(this.layerInfo)
+    }
+    this.flowId = item.flowId
+    this.layerInfo = null
+  }
+
+  private addLayer() {
+    const requestParams = new RequestParams({ flowId: this.flowId })
+    this.flowModel.flowInfoService.getLayerInfoByFlowId(requestParams)
+      .subscribe(data => {
+        this.layerInfo = data
+        delete this.layerInfo.uploadFile
+        if (this.viewer) this.viewer.addLayer(this.layerInfo)
+      })
   }
 
 
