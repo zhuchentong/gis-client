@@ -145,4 +145,24 @@ export class CesiumCommonService {
       ? `${(distance / 1000).toFixed(2)} km`
       : `${distance.toFixed(2)} m`
   }
+
+  /**
+   * 角度转笛卡尔坐标系
+   * @param degress 
+   */
+  public static degreesToCartesian3Array(degress: Array<{ x: number, y: number }>) {
+    return degress.map(item => {
+      return Cesium.Cartesian3.fromDegrees(item.x, item.y)
+    })
+  }
+
+  /**
+   * 弧度转笛卡尔坐标系
+   * @param radians
+   */
+  public static radiansToCartesian3Array(radians: Array<{ x: number, y: number }>) {
+    return radians.map(item => {
+      return Cesium.Cartesian3.fromRadians(item.x, item.y)
+    })
+  }
 }

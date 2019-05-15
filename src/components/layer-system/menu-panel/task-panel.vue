@@ -17,13 +17,13 @@
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
     <div v-else>
-      <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="id = item.id" :class="{'info-item-activated': item.id === id}">
-        <label-item label="任务名称" :value="item.name"></label-item>
+      <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="itemClick(item)" :class="{'info-item-activated': item.id === id}">
+        <label-item label="任务名称" noWarp showTitle :value="item.name"></label-item>
         <label-item label="外业类型" :value="item.type | dictConvert('PatrolType')"></label-item>
         <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
         <div class="text-right item-operate">
           <el-button type="text" @click="viewTaskDetail">查看详情</el-button>
-          <el-button type="text" :disabled="item.show === 'NO'">显示图层</el-button>
+          <el-button type="text" :disabled="item.show === 'NO'" @click="taskDataShow(item)">显示区域</el-button>
         </div>
       </div>
       <div class="text-center">
@@ -36,17 +36,23 @@
 
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 import { PageService } from "~/extension/services/page.service"
 import { Inject } from 'typescript-ioc'
 import { PatrolInfoService } from '~/services/patrol-info.service'
 import { RequestParams } from '~/core/http'
 import { WindowSize } from '~/config/enum.config'
+import { CesiumDrawService } from "~/utils/cesium/draw.service"
+import MapViewer from "~/components/layer-viewer/map-viewer.vue"
+import { CesiumCommonService } from "~/utils/cesium/common.service.ts"
 
 @Component({
   components: {}
 })
 export default class TaskPanel extends Vue {
+
+  @Prop()
+  private viewer!: MapViewer
 
   private queryModel = {
     status: "", // 已归档
@@ -58,6 +64,10 @@ export default class TaskPanel extends Vue {
   private pageService = new PageService({ pageSize: 6 })
   @Inject
   private patrolService!: PatrolInfoService
+
+  private drawService!: CesiumDrawService
+  // 最后一个画的区域
+  private lastEntityId = ""
 
   /**
    * 监听查询model变化
@@ -99,6 +109,44 @@ export default class TaskPanel extends Vue {
 
   private mounted() {
     this.refreshData()
+    if (this.viewer) {
+      this.drawService = new CesiumDrawService(this.viewer.getViewer())
+    }
+  }
+
+  /**
+   * 拉取巡查数据，展示区域
+   */
+  private taskDataShow(item) {
+    const taskId = item.id
+    const requestParams = new RequestParams({ id: taskId })
+    this.patrolService.getPatrolTrack(requestParams).subscribe(data => {
+      if (!data.length) return
+      const positions = CesiumCommonService.radiansToCartesian3Array(data.map(v => ({ x: v.positionX, y: v.positionY })))
+      this.viewer && this.drawEntity(positions)
+    })
+  }
+
+  /**
+   * 绘制实体
+   */
+  private drawEntity(positions) {
+    const entity = this.drawService.drawPolygon(positions)
+    this.viewer.getViewer().zoomTo(entity)
+    this.lastEntityId = entity.id
+  }
+
+  /**
+   * 列表项变更。
+   */
+  private itemClick(item) {
+    // 判断如果ID变化，就要将已经绘制的区域删除
+    if (item.id !== this.id) {
+      if (this.viewer && this.lastEntityId) {
+        this.viewer.getViewer().entities.removeById(this.lastEntityId)
+      }
+    }
+    this.id = item.id
   }
 }
 </script>
