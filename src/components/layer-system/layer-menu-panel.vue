@@ -28,6 +28,7 @@ export default class LayerMenuPanel extends Vue {
 
 <style lang="less" scoped>
 .layer-menu-panel {
+  height: 100%;
 }
 </style>
 
