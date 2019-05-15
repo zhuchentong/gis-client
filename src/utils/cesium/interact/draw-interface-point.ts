@@ -6,6 +6,7 @@ import { CesiumDrawService } from '../draw.service'
 
 export class DrawInteractPoint extends DrawInteract {
   private drawService: CesiumDrawService
+  private position
 
   constructor(mapViewer) {
     super(mapViewer, {
@@ -20,6 +21,10 @@ export class DrawInteractPoint extends DrawInteract {
    * @param e
    */
   public startDraw(e) {
+    if (this.position) {
+      return
+    }
+
     // 获取点击坐标点
     const cartographic = CesiumCommonService.getViewCartesianPoint(
       this.viewer,
@@ -28,13 +33,13 @@ export class DrawInteractPoint extends DrawInteract {
     // 无效坐标点
     if (!cartographic) return
     // 转换位置信息
-    const position = CesiumCommonService.DegressToCartesian3(
+    this.position = CesiumCommonService.DegressToCartesian3(
       this.viewer,
       cartographic
     )
     // 添加坐标点
-    this.drawService.drawPoint(position, '地灾点')
-    this.observer.next({ cartographic, position })
+    this.drawService.drawPoint(this.position)
+    this.observer.next({ cartographic, position: this.position })
   }
 
   /**
@@ -49,6 +54,6 @@ export class DrawInteractPoint extends DrawInteract {
    * 重置绘制状态
    */
   public resetDraw() {
-    return
+    this.position = null
   }
 }
