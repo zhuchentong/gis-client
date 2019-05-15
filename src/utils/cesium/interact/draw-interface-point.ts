@@ -37,7 +37,7 @@ export class DrawInteractPoint extends DrawInteract {
         longitude: Cesium.Math.toDegrees(cartographic.longitude)
       }
 
-      const cartesian3 = CesiumCommonService.DegressToCartesian3(
+      const cartesian3 = CesiumCommonService.DegreesToCartesian3(
         this.viewer,
         cartographic
       )

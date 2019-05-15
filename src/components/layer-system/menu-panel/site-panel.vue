@@ -2,11 +2,20 @@
   <section class="component site-panel">
     <div class="search row between-span">
       <div>
-        <el-checkbox v-model="selectAll" class="search-select-all-checkbox" :indeterminate="getIndeterminate"></el-checkbox>
+        <el-checkbox
+          v-model="selectAll"
+          class="search-select-all-checkbox"
+          :indeterminate="getIndeterminate"
+        ></el-checkbox>
         <label>隐患级别:</label>
         <el-select v-model="queryModel.grade" class="search-worktype">
           <el-option label="全部" value></el-option>
-          <el-option v-for="{code,name} of $dict.getDictData('DisasterGrade')" :key="code" :label="name" :value="code"></el-option>
+          <el-option
+            v-for="{code,name} of $dict.getDictData('DisasterGrade')"
+            :key="code"
+            :label="name"
+            :value="code"
+          ></el-option>
         </el-select>
       </div>
       <div>
@@ -17,7 +26,12 @@
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
     <div v-else>
-      <div v-for="item of dataList" :key="item.id" class="info-item row no-warp" :class="{'info-item-disabled': item.status === 'DISABLED' }">
+      <div
+        v-for="item of dataList"
+        :key="item.id"
+        class="info-item row no-warp"
+        :class="{'info-item-disabled': item.status === 'DISABLED' }"
+      >
         <el-checkbox v-model="item.selected" @change="sitStatusChange" class="info-item-check-box"></el-checkbox>
         <div>
           <div class="row between-span info-item-title">
@@ -29,12 +43,32 @@
         </div>
       </div>
       <div class="text-center">
-        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total"></el-pagination>
+        <el-pagination
+          @current-change="refreshData"
+          small
+          :pager-count="5"
+          :current-page.sync="pageService.pageIndex"
+          :page-size="pageService.pageSize"
+          layout="total, prev, pager, next"
+          :total="pageService.total"
+        ></el-pagination>
       </div>
     </div>
 
-    <el-dialog title="维护地灾点" :center="true" :visible.sync="dialog.modify" width="500px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-      <modify-danger-site :model="editModel" @close="dialog.modify = false" @success="onAppendSuccess"></modify-danger-site>
+    <el-dialog
+      title="维护地灾点"
+      :center="true"
+      :visible.sync="dialog.modify"
+      width="500px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <modify-danger-site
+        :model="editModel"
+        @close="dialog.modify = false"
+        @success="onAppendSuccess"
+      ></modify-danger-site>
     </el-dialog>
   </section>
 </template>
@@ -52,7 +86,7 @@ import { CommonService } from '~/utils/common.service'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
 import { DrawInteractPoint } from '@/utils/cesium/interact'
-import { CesiumDrawService } from "~/utils/cesium/draw.service"
+import { CesiumDrawService } from '~/utils/cesium/draw.service'
 
 @Component({
   components: {
@@ -111,17 +145,15 @@ export default class SitePanel extends Vue {
     this.editModel = new DangerSiteModel()
     const draw = new DrawInteractPoint(this.viewer)
     draw.start().subscribe({
-      next: data => {
-        const location = CesiumCommonService.cartesian3ToLocation(data.position)
-        this.editModel.positionX = location.latitude
-        this.editModel.positionY = location.longitude
+      next: ({ degrees }) => {
+        this.editModel.positionX = degrees.latitude
+        this.editModel.positionY = degrees.longitude
       },
       complete: () => {
         this.dialog.modify = true
       }
     })
   }
-
 
   private showSite(value, data) {
     if (!this.drawService) return
@@ -143,7 +175,10 @@ export default class SitePanel extends Vue {
       const item = this.pointEntitys.find(x => x.id === data.id)
       if (!item) return
       this.viewer.drawDataSource.entities.removeById(item.entityId)
-      this.pointEntitys.splice(this.pointEntitys.findIndex(x => x.id === item.id), 1)
+      this.pointEntitys.splice(
+        this.pointEntitys.findIndex(x => x.id === item.id),
+        1
+      )
     }
   }
 

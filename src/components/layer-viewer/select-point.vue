@@ -50,8 +50,8 @@ export default class SelectPoint extends Vue {
     this.mapViewer = value
     this.drawInteractPoint = new DrawInteractPoint(this.mapViewer)
 
-    this.drawInteractPoint.start().subscribe((data: any) => {
-      this.onPointSelected(data.cartographic)
+    this.drawInteractPoint.start().subscribe(({ cartographic }) => {
+      this.onPointSelected(cartographic)
     })
 
     if (this.position) {

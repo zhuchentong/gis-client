@@ -2,11 +2,11 @@ import Cesium from 'cesium/Cesium'
 
 export class CesiumCommonService {
   /**
-   * DegressToCartesian3
+   * DegreesToCartesian3
    * @param viewer
    * @param cartographic
    */
-  public static DegressToCartesian3(viewer, cartographic) {
+  public static DegreesToCartesian3(viewer, cartographic) {
     // 海拔
     const height = viewer.scene.globe.getHeight(cartographic)
     // 地理坐标（弧度）转经纬度坐标
@@ -96,7 +96,7 @@ export class CesiumCommonService {
         postion
       )
       if (cartographic) {
-        result = CesiumCommonService.DegressToCartesian3(viewer, cartographic)
+        result = CesiumCommonService.DegreesToCartesian3(viewer, cartographic)
       }
     }
     return result
@@ -148,10 +148,12 @@ export class CesiumCommonService {
 
   /**
    * 角度转笛卡尔坐标系
-   * @param degress 
+   * @param degrees
    */
-  public static degreesToCartesian3Array(degress: Array<{ x: number, y: number }>) {
-    return degress.map(item => {
+  public static degreesToCartesian3Array(
+    degrees: Array<{ x: number; y: number }>
+  ) {
+    return degrees.map(item => {
       return Cesium.Cartesian3.fromDegrees(item.x, item.y)
     })
   }
@@ -160,7 +162,9 @@ export class CesiumCommonService {
    * 弧度转笛卡尔坐标系
    * @param radians
    */
-  public static radiansToCartesian3Array(radians: Array<{ x: number, y: number }>) {
+  public static radiansToCartesian3Array(
+    radians: Array<{ x: number; y: number }>
+  ) {
     return radians.map(item => {
       return Cesium.Cartesian3.fromRadians(item.x, item.y)
     })

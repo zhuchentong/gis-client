@@ -94,7 +94,7 @@ export class CesiumDrawService {
       hierarchy = new Cesium.PolygonHierarchy(
         positions.map(point => {
           if (point instanceof Cesium.Cartographic) {
-            return CesiumCommonService.DegressToCartesian3(this.viewer, point)
+            return CesiumCommonService.DegreesToCartesian3(this.viewer, point)
           } else {
             return point
           }
@@ -134,7 +134,7 @@ export class CesiumDrawService {
       () =>
         positions.map(point => {
           if (point instanceof Cesium.Cartographic) {
-            return CesiumCommonService.DegressToCartesian3(this.viewer, point)
+            return CesiumCommonService.DegreesToCartesian3(this.viewer, point)
           } else {
             return point
           }
