@@ -1,12 +1,12 @@
 <template>
-  <section class="component land-use">
-       <el-card header="土地用途区统计">
+  <section class="component report-land">
+       <el-card header="地灾分布统计">
       <ve-pie :data="chartData"></ve-pie>
     </el-card>
     <data-box :data="dataSet">
       <template slot="columns">
-        <el-table-column prop="name" label="土地用途区类型"></el-table-column>
-        <el-table-column prop="acreage" label="占地面积(亩)"></el-table-column>
+        <el-table-column prop="prefecture" label="行政村"></el-table-column>
+        <el-table-column prop="number" label="地灾点个数"></el-table-column>
         <el-table-column prop="ratio" label="所占百分比"></el-table-column>
       </template>
     </data-box>
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { LayerStatisticalService } from "~/services/layer-statistical.service"
+import { StatisticalService } from "~/services/statistical.service"
 import {Inject} from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { Pie } from "v-charts"
@@ -29,13 +29,13 @@ import DataBox from "~/components/common/data-box.vue"
     Pie
   }
 })
-export default class LandUse extends Vue {
+export default class ReportLand extends Vue {
   @Inject
-  private sevice!: LayerStatisticalService
+  private sevice!: StatisticalService
 
   private dataSet: any = []
     private readonly setting = {
-    type: "管制区类型",
+    type: "行政村",
     area: "占地面积(亩)"
   }
    private chartData = {
@@ -45,17 +45,21 @@ export default class LandUse extends Vue {
 
     private refreshData() {
     const params = new RequestParams({
-      reportType: 'LAND_USE_AREA'
+      type: '1',
+      year:'2019'
     })
- this.sevice.getLayerStatisticalReport(params).subscribe(data =>{
-   this.dataSet = data
-      this.chartData.rows=data.map(item=>{
+ this.sevice.getStatisticalDisaster(params).subscribe(data => {
+ this.dataSet = data,
+ this.chartData.rows=data.map(item=>{
   const row = {}
-      row[this.setting.type] = item.name
-      row[this.setting.area] = item.acreage
+      row[this.setting.type] = item.prefecture
+      row[this.setting.area] = item.ratio
       return row
  })
- })
+ }
+
+ )
+ console.log(this.dataSet,'dataSet')
   }
   private mounted(){
     this.refreshData()
