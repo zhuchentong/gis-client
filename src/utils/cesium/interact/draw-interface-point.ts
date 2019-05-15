@@ -30,16 +30,28 @@ export class DrawInteractPoint extends DrawInteract {
       this.viewer,
       e.position
     )
-    // 无效坐标点
-    if (!cartographic) return
-    // 转换位置信息
-    this.position = CesiumCommonService.DegressToCartesian3(
-      this.viewer,
-      cartographic
-    )
-    // 添加坐标点
-    this.drawService.drawPoint(this.position)
-    this.observer.next({ cartographic, position: this.position })
+
+    if (cartographic) {
+      const degrees = {
+        latitude: Cesium.Math.toDegrees(cartographic.latitude),
+        longitude: Cesium.Math.toDegrees(cartographic.longitude)
+      }
+
+      const cartesian3 = CesiumCommonService.DegressToCartesian3(
+        this.viewer,
+        cartographic
+      )
+
+      this.position = {
+        cartographic,
+        cartesian3,
+        degrees
+      }
+
+      // 添加坐标点
+      this.drawService.drawPoint(this.position.cartesian3)
+      this.observer.next(this.position)
+    }
   }
 
   /**
