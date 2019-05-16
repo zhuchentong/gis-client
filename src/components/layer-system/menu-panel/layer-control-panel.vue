@@ -6,16 +6,31 @@
         :key="item.layer.layerName"
         class="col layer-item text-left"
       >
-        <div class="layer-title">{{item.layer.layerName}}</div>
+        <div class="row between-span middle-span">
+          <div class="layer-title">{{item.layer.layerName}}</div>
+          <div
+            class="layer-close-icon"
+            @click="onCloseLayer(item.layer)"
+            v-if="item.layer.layerSpace !== 'base-space'"
+          >
+            <svg-icon :iconSize="12" iconName="close"></svg-icon>
+          </div>
+        </div>
+
         <div class="setting-text">
-          <div v-if="layerList.length > 1" class="row between-span middle-span">
+          <div class="row between-span middle-span">
             <span>图层位置</span>
             <div>
-              <el-button type="text" @click="raiseLayer(item)" v-show="index" icon="el-icon-top"></el-button>
+              <el-button
+                type="text"
+                @click="raiseLayer(item)"
+                :disabled="!index"
+                icon="el-icon-top"
+              ></el-button>
               <el-button
                 type="text"
                 @click="lowerLayer(item)"
-                v-show="index < (layerList.length - 1)"
+                :disabled="index >= (layerList.length - 1)"
                 icon="el-icon-bottom"
               ></el-button>
             </div>
@@ -34,6 +49,7 @@
         </div>
       </div>
     </transition-group>
+    <div v-if="!layerList.length" class="empty-tip row middle-span center-span">暂无图层</div>
   </section>
 </template>
 
@@ -109,6 +125,10 @@ export default class extends Vue {
     // 上移
     this.viewer.getViewer().scene.imageryLayers.raiseToTop(layer)
   }
+
+  private onCloseLayer(layer) {
+    this.viewer.removeLayer(layer)
+  }
 }
 </script>
 
@@ -124,6 +144,9 @@ export default class extends Vue {
       margin: 5px 1px;
       font-weight: bold;
     }
+    .layer-close-icon {
+      cursor: pointer;
+    }
     .setting-text {
       padding-left: 10px;
       div > span {
@@ -135,6 +158,9 @@ export default class extends Vue {
   .flip-list-move {
     transition: transform 0.8s;
     pointer-events: none;
+  }
+  .empty-tip {
+    height: 200px;
   }
 }
 </style>

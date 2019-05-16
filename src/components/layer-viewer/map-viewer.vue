@@ -384,24 +384,20 @@ export default class MapViewer extends Vue {
       e => {
         e.cancel = true
         // 镜头位置为工作区bbox
-        this.GetGeographicBoundingBox(this.workspace, '')
-          .then((view: any) => {
-            this.viewer.camera.flyTo(view)
-          })
-          .catch(ex => {
-            console.log(ex)
-          })
+        this.setCamera(this.workspace)
       }
     )
+
+    this.setCamera(this.workspace)
   }
 
   /**
    * 设置镜头位置
    */
-  private setCamera(layerSpace, layerName) {
+  private setCamera(layerSpace, layerName?) {
     this.GetGeographicBoundingBox(layerSpace, layerName)
       .then((view: any) => {
-        this.viewer.camera.setView(view)
+        this.viewer.camera.flyTo(view)
       })
       .catch(ex => {
         console.log(ex)
