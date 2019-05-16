@@ -13,12 +13,7 @@
       <div slot="header">
         <span>视角</span>
       </div>
-      <div
-        class="icon-item text-center"
-        v-for="item of cameraList"
-        :key="item.key"
-        @click="item.handle()"
-      >
+      <div class="icon-item text-center" v-for="item of cameraList" :key="item.key" @click="item.handle()">
         <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
         <div>{{item.label}}</div>
       </div>
@@ -73,9 +68,9 @@ export default class ToolPanel extends Vue {
         CesiumCommonService.cartesian3ToDegrees(x)
       )
       const [start] = degreesList
-      const cartographicDegrees = []
-      degreesList.forEach((x,i)=>{
-        cartographicDegrees = [...cartographicDegrees,...[i*10,x.longitude, x.latitude, x.height]]
+      let cartographicDegrees: any[] = []
+      degreesList.forEach((x, i) => {
+        cartographicDegrees = [...cartographicDegrees, ...[i * 10, x.longitude, x.latitude, x.height]]
       })
       const viewer = this.viewer.getViewer()
       const czml = [
