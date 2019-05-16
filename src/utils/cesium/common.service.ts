@@ -174,11 +174,12 @@ export class CesiumCommonService {
    * 坐标系转换 笛卡尔坐标系转经纬度坐标
    * @param position 笛卡尔坐标
    */
-  public static cartesian3ToLocation(position: Cesium.Cartesian3) {
+  public static cartesian3ToDegrees(position: Cesium.Cartesian3) {
     const cartographic = Cesium.Cartographic.fromCartesian(position)
     return {
       latitude: Cesium.Math.toDegrees(cartographic.latitude),
-      longitude: Cesium.Math.toDegrees(cartographic.longitude)
+      longitude: Cesium.Math.toDegrees(cartographic.longitude),
+      height: cartographic.height
     }
   }
 }

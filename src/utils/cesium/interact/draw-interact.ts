@@ -26,7 +26,7 @@ export abstract class DrawInteract {
   /**
    * 启动绘制模式
    */
-  public start() {
+  public start(): Observable<any> {
     this.obserable = new Observable(observer => (this.observer = observer))
     this.startEventListener = this.addEventListener(
       this.startEvent,
@@ -77,6 +77,9 @@ export abstract class DrawInteract {
         this.resetDraw()
         break
       case 'submit':
+        // 清空数据
+        this.resetDraw()
+        // 关闭监听
         this.clioseEventListener()
         this.observer.complete()
         break

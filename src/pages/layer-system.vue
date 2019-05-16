@@ -47,7 +47,7 @@ export default class extends Vue {
 .layer-system-page {
   display: grid;
   grid-template-rows: auto 20px;
-  grid-template-columns: 60px 250px auto;
+  grid-template-columns: 60px 260px auto;
 
   .menu-list {
     grid-area: ~'1/1/span 1/span 1';

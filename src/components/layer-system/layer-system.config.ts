@@ -8,6 +8,7 @@ import SearchPanel from './menu-panel/search-panel.vue'
 import SitePanel from './menu-panel/site-panel.vue'
 import TaskPanel from './menu-panel/task-panel.vue'
 import ViewerPanel from './menu-panel/viewer-panel.vue'
+import ToolPanel from './menu-panel/tool-panel.vue'
 
 /**
  * 左侧菜单列表
@@ -24,8 +25,8 @@ export const MenuList = [
     icon: 'layer-control'
   },
   {
-    key: 'measure-panel',
-    label: '测量',
+    key: 'tool-panel',
+    label: '工具',
     icon: 'measure'
   },
   {
@@ -38,11 +39,11 @@ export const MenuList = [
     label: '检测',
     icon: 'check'
   },
-  {
-    key: 'viewer-panel',
-    label: '视角',
-    icon: 'viewer'
-  },
+  // {
+  //   key: 'viewer-panel',
+  //   label: '视角',
+  //   icon: 'viewer'
+  // },
   {
     key: 'compute-panel',
     label: '计算',
@@ -71,6 +72,7 @@ export const MenuList = [
 export const PanelComponents = {
   CheckPanel,
   ComputePanel,
+  ToolPanel,
   LayerControlPanel,
   LayerListPanel,
   MeasurePanel,

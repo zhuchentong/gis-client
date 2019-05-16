@@ -308,8 +308,9 @@ export default class MapViewer extends Vue {
       fullscreenButton: false,
       navigationHelpButton: false,
       geocoder: false,
-      animation: false,
-      timeline: false,
+      // animation: true,
+      shouldAnimate:true,
+      // timeline: false,
       // imageryProviderViewModels: this.getImageViewModels(),
       // terrainProviderViewModels: this.getTerrainViewModels(),
       creditContainer: 'credit'
@@ -332,6 +333,7 @@ export default class MapViewer extends Vue {
     this.viewer.scene.globe.baseColor = Cesium.Color.WHITE
 
     this.viewer.dataSources.add(this.drawDataSource)
+    this.cameraView = this.viewer.camera
     // 监听实体数组变化
     this.drawEntities.collectionChanged.addEventListener(() => {
       this.drawEntitiesLength = this.drawEntities.values.length
