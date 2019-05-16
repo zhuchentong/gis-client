@@ -31,7 +31,7 @@ export default class CheckLayerSelect extends Vue {
   private layerList: any[] = []
 
   private mounted() {
-    this.getLayerList()
+    this.queryLayers()
   }
 
 
@@ -84,6 +84,69 @@ export default class CheckLayerSelect extends Vue {
     }
 
     this.layerList = gerateGroupTree()
+  }
+
+  private queryLayers() {
+    this.layerList = [
+      {
+        name: "预警监测",
+        id: "yujingjiance",
+        children: [
+          {
+            name: "基本农田占用检测",
+            id: "1"
+          },
+          {
+            name: "非允许建设区检测",
+            id: "2"
+          }
+        ]
+      },
+      {
+        name: "数据分析",
+        id: "shujufenxi",
+        children: [
+          {
+            name: "土地变更现状",
+            id: "11"
+          },
+          {
+            name: "土地用途区",
+            id: "12"
+          },
+          {
+            name: "控制性详细规划",
+            id: "13"
+          },
+          {
+            name: "建设用地管制区",
+            id: "14"
+          }
+        ]
+      },
+      {
+        name: "业务分析",
+        id: "yewufenxi",
+        children: [
+          {
+            name: "报地",
+            id: "21"
+          },
+          {
+            name: "批地",
+            id: "22"
+          },
+          {
+            name: "征地",
+            id: "23"
+          },
+          {
+            name: "供地",
+            id: "24"
+          }
+        ]
+      },
+    ]
   }
 
   private submit() {
