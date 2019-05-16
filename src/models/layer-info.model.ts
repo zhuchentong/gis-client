@@ -4,6 +4,7 @@ import { LayerInfoService } from '@/services/layer-info.service'
 import { BusinessLayerService } from '@/services/business-layer.service'
 import { FilterService } from '@/utils/filter.service'
 import { PageService } from '~/extension/services/page.service'
+import { SortService, SortType } from '@/extension/services/sort.service'
 
 export class LayerInfo extends Model {
   public layerName: string = ""
@@ -24,6 +25,7 @@ export class LayerInfo extends Model {
 
   private defaultSpace = "base-space"
 
+  private sort = new SortService({ sort: SortType.ascending })
 
   /**
    * 保存图层文件信息
@@ -56,7 +58,7 @@ export class LayerInfo extends Model {
       groupId: this.groupId,
       layerSpace: this.defaultSpace,
       createDate: FilterService.dateFormat(this.createDate)
-    }, { page }))
+    }, { page, sort: this.sort }))
   }
 
   public getLayerInfoList() {

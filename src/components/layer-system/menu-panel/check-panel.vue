@@ -31,11 +31,12 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { MenuList } from "~/components/layer-system/check-panel/check-panel.config"
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
-import { DrawInteractPolyline } from "~/utils/cesium/interact"
 import TaskListSelect from "~/components/layer-system/check-panel/task-list-select.vue"
 import BusinessListSelect from "~/components/layer-system/check-panel/business-list-select.vue"
 import CheckLayerSelect from "~/components/layer-system/check-panel/check-layer-selecte.vue"
 import CheckResult from "~/components/layer-system/check-panel/check-result.vue"
+import { DrawInteractPolyline } from "~/utils/cesium/interact"
+import Cesium from "cesium/Cesium"
 
 @Component({
   components: {
@@ -49,7 +50,7 @@ export default class CheckPanel extends Vue {
 
   @Prop()
   private viewer!: MapViewer
-  private drawService!: DrawInteractPolyline
+  private drawLineService!: DrawInteractPolyline
   private items = MenuList
 
   private positions: any[] = []
@@ -68,14 +69,32 @@ export default class CheckPanel extends Vue {
     this.checkItem = item
     this.dialog.hasResult = false
     if (item.key === 'area') {
-      // 
+      this.drawPolygon()
     } else {
       this.dialog[item.key] = true
     }
   }
 
   private mounted() {
-    this.drawService = new DrawInteractPolyline(this.viewer)
+    this.drawLineService = new DrawInteractPolyline(this.viewer)
+  }
+
+  /**
+   * 区域对比 绘制区域
+   */
+  private drawPolygon() {
+    let positions: Cesium.Cartesian3[]
+    this.drawLineService.start().subscribe({
+      next: (data) => { positions = data.positions },
+      complete: () => {
+        if (!positions) {
+          this.$message("请绘制区域")
+          return
+        }
+        this.positions = positions
+        this.dialog.layer = true
+      }
+    })
   }
 
   private taskSelected(data) {
