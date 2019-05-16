@@ -24,6 +24,7 @@ import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
 import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'
 import LayerAttrTable from '~/components/layer-system/layer-attr-table.vue'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
+import { TempLayers } from "~/models/temp-layers.model.ts"
 @Layout('workspace')
 @Component({
   components: {
@@ -38,6 +39,12 @@ export default class extends Vue {
 
   private onMapReady(viewer) {
     this.mapViewer = viewer
+  }
+
+  private mounted() {
+    // 系统打开时，删除本机查看过的所有的临时
+    const tempLayers = new TempLayers()
+    tempLayers.deleteAll()
   }
 }
 </script>

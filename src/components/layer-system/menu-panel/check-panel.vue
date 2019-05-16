@@ -1,5 +1,5 @@
 <template>
-  <section class="component check-panel">
+  <section class="component check-panel" v-loading="loading">
     <div class="compute-item text-center" v-for="item of items" :key="item.key" @click="onItemClick(item)" :class="{'active': checkItem.key === item.key}">
       <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
       <div>{{item.label}}</div>
@@ -15,6 +15,9 @@
     </el-dialog>
     <el-dialog title="选择业务项目" :center="true" :visible.sync="dialog.business" width="750px" :close-on-click-modal="false" :close-on-press-escape="false">
       <business-list-select @affirm="businessSelected"></business-list-select>
+    </el-dialog>
+    <el-dialog title="选择业务项目" :center="true" :visible.sync="dialog.import" width="750px" :close-on-click-modal="false" :close-on-press-escape="false">
+      <file-upload ref="attach-upload" :AllowExtension="allowExtension" :showFileList="false" @onUploadSuccess="onFileUploadSuccess">上传文件</file-upload>
     </el-dialog>
     <el-dialog title="选择对比图层" :center="true" :visible.sync="dialog.layer" width="550px" :close-on-click-modal="false" :close-on-press-escape="false">
       <check-layer-select @affirm="layerSelected"></check-layer-select>
@@ -37,13 +40,18 @@ import CheckLayerSelect from "~/components/layer-system/check-panel/check-layer-
 import CheckResult from "~/components/layer-system/check-panel/check-result.vue"
 import { DrawInteractPolyline } from "~/utils/cesium/interact"
 import Cesium from "cesium/Cesium"
+import FileUpload from "~/components/common/file-upload.vue"
+import { FileType } from "~/config/enum.config.ts"
+import { LayerInfo } from "~/models/layer-info.model.ts"
+import { TempLayers } from "~/models/temp-layers.model"
 
 @Component({
   components: {
     TaskListSelect,
     BusinessListSelect,
     CheckLayerSelect,
-    CheckResult
+    CheckResult,
+    FileUpload
   }
 })
 export default class CheckPanel extends Vue {
@@ -52,17 +60,22 @@ export default class CheckPanel extends Vue {
   private viewer!: MapViewer
   private drawLineService!: DrawInteractPolyline
   private items = MenuList
+  private allowExtension = [FileType.compressed]
+  private tempLayers = new TempLayers()
 
+  private loading = false
   private positions: any[] = []
-
   private checkItem: any = {}
+  // 临时图层
+  private tempLayerCode = ""
 
   private dialog = {
     task: false,
     business: false,
     layer: false,
     result: false,
-    hasResult: false
+    hasResult: false,
+    import: false
   }
 
   private onItemClick(item) {
@@ -113,6 +126,27 @@ export default class CheckPanel extends Vue {
     // query
     this.dialog.result = true
     this.dialog.hasResult = true
+  }
+
+  /**
+   * 图层上传成功
+   */
+  private onFileUploadSuccess(id: string, data: any) {
+    this.dialog.import = false
+    this.tempLayerCode = data.id
+    const layerInfo = new LayerInfo()
+    layerInfo.fileId = data.id
+    layerInfo.layerName = data.originalName
+    this.loading = true
+    layerInfo.publishTempLayer().subscribe(() => {
+      // 本地缓存存放已经发布的图层
+      this.tempLayers.push(data.id, data.originalName)
+      this.dialog.layer = true
+      this.loading = false
+    }, () => {
+      this.$message('本地图层加载失败')
+      this.loading = false
+    })
   }
 }
 </script>
