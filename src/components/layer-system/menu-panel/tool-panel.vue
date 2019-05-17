@@ -13,7 +13,12 @@
       <div slot="header">
         <span>视角</span>
       </div>
-      <div class="icon-item text-center" v-for="item of cameraList" :key="item.key" @click="item.handle()">
+      <div
+        class="icon-item text-center"
+        v-for="item of cameraList"
+        :key="item.key"
+        @click="item.handle()"
+      >
         <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
         <div>{{item.label}}</div>
       </div>
@@ -63,62 +68,71 @@ export default class ToolPanel extends Vue {
       .toPromise()
       .catch()
 
-    if (positions.length >= 2) {
-      const degreesList = positions.map(x =>
-        CesiumCommonService.cartesian3ToDegrees(x)
-      )
-      const [start] = degreesList
-      let cartographicDegrees: any[] = []
-      degreesList.forEach((x, i) => {
-        cartographicDegrees = [...cartographicDegrees, ...[i * 10, x.longitude, x.latitude, x.height]]
-      })
-      const viewer = this.viewer.getViewer()
-      const czml = [
-        {
-          id: 'document',
-          name: 'CZML Point - Time Dynamic',
-          version: '1.0'
-        },
-        {
-          id: 'point',
-          // availability: '2012-08-04T16:00:00Z/2012-08-04T16:05:00Z',
-          position: {
-            epoch: new Date().toISOString(),
-            cartographicDegrees
-          },
-          point: {
-            color: {
-              rgba: [255, 255, 255, 128]
-            },
-            outlineColor: {
-              rgba: [255, 0, 0, 128]
-            },
-            outlineWidth: 1,
-            pixelSize: 5
-          }
-        }
-      ]
+    if (positions.length < 2) return
 
-      const cameraView = {
-        destination: Cesium.Cartesian3.fromDegrees(
-          start.longitude,
-          start.latitude,
-          start.height + 5000.0
-        ),
-        orientation: {
-          heading: 0.0,
-          pitch: -Cesium.Math.PI_OVER_TWO,
-          roll: 0.0
+    const degrees = positions.map(x =>
+      CesiumCommonService.cartesian3ToDegrees(x)
+    )
+
+    const [start] = degrees
+    const czml = this.generateCzml(degrees)
+
+    const viewer = this.viewer.getViewer()
+
+    // const cameraView = {
+    //   destination: Cesium.Cartesian3.fromDegrees(
+    //     start.longitude,
+    //     start.latitude,
+    //     start.height + 5000.0
+    //   ),
+    //   orientation: {
+    //     heading: 0.0,
+    //     pitch: -Cesium.Math.PI_OVER_TWO,
+    //     roll: 0.0
+    //   }
+    // }
+
+    // viewer.scene.camera.setView(cameraView)
+
+    const source = await Cesium.CzmlDataSource.load(czml)
+    const entity = source.entities.getById('point')
+    viewer.trackedEntity = entity
+    viewer.dataSources.add(source)
+  }
+
+  private generateCzml(degrees) {
+    const [start] = degrees
+    return [
+      {
+        id: 'document',
+        name: 'CZML Point - Time Dynamic',
+        version: '1.0'
+      },
+      {
+        id: 'point',
+        // TODO:设置viewFrom
+        // viewFrom: {
+        //   cartesian: [point.x, point.y, point.z]
+        // },
+        position: {
+          epoch: new Date().toISOString(),
+          // TODO:按距离计算时间
+          cartographicDegrees: degrees
+            .map((x, i) => [i * 10, x.longitude, x.latitude, x.height])
+            .flat()
+        },
+        point: {
+          color: {
+            rgba: [255, 255, 255, 128]
+          },
+          outlineColor: {
+            rgba: [255, 0, 0, 128]
+          },
+          outlineWidth: 1,
+          pixelSize: 5
         }
       }
-
-      viewer.scene.camera.setView(cameraView)
-
-      const source = await Cesium.CzmlDataSource.load(czml)
-      const entity = source.entities.getById('point')
-      viewer.trackedEntity = entity
-      viewer.dataSources.add(source)
-    }
+    ]
   }
 }
 </script>

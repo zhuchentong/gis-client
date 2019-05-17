@@ -308,9 +308,9 @@ export default class MapViewer extends Vue {
       fullscreenButton: false,
       navigationHelpButton: false,
       geocoder: false,
-      // animation: true,
       shouldAnimate:true,
-      // timeline: false,
+      animation: false,
+      timeline: false,
       // imageryProviderViewModels: this.getImageViewModels(),
       // terrainProviderViewModels: this.getTerrainViewModels(),
       creditContainer: 'credit'
@@ -571,7 +571,9 @@ export default class MapViewer extends Vue {
         break
       }
     }
-
+    if(this.viewer.trackedEntity){
+        this.viewer.trackedEntity = (undefined as any)
+    }
     this.drawEventListener.forEach(handle => handle(event))
   }
 }
