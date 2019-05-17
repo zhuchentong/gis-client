@@ -47,7 +47,6 @@ export default class SearchLand extends Vue {
   @LayerTableModule.Mutation private removeLayerAttrTable!: (id) => void
 
   private currentLayer = ""
-  private lastQueryTableId = ""
 
   private searchSetting: any[] = require("~/assets/json/search-setting.json")
   private searchRangeSetting: any[] = require("~/assets/json/search-range-setting.json")
@@ -93,7 +92,6 @@ export default class SearchLand extends Vue {
   }
 
   private layerChange(id) {
-    this.clearTable()
     this.model = {}
     if (!id) this.searchItems = []
     if (!this.currentSelectItem) return
@@ -126,9 +124,8 @@ export default class SearchLand extends Vue {
     }
     this.$message.success(`检索到 ${filterData.length} 条数据`)
     // 创建检索数据table
-    this.lastQueryTableId = `${this.currentLayer}-search`
     const attrTable = {
-      id: this.lastQueryTableId,
+      id: `${this.currentLayer}-search-${Date.now().valueOf()}`,
       name: `${this.currentSelectItem.name}-地块检索`,
       data: filterData
     }
@@ -155,14 +152,6 @@ export default class SearchLand extends Vue {
       }
     })
     return tmpData
-  }
-
-  private clearTable() {
-    if (this.lastQueryTableId) {
-      // 删除已经检索过的表
-      this.removeLayerAttrTable(this.lastQueryTableId)
-      this.lastQueryTableId = ""
-    }
   }
 
 }

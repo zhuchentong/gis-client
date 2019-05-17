@@ -92,11 +92,11 @@ export default class MapViewer extends Vue {
   /**
    * 加载图层
    */
-  public addLayer(layer) {
+  public addLayer(layer, cqlFilter?: string) {
     const layers = this.viewer.scene.imageryLayers
     const providerLayers = `${layer.layerSpace}:${layer.layerCode}`
     const provider = layers.addImageryProvider(
-      this.createLayer(layer.layerSpace, providerLayers)
+      this.createLayer(layer.layerSpace, providerLayers, cqlFilter)
     )
     this.layerList.unshift({
       layer,
@@ -474,18 +474,21 @@ export default class MapViewer extends Vue {
   /**
    * 创建图层
    */
-  private createLayer(space, layer) {
+  private createLayer(space, layer, cqlFilter?: string) {
+
+    const parameters: any = {
+      width: 512,
+      height: 512,
+      transparent: 'true',
+      format: 'image/png',
+      service: 'WMS'
+    }
+    if (cqlFilter) parameters.cql_filter = cqlFilter
+
     return new Cesium.WebMapServiceImageryProvider({
       url: `${this.geoServer}/${space}/wms`,
       layers: layer,
-      parameters: {
-        // styles: style,   // TODO: 暂时先把样式注释掉
-        width: 512,
-        height: 512,
-        transparent: 'true',
-        format: 'image/png',
-        service: 'WMS'
-      },
+      parameters,
       getFeatureInfoFormats: [
         new Cesium.GetFeatureInfoFormat(
           'json',

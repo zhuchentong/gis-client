@@ -95,7 +95,7 @@ export default class LayerManage extends Vue {
   private pageService = new PageService()
 
   // 开发人员可以开启此功能操作图层列表
-  private visabledAddGroupFlag = false
+  private visabledAddGroupFlag = true
 
   private layerGroup = new LayerGroup()
   private layer = new LayerInfo()
@@ -197,6 +197,7 @@ export default class LayerManage extends Vue {
   private deleteLayerClick(row: LayerInfo) {
     this.$confirm(`是否删除【${row.layerName}】?`).then(() => {
       this.layer.id = row.id
+      this.layer.groupId = row.groupId
       this.layer.delete().subscribe(() => {
         this.$message.success("操作成功")
         this.refreshLayers()
