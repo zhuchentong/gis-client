@@ -2,19 +2,19 @@ export const MenuList = [
   {
     label: "地块检索",
     key: "land",
-    icon: "check-area",
+    icon: "search-land",
     component: 'SearchLand'
   },
   {
     label: "建筑物检索",
     key: "buildings",
-    icon: "check-task",
+    icon: "search-buildings",
     component: 'SearchBuildings'
   },
   {
     label: "辅助选址",
     key: "area",
-    icon: "check-business",
+    icon: "search-area",
     component: 'SearchArea'
   }
 ]

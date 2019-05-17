@@ -1,14 +1,14 @@
 <template>
   <section class="component search-buildings">
     <el-form v-model="model" inline label-width="120px">
-      <el-form-item label="结构类型" prop="type">
-        <el-input v-model="model.type"></el-input>
+      <el-form-item label="建筑结构" prop="建筑结构">
+        <el-input v-model="model['建筑结构']"></el-input>
       </el-form-item>
-      <el-form-item label="层数" prop="floors">
-        <el-input v-model="model.floors"></el-input>
+      <el-form-item label="建筑层数" prop="建筑层数">
+        <el-input v-model="model['建筑层数']"></el-input>
       </el-form-item>
-      <el-form-item label="行政区" prop="region">
-        <district v-model="model.region"></district>
+      <el-form-item label="坐落位置" prop="坐落位置">
+        <district v-model="model['坐落位置']"></district>
       </el-form-item>
     </el-form>
     <div class="operate-buttons">
@@ -30,10 +30,12 @@ import District from "~/components/business-common/district.vue"
 export default class SearchBuildings extends Vue {
 
   private model: any = {
-    type: "",
-    floors: "",
-    region: ""
+    '建筑结构': "",
+    '建筑层数': "",
+    '坐落位置': ""
   }
+
+  private buildingType = ["钢混"]
 
   private reset() {
     // 

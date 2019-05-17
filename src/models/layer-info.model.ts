@@ -7,6 +7,10 @@ import { PageService } from '~/extension/services/page.service'
 import { SortService, SortType } from '@/extension/services/sort.service'
 
 export class LayerInfo extends Model {
+  /**
+   * 第三方图层空间
+   */
+  public static readonly thirdSpace = "third-space"
   public layerName: string = ""
   public id: string = ""
   public groupId: string = ""
@@ -17,13 +21,15 @@ export class LayerInfo extends Model {
   public fileId: string = ""
   public fileType: string = "BASIC_FILE"
   public styleId: string = ""
-  private readonly tempSpace = "temp-space"
+
+  public readonly tempSpace = "temp-space"
+  public readonly defaultSpace = "base-space"
 
   // service
   private layerInfoService = new LayerInfoService()
-  private businessLayerService = new BusinessLayerService()
 
-  private defaultSpace = "base-space"
+
+
 
   private sort = new SortService({ sort: SortType.ascending })
 
@@ -39,13 +45,18 @@ export class LayerInfo extends Model {
       styleId: this.styleId,
       layerName: this.layerName,
       layerRemark: this.layerRemark,
+      layerSpace: this.groupId === LayerInfo.thirdSpace ? LayerInfo.thirdSpace : this.defaultSpace,
       layerShow: this.layerShow,
       groupId: this.groupId
     }))
   }
 
   public delete() {
-    return this.layerInfoService.deleteLayerInfoById(new RequestParams(null, { append: [this.id] }))
+    const requestParams = {
+      id: this.id,
+      layerSpace: this.groupId === LayerInfo.thirdSpace ? LayerInfo.thirdSpace : this.defaultSpace
+    }
+    return this.layerInfoService.deleteLayerInfoById(new RequestParams(requestParams))
   }
 
   /**
@@ -56,38 +67,11 @@ export class LayerInfo extends Model {
     return this.layerInfoService.queryLayerInfoList(new RequestParams({
       layerName: this.layerName,
       groupId: this.groupId,
-      layerSpace: this.defaultSpace,
+      layerSpace: this.groupId === LayerInfo.thirdSpace ? LayerInfo.thirdSpace : this.defaultSpace,
       createDate: FilterService.dateFormat(this.createDate)
     }, { page, sort: this.sort }))
   }
 
-  public getLayerInfoList() {
-    return this.layerInfoService.getLayerInfoList(new RequestParams({
-      layerSpace: this.defaultSpace
-    }))
-  }
-
-  public getBusinessLayerList() {
-    return this.businessLayerService.getBusinessLayerList(new RequestParams({
-      layerSpace: this.defaultSpace
-    }))
-  }
-
-  public getImageLayerInfoList() {
-    return this.layerInfoService.getLayerInfoList(new RequestParams({
-      layerSpace: "space02"
-    }))
-  }
-
-  /**
-   * 查询图层的属性
-   * @param layerId 
-   */
-  public queryLayerAttr(layerCode: string) {
-    return this.layerInfoService.queryMapSpotByAttr(new RequestParams({
-      layerCode
-    }))
-  }
 
   /**
    * 发布临时图层
@@ -100,30 +84,4 @@ export class LayerInfo extends Model {
       workSpace: this.tempSpace // 暂定geoserver的cache工作区
     }))
   }
-
-  /**
-   * 删除临时图层
-   * @param layerCode 
-   */
-  public deleteTempLayer(layerCode: string) {
-    return this.layerInfoService.deleteTempLayer(new RequestParams({
-      layerCode,
-      workSpace: this.tempSpace
-    }))
-  }
-
-  /**
-   * 图层相交对比
-   * @param firstLayerCode 要比较的图层
-   * @param secondLayerCode 参与比较的基础图层
-   */
-  public intersectionLayer(firstLayerCode, secondLayerCode) {
-    return this.layerInfoService.intersectionLayer(new RequestParams({
-      layerCode1: firstLayerCode,
-      layerCode2: secondLayerCode,
-      styles: "intersection_polygon", // 默认相交对比图层样式
-      workspace: this.tempSpace
-    }))
-  }
-
 }

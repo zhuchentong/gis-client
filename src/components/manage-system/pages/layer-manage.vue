@@ -95,7 +95,7 @@ export default class LayerManage extends Vue {
   private pageService = new PageService()
 
   // 开发人员可以开启此功能操作图层列表
-  private visabledAddGroupFlag = true
+  private visabledAddGroupFlag = false
 
   private layerGroup = new LayerGroup()
   private layer = new LayerInfo()
@@ -148,8 +148,13 @@ export default class LayerManage extends Vue {
    */
   private refreshGroupList() {
     this.layerGroup.getGroupList().subscribe(data => {
-      this.groupList = data
-      this.updateGroupList(data)
+      if (!this.visabledAddGroupFlag) {
+        // 非管理员，模式不显示第三方图层空间
+        this.groupList = data.filter(x => x.id !== LayerInfo.thirdSpace)
+      } else {
+        this.groupList = data
+      }
+      this.updateGroupList(this.groupList)
       //  默认选中节点
       this.$nextTick(() => {
         const roots = this.groupList.filter((x: any) => !x.parentId)

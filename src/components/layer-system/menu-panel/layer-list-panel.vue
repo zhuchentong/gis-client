@@ -20,6 +20,7 @@ import AppConfig from '~/config/app.config'
 import { zip } from 'rxjs'
 import MapViewer from '@/components/layer-viewer/map-viewer.vue'
 import { Tree } from "element-ui"
+import { LayerInfo } from '~/models/layer-info.model'
 
 @Component({
   components: {}
@@ -75,6 +76,9 @@ export default class extends Vue {
       )
     ).toPromise()
 
+    // 过滤第三方图层组
+    const filterGroup = groupList.filter(x => x.id !== LayerInfo.thirdSpace)
+
     // 关联图层数据
     layerList.forEach(layer => {
       // 设置图层数据
@@ -85,7 +89,7 @@ export default class extends Vue {
         type: 'layer'
       }
 
-      const group = groupList.find(x => x.id === layer.groupId)
+      const group = filterGroup.find(x => x.id === layer.groupId)
 
       if (!group.children) {
         group.children = [item]
@@ -96,7 +100,7 @@ export default class extends Vue {
 
     const gerateGroupTree = (id?) => {
       // 设置目录名称
-      const children = groupList
+      const children = filterGroup
         .filter(x => (id ? x.parentId === id : !x.parentId))
         .map(x => ({
           id: x.id,
