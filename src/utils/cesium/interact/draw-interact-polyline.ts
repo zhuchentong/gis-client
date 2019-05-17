@@ -42,12 +42,18 @@ export class DrawInteractPolyline extends DrawInteract {
   public startDraw(e) {
     // 获取当前点
     const point = CesiumCommonService.getPosition(this.viewer, e.position)
-    // 添加坐标点
-    if (point) {
-      const isCreatePolyline = this.positions.length === 0
-      this.positions.push(point)
-      isCreatePolyline && this.drawService.drawPolyline(this.positions)
+
+    if (!point) {
+      return
     }
+
+    this.positions.push(point)
+    this.drawService.drawPoint(point)
+
+    if (this.positions.length === 1) {
+      this.drawService.drawPolyline(this.positions)
+    }
+
     // 通知坐标更新
     this.observer.next({
       point,

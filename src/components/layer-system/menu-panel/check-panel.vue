@@ -159,7 +159,7 @@ export default class CheckPanel extends Vue {
     padding-top: 20px;
     display: inline-block;
     height: 80px;
-    width: 120px;
+    width: 50%;
   }
   .active {
     color: #fc8144;

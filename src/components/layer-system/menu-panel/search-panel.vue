@@ -56,8 +56,7 @@ export default class SearchPanel extends Vue {
   .compute-item {
     padding-top: 20px;
     display: inline-block;
-    height: 80px;
-    width: 120px;
+    width: 50%;
   }
   .active {
     color: #fc8144;
