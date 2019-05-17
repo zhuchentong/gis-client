@@ -1,20 +1,14 @@
 <template>
-  <div
-    class="layout fill"
-    style="overflow:hidden;"
-  >
+  <div class="layout fill" style="overflow:hidden;">
     <div class="header draggable row middle-span">
-      <img
-        class="logo"
-        src="../assets/images/logo.png"
-      >
+      <img class="logo" src="../assets/images/logo.png">
       <div class="title">多规合一综合信息平台</div>
     </div>
     <div class="layout-header-operate-block header-text">
       <a @click="onExit()">退出</a>
     </div>
     <div class="content">
-      <router-view />
+      <router-view/>
     </div>
   </div>
 </template>
@@ -35,6 +29,9 @@ export default class WorkspaceLayout extends Vue {
 
 <style lang="less" scoped>
 @height: 40px;
+.layout {
+  position: relative;
+}
 .header {
   text-align: right;
   padding: 0 10px;
@@ -62,7 +59,10 @@ export default class WorkspaceLayout extends Vue {
 }
 
 .content {
-  position: relative;
-  height: calc(100% - @height);
+  position: absolute;
+  top: @height;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>
