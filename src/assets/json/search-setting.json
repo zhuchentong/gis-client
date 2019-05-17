@@ -20,7 +20,7 @@
     ]
   },
   {
-    "name": "土总规-建设用地管制区",
+    "name": "建设用地管制区",
     "searchItems": [
       {
         "name": "管制区类型",
@@ -35,7 +35,7 @@
     ]
   },
   {
-    "name": "土总规-土地用途区",
+    "name": "土地用途区",
     "searchItems": [
       {
         "name": "用途区类型",
@@ -50,7 +50,7 @@
     ]
   },
   {
-    "name": "城乡规划-控详规-土地使用规划",
+    "name": "土地使用规划",
     "searchItems": [
       {
         "name": "地块编号",
@@ -59,7 +59,7 @@
       },
       {
         "name": "规划用途",
-        "code": "规划用途",
+        "code": "用地代码",
         "type": "range"
       },
       {
@@ -125,7 +125,7 @@
     ]
   },
   {
-    "name": "2016地类图斑",
+    "name": "地类图斑",
     "searchItems": [
       {
         "name": "地类编码",
@@ -165,7 +165,7 @@
     ]
   },
   {
-    "name": "2016线状地物",
+    "name": "线状地物",
     "searchItems": [
       {
         "name": "地类编码",
@@ -215,127 +215,7 @@
     ]
   },
   {
-    "name": "2016零星地物",
-    "searchItems": [
-      {
-        "name": "地类编码",
-        "code": "DLBM",
-        "type": "string"
-      },
-      {
-        "name": "地类名称",
-        "code": "DLMC",
-        "type": "string"
-      },
-      {
-        "name": "权属名称",
-        "code": "QSDWMC",
-        "type": "string"
-      },
-      {
-        "name": "权属性质",
-        "code": "QSXZ",
-        "type": "string"
-      },
-      {
-        "name": "面积",
-        "code": "XZDWMJ",
-        "type": "number"
-      }
-    ]
-  },
-  {
-    "name": "2017地类图斑",
-    "searchItems": [
-      {
-        "name": "地类编码",
-        "code": "DLBM",
-        "type": "string"
-      },
-      {
-        "name": "地类名称",
-        "code": "DLMC",
-        "type": "string"
-      },
-      {
-        "name": "权属性质",
-        "code": "QSXZ",
-        "type": "string"
-      },
-      {
-        "name": "地物名称",
-        "code": "QSDWMC",
-        "type": "string"
-      },
-      {
-        "name": "坐落",
-        "code": "ZLDWMC",
-        "type": "string"
-      },
-      {
-        "name": "图斑面积",
-        "code": "TBMJ",
-        "type": "number"
-      },
-      {
-        "name": "图斑地类面积",
-        "code": "TBDLMJ",
-        "type": "number"
-      }
-    ]
-  },
-  {
-    "name": "2017线状地物",
-    "searchItems": [
-      {
-        "name": "地类编码",
-        "code": "DLBM",
-        "type": "string"
-      },
-      {
-        "name": "地类名称",
-        "code": "DLMC",
-        "type": "string"
-      },
-      {
-        "name": "长度",
-        "code": "CD",
-        "type": "number"
-      },
-      {
-        "name": "宽度",
-        "code": "KD",
-        "type": "number"
-      },
-      {
-        "name": "面积",
-        "code": "XZDWMJ",
-        "type": "number"
-      },
-      {
-        "name": "地物名称",
-        "code": "XZDWMC",
-        "type": "string"
-      },
-      {
-        "name": "权属名称1",
-        "code": "QSDWMC1",
-        "type": "string"
-      },
-      {
-        "name": "权属名称2",
-        "code": "QSDWMC2",
-        "type": "string"
-      },
-      {
-        "name": "权属性质",
-        "code": "QSXZ",
-        "type": "string"
-      }
-    ]
-  },
-  {
-    "name": "2017零星地物",
+    "name": "零星地物",
     "searchItems": [
       {
         "name": "地类编码",

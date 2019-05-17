@@ -6,7 +6,7 @@
       </el-select>
     </common-title>
     <div v-if="!searchItems.length" class="no-data"></div>
-    <el-form v-else v-model="model" inline ref="form" label-width="120px">
+    <el-form v-else :model="model" inline ref="form" label-width="120px">
       <el-form-item v-for="item of searchItems" :key="item.code" :label="item.name" :prop="item.code">
         <el-input v-if="item.type === 'string'" v-model="model[item.code]" clearable></el-input>
         <number-range v-else-if="item.type === 'number'" v-model="model[item.code]" clearable></number-range>
@@ -31,6 +31,9 @@ import { LayerInfoService } from "~/services/layer-info.service.ts"
 import { RequestParams } from "~/core/http"
 import { Inject } from "typescript-ioc"
 import { Form } from "element-ui"
+import { namespace } from "vuex-class"
+
+const LayerTableModule = namespace('layerTableModule')
 
 @Component({
   components: {
@@ -39,7 +42,12 @@ import { Form } from "element-ui"
 })
 export default class SearchLand extends Vue {
 
+  @LayerTableModule.Getter private getTable!: (id) => any
+  @LayerTableModule.Mutation private addLayerAttrTable!: (data) => void
+  @LayerTableModule.Mutation private removeLayerAttrTable!: (id) => void
+
   private currentLayer = ""
+  private lastQueryTableId = ""
 
   private searchSetting: any[] = require("~/assets/json/search-setting.json")
   private searchRangeSetting: any[] = require("~/assets/json/search-range-setting.json")
@@ -68,6 +76,10 @@ export default class SearchLand extends Vue {
     return
   }
 
+  private get currentSelectItem() {
+    return this.dataSet.find(x => x.id === this.currentLayer)
+  }
+
   @Watch('visabled', { immediate: true })
   private onVisabledChange(val) {
     if (val) {
@@ -76,36 +88,81 @@ export default class SearchLand extends Vue {
           id: layer.id,
           name: layer.layerName
         }
-      }).filter(x => this.searchLayers.includes(x.name))
+      }).filter(layer => !!this.searchLayers.find(x => layer.name.includes(x)))
     }
   }
 
   private layerChange(id) {
+    this.clearTable()
     this.model = {}
     if (!id) this.searchItems = []
-    const layer = this.dataSet.find(x => x.id === this.currentLayer)
-    if (!layer) return
-    const setting = this.searchSetting.find(x => x.name === layer.name) || {}
-    if (!this.searchItems) return
-    setting.searchItems.forEach(v => {
-      this.model[v.code] = v.type === "number" ? { min: "", max: "" } : ""
+    if (!this.currentSelectItem) return
+    // 更新检索项
+    const { searchItems } = this.searchSetting.find(x => this.currentSelectItem.name.includes(x.name))
+    if (!searchItems) return
+    this.searchItems = searchItems
+    searchItems.forEach(({ code, type }) => {
+      // 创建model
+      this.$set(this.model, code, type === "number" ? { min: "", max: "" } : "")
     })
-    this.searchItems = setting.searchItems
   }
 
   private reset() {
+    this.currentLayer = ""
+    this.layerChange("");
     (this.$refs.form as Form).resetFields()
   }
 
   private submit() {
-    const requestParams = new RequestParams({
-      layerCode: this.currentLayer,
-      cql: ""
+    const tableInfo = this.getTable(this.currentLayer)
+    if (!tableInfo) {
+      this.$message.error("未找到关联图层数据信息")
+      return
+    }
+    const filterData = this.filterTableData(tableInfo.data)
+    if (!filterData.length || tableInfo.data.length === filterData.length) {
+      this.$message("未检索到数据")
+      return
+    }
+    this.$message.success(`检索到 ${filterData.length} 条数据`)
+    // 创建检索数据table
+    this.lastQueryTableId = `${this.currentLayer}-search`
+    const attrTable = {
+      id: this.lastQueryTableId,
+      name: `${this.currentSelectItem.name}-地块检索`,
+      data: filterData
+    }
+    this.addLayerAttrTable(attrTable)
+    this.onSuccess()
+  }
+
+  // 过滤缓存数据
+  private filterTableData(data) {
+    let tmpData: any[] = data
+    this.searchItems.forEach(({ code, type }) => {
+      const queryData = this.model[code]
+      if (!queryData) return
+      if (type === 'number') {
+        const min = queryData.min || 0
+        const max = queryData.max || 0
+        if (!min && !max) return
+        tmpData = tmpData.filter(row => {
+          const originData = row[code] as number
+          return originData >= min && originData <= max
+        })
+      } else {
+        tmpData = tmpData.filter(row => (row[code] as string || '').includes(queryData))
+      }
     })
-    this.service.queryMapSpotByAttr(requestParams).subscribe(data => {
-      console.log(data)
-      this.onSuccess()
-    })
+    return tmpData
+  }
+
+  private clearTable() {
+    if (this.lastQueryTableId) {
+      // 删除已经检索过的表
+      this.removeLayerAttrTable(this.lastQueryTableId)
+      this.lastQueryTableId = ""
+    }
   }
 
 }

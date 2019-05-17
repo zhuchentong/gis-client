@@ -4,7 +4,7 @@
       <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
       <div>{{item.label}}</div>
     </div>
-    <el-dialog :title="checkItem.label" :center="true" :visible.sync="dialog.search" width="750px" :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog :title="checkItem.label" :center="true" :visible.sync="dialog.search" width="750px" :close-on-click-modal="false" :close-on-press-escape="false" @close="checkItem = {}">
       <keep-alive>
         <component :is="checkItem.component" :visabled="dialog.search" :viewer="viewer" @success="onSuccess"></component>
       </keep-alive>

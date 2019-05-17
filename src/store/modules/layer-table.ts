@@ -65,6 +65,14 @@ export default {
             data: data.map(x => x.attr)
           })
         })
+    },
+  },
+  getters: {
+    /**
+     * 获取图层table信息
+     */
+    getTable(state) {
+      return (id) => state.tableList.find(x => x.id === id)
     }
   }
 }

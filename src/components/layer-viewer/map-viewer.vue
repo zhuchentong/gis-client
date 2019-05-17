@@ -309,7 +309,7 @@ export default class MapViewer extends Vue {
       navigationHelpButton: false,
       geocoder: false,
       // animation: true,
-      shouldAnimate:true,
+      shouldAnimate: true,
       // timeline: false,
       // imageryProviderViewModels: this.getImageViewModels(),
       // terrainProviderViewModels: this.getTerrainViewModels(),
@@ -435,7 +435,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-        this.geoServer
+      this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()

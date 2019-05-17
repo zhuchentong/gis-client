@@ -1,15 +1,6 @@
 <template>
   <section>
-    <el-tree
-      show-checkbox
-      ref="layerTree"
-      node-key="id"
-      :props="{label:'name'}"
-      :data="layerList"
-      :render-after-expand="false"
-      :default-expanded-keys="expendKeys"
-      @check-change="onCheckChange"
-    ></el-tree>
+    <el-tree show-checkbox ref="layerTree" node-key="id" :props="{label:'name'}" :data="layerList" :render-after-expand="false" :default-expanded-keys="expendKeys" @check-change="onCheckChange"></el-tree>
   </section>
 </template>
 
@@ -28,6 +19,7 @@ import { BaseInfoConfig } from '~/components/business-system/business-system.con
 import AppConfig from '~/config/app.config'
 import { zip } from 'rxjs'
 import MapViewer from '@/components/layer-viewer/map-viewer.vue'
+import { Tree } from "element-ui"
 
 @Component({
   components: {}
@@ -47,8 +39,11 @@ export default class extends Vue {
   private layerList: any[] = []
   private expendKeys: string[] = []
 
+  private tree!: Tree
+
   private mounted() {
     this.generateLayerList()
+    this.tree = this.$refs.layerTree as Tree
   }
 
   /**
@@ -143,15 +138,27 @@ export default class extends Vue {
   private onCheckChange(node, checked, indeterminate) {
     switch (node.type) {
       case 'layer':
+        const name = this.getLayerName(node.id)
+        const nodeData = { ...node.data, layerName: name }
         checked
-          ? this.viewer.addLayer(node.data)
-          : this.viewer.removeLayer(node.data)
+          ? this.viewer.addLayer(nodeData)
+          : this.viewer.removeLayer(nodeData)
         break
       case 'tileset':
         checked
           ? this.viewer.addTileset(node.data)
           : this.viewer.removeTileset(node.data.id)
         break
+    }
+  }
+
+  private getLayerName(id) {
+    const { level, parent, data } = this.tree.getNode(id)
+    const name = (data as any).name
+    if (level > 2) {
+      return [(parent as any).label, '-', name].join('')
+    } else {
+      return name
     }
   }
 
