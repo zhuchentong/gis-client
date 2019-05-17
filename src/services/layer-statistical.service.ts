@@ -28,6 +28,4 @@ export class LayerStatisticalService {
   public getClassificationOne(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
-  
-
 }

@@ -3,7 +3,7 @@
        <el-card header="外业任务类型统计">
       <ve-pie :data="chartData"></ve-pie>
     </el-card>
-    <data-box :data="dataSet">
+    <data-box :data="dataSet"  :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="type" label="类型"></el-table-column>
         <el-table-column prop="number" label="数量"></el-table-column>

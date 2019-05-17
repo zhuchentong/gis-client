@@ -1,56 +1,67 @@
 
-export const DataMenu = [
+export const MenuList = [
   {
-    label: "土地现状数据统计",
-    component: "land-now"
-  },
-  {
-    label: "土地用途区统计",
-    component: "land-use"
-  },
-  {
-    label: "管制区类型统计",
-    component: "land-control"
+    name: "数据统计",
+    icon:"report-pie",
+    items: [
+      {
+        label: "土地现状数据统计",
+        component: "land-now"
+      },
+      {
+        label: "土地用途区统计",
+        component: "land-use"
+      },
+      {
+        label: "管制区类型统计",
+        component: "land-control"
 
+      },
+      {
+        label: "控制性详细规划统计",
+        component: "land-control-detail"
+      }
+    ]
   },
   {
-    label: "控制性详细规划统计",
-    component: "land-control-detail"
-  }
-]
-
-
-export const BussinessMenu = [
-  {
-    label: "报地统计",
-    component: "report-land"
+    name: "业务统计",
+    icon:"report-line",
+    items: [
+      {
+        label: "报地统计",
+        component: "report-land"
+      },
+      {
+        label: "批地统计",
+        component: "grant-land"
+      },
+      {
+        label: "征地统计",
+        component: "acquisition-land"
+      },
+      {
+        label: "供地统计",
+        component: "supply-land"
+      }
+    ]
   },
   {
-    label: "批地统计",
-    component:"grant-land"
-  },
-  {
-    label: "征地统计",
-    component:"acquisition-land"
-  },
-  {
-    label: "供地统计",
-    component:"supply-land"
-  }
-]
-
-export const TaskMenu = [
-  {
-    label: "外业任务数统计",
-    component: "task-number"
-  },
-  {
-    label: "外业任务类型统计",
-    component:"task-type"
-  },
-  {
-    label: "地灾分布统计",
-    component:"land-disaster-distribution"
+    name: "外业统计",
+    icon:"report-pie",
+    items: [
+      {
+        label: "外业任务数统计",
+        component: "task-number"
+      },
+      {
+        label: "外业任务类型统计",
+        component: "task-type"
+      },
+      {
+        label: "地灾分布统计",
+        component: "land-disaster-distribution"
+      }
+    ]
   }
 ]
 
@@ -77,7 +88,7 @@ export const BussinessComponents = {
   GrantLand,
   AcquisitionLand,
   SupplyLand
-} 
+}
 export const TaskComponents = {
   TaskType,
   TaskNumber,

@@ -3,7 +3,7 @@
        <el-card header="地灾分布统计">
       <ve-pie :data="chartData"></ve-pie>
     </el-card>
-    <data-box :data="dataSet">
+    <data-box :data="dataSet"  :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="prefecture" label="行政村"></el-table-column>
         <el-table-column prop="number" label="地灾点个数"></el-table-column>
