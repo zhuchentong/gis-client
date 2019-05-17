@@ -24,7 +24,7 @@ import LayerMenuList from '~/components/layer-system/layer-menu-list.vue'
 import LayerMenuPanel from '~/components/layer-system/layer-menu-panel.vue'
 import LayerAttrTable from '~/components/layer-system/layer-attr-table.vue'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
-import { TempLayers } from "~/models/temp-layers.model.ts"
+import { TempLayers } from '~/models/temp-layers.model.ts'
 @Layout('workspace')
 @Component({
   components: {
@@ -54,7 +54,7 @@ export default class extends Vue {
 .layer-system-page {
   display: grid;
   grid-template-rows: auto 20px;
-  grid-template-columns: 60px 260px auto;
+  grid-template-columns: 60px 240px auto;
 
   .menu-list {
     grid-area: ~'1/1/span 1/span 1';

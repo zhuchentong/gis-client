@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <el-tree show-checkbox ref="layerTree" node-key="id" :props="{label:'name'}" :data="layerList" :render-after-expand="false" :default-expanded-keys="expendKeys" @check-change="onCheckChange"></el-tree>
+  <section class="layer-list-panel">
+    <el-tree class="layer-list-tree" show-checkbox ref="layerTree" node-key="id" :props="{label:'name'}" :data="layerList" :render-after-expand="false" :default-expanded-keys="expendKeys" @check-change="onCheckChange"></el-tree>
   </section>
 </template>
 
@@ -177,5 +177,11 @@ export default class extends Vue {
 </script>
 
 <style lang="less" scoped>
+.layer-list-panel {
+  .layer-list-tree {
+    transform: scale(0.8);
+    transform-origin: top left;
+  }
+}
 </style>
 
