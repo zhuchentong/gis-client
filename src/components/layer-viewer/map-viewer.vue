@@ -390,16 +390,20 @@ export default class MapViewer extends Vue {
       }
     )
 
-    this.setCamera(this.workspace)
+    this.setCamera(this.workspace, null, 'setView')
   }
 
   /**
    * 设置镜头位置
    */
-  private setCamera(layerSpace, layerName?) {
+  private setCamera(
+    layerSpace,
+    layerName?,
+    setView: 'setView' | 'flyTo' = 'flyTo'
+  ) {
     this.GetGeographicBoundingBox(layerSpace, layerName)
       .then((view: any) => {
-        this.viewer.camera.flyTo(view)
+        view && this.viewer.camera[setView](view)
       })
       .catch(ex => {
         console.log(ex)
@@ -435,7 +439,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-      this.geoServer
+        this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -452,10 +456,11 @@ export default class MapViewer extends Vue {
         const layer = layerName
           ? Capability.Layer.Layer.find(x => x.Name === layerName)
           : Capability.Layer
-
+          
         if (layer) {
           const EX_GeographicBoundingBox = layer.EX_GeographicBoundingBox
           const [west, south, east, north] = EX_GeographicBoundingBox
+
           return {
             destination: Cesium.Rectangle.fromDegrees(west, south, east, north),
             orientation: {
@@ -535,14 +540,17 @@ export default class MapViewer extends Vue {
 
   private formatFeatureProperties(properties) {
     const data = {}
-    // 不需要转译的过滤字段
-    const filterKey = ['fid', 'OBJECTID', 'Shape_Leng', 'Shape_Area']
-    Object.entries(properties).forEach(([key, value]) => {
-      key = FilterService.convertShpCode(key)
-      if (!filterKey.includes(key)) {
-        data[key] = value
-      }
-    })
+    // 字段转译
+    Object.entries(properties)
+      .map(([key, value]) => ({
+        key,
+        value,
+        label: FilterService.convertShpCode(key)
+      }))
+      .filter(x => x.key !== x.label || /[\u4e00-\u9fa5]/.test(x.key))
+      .forEach(x => {
+        data[x.label] = x.value
+      })
     return data
   }
 
@@ -575,7 +583,7 @@ export default class MapViewer extends Vue {
       }
     }
     if (this.viewer.trackedEntity) {
-      this.viewer.trackedEntity = (undefined as any)
+      this.viewer.trackedEntity = undefined as any
     }
     this.drawEventListener.forEach(handle => handle(event))
   }

@@ -63,6 +63,12 @@ export default class extends Vue {
 
   .menu-panel {
     grid-area: ~'1/2/span 1/span 1';
+    position: absolute;
+    left: 60px;
+    top: 0;
+    bottom: 0;
+    width: 240px;
+    overflow:auto;
   }
 
   .layer-view {
