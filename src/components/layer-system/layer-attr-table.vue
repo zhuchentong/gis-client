@@ -1,22 +1,15 @@
 <template>
   <section class="layer-attr-table">
-    <div
-      class="table-icon"
-      @click="updateTableShow"
-      title="图层属性表"
-    >
+    <div class="table-icon" @click="updateTableShow" title="图层属性表">
       <svg-icon
         :iconSize="24"
-        :iconColor="isTableShow?'gray':'white'"
+        :iconColor="(isTableShow||this.tableList.length===0)?'gray':'white'"
         iconName="table"
       ></svg-icon>
     </div>
     <!-- <transition name="fade"> -->
     <div v-show="isTableShow">
-      <el-tabs
-        type="border-card"
-        v-model="currentTable"
-      >
+      <el-tabs type="border-card" v-model="currentTable" @tab-remove="onRemoveTab" closable>
         <el-tab-pane
           v-for="layerTable of tableList"
           :key="layerTable.id"
@@ -68,23 +61,38 @@ export default class LayerAttrTable extends Vue {
   @Prop()
   private viewer
   private currentTable = ''
-
+  private lastTabelList
   private updateTableShow() {
     if (this.isTableShow || this.tableList.length !== 0) {
       this.updateTableVisibility(!this.isTableShow)
     }
   }
 
-  @Watch('tableList')
-  private onTableListChange(tableList) {
-    if (tableList.length === 0) {
+  private onRemoveTab(id) {
+    this.removeLayerAttrTable(id)
+  }
+
+  @Watch('tableList.length')
+  private onTableListChange(newValue, oldValue) {
+    if (this.tableList.length === 0) {
       this.updateTableVisibility(false)
       return
     }
 
-    const target = tableList.find(x => x.id === this.currentTable)
+    let index = 0
+    if (newValue > oldValue) {
+      index = this.tableList.length - 1
+    } else {
+      const newList = this.tableList.map(x => x.id)
+      const oldList = this.lastTabelList.map(x => x.id)
+      index = oldList.findIndex(
+        x => x === oldList.find(y => !newList.includes(y))
+      )
+      index -= oldList.length - 1 === index ? 1 : 0
+    }
 
-    if (!target) this.currentTable = tableList[0].id
+    this.currentTable = this.tableList[index].id
+    this.lastTabelList = Object.assign([], this.tableList)
   }
 }
 </script>

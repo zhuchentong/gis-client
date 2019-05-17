@@ -1,258 +1,122 @@
 [
   {
-    "code": "BEIZHI",
-    "name": "北至"
-  },
-  {
-    "code": "BGJLH",
-    "name": "变更记录号"
-  },
-  {
-    "code": "BGRQ",
-    "name": "变更日期"
-  },
-  {
-    "code": "BSM",
-    "name": "标识码"
-  },
-  {
-    "code": "BZ",
-    "name": "备注"
-  },
-  {
-    "code": "CD",
-    "name": "长度"
-  },
-  {
     "code": "DLBM",
     "name": "地类编码"
-  },
-  {
-    "code": "DLBZ",
-    "name": "地类备注"
   },
   {
     "code": "DLMC",
     "name": "地类名称"
   },
   {
-    "code": "DYDZS",
-    "name": "利用等指数"
-  },
-  {
-    "code": "DZ",
-    "name": "东至"
-  },
-  {
-    "code": "GDLX",
-    "name": "耕地类型"
-  },
-  {
-    "code": "GDPDJ",
-    "name": "耕地坡度"
-  },
-  {
-    "code": "GZQLXDM",
-    "name": "管制区类型代码"
-  },
-  {
-    "code": "GZQMJ",
-    "name": "管制区面积"
-  },
-  {
-    "code": "JBNTTBBH",
-    "name": "基本农田图斑编号"
-  },
-  {
-    "code": "JSMJ",
-    "name": "计算面积"
-  },
-  {
-    "code": "JSMJ_DIST",
-    "name": "计算椭球面积"
-  },
-  {
-    "code": "KCBL",
-    "name": "扣除比例"
-  },
-  {
-    "code": "KCDLBM",
-    "name": "扣除地类编码"
-  },
-  {
-    "code": "KCLX",
-    "name": "扣除类型"
-  },
-  {
-    "code": "KCTBBH1",
-    "name": "扣除图斑编号1"
-  },
-  {
-    "code": "KCTBBH2",
-    "name": "扣除图斑编号2"
-  },
-  {
-    "code": "KCTBDWDM1",
-    "name": "扣除图斑座落单位代码1"
-  },
-  {
-    "code": "KCTBDWDM2",
-    "name": "扣除图斑座落单位代码2"
-  },
-  {
-    "code": "KD",
-    "name": "宽度"
-  },
-  {
-    "code": "KZMJ",
-    "name": "控制面积"
-  },
-  {
-    "code": "LEN_DIST",
-    "name": "本软件长度"
-  },
-  {
-    "code": "LXDWMJ",
-    "name": "零星地物面积"
-  },
-  {
-    "code": "MSSM",
-    "name": "描述说明"
-  },
-  {
-    "code": "NZ",
-    "name": "南至"
-  },
-  {
-    "code": "PZWH",
-    "name": "批准文号"
-  },
-  {
-    "code": "QSDWDM",
-    "name": "权属单位代码"
-  },
-  {
-    "code": "QSDWDM1",
-    "name": "权属单位代码1"
-  },
-  {
-    "code": "QSDWDM2",
-    "name": "权属单位代码2"
-  },
-  {
     "code": "QSDWMC",
-    "name": "权属单位名称"
-  },
-  {
-    "code": "QSDWMC1",
-    "name": "权属单位名称1"
-  },
-  {
-    "code": "QSDWMC2",
-    "name": "权属单位名称2"
+    "name": "权属名称"
   },
   {
     "code": "QSXZ",
     "name": "权属性质"
   },
   {
-    "code": "SM",
-    "name": "说明"
+    "code": "MJ",
+    "name": "面积"
+  },
+  {
+    "code": "DLBM",
+    "name": "地类编码"
+  },
+  {
+    "code": "DLMC",
+    "name": "地类名称"
+  },
+  {
+    "code": "CD",
+    "name": "长度"
+  },
+  {
+    "code": "KD",
+    "name": "宽度"
+  },
+  {
+    "code": "XZDWMJ",
+    "name": "面积"
+  },
+  {
+    "code": "XZDWMC",
+    "name": "地物名称"
+  },
+  {
+    "code": "QSDWMC1",
+    "name": "权属名称1"
+  },
+  {
+    "code": "QSDWMC2",
+    "name": "权属名称2"
+  },
+  {
+    "code": "QSXZ",
+    "name": "权属性质"
   },
   {
     "code": "TBBH",
     "name": "图斑编号"
   },
   {
-    "code": "TBDLMJ",
-    "name": "图斑地类面积"
+    "code": "DLBM",
+    "name": "地类编码"
+  },
+  {
+    "code": "DLMC",
+    "name": "地类名称"
+  },
+  {
+    "code": "QSXZ",
+    "name": "权属性质"
+  },
+  {
+    "code": "QSDWMC",
+    "name": "地物名称"
+  },
+  {
+    "code": "ZLDWMC",
+    "name": "坐落"
   },
   {
     "code": "TBMJ",
     "name": "图斑面积"
   },
   {
-    "code": "TBMJ_DIST",
-    "name": "图斑椭球面积"
-  },
-  {
-    "code": "TBYBH",
-    "name": "图斑预编号"
-  },
-  {
-    "code": "TDYTQBH",
-    "name": "土地用途区编号"
+    "code": "TBDLMJ",
+    "name": "图斑地类面积"
   },
   {
     "code": "TDYTQLXDM",
-    "name": "土地用途区类型代码"
+    "name": "用途区类型"
   },
   {
     "code": "TDYTQMJ",
-    "name": "土地用途区面积"
+    "name": "面积"
   },
   {
-    "code": "TKMJ",
-    "name": "扣除地类面积"
+    "code": "GZQLXDM",
+    "name": "管制区类型"
   },
   {
-    "code": "TKXS",
-    "name": "扣除地类系数"
+    "code": "GZQMJ",
+    "name": "管制区面积"
   },
   {
-    "code": "XZ",
-    "name": "西至"
-  },
-  {
-    "code": "XZDWBH",
-    "name": "线状地物编号"
-  },
-  {
-    "code": "XZDWMC",
-    "name": "线状地物名称"
-  },
-  {
-    "code": "XZDWMJ",
-    "name": "线状地物面积"
-  },
-  {
-    "code": "XZDWYBH",
-    "name": "线状地物预编号"
-  },
-  {
-    "code": "XZGDJFLY",
-    "name": "新增耕地经费来源"
-  },
-  {
-    "code": "XZQDM",
-    "name": "行政区代码"
+    "code": "MJ",
+    "name": "面积"
   },
   {
     "code": "XZQMC",
     "name": "行政区名称"
   },
   {
-    "code": "YSDM",
-    "name": "要素代码"
-  },
-  {
-    "code": "ZLDBDM",
-    "name": "质量等级代码"
-  },
-  {
-    "code": "ZLDWDM",
-    "name": "座落单位代码"
-  },
-  {
-    "code": "ZLDWMC",
-    "name": "座落单位名称"
-  },
-  {
     "code": "XZQMJ",
     "name": "行政区面积"
   },
   {
-    "code": "MJ",
-    "name": "面积"
+    "code": "XZ",
+    "name": "乡镇"
   }
 ]
