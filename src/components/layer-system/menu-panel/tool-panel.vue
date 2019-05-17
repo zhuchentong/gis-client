@@ -4,8 +4,13 @@
       <div slot="header">
         <span>测量</span>
       </div>
-      <div class="icon-item text-center" v-for="item of measureList" :key="item.key">
-        <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
+      <div
+        class="icon-item text-center"
+        v-for="item of measureList"
+        :key="item.key"
+        @click="item.handle()"
+      >
+        <svg-icon iconColor="black" :iconName="item.icon" iconSize="40"></svg-icon>
         <div>{{item.label}}</div>
       </div>
     </el-card>
@@ -33,6 +38,9 @@ import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 import { DrawInteractPolyline } from '~/utils/cesium/interact'
 import Cesium from 'cesium/Cesium'
 import { CesiumCommonService } from '../../../utils/cesium/common.service'
+import { CesiumDrawService } from '@/utils/cesium/draw.service'
+import * as turf from '@turf/turf'
+
 @Component({
   components: {}
 })
@@ -41,14 +49,16 @@ export default class ToolPanel extends Vue {
   private viewer!: MapViewer
   private readonly measureList = [
     {
-      label: '距离测距',
+      label: '距离测量',
       key: 'distance',
-      icon: 'check-area'
+      icon: 'distance',
+      handle: this.computeDistance.bind(this)
     },
     {
-      label: '面积测距',
+      label: '面积测量',
       key: 'area',
-      icon: 'check-area'
+      icon: 'area',
+      handle: this.computeArea.bind(this)
     }
   ]
 
@@ -56,11 +66,89 @@ export default class ToolPanel extends Vue {
     {
       label: '视角巡航',
       key: 'cruise',
-      icon: 'check-area',
+      icon: 'camera-fly',
       handle: this.onStartCruise.bind(this)
     }
   ]
 
+  /**
+   * 计算距离
+   */
+  private computeDistance() {
+    const drawInteractPolyline = new DrawInteractPolyline(this.viewer)
+    const drawService = new CesiumDrawService(this.viewer)
+    let distanceTotal = 0
+    drawInteractPolyline.start().subscribe({
+      next: ({ point, positions }) => {
+        if (positions.length === 1) {
+          drawService.drawLabel(point, '起点')
+          distanceTotal = 0
+        } else {
+          // 两点间距离
+          const distance = Cesium.Cartesian3.distance(
+            positions[positions.length - 2],
+            positions[positions.length - 1]
+          )
+          // 中心点位置
+          // const middle = Cesium.Cartesian3.midpoint(
+          //   positions[positions.length - 2],
+          //   positions[positions.length - 1],
+          //   new Cesium.Cartesian3()
+          // )
+          // 总距离
+          distanceTotal += distance
+          // 绘制中心距离
+          // drawService.drawLabel(
+          //   middle,
+          //   CesiumCommonService.getDistanceStr(distance)
+          // )
+          // 绘制总距离
+          drawService.drawLabel(
+            point,
+            CesiumCommonService.getDistanceStr(distanceTotal)
+          )
+        }
+      },
+      complete: () => {
+        distanceTotal = 0
+      }
+    })
+  }
+
+  /**
+   * 计算面积
+   */
+  private async computeArea() {
+    const drawInteractPolyline = new DrawInteractPolyline(this.viewer, {
+      closed: true
+    })
+    const drawService = new CesiumDrawService(this.viewer)
+    const { positions } = await drawInteractPolyline.start().toPromise()
+    if (positions && positions.length >= 3) {
+      // 生成点集合
+      const points = positions.map(point => {
+        const position = CesiumCommonService.cartesian3ToDegrees(point)
+        return [position.longitude, position.latitude]
+      })
+
+      // 计算多边形
+      const polygon = turf.polygon([[...points, points[0]]])
+      // 获取多边形中心
+      const {
+        geometry: { coordinates }
+      } = turf.centerOfMass(polygon) as any
+      const center = Cesium.Cartesian3.fromDegrees(
+        coordinates[0],
+        coordinates[1]
+      )
+      // 绘制面积信息
+      drawService.drawLabel(center, `${turf.area(polygon).toFixed(2)}平方米`)
+    }
+  }
+
+  /**
+   * 开启视角巡航
+   */
   private async onStartCruise() {
     const drawInteractPolyline = new DrawInteractPolyline(this.viewer)
     const { positions } = await drawInteractPolyline
@@ -79,27 +167,15 @@ export default class ToolPanel extends Vue {
 
     const viewer = this.viewer.getViewer()
 
-    // const cameraView = {
-    //   destination: Cesium.Cartesian3.fromDegrees(
-    //     start.longitude,
-    //     start.latitude,
-    //     start.height + 5000.0
-    //   ),
-    //   orientation: {
-    //     heading: 0.0,
-    //     pitch: -Cesium.Math.PI_OVER_TWO,
-    //     roll: 0.0
-    //   }
-    // }
-
-    // viewer.scene.camera.setView(cameraView)
-
     const source = await Cesium.CzmlDataSource.load(czml)
     const entity = source.entities.getById('point')
     viewer.trackedEntity = entity
     viewer.dataSources.add(source)
   }
 
+  /**
+   * 生成czml
+   */
   private generateCzml(degrees) {
     const [start] = degrees
     return [
