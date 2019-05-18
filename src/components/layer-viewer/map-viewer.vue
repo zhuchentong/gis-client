@@ -262,6 +262,21 @@ export default class MapViewer extends Vue {
     this.terrainProvider = null
   }
 
+  public addGeoJson(data) {
+    const featureCollection = typeof data === 'string' ? JSON.parse(data) : data
+    for (const feature of featureCollection.features) {
+      feature.properties = this.formatFeatureProperties(feature.properties)
+      feature.id = '属性信息'
+    }
+
+    this.viewer.dataSources.add(
+      Cesium.GeoJsonDataSource.load(featureCollection, {
+        stroke: Cesium.Color.RED,
+        fill: Cesium.Color.fromAlpha(Cesium.Color.LIGHTGREEN, 0.5)
+      })
+    )
+  }
+
   /**
    * 开启绘制模式
    */
@@ -456,7 +471,7 @@ export default class MapViewer extends Vue {
         const layer = layerName
           ? Capability.Layer.Layer.find(x => x.Name === layerName)
           : Capability.Layer
-          
+
         if (layer) {
           const EX_GeographicBoundingBox = layer.EX_GeographicBoundingBox
           const [west, south, east, north] = EX_GeographicBoundingBox
@@ -480,7 +495,6 @@ export default class MapViewer extends Vue {
    * 创建图层
    */
   private createLayer(space, layer, cqlFilter?: string) {
-
     const parameters: any = {
       width: 512,
       height: 512,
@@ -508,6 +522,7 @@ export default class MapViewer extends Vue {
    * 格式化Featrue信息
    */
   private geoJsonToFeatureInfo(json) {
+    console.log(json)
     const result: Cesium.ImageryLayerFeatureInfo[] = []
 
     const features = json.features
@@ -540,6 +555,7 @@ export default class MapViewer extends Vue {
 
   private formatFeatureProperties(properties) {
     const data = {}
+    const filterKey = ['对比图层总面积', '结果形状面积']
     // 字段转译
     Object.entries(properties)
       .map(([key, value]) => ({
@@ -547,6 +563,7 @@ export default class MapViewer extends Vue {
         value,
         label: FilterService.convertShpCode(key)
       }))
+      .filter(x => !filterKey.includes(x.key))
       .filter(x => x.key !== x.label || /[\u4e00-\u9fa5]/.test(x.key))
       .forEach(x => {
         data[x.label] = x.value

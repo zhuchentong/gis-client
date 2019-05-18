@@ -1,12 +1,36 @@
 <template>
   <section class="component search-panel">
-    <div class="compute-item text-center" v-for="item of items" :key="item.key" @click="onItemClick(item)" :class="{'active': checkItem.key === item.key}">
-      <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
-      <div>{{item.label}}</div>
-    </div>
-    <el-dialog :title="checkItem.label" :center="true" :visible.sync="dialog.search" width="750px" :close-on-click-modal="false" :close-on-press-escape="false" @close="checkItem = {}">
+    <el-card shadow="never">
+      <div slot="header">
+        <span>数据检索</span>
+      </div>
+      <div
+        class="compute-item text-center"
+        v-for="item of items"
+        :key="item.key"
+        @click="onItemClick(item)"
+        :class="{'active': checkItem.key === item.key}"
+      >
+        <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
+        <div>{{item.label}}</div>
+      </div>
+    </el-card>
+    <el-dialog
+      :title="checkItem.label"
+      :center="true"
+      :visible.sync="dialog.search"
+      width="750px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      @close="checkItem = {}"
+    >
       <keep-alive>
-        <component :is="checkItem.component" :visabled="dialog.search" :viewer="viewer" @success="onSuccess"></component>
+        <component
+          :is="checkItem.component"
+          :visabled="dialog.search"
+          :viewer="viewer"
+          @success="onSuccess"
+        ></component>
       </keep-alive>
     </el-dialog>
   </section>
@@ -15,8 +39,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { MenuList, SearchDialogs } from "~/components/layer-system/search-panel/search-panel.config.ts"
-import MapViewer from "~/components/layer-viewer/map-viewer.vue"
+import {
+  MenuList,
+  SearchDialogs
+} from '~/components/layer-system/search-panel/search-panel.config.ts'
+import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 
 @Component({
   components: {
@@ -24,7 +51,6 @@ import MapViewer from "~/components/layer-viewer/map-viewer.vue"
   }
 })
 export default class SearchPanel extends Vue {
-
   @Prop()
   private viewer!: MapViewer
 
@@ -44,7 +70,6 @@ export default class SearchPanel extends Vue {
     this.checkItem = {}
     this.dialog.search = false
   }
-
 }
 </script>
 

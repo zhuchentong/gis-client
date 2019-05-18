@@ -1,4 +1,4 @@
-import Cesium, { Entity } from 'cesium/Cesium'
+import Cesium, { Entity, Color } from 'cesium/Cesium'
 import { CesiumCommonService } from './common.service'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 /**
@@ -51,14 +51,14 @@ export class CesiumDrawService {
     entity.position = cartesian3
 
     // 设置实体高度
+    // TODO:测试空间绘点
     const heightReference =
       Cesium.Cartographic.fromCartesian(cartesian3).height > 0
         ? Cesium.HeightReference.RELATIVE_TO_GROUND
         : Cesium.HeightReference.CLAMP_TO_GROUND
-
     // 设置点数据信息
     entity.point = new Cesium.PointGraphics({
-      heightReference,
+      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
       color: this.color.point,
       pixelSize: 6,
       outlineColor: this.color.outline,
@@ -102,15 +102,18 @@ export class CesiumDrawService {
       )
     }
 
-    return this.mapViewer.drawEntities.add({
-      polygon: {
-        hierarchy,
-        material: fillColor || this.color.polygon,
-        height: 0,
-        outline: true,
-        outlineColor: borderColor || this.color.border
-      }
-    })
+    return this.mapViewer.drawEntities.add(
+      new Cesium.Entity({
+        polygon: {
+          hierarchy,
+          material: fillColor || this.color.polygon,
+          height: 0,
+          outline: true,
+          outlineColor: Cesium.Color.RED,
+          outlineWidth: 10
+        }
+      })
+    )
   }
 
   /**
@@ -121,8 +124,9 @@ export class CesiumDrawService {
    */
   public drawPolyline(
     positions: Array<Cesium.Cartographic | Cesium.Cartesian3>,
-    clampToGround = false
+    { clampToGround = false } = {}
   ) {
+    // 折线实体
     const polylineEntity = new Entity({
       polyline: {
         width: 3,
@@ -130,6 +134,8 @@ export class CesiumDrawService {
         clampToGround // 开启贴地模式
       }
     })
+
+    // 折线位置
     polylineEntity.polyline.positions = new Cesium.CallbackProperty(
       () =>
         positions.map(point => {

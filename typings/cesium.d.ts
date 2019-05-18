@@ -3722,6 +3722,7 @@ declare namespace Cesium {
   class PolygonGraphicsOptions {
       public hierarchy?: any | PolygonHierarchy | Cartesian3[]
       public height?: number
+      public heightReference?: HeightReference;
       public extrudedHeight?: any | number
       public show?: any | boolean
       public fill?: any | boolean
