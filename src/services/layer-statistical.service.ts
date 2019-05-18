@@ -28,4 +28,15 @@ export class LayerStatisticalService {
   public getClassificationOne(requestParams: RequestParams): Observable<any> {
     return requestParams.request()
   }
+
+  /**
+   * 土地利用现状二级分类
+   * @param requestParams 
+   */
+  @Request({
+    server: Controller.getSecondClassification
+  })
+  public getSecondClassification(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

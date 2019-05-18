@@ -1,13 +1,20 @@
 <template>
   <section class="component report-land">
-       <el-card header="地灾分布统计">
-      <ve-pie :data="chartData"></ve-pie>
-    </el-card>
-    <data-box :data="dataSet"  :maxHeight="320">
+    <div class="row">
+      <el-card class="col-span-6">
+        <common-title slot="header" :showIcon="false" title="地灾分布统计"></common-title>
+        <ve-pie :data="chartDataByName"></ve-pie>
+      </el-card>
+      <el-card class="col-span-6">
+        <common-title slot="header" :showIcon="false" title="隐患级别统计"></common-title>
+        <ve-pie :data="chartDataByGrade"></ve-pie>
+      </el-card>
+    </div>
+    <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="prefecture" label="行政村"></el-table-column>
         <el-table-column prop="number" label="地灾点个数"></el-table-column>
-        <el-table-column prop="ratio" label="所占百分比"></el-table-column>
+        <el-table-column prop="ratio" label="所占百分比" :formatter="row => $filter.toPercent(row.ratio)"></el-table-column>
       </template>
     </data-box>
   </section>
@@ -19,10 +26,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { StatisticalService } from "~/services/statistical.service"
-import {Inject} from 'typescript-ioc'
+import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { Pie } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
+import { FilterService } from "~/utils/filter.service"
+
 @Component({
   components: {
     DataBox,
@@ -34,37 +43,58 @@ export default class ReportLand extends Vue {
   private sevice!: StatisticalService
 
   private dataSet: any = []
-    private readonly setting = {
-    type: "行政村",
-    area: "占地面积(亩)"
+
+  private readonly settingByName = {
+    prefecture: "行政村",
+    number: "数量",
+    ratio: "所占比例",
   }
-   private chartData = {
-    columns: Object.values(this.setting),
-    rows:[]
+  private readonly settingByGrade = {
+    grade: "等级",
+    number: "数量",
+    ratio: "所占比例",
+  }
+  private chartDataByName = {
+    columns: Object.values(this.settingByName),
+    rows: []
   }
 
-    private refreshData() {
-    const params = new RequestParams({
-      type: '1',
-      year:'2019'
+  private chartDataByGrade = {
+    columns: Object.values(this.settingByGrade),
+    rows: []
+  }
+
+  private refreshData() {
+    this.sevice.getStatisticalDisasterByName(new RequestParams(null)).subscribe(data => {
+      this.dataSet = data
+      this.chartDataByName.rows = data.map(v => {
+        const row = {}
+        Object.entries(this.settingByName).forEach(([key, value]) => {
+          row[value] = v[key]
+        })
+        return row
+      })
     })
- this.sevice.getStatisticalDisaster(params).subscribe(data => {
- this.dataSet = data,
- this.chartData.rows=data.map(item=>{
-  const row = {}
-      row[this.setting.type] = item.prefecture
-      row[this.setting.area] = item.ratio
-      return row
- })
- }
-
- )
- console.log(this.dataSet,'dataSet')
+    this.sevice.getStatisticalDisasterByGrade(new RequestParams(null)).subscribe(data => {
+      this.dataSet = data
+      this.chartDataByGrade.rows = data.map(v => {
+        const row = {}
+        Object.entries(this.settingByGrade).forEach(([key, value]) => {
+          if (key === "grade") {
+            const str = FilterService.dictConvert(v[key], 'DisasterGrade')
+            row[value] = str
+          } else {
+            row[value] = v[key]
+          }
+        })
+        return row
+      })
+    })
   }
-  private mounted(){
+  private mounted() {
     this.refreshData()
   }
 
- }
+}
 </script>
 

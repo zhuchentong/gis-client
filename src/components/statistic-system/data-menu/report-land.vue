@@ -12,7 +12,7 @@
           </el-radio-group>
         </div>
       </common-title>
-      <ve-histogram :data="chartData" :settings="chartSettings"></ve-histogram>
+      <ve-histogram :data="chartData" :settings="chartSettings" :data-empty="!!dataSet.length"></ve-histogram>
     </el-card>
     <data-box :data="dataSet" :maxHeight="310">
       <template slot="columns">

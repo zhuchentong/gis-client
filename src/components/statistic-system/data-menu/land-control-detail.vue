@@ -21,14 +21,15 @@
 import { Component, Vue } from 'vue-property-decorator'
 import DataBox from "~/components/common/data-box.vue"
 import { LayerStatisticalService } from "~/services/layer-statistical.service"
-import { Pie } from "v-charts"
+import { VePie, VeHistogram } from "v-charts"
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 
 @Component({
   components: {
     DataBox,
-    Pie
+    VePie,
+    VeHistogram
   }
 })
 export default class LandControlDetail extends Vue {

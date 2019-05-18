@@ -41,7 +41,7 @@ import DataBox from "~/components/common/data-box.vue"
     VeHistogram
   }
 })
-export default class RrantLand extends Vue {
+export default class GrantLand extends Vue {
   @Inject
   private sevice!: StatisticalService
 

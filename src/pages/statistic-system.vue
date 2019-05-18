@@ -47,18 +47,18 @@ export default class extends Vue {
   }
   .menu {
     height: 100%;
-    background-color: #36abcd;
+    background-color: #21a7cf;
   }
 
   .statistic-group {
     .common-title {
       .custom-card-header {
-        color: #fffff2;
+        color: #fefefe;
       }
       background-color: #2488af;
     }
     &-item {
-      color: #fffff2;
+      color: #fefefe;
       padding-left: 20px;
       line-height: 28px;
       font-size: 14px;
@@ -80,6 +80,12 @@ export default class extends Vue {
       .ve-line,
       .ve-pie {
         height: 350px !important;
+      }
+
+      .no-data {
+        height: 350px;
+        margin: 0;
+        line-height: 350px;
       }
     }
   }

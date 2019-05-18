@@ -22,12 +22,13 @@ import { Component, Vue } from 'vue-property-decorator'
 import { LayerStatisticalService } from "~/services/layer-statistical.service"
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
-import { Pie } from "v-charts"
+import { Pie, VeHistogram } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
 @Component({
   components: {
     DataBox,
-    Pie
+    Pie,
+    VeHistogram
   }
 })
 export default class LandUse extends Vue {

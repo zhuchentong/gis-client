@@ -11,13 +11,21 @@ export default {
     action: 'getLayerStatisticalReport',
     type: RequestMethod.Get
   },
-  
+
   /**
    * 土地利用现状一级分类统计
    */
   getClassificationOne: {
     controller: CONTROLLER,
     action: 'getClassificationOne',
+    type: RequestMethod.Get
+  },
+  /**
+   * 土地利用现状二级分类统计
+   */
+  getSecondClassification: {
+    controller: CONTROLLER,
+    action: 'getSecondClassification',
     type: RequestMethod.Get
   }
 }

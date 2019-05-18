@@ -19,10 +19,10 @@ export class StatisticalService {
         return requestParams.request()
     }
 
-   /**
-    * 业务统计(批地统计)
-    * @param requestParams 
-    */
+    /**
+     * 业务统计(批地统计)
+     * @param requestParams 
+     */
     @Request({
         server: Controller.getLandStatisticalGrant
     })
@@ -30,10 +30,10 @@ export class StatisticalService {
         return requestParams.request()
     }
 
-   /**
-    * 业务统计(征地统计)
-    * @param requestParams 
-    */
+    /**
+     * 业务统计(征地统计)
+     * @param requestParams 
+     */
     @Request({
         server: Controller.getLandStatisticalExpropriation
     })
@@ -41,10 +41,10 @@ export class StatisticalService {
         return requestParams.request()
     }
 
-   /**
-    * 业务统计(供地统计)
-    * @param requestParams 
-    */
+    /**
+     * 业务统计(供地统计)
+     * @param requestParams 
+     */
     @Request({
         server: Controller.getLandStatistical
     })
@@ -75,16 +75,26 @@ export class StatisticalService {
     }
 
     /**
-     * 外业统计（地灾分布统计）
+     * 外业统计（地灾分布按照地名统计）
      * @param requestParams 
      */
     @Request({
-        server: Controller.getStatisticalDisaster
+        server: Controller.getStatisticalDisasterByName
     })
-    public getStatisticalDisaster(requestParams: RequestParams): Observable<any> {
+    public getStatisticalDisasterByName(requestParams: RequestParams): Observable<any> {
         return requestParams.request()
     }
 
+    /**
+     * 外业统计（地灾分布按照地灾等级统计）
+     * @param requestParams 
+     */
+    @Request({
+        server: Controller.getStatisticalDisasterByGrade
+    })
+    public getStatisticalDisasterByGrade(requestParams: RequestParams): Observable<any> {
+        return requestParams.request()
+    }
 
 
 }

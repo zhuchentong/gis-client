@@ -1,9 +1,22 @@
 <template>
   <section class="component land-now">
-    <el-card>
-      <common-title slot="header" :showIcon="false" title="土地现状数据统计"></common-title>
-      <ve-pie :data="chartData"></ve-pie>
-    </el-card>
+    <div class="row">
+      <el-card class="col-span-6">
+        <common-title slot="header" :showIcon="false" title="土地现状数据统计">
+          <el-select slot="append" v-model="queryModel.year" placeholder="请输入要查询的年份" @change="onYearChange">
+            <el-option v-for="year of years" :key="year" :label="`${year}年`" :value="year"></el-option>
+          </el-select>
+        </common-title>
+        <ve-pie :data="chartData" :events="chartEvents"></ve-pie>
+      </el-card>
+      <el-card class="col-span-6">
+        <div v-if="!typeName" class="no-data"></div>
+        <div v-else>
+          <common-title slot="header" :showIcon="false" :title="typeName"></common-title>
+          <ve-pie :data="chartDataByType"></ve-pie>
+        </div>
+      </el-card>
+    </div>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="name" label="土地现状类型"></el-table-column>
@@ -36,31 +49,73 @@ export default class LandNow extends Vue {
   @Inject
   private sevice!: LayerStatisticalService
 
+  private queryModel = {
+    year: "2017"
+  }
+
+  private years = ['2016', '2017']
 
   private readonly setting = {
-    name: "管制区类型",
+    name: "类型",
     acreage: "占地面积(亩)"
   }
 
+  private chartEvents = {
+    click: this.onChartClick
+  }
+
   private dataSet: any = []
+  private typeName = ""
+
+
   private chartData = {
     columns: Object.values(this.setting),
     rows: []
   }
 
+  private chartDataByType = {
+    columns: Object.values(this.setting),
+    rows: []
+  }
+
+  private onYearChange(value) {
+    if (!value) return
+    this.refreshData()
+  }
 
   private refreshData() {
-    const params = new RequestParams({ year: '2017' })
-    this.sevice.getClassificationOne(params).subscribe(data => {
-      this.dataSet = data
-      this.chartData.rows = data.map(v => {
-        const row = {}
-        Object.entries(this.setting).forEach(([key, value]) => {
-          row[value] = v[key]
+    this.sevice.getClassificationOne(new RequestParams(this.queryModel))
+      .subscribe(data => {
+        this.dataSet = data
+        this.chartData.rows = data.map(v => {
+          const row: any = {}
+          Object.entries(this.setting).forEach(([key, value]) => {
+            row[value] = v[key]
+          })
+          return row
         })
-        return row
       })
+  }
+
+  private onChartClick(e) {
+    const name = e.name
+    const findRow = this.dataSet.find(x => x.name === name)
+    if (!findRow) return
+    const queryParams = new RequestParams({
+      publishId: findRow.publishId,
+      code: findRow.code
     })
+    this.sevice.getSecondClassification(queryParams)
+      .subscribe(data => {
+        this.typeName = name
+        this.chartDataByType.rows = data.map(v => {
+          const row: any = {}
+          Object.entries(this.setting).forEach(([key, value]) => {
+            row[value] = v[key]
+          })
+          return row
+        })
+      })
   }
 
 
