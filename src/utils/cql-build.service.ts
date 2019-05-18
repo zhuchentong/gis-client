@@ -12,17 +12,17 @@ export class CqlBuilder {
     let str: string = ""
     switch (type) {
       case "equal":
-        str = `${key} = '${value}'`
+        str = `"${key}" = '${value}'`
         break
       case "between":
-        str = `${key} between ${value[0]} and ${value[1]}`
+        str = `"${key}" between ${value[0]} and ${value[1]}`
         break
       case "like":
-        str = `${key} like '%${value}%'`
+        str = `"${key}" like '%${value}%'`
         break
       case "in":
         const qeuryValue = typeof value === "string" ? [value] : value
-        str = `${key} in (${qeuryValue.join()})`
+        str = `"${key}" in (${qeuryValue.join()})`
         break
     }
     this.predicateList.push(str)

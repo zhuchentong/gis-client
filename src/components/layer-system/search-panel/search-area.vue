@@ -2,12 +2,33 @@
   <section class="component search-area" v-loading="loading">
     <el-form v-model="model" inline label-width="120px">
       <div v-for="setting of itemsSeting" :key="setting.layerCode">
-        <common-title :showIcon="false" :title="setting.showName"></common-title>
-        <el-form-item v-for="item of setting.items" :key="item.code" :label="item.name" :prop="item.code">
-          <el-input v-if="item.type === 'string'" v-model="model[item.code]" clearable></el-input>
-          <number-range v-else-if="item.type === 'number'" v-model="model[item.code]" clearable></number-range>
+        <common-title
+          :showIcon="false"
+          :title="setting.showName"
+        ></common-title>
+        <el-form-item
+          v-for="item of setting.items"
+          :key="item.code"
+          :label="item.name"
+          :prop="item.code"
+        >
+          <el-input
+            v-if="item.type === 'string'"
+            v-model="model[item.code]"
+            clearable
+          ></el-input>
+          <number-range
+            v-else-if="item.type === 'number'"
+            v-model="model[item.code]"
+            clearable
+          ></number-range>
           <el-select v-else v-model="model[item.code]" clearable>
-            <el-option v-for="{code,name} of searchRangeSetting[item.code]" :key="code" :label="name" :value="code"></el-option>
+            <el-option
+              v-for="{ code, name } of searchRangeSetting[item.code]"
+              :key="code"
+              :label="name"
+              :value="code"
+            ></el-option>
           </el-select>
         </el-form-item>
       </div>
@@ -165,7 +186,7 @@ export default class SearchArea extends Vue {
     }
     const features = JSON.parse(geoJsonData)
     this.viewer.getViewer().dataSources.add(
-      Cesium.GeoJsonDataSource.load(features,option)
+      Cesium.GeoJsonDataSource.load(features, option)
     )
   }
 }
