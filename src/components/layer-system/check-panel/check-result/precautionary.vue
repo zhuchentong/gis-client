@@ -1,9 +1,9 @@
 <template>
   <section class="component precautionary">
-    <el-card>
+    <el-card v-loading="!fieldResult">
       <div slot="header" class="row middle-span between-span">
         <label>基本农田占用检测</label>
-        <i class="el-icon-warning">压占基本农田，疑似违法用地，请核实！</i>
+        <i v-if="fieldResult&&fieldResult.alarm" class="el-icon-warning alarm">压占基本农田，疑似违法用地，请核实！</i>
       </div>
       <label-container :column="1" :labelWidth="120">
         <label-item label="基本农田保护区"></label-item>
@@ -13,7 +13,7 @@
     <el-card>
       <div slot="header" class="row middle-span between-span">
         <label>非允许建设区检测</label>
-        <i class="el-icon-warning">压占非允许建设区，疑似违法用地，请核实！</i>
+        <i class="el-icon-warning alarm">压占非允许建设区，疑似违法用地，请核实！</i>
       </div>
       <label-container :column="1" :labelWidth="120">
         <label-item label="允许建设区"></label-item>
@@ -32,6 +32,8 @@ import { CesiumCommonService } from '@/utils/cesium/common.service'
 import { Inject } from 'typescript-ioc'
 import { DetectionService } from '~/services/detection.service'
 import { RequestParams } from '../../../../core/http'
+import { CqlBuilder } from '~/utils/cql-build.service'
+import * as turf from '@turf/turf'
 @Component({
   components: {}
 })
@@ -47,9 +49,9 @@ export default class Precautionary extends Vue {
   private detectionService = new DetectionService()
 
   // 基本农田检测结果
-  private fieldResult = null
+  private fieldResult: any = null
   // 建设区检测结果
-  private buildResult = null
+  private buildResult: any = null
 
   private mounted() {
     this.startCheck()
@@ -73,12 +75,19 @@ export default class Precautionary extends Vue {
     })
   }
 
-  private startFieldCheck({ code }) {
+  private async startFieldCheck({ code }) {
     const { positions, layer } = this.range
+    const cql = `"TDYTQLXDM" = '010' or "TDYTQLXDM" = '020'`
+    let data
     if (positions) {
-      this.getRangeCheck(code, positions)
+      data = await this.getRangeCheck(code, positions, cql)
     } else {
       this.getLayerCheck(code, layer)
+    }
+
+    this.fieldResult = {
+      alarm: data.find(x => x.attr['TDYTQLXDM'] === '010'),
+      data
     }
   }
 
@@ -86,7 +95,12 @@ export default class Precautionary extends Vue {
     return
   }
 
-  private getRangeCheck(code, positions) {
+  private getRangeCheck(code, positions, cql?) {
+    console.log(positions)
+    const points = positions.map(x=>CesiumCommonService.cartesian3ToDegrees(x)).map(x=>([x.longitude,x.latitude]))
+    console.log(points)
+    const polygon1 = turf.polygon([[...points, points[0]]])
+    console.log(turf.area(polygon1))
     // 获取wkt区域数据
     const polygon = [...positions, positions[0]]
       .map(x => {
@@ -96,16 +110,15 @@ export default class Precautionary extends Vue {
       .join(',')
 
     // 获取对比数据
-    this.detectionService
+    return this.detectionService
       .getDetectionWkt(
         new RequestParams({
           wkt: `POLYGON ((${polygon}))`,
-          layerCode: code
+          layerCode: code,
+          cql
         })
       )
-      .subscribe(data => {
-        console.log(data)
-      })
+      .toPromise()
   }
 
   private getLayerCheck(code, layer) {
@@ -113,3 +126,10 @@ export default class Precautionary extends Vue {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.alarm {
+  color: red;
+}
+</style>
+
