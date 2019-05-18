@@ -1,6 +1,21 @@
 <template>
   <section class="component check-layer-selecte">
-    <el-tree class="tree" show-checkbox ref="layerTree" node-key="id" :props="{label:'name'}" :data="layerList" default-expand-all></el-tree>
+    <el-card v-for="checkGroup in checkContentList" :key="checkGroup.name">
+      <div slot="header" class="row middle-span between-span">
+        <span>{{checkGroup.name}}</span>
+        <!-- <el-checkbox :value="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
+      </div>
+      <div>
+        <el-checkbox-group v-model="checkGroup.values">
+          <el-checkbox
+            class="check-item"
+            :label="checkItem.code"
+            :key="checkItem.code"
+            v-for="checkItem in checkGroup.children"
+          >{{checkItem.name}}</el-checkbox>
+        </el-checkbox-group>
+      </div>
+    </el-card>
     <div class="operate-buttons">
       <el-button @click="submit">确定</el-button>
     </div>
@@ -15,14 +30,13 @@ import { LayerInfoService } from '~/services/layer-info.service.ts'
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { LayerSpace } from '~/config/business-config.ts'
-import { Tree } from "element-ui"
-import { zip } from "rxjs"
+import { Tree } from 'element-ui'
+import { zip } from 'rxjs'
 
 @Component({
   components: {}
 })
 export default class CheckLayerSelect extends Vue {
-
   @Inject
   private groupService!: LayerGroupService
   @Inject
@@ -30,142 +44,88 @@ export default class CheckLayerSelect extends Vue {
 
   private layerList: any[] = []
 
-  private mounted() {
-    this.queryLayers()
-  }
-
-
-  /**
-   * 生成基础图层
-   */
-  private async getLayerList() {
-    // 获取图层目录
-    // 获取图层列表
-    const [groupList, layerList] = await zip(
-      this.groupService.getLayerGroupList(new RequestParams()),
-      this.layerService.getLayerInfoList(
-        new RequestParams({ layerSpace: LayerSpace.base })
-      )
-    ).toPromise()
-
-    // 关联图层数据
-    layerList.forEach(layer => {
-      // 设置图层数据
-      const item = {
-        id: layer.id,
-        name: layer.layerName,
-        data: layer,
-        type: 'layer'
-      }
-
-      const group = groupList.find(x => x.id === layer.groupId)
-
-      if (!group.children) {
-        group.children = [item]
-      } else {
-        group.children.push(item)
-      }
-    })
-
-    const gerateGroupTree = (id?) => {
-      // 设置目录名称
-      const children = groupList
-        .filter(x => (id ? x.parentId === id : !x.parentId))
-        .map(x => ({
-          id: x.id,
-          name: x.groupName,
-          type: 'group',
-          children: gerateGroupTree(x.id) || x.children
-        }))
-
-      if (children && children.length) {
-        return children
-      }
+  private checkContentList = {
+    alarmCheck: {
+      values: [],
+      name: '预警检测',
+      component: 'precautionary',
+      children: [
+        {
+          name: '基本农田占用检测',
+          type: 'jbnt',
+          code: '6534621933959839744'
+        },
+        {
+          name: '非允许建设区检测',
+          type: 'yxjsq',
+          code: '222'
+        }
+      ]
+    },
+    dataCheck: {
+      values: [],
+      name: '数据分析',
+      component: 'data-analyze',
+      children: [
+        {
+          name: '土地变更现状数据分析',
+          type: 'bgxz',
+          code: '23'
+        },
+        {
+          name: '土地用途区数据分析',
+          type: 'tdytq',
+          code: '123'
+        },
+        {
+          name: '控制性详细规划数据分析',
+          type: 'kzxxxgh',
+          code: '2323ss'
+        },
+        {
+          name: '建设用地管制区',
+          type: 'jzydgzq',
+          code: '2323'
+        }
+      ]
+    },
+    businessCheck: {
+      values: [],
+      name: '业务分析',
+      component: 'business-analyze',
+      children: [
+        {
+          name: '报地数据分析',
+          code: 'bd'
+        },
+        {
+          name: '批地数据分析',
+          code: 'pd'
+        },
+        {
+          name: '征地数据分析',
+          code: 'zd'
+        },
+        {
+          name: '供地数据分析',
+          code: 'gd'
+        }
+      ]
     }
-
-    this.layerList = gerateGroupTree()
-  }
-
-  private queryLayers() {
-    this.layerList = [
-      {
-        name: "预警监测",
-        id: "yujingjiance",
-        children: [
-          {
-            name: "基本农田占用检测",
-            id: "1"
-          },
-          {
-            name: "非允许建设区检测",
-            id: "2"
-          }
-        ]
-      },
-      {
-        name: "数据分析",
-        id: "shujufenxi",
-        children: [
-          {
-            name: "土地变更现状",
-            id: "11"
-          },
-          {
-            name: "土地用途区",
-            id: "12"
-          },
-          {
-            name: "控制性详细规划",
-            id: "13"
-          },
-          {
-            name: "建设用地管制区",
-            id: "14"
-          }
-        ]
-      },
-      {
-        name: "业务分析",
-        id: "yewufenxi",
-        children: [
-          {
-            name: "报地",
-            id: "21"
-          },
-          {
-            name: "批地",
-            id: "22"
-          },
-          {
-            name: "征地",
-            id: "23"
-          },
-          {
-            name: "供地",
-            id: "24"
-          }
-        ]
-      },
-    ]
   }
 
   private submit() {
-    const layerTree = this.$refs.layerTree as Tree
-    const layers: string[] = layerTree.getCheckedKeys(true)
-    if (!layers.length) {
-      this.$message("请选择要对比的图层")
-      return
+    this.emitSubmit()
+  }
+
+  @Emit('submit')
+  private emitSubmit() {
+    return {
+      alarmCheck: this.checkContentList.alarmCheck,
+      dataCheck: this.checkContentList.dataCheck,
+      businessCheck: this.checkContentList.businessCheck
     }
-    this.onAffirm(layers)
   }
-
-
-  @Emit('affirm')
-  private onAffirm(data) {
-    return data
-  }
-
-
 }
 </script>
 
@@ -175,6 +135,11 @@ export default class CheckLayerSelect extends Vue {
   .tree {
     height: 460px;
     overflow: auto;
+  }
+
+  .check-item {
+    display: block;
+    padding: 3px;
   }
 }
 </style>

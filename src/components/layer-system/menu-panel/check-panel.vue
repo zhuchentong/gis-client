@@ -1,49 +1,99 @@
 <template>
   <section class="component check-panel" v-loading="loading">
-    <div class="compute-item text-center" v-for="item of items" :key="item.key" @click="onItemClick(item)" :class="{'active': checkItem.key === item.key}">
-      <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
-      <div>{{item.label}}</div>
-    </div>
+    <el-card shadow="never">
+      <div slot="header">
+        <span>数据检测</span>
+      </div>
+      <div
+        class="compute-item text-center"
+        v-for="item of items"
+        :key="item.key"
+        @click="onItemClick(item)"
+        :class="{'active': checkItem.key === item.key}"
+      >
+        <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
+        <div>{{item.label}}</div>
+      </div>
+    </el-card>
 
     <div v-if="dialog.hasResult" class="view-result">
       <a @click="dialog.result = true" title="查看分析结果">
         <svg-icon iconName="saved" iconSize="40"></svg-icon>
       </a>
     </div>
-    <el-dialog title="选择外业项目" :center="true" :visible.sync="dialog.task" width="750px" :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog
+      title="选择外业项目"
+      :center="true"
+      :visible.sync="dialog.task"
+      width="750px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <task-list-select @affirm="taskSelected"></task-list-select>
     </el-dialog>
-    <el-dialog title="选择业务项目" :center="true" :visible.sync="dialog.business" width="750px" :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog
+      title="选择业务项目"
+      :center="true"
+      :visible.sync="dialog.business"
+      width="750px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <business-list-select @affirm="businessSelected"></business-list-select>
     </el-dialog>
-    <el-dialog title="选择业务项目" :center="true" :visible.sync="dialog.import" width="750px" :close-on-click-modal="false" :close-on-press-escape="false">
-      <file-upload ref="attach-upload" :AllowExtension="allowExtension" :showFileList="false" @onUploadSuccess="onFileUploadSuccess">上传文件</file-upload>
+    <el-dialog
+      title="选择业务项目"
+      :center="true"
+      :visible.sync="dialog.import"
+      width="750px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <file-upload
+        ref="attach-upload"
+        :AllowExtension="allowExtension"
+        :showFileList="false"
+        @onUploadSuccess="onFileUploadSuccess"
+      >上传文件</file-upload>
     </el-dialog>
-    <el-dialog title="选择对比图层" :center="true" :visible.sync="dialog.layer" width="550px" :close-on-click-modal="false" :close-on-press-escape="false">
-      <check-layer-select @affirm="layerSelected"></check-layer-select>
+    <el-dialog
+      title="请选择检测项"
+      :center="true"
+      :visible.sync="dialog.layer"
+      width="550px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <check-layer-select @submit="layerSelected"></check-layer-select>
     </el-dialog>
-    <el-dialog title="检测项结果" :center="true" :visible.sync="dialog.result" width="750px" :close-on-click-modal="false" :close-on-press-escape="false">
-      <check-result></check-result>
+    <el-dialog
+      title="检测项结果"
+      :center="true"
+      :visible.sync="dialog.result"
+      width="750px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <check-result ref="check-result"></check-result>
     </el-dialog>
-
   </section>
 </template>
 
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { MenuList } from "~/components/layer-system/check-panel/check-panel.config"
+import { MenuList } from '~/components/layer-system/check-panel/check-panel.config'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
-import TaskListSelect from "~/components/layer-system/check-panel/task-list-select.vue"
-import BusinessListSelect from "~/components/layer-system/check-panel/business-list-select.vue"
-import CheckLayerSelect from "~/components/layer-system/check-panel/check-layer-selecte.vue"
-import CheckResult from "~/components/layer-system/check-panel/check-result.vue"
-import { DrawInteractPolyline } from "~/utils/cesium/interact"
-import Cesium from "cesium/Cesium"
-import FileUpload from "~/components/common/file-upload.vue"
-import { FileType } from "~/config/enum.config.ts"
-import { LayerInfo } from "~/models/layer-info.model.ts"
-import { TempLayers } from "~/models/temp-layers.model"
+import TaskListSelect from '~/components/layer-system/check-panel/task-list-select.vue'
+import BusinessListSelect from '~/components/layer-system/check-panel/business-list-select.vue'
+import CheckLayerSelect from '~/components/layer-system/check-panel/check-layer-selecte.vue'
+import CheckResult from '~/components/layer-system/check-panel/check-result.vue'
+import { DrawInteractPolyline } from '~/utils/cesium/interact'
+import Cesium from 'cesium/Cesium'
+import FileUpload from '~/components/common/file-upload.vue'
+import { FileType } from '~/config/enum.config.ts'
+import { LayerInfo } from '~/models/layer-info.model.ts'
+import { TempLayers } from '~/models/temp-layers.model'
 
 @Component({
   components: {
@@ -55,10 +105,8 @@ import { TempLayers } from "~/models/temp-layers.model"
   }
 })
 export default class CheckPanel extends Vue {
-
   @Prop()
   private viewer!: MapViewer
-  private drawLineService!: DrawInteractPolyline
   private items = MenuList
   private allowExtension = [FileType.compressed]
   private tempLayers = new TempLayers()
@@ -67,7 +115,7 @@ export default class CheckPanel extends Vue {
   private positions: any[] = []
   private checkItem: any = {}
   // 临时图层
-  private tempLayerCode = ""
+  private tempLayerCode = ''
 
   private dialog = {
     task: false,
@@ -88,26 +136,23 @@ export default class CheckPanel extends Vue {
     }
   }
 
-  private mounted() {
-    this.drawLineService = new DrawInteractPolyline(this.viewer)
-  }
-
   /**
    * 区域对比 绘制区域
    */
-  private drawPolygon() {
-    let positions: Cesium.Cartesian3[]
-    this.drawLineService.start().subscribe({
-      next: (data) => { positions = data.positions },
-      complete: () => {
-        if (!positions) {
-          this.$message("请绘制区域")
-          return
-        }
-        this.positions = positions
-        this.dialog.layer = true
-      }
+  private async drawPolygon() {
+    const drawInteractPolyline = new DrawInteractPolyline(this.viewer, {
+      closed: true,
+      fill: true,
+      fillColor: Cesium.Color.fromAlpha(Cesium.Color.LIGHTSKYBLUE, 0.5)
     })
+    const { positions } = await drawInteractPolyline.start().toPromise()
+    if (!positions || positions.length < 3) {
+      this.$message('请选择有效测量区域')
+      return
+    }
+
+    this.positions = positions
+    this.dialog.layer = true
   }
 
   private taskSelected(data) {
@@ -121,11 +166,16 @@ export default class CheckPanel extends Vue {
     this.dialog.layer = true
   }
 
-  private layerSelected(layerIds: string[]) {
+  private layerSelected(checkContent) {
     this.dialog.layer = false
-    // query
     this.dialog.result = true
     this.dialog.hasResult = true
+    this.$nextTick(() => {
+      const checkResult = this.$refs['check-result'] as any
+      checkResult.startCheck(checkContent, {
+        positions: this.positions
+      })
+    })
   }
 
   /**
@@ -138,15 +188,18 @@ export default class CheckPanel extends Vue {
     layerInfo.fileId = data.id
     layerInfo.layerName = data.originalName
     this.loading = true
-    layerInfo.publishTempLayer().subscribe(() => {
-      // 本地缓存存放已经发布的图层
-      this.tempLayers.push(data.id, data.originalName)
-      this.dialog.layer = true
-      this.loading = false
-    }, () => {
-      this.$message('本地图层加载失败')
-      this.loading = false
-    })
+    layerInfo.publishTempLayer().subscribe(
+      () => {
+        // 本地缓存存放已经发布的图层
+        this.tempLayers.push(data.id, data.originalName)
+        this.dialog.layer = true
+        this.loading = false
+      },
+      () => {
+        this.$message('本地图层加载失败')
+        this.loading = false
+      }
+    )
   }
 }
 </script>

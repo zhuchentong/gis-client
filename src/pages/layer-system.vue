@@ -68,7 +68,7 @@ export default class extends Vue {
     top: 0;
     bottom: 0;
     width: 240px;
-    overflow:auto;
+    overflow: auto;
   }
 
   .layer-view {

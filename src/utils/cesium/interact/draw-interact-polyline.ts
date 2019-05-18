@@ -8,6 +8,7 @@ export class DrawInteractPolyline extends DrawInteract {
   private positions: Cesium.Cartesian3[] = []
   private drawService
   private closed
+  private fill
   private fillColor
   private borderColor
 
@@ -15,10 +16,12 @@ export class DrawInteractPolyline extends DrawInteract {
     mapViewer,
     {
       closed = false,
+      fill = false,
       fillColor,
       borderColor
     }: {
       closed?: boolean
+      fill?: boolean | Cesium.Color
       fillColor?: Cesium.Color
       borderColor?: Cesium.Color
     } = {}
@@ -31,6 +34,7 @@ export class DrawInteractPolyline extends DrawInteract {
     this.drawService = new CesiumDrawService(mapViewer)
 
     this.closed = closed
+    this.fill = fill
     this.fillColor = fillColor
     this.borderColor = borderColor
   }
@@ -70,6 +74,13 @@ export class DrawInteractPolyline extends DrawInteract {
     this.clioseEventListener()
 
     if (this.closed) {
+      this.drawService.drawPolyline([
+        this.positions[0],
+        this.positions[this.positions.length - 1]
+      ])
+    }
+
+    if (this.closed && this.fill) {
       this.drawService.drawPolygon(this.positions, {
         fillColor: this.fillColor,
         borderColor: this.borderColor
