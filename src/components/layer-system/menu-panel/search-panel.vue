@@ -1,5 +1,5 @@
 <template>
-  <section class="component search-panel" v-loading="loading">
+  <section class="component search-panel">
     <div class="compute-item text-center" v-for="item of items" :key="item.key" @click="onItemClick(item)" :class="{'active': checkItem.key === item.key}">
       <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
       <div>{{item.label}}</div>
@@ -30,7 +30,6 @@ export default class SearchPanel extends Vue {
 
   private items = MenuList
   private checkItem: any = {}
-  private loading = false
 
   private dialog = {
     search: false

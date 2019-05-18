@@ -93,4 +93,13 @@ export class LayerInfoService {
     return requestParams.request()
   }
 
+  /**
+   * 多图层对比 （辅助选址）
+   */
+  @Request({
+    server: Controller.multipleLayerComparisons
+  })
+  public multipleLayerComparisons(requestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

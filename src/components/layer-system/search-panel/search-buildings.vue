@@ -94,7 +94,7 @@ export default class SearchBuildings extends Vue {
         const min = queryData.min || 0
         const max = queryData.max || 0
         if (!min && !max) return
-        cqlBuilder.addPredicater(code, filter, min, max)
+        cqlBuilder.addPredicater(code, filter, [min, max])
       } else {
         cqlBuilder.addPredicater(code, filter, queryData)
       }

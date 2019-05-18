@@ -8,17 +8,21 @@ export class CqlBuilder {
    * @param value1 查询字段值
    * @param value2 查询字段值，当type 不是 number 的时候必填
    */
-  public addPredicater(key, type, value1, value2?: string) {
+  public addPredicater(key, type, value: string | any[]) {
     let str: string = ""
     switch (type) {
       case "equal":
-        str = `${key} = '${value1}'`
+        str = `${key} = '${value}'`
         break
       case "between":
-        str = `${key} between ${value1} and ${value2}`
+        str = `${key} between ${value[0]} and ${value[1]}`
         break
       case "like":
-        str = `${key} like '%${value1}%'`
+        str = `${key} like '%${value}%'`
+        break
+      case "in":
+        const qeuryValue = typeof value === "string" ? [value] : value
+        str = `${key} in (${qeuryValue.join()})`
         break
     }
     this.predicateList.push(str)
@@ -28,6 +32,6 @@ export class CqlBuilder {
    * 编译成cql where 语句
    */
   public build() {
-    return this.predicateList.length ? `[${this.predicateList.join(' and ')}]` : ""
+    return this.predicateList.length ? `${this.predicateList.join(' and ')}` : ""
   }
 }

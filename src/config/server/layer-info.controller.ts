@@ -77,6 +77,14 @@ export default {
     controller: CONTROLLER,
     action: 'intersectionLayer',
     type: RequestMethod.Get
+  },
+  /**
+   * 多图层对比 （辅助选址）
+   */
+  multipleLayerComparisons: {
+    controller: CONTROLLER,
+    action: 'multipleLayerComparisons',
+    type: RequestMethod.Post
   }
 
 }
