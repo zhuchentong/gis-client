@@ -7,27 +7,40 @@ import { Model } from '../model'
  */
 export function Request({
   server,
-  model
+  model,
+  force
 }: {
   server: IRequestServerConfig
   model?: { prototype: Model }
+  force?: boolean
 }) {
   return (target, name, descriptor) => {
-    // 请求对象
-    const requestObject = new RequestObject(server)
+    const generateRequestObject = () => {
+      // 请求对象
+      const object = new RequestObject(server)
 
-    // 设置响应数据模型
-    if (model) {
-      requestObject.setResponseModel(model)
+      // 设置响应数据模型
+      if (model) {
+        object.setResponseModel(model)
+      }
+
+      return object
     }
+
+    const requestObject = generateRequestObject()
 
     // 存储历史方法
     const _value = descriptor.value
 
     // 传入请求方法
     descriptor.value = (requestParams: RequestParams) => {
-      // 设置请求对象
-      requestParams.setRequestObject(requestObject)
+      if (force) {
+        requestParams.setRequestObject(generateRequestObject())
+      } else {
+        // 设置请求对象
+        requestParams.setRequestObject(requestObject)
+      }
+
       // 传入更新后的请求对象
       return _value.call(target, requestParams)
     }

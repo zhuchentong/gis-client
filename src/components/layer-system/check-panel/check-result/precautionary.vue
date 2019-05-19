@@ -1,25 +1,33 @@
 <template>
   <section class="component precautionary">
-    <el-card v-loading="!fieldResult">
+    <el-card v-if="getCheckType('jbnt')" v-loading="!fieldResult">
       <div slot="header" class="row middle-span between-span">
         <label>基本农田占用检测</label>
         <i v-if="fieldResult&&fieldResult.alarm" class="el-icon-warning alarm">压占基本农田，疑似违法用地，请核实！</i>
+        <i v-else class="el-icon-success">未检测到基本农田占用</i>
       </div>
-      <label-container :column="1" :labelWidth="120">
-        <label-item label="基本农田保护区"></label-item>
-        <label-item label="一般农用地"></label-item>
+      <label-container :column="1" :labelWidth="120" v-if="fieldResult&&fieldResult.data">
+        <label-item  :label="item.label" v-for="item of fieldResult.data" :key="item.label">
+          <label-container :column="2" :labelWidth="120">
+            <label-item label="压盖面积">{{item.area}}平方米</label-item>
+            <label-item label="所占比例">{{(item.radio * 100).toFixed(2)}}%</label-item>
+          </label-container>
+        </label-item>
       </label-container>
     </el-card>
-    <el-card>
+    <el-card v-if="getCheckType('yxjsq')" v-loading="!buildResult">
       <div slot="header" class="row middle-span between-span">
         <label>非允许建设区检测</label>
-        <i class="el-icon-warning alarm">压占非允许建设区，疑似违法用地，请核实！</i>
+        <i v-if="buildResult&&buildResult.alarm" class="el-icon-warning alarm">压占非允许建设区，疑似违法用地，请核实！</i>
+        <i v-else class="el-icon-success">未检测到非允许建设区占用</i>
       </div>
-      <label-container :column="1" :labelWidth="120">
-        <label-item label="允许建设区"></label-item>
-        <label-item label="有条件建设区"></label-item>
-        <label-item label="限制建设区"></label-item>
-        <label-item label="禁止建设区"></label-item>
+      <label-container :column="1" :labelWidth="120" v-if="buildResult&&buildResult.data">
+        <label-item :label="item.label" v-for="item of buildResult.data" :key="item.label">
+          <label-container :column="2" :labelWidth="120">
+            <label-item label="压盖面积">{{item.area}}平方米</label-item>
+            <label-item label="所占比例">{{(item.radio * 100).toFixed(2)}}%</label-item>
+          </label-container>
+        </label-item>
       </label-container>
     </el-card>
   </section>
@@ -33,7 +41,7 @@ import { Inject } from 'typescript-ioc'
 import { DetectionService } from '~/services/detection.service'
 import { RequestParams } from '../../../../core/http'
 import { CqlBuilder } from '~/utils/cql-build.service'
-import * as turf from '@turf/turf'
+import { List } from 'linqts'
 @Component({
   components: {}
 })
@@ -46,12 +54,52 @@ export default class Precautionary extends Vue {
   @Prop()
   public range
 
-  private detectionService = new DetectionService()
-
   // 基本农田检测结果
   private fieldResult: any = null
   // 建设区检测结果
   private buildResult: any = null
+
+  // 基本农田检测列表
+  private readonly fieldList = [
+    {
+      label: '基本农田保护区',
+      type: 'TDYTQLXDM',
+      value: '010',
+      alarm: true
+    },
+    {
+      label: '一般农用地',
+      type: 'TDYTQLXDM',
+      value: '020'
+    }
+  ]
+
+  // 建设管制区检测列表
+  private readonly buildList = [
+    {
+      label: '允许建设区',
+      type: 'GZQLXDM',
+      value: '010'
+    },
+    {
+      label: '有条件建设区',
+      type: 'GZQLXDM',
+      value: '020',
+      alarm: true
+    },
+    {
+      label: '限制建设用地区',
+      type: 'GZQLXDM',
+      value: '030',
+      alarm: true
+    },
+    {
+      label: '禁止建设区',
+      type: 'GZQLXDM',
+      value: '040',
+      alarm: true
+    }
+  ]
 
   private mounted() {
     this.startCheck()
@@ -62,7 +110,17 @@ export default class Precautionary extends Vue {
     this.startCheck()
   }
 
+  private getCheckType(type) {
+    return this.content && this.content.some(x => x.type === type)
+  }
+
+  /**
+   * 开始检测
+   */
   private startCheck() {
+    this.buildResult = null
+    this.fieldResult = null
+
     this.content.forEach(x => {
       switch (x.type) {
         case 'jbnt':
@@ -75,32 +133,92 @@ export default class Precautionary extends Vue {
     })
   }
 
+  /**
+   * 开始农田占用检测
+   */
   private async startFieldCheck({ code }) {
+    // 获取检测范围
     const { positions, layer } = this.range
+    // 设置检测条件
     const cql = `"TDYTQLXDM" = '010' or "TDYTQLXDM" = '020'`
-    let data
+    // 检测结果
+    let result
+    // 获取检测数据
     if (positions) {
-      data = await this.getRangeCheck(code, positions, cql)
+      result = await this.getRangeCheck(code, positions, cql)
     } else {
-      this.getLayerCheck(code, layer)
+      result = await this.getLayerCheck(code, layer)
     }
-
-    this.fieldResult = {
-      alarm: data.find(x => x.attr['TDYTQLXDM'] === '010'),
-      data
+    if (result && result.length) {
+      const alarm = this.getResultAlarm(this.fieldList, result)
+      const data = this.getResultData(this.fieldList, result)
+      this.fieldResult = {
+        alarm,
+        data
+      }
+    } else {
+      this.fieldResult = {}
     }
   }
 
-  private startBuildCheck({ code }) {
-    return
+  private async startBuildCheck({ code }) {
+    // 获取检测范围
+    const { positions, layer } = this.range
+    // 设置检测条件
+    // const cql = `"TDYTQLXDM" = '010' or "TDYTQLXDM" = '020'`
+    // 检测结果
+    let result
+    // 获取检测数据
+    if (positions) {
+      result = await this.getRangeCheck(code, positions)
+    } else {
+      result = await this.getLayerCheck(code, layer)
+    }
+    if (result && result.length) {
+      const alarm = this.getResultAlarm(this.buildList, result)
+      const data = this.getResultData(this.buildList, result)
+      this.buildResult = {
+        alarm,
+        data
+      }
+    } else {
+      this.buildResult = {}
+    }
   }
 
+  private getResultData(list, result) {
+    return list
+      .map(item => ({
+        label: item.label,
+        data: result
+          .map(x => x.attr)
+          .filter(x => x[item.type] === item.value)
+          .map(x => ({
+            area: x['结果形状面积'],
+            total: x['对比图层总面积']
+          }))
+      }))
+      .map(item => ({
+        label: item.label,
+        area: new List(item.data).Sum((x: any) => x.area).toFixed(2),
+        radio: new List(item.data).Sum((x: any) => x.area / x.total)
+      }))
+  }
+
+  /**
+   * 获取预警状态
+   */
+  private getResultAlarm(list, result) {
+    return list
+      .filter(item => item.alarm)
+      .some((x: any) => result.find(y => y.attr[x.type] === x.value))
+  }
+
+  /**
+   * 进行区域检测
+   */
   private getRangeCheck(code, positions, cql?) {
-    console.log(positions)
-    const points = positions.map(x=>CesiumCommonService.cartesian3ToDegrees(x)).map(x=>([x.longitude,x.latitude]))
-    console.log(points)
-    const polygon1 = turf.polygon([[...points, points[0]]])
-    console.log(turf.area(polygon1))
+    const detectionService = new DetectionService()
     // 获取wkt区域数据
     const polygon = [...positions, positions[0]]
       .map(x => {
@@ -110,7 +228,7 @@ export default class Precautionary extends Vue {
       .join(',')
 
     // 获取对比数据
-    return this.detectionService
+    return detectionService
       .getDetectionWkt(
         new RequestParams({
           wkt: `POLYGON ((${polygon}))`,

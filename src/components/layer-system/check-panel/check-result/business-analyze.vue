@@ -1,33 +1,58 @@
 <template>
   <section class="component business-analyze-base row">
-    <div class="analyze-items">
-      <div class="analyze-items-item" v-for="{label,value} of analyzeItems" :key="value" @click="currentKey = value" :class="{actived: value === currentKey }">{{label}}</div>
-    </div>
-    <data-box class="col-span">
-      <template :data="data" slot="columns">
-        <el-table-column label="项目名称" prop="type" :min-width="$helper.getColumnWidth(2)" show-overflow-tooltip></el-table-column>
-        <el-table-column label="批复文号" prop="type" :min-width="$helper.getColumnWidth(2)" show-overflow-tooltip></el-table-column>
-        <el-table-column label="项目类型" prop="type" :min-width="$helper.getColumnWidth(2)" :formatter="row => $filter.dictConvert(row.type,'FlowType')" show-overflow-tooltip></el-table-column>
-        <el-table-column label="占地面积" prop="type" :min-width="$helper.getColumnWidth(2)" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button type="text">查看详情</el-button>
-            <el-button type="text">加载图层</el-button>
+    <el-tabs tab-position="left" class="business-analyze-tabs">
+      <el-tab-pane :label="item.name" v-for="item of result" :key="item.name">
+        <data-box v-if="item.data" :data="item.data" class="col-span">
+          <template slot="columns">
+            <el-table-column
+              label="项目名称"
+              prop="name"
+              :min-width="$helper.getColumnWidth(2)"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              label="批复文号"
+              prop="code"
+              :min-width="$helper.getColumnWidth(2)"
+              show-overflow-tooltip
+            ></el-table-column>
+            <!-- <el-table-column
+          label="项目类型"
+          prop="type"
+          :min-width="$helper.getColumnWidth(2)"
+          :formatter="row => $filter.dictConvert(row.type,'FlowType')"
+          show-overflow-tooltip
+            ></el-table-column>-->
+            <el-table-column
+              label="项目面积"
+              prop="acreage"
+              :min-width="$helper.getColumnWidth(2)"
+              show-overflow-tooltip
+            ></el-table-column>
+            <!-- <el-table-column label="操作">
+              <template>
+                <el-button type="text">查看详情</el-button>
+                <el-button type="text">加载图层</el-button>
+              </template>
+            </el-table-column> -->
           </template>
-        </el-table-column>
-      </template>
-    </data-box>
+        </data-box>
+      </el-tab-pane>
+    </el-tabs>
   </section>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
-import DataBox from "~/components/common/data-box.vue"
-import { FlowInfoService } from "~/services/flow-info.service"
-import { RequestParams } from "~/core/http/"
-import { Inject } from "typescript-ioc"
-import { PageService } from "~/extension/services/page.service"
+import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator'
+import DataBox from '~/components/common/data-box.vue'
+import { FlowInfoService } from '~/services/flow-info.service'
+import { RequestParams } from '~/core/http/'
+import { Inject } from 'typescript-ioc'
+import { PageService } from '~/extension/services/page.service'
+import { DetectionService } from '@/services/detection.service'
+import { CesiumCommonService } from '@/utils/cesium/common.service'
+import clone from 'clone'
 
 @Component({
   components: {
@@ -35,50 +60,98 @@ import { PageService } from "~/extension/services/page.service"
   }
 })
 export default class BusinessAnalyzeBase extends Vue {
+  @Prop({
+    default: []
+  })
+  public content
+
+  @Prop()
+  public range
+
+  private bcData = []
+  private pdData = []
+  private zdData = []
+  private gdData = []
+  // 数据分析结果
+  private result: any = []
+
+  private mounted() {
+    this.startCheck()
+  }
+
+  @Watch('content')
+  private onChecnChange() {
+    this.startCheck()
+  }
+
+  private getCheckType(type) {
+    return this.content && this.content.some(x => x.type === type)
+  }
 
   /**
-   * 创建业务基础信息配置
+   * 开始检测
    */
-  private analyzeItems = [
-    {
-      label: '报地',
-      value: 'REPORT',
-    },
-    {
-      label: '批地',
-      value: 'GRANT',
-    },
-    {
-      label: '征地',
-      value: 'EXPROPRIA',
-    },
-    {
-      label: '供地',
-      value: 'SUPPLY',
+  private startCheck() {
+    this.result = []
+    clone(this.content).forEach(async x => {
+      x.data = await this.startRequestCheck(x)
+      this.result.push(x)
+    })
+
+    console.log(this.result)
+  }
+
+  private async startRequestCheck(node) {
+    // 获取检测范围
+    const { positions, layer } = this.range
+    // 检测结果
+    let result
+    // 获取检测数据
+    if (positions) {
+      result = await this.getRangeCheck(node, positions)
+    } else {
+      // result = await this.getLayerCheck(code, layer)
     }
-  ]
 
-  private currentKey = "REPORT"
+    return result
+  }
 
-  @Prop({ default: () => [] })
-  private data!: any[]
+  /**
+   * 进行区域检测
+   */
+  private getRangeCheck({ key }, positions, cql?) {
+    const detectionService = new DetectionService()
+    // 获取wkt区域数据
+    const polygon = [...positions, positions[0]]
+      .map(x => {
+        const point = CesiumCommonService.cartesian3ToDegrees(x)
+        return `${point.longitude} ${point.latitude}`
+      })
+      .join(',')
 
+    // 获取对比数据
+    return detectionService
+      .getBusinessWkt(
+        new RequestParams({
+          wkt: `POLYGON ((${polygon}))`,
+          flowType: key,
+          cql
+        })
+      )
+      .toPromise()
+  }
+
+  private getLayerCheck(code, layer) {
+    return
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .component.business-analyze-base {
   height: 100%;
-  .analyze-items {
-    width: 80px;
-    &-item {
-      line-height: 30px;
-      border-bottom: solid 1px #f2f2f2;
-      text-align: center;
-    }
-    .actived {
-      background-color: #e6b379;
-    }
+  .business-analyze-tabs {
+    min-width: 100%;
   }
 }
 </style>
