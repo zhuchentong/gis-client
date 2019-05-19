@@ -156,6 +156,7 @@ export default class CheckPanel extends Vue {
   }
 
   private taskSelected(data) {
+    console.log(data)
     this.dialog.task = false
     this.positions = data
     this.dialog.layer = true

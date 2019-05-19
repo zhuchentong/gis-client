@@ -58,7 +58,7 @@ export default class CheckLayerSelect extends Vue {
         {
           name: '非允许建设区检测',
           type: 'yxjsq',
-          code: '222'
+          code: '6534620896976896000'
         }
       ]
     },
@@ -70,22 +70,26 @@ export default class CheckLayerSelect extends Vue {
         {
           name: '土地变更现状数据分析',
           type: 'bgxz',
-          code: '23'
+          key: 'LAND_CLASSIFICATION',
+          code: '6533189554047692800'
         },
         {
           name: '土地用途区数据分析',
           type: 'tdytq',
-          code: '123'
+          key: 'LAND_USE_AREA',
+          code: '6534621158219120640'
         },
         {
           name: '控制性详细规划数据分析',
           type: 'kzxxxgh',
-          code: '2323ss'
+          key: 'REGULATORY_PLAN',
+          code: '6534621635535110144'
         },
         {
           name: '建设用地管制区',
           type: 'jzydgzq',
-          code: '2323'
+          key: 'LAND_CONSTRUCTION',
+          code: '6534620896976896000'
         }
       ]
     },
@@ -96,19 +100,23 @@ export default class CheckLayerSelect extends Vue {
       children: [
         {
           name: '报地数据分析',
-          code: 'bd'
+          code: 'bd',
+          key: 'REPORT'
         },
         {
           name: '批地数据分析',
-          code: 'pd'
+          code: 'pd',
+          key: 'GRANT'
         },
         {
           name: '征地数据分析',
-          code: 'zd'
+          code: 'zd',
+          key: 'EXPROPRIA'
         },
         {
           name: '供地数据分析',
-          code: 'gd'
+          code: 'gd',
+          key: 'SUPPLY'
         }
       ]
     }
