@@ -190,8 +190,11 @@ export default class extends Vue {
 
     const params = {
       ...this.baseModel,
+      positionX: this.baseModel.positionX,
+      positionY: this.baseModel.positionY,
       planTime: this.$filter.dateFormat(this.baseModel.planTime)
     }
+    delete params.cartographic
     this.service.createPatrolInfo(new RequestParams(params))
       .subscribe(this.onSuccess)
   }

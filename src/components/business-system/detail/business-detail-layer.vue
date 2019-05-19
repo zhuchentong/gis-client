@@ -1,6 +1,6 @@
 <template>
   <section class="component business-detail-layer">
-    <div v-if="!flowId" class="no-data"></div>
+    <div v-if="!flowId || !layerInfo" class="no-data"></div>
     <div v-else class="map-container">
       <map-viewer @map-ready="onMapReady"></map-viewer>
     </div>

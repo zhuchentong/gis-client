@@ -3,16 +3,38 @@
     <el-card>
       <common-title slot="header" :showIcon="false" title="外业任务数统计">
         <div slot="append">
-
-          <el-radio-group size="mini" v-model="queryModel.type" @change="onTypeChange">
+          <el-radio-group
+            size="mini"
+            v-model="queryModel.type"
+            @change="onTypeChange"
+          >
             <el-radio-button :label="1">年</el-radio-button>
             <el-radio-button :label="2">季度</el-radio-button>
           </el-radio-group>
-          <el-select v-model="queryModel.year" placeholder="请输入要查询的年份" @change="onYearChange">
-            <el-option v-for="year of years" :key="year" :label="year" :value="year"></el-option>
+          <el-select
+            v-model="queryModel.year"
+            placeholder="请输入要查询的年份"
+            @change="onYearChange"
+          >
+            <el-option
+              v-for="year of years"
+              :key="year"
+              :label="year"
+              :value="year"
+            ></el-option>
           </el-select>
-          <el-select v-if="queryModel.type === 2" v-model="queryModel.quarterly" placeholder="请输入要查询的季度" @change="onQuarterlyChange">
-            <el-option v-for="{code,name} of quarterDataSet" :key="code" :label="name" :value="code"></el-option>
+          <el-select
+            v-if="queryModel.type === 2"
+            v-model="queryModel.quarterly"
+            placeholder="请输入要查询的季度"
+            @change="onQuarterlyChange"
+          >
+            <el-option
+              v-for="{ code, name } of quarterDataSet"
+              :key="code"
+              :label="name"
+              :value="code"
+            ></el-option>
           </el-select>
         </div>
       </common-title>
@@ -22,10 +44,12 @@
     <data-box :data="dataSet" :maxHeight="310">
       <template slot="columns">
         <el-table-column prop="userName" label="人员"></el-table-column>
-        <el-table-column prop="type" label="任务类型" :formatter="row => $filter.dictConvert(row.type,'PatrolType')"></el-table-column>
-        <el-table-column prop="grade" label="等级" :formatter="row => $filter.dictConvert(row.type,'DisasterGrade')"></el-table-column>
         <el-table-column prop="number" label="次数"></el-table-column>
-        <el-table-column prop="prefecture" label="所占百分比" :formatter="row => $filter.toPercent(row.prefecture)"></el-table-column>
+        <el-table-column
+          prop="ratio"
+          label="所占百分比"
+          :formatter="row => $filter.toPercent(row.ratio)"
+        ></el-table-column>
       </template>
     </data-box>
   </section>
@@ -38,6 +62,8 @@ import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { VePie } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
+import {getQuarter } from "date-fns"
+
 @Component({
   components: {
     DataBox,
@@ -63,8 +89,6 @@ export default class TaskNumber extends Vue {
   private readonly setting = {
     userName: "人员",
     number: "次数",
-    type: "任务类型",
-    grade: "等级",
     prefecture: "所占百分比"
   }
 
@@ -114,6 +138,10 @@ export default class TaskNumber extends Vue {
 
   private onTypeChange(val) {
     if (val === 1) {
+      this.refreshData()
+    }else {
+      this.queryModel.year = new Date().getFullYear().toString()
+      this.queryModel.quarterly = getQuarter(new Date()).toString()
       this.refreshData()
     }
   }

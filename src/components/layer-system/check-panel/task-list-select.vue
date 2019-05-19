@@ -5,7 +5,7 @@
         <el-table-column label="任务类型" prop="name" :min-width="$helper.getColumnWidth(1)" show-overflow-tooltip></el-table-column>
         <el-table-column label="任务名称" prop="name" :min-width="$helper.getColumnWidth(2)"></el-table-column>
         <el-table-column label="巡查时间" prop="createTime" :min-width="$helper.getColumnWidth(2)" :formatter="row => $filter.dateTimeFormat(row.createTime)"></el-table-column>
-        <el-table-column label="巡查人员" prop="partolUserName" :min-width="$helper.getColumnWidth(1)"></el-table-column>
+        <el-table-column label="巡查人员" prop="userName" :min-width="$helper.getColumnWidth(1)"></el-table-column>
       </template>
     </data-box>
     <div class="operate-buttons">

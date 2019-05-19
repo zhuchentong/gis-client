@@ -1,17 +1,46 @@
 <template>
   <section class="component search-land">
     <common-title class="select-layer" :showIcon="false" title="选择检索目标：">
-      <el-select slot="append" v-model="currentLayer" @change="layerChange" clearable placeholder="请选择要检索的图层">
-        <el-option v-for="item of dataSet" :key="item.id" :label="item.name" :value="item.id"></el-option>
+      <el-select
+        slot="append"
+        v-model="currentLayer"
+        @change="layerChange"
+        clearable
+        placeholder="请选择要检索的图层"
+      >
+        <el-option
+          v-for="item of dataSet"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
       </el-select>
     </common-title>
     <div v-if="!searchItems.length" class="no-data"></div>
     <el-form v-else :model="model" inline ref="form" label-width="120px">
-      <el-form-item v-for="item of searchItems" :key="item.code" :label="item.name" :prop="item.code">
-        <el-input v-if="item.type === 'string'" v-model="model[item.code]" clearable></el-input>
-        <number-range v-else-if="item.type === 'number'" v-model="model[item.code]" clearable></number-range>
+      <el-form-item
+        v-for="item of searchItems"
+        :key="item.code"
+        :label="item.name"
+        :prop="item.code"
+      >
+        <el-input
+          v-if="item.type === 'string'"
+          v-model="model[item.code]"
+          clearable
+        ></el-input>
+        <number-range
+          v-else-if="item.type === 'number'"
+          v-model="model[item.code]"
+          clearable
+        ></number-range>
         <el-select v-else v-model="model[item.code]" clearable>
-          <el-option v-for="{code,name} of searchRangeSetting[item.code]" :key="code" :label="name" :value="code"></el-option>
+          <el-option
+            v-for="{ code, name } of searchRangeSetting[item.code]"
+            :key="code"
+            :label="name"
+            :value="code"
+          ></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -58,7 +87,7 @@ export default class SearchLand extends Vue {
   private viewer!: MapViewer
 
   @Prop()
-  private visabled!: boolean
+  private count!: number
 
   private dataSet: any[] = []
   private model: any = {}
@@ -74,26 +103,31 @@ export default class SearchLand extends Vue {
     return
   }
 
+
   private get currentSelectItem() {
     return this.dataSet.find(x => x.id === this.currentLayer)
   }
 
-  @Watch('visabled', { immediate: true })
+  @Watch('count', { immediate: true })
   private onVisabledChange(val) {
-    if (val) {
-      this.dataSet = this.viewer
-        .getLayerList()
-        .map(({ layer }) => {
-          return {
-            id: layer.id,
-            name: layer.layerName
-          }
-        })
-        .filter(layer => !!this.searchLayers.find(x => layer.name.includes(x)))
+    // 监听页面打开状态，更新图层列表
+    this.dataSet = this.viewer
+      .getLayerList()
+      .map(({ layer }) => {
+        return {
+          id: layer.id,
+          name: layer.layerName
+        }
+      })
+      .filter(layer => !!this.searchLayers.find(x => layer.name.includes(x)))
+    if (!this.dataSet.length) {
+      // 如果没有勾选图层，相应的查询表单也应该清除
+      this.currentLayer = ""
+      this.layerChange()
     }
   }
 
-  private layerChange(id) {
+  private layerChange(id?) {
     this.model = {}
     if (!id) this.searchItems = []
     if (!this.currentSelectItem) return
@@ -110,9 +144,7 @@ export default class SearchLand extends Vue {
   }
 
   private reset() {
-    this.currentLayer = ''
-    this.layerChange('')
-      ; (this.$refs.form as Form).resetFields()
+    (this.$refs.form as Form).resetFields()
   }
 
   private submit() {
@@ -122,7 +154,7 @@ export default class SearchLand extends Vue {
       return
     }
     const filterData = this.filterTableData(tableInfo.data)
-    if (!filterData.length || tableInfo.data.length === filterData.length) {
+    if (!filterData.length) {
       this.$message('未检索到数据')
       return
     }

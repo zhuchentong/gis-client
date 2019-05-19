@@ -9,10 +9,10 @@
         v-for="item of items"
         :key="item.key"
         @click="onItemClick(item)"
-        :class="{'active': checkItem.key === item.key}"
+        :class="{ active: checkItem.key === item.key }"
       >
         <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
-        <div>{{item.label}}</div>
+        <div>{{ item.label }}</div>
       </div>
     </el-card>
     <el-dialog
@@ -22,13 +22,13 @@
       width="750px"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      @close="checkItem = {}"
+      @close=";(checkItem = {}), count++"
     >
       <keep-alive>
         <component
           :is="checkItem.component"
-          :visabled="dialog.search"
           :viewer="viewer"
+          :count="count"
           @success="onSuccess"
         ></component>
       </keep-alive>
@@ -56,6 +56,9 @@ export default class SearchPanel extends Vue {
 
   private items = MenuList
   private checkItem: any = {}
+
+  // 用于监听页面打开
+  private count = 0
 
   private dialog = {
     search: false
