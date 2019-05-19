@@ -78,7 +78,7 @@ export default class ComputePanel extends Vue {
 
     // 计算多边形
     const polygon = turf.polygon([[...points, points[0]]])
-    this.drawEntity.area = turf.area(polygon)
+    this.drawEntity.area = Number.parseFloat(turf.area(polygon).toFixed(2))
     this.drawEntity.positions = [...points, points[0]]
     this.dialog.compute = true
   }

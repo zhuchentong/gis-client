@@ -3,14 +3,26 @@
     <el-card v-if="getCheckType('jbnt')" v-loading="!fieldResult">
       <div slot="header" class="row middle-span between-span">
         <label>基本农田占用检测</label>
-        <i v-if="fieldResult&&fieldResult.alarm" class="el-icon-warning alarm">压占基本农田，疑似违法用地，请核实！</i>
+        <i v-if="fieldResult && fieldResult.alarm" class="el-icon-warning alarm"
+          >压占基本农田，疑似违法用地，请核实！</i
+        >
         <i v-else class="el-icon-success">未检测到基本农田占用</i>
       </div>
-      <label-container :column="1" :labelWidth="120" v-if="fieldResult&&fieldResult.data">
-        <label-item  :label="item.label" v-for="item of fieldResult.data" :key="item.label">
+      <label-container
+        :column="1"
+        :labelWidth="120"
+        v-if="fieldResult && fieldResult.data"
+      >
+        <label-item
+          :label="item.label"
+          v-for="item of fieldResult.data"
+          :key="item.label"
+        >
           <label-container :column="2" :labelWidth="120">
-            <label-item label="压盖面积">{{item.area}}平方米</label-item>
-            <label-item label="所占比例">{{(item.radio * 100).toFixed(2)}}%</label-item>
+            <label-item label="压盖面积">{{ item.area }}平方米</label-item>
+            <label-item label="所占比例"
+              >{{ (item.radio * 100).toFixed(2) }}%</label-item
+            >
           </label-container>
         </label-item>
       </label-container>
@@ -18,14 +30,26 @@
     <el-card v-if="getCheckType('yxjsq')" v-loading="!buildResult">
       <div slot="header" class="row middle-span between-span">
         <label>非允许建设区检测</label>
-        <i v-if="buildResult&&buildResult.alarm" class="el-icon-warning alarm">压占非允许建设区，疑似违法用地，请核实！</i>
+        <i v-if="buildResult && buildResult.alarm" class="el-icon-warning alarm"
+          >压占非允许建设区，疑似违法用地，请核实！</i
+        >
         <i v-else class="el-icon-success">未检测到非允许建设区占用</i>
       </div>
-      <label-container :column="1" :labelWidth="120" v-if="buildResult&&buildResult.data">
-        <label-item :label="item.label" v-for="item of buildResult.data" :key="item.label">
+      <label-container
+        :column="1"
+        :labelWidth="120"
+        v-if="buildResult && buildResult.data"
+      >
+        <label-item
+          :label="item.label"
+          v-for="item of buildResult.data"
+          :key="item.label"
+        >
           <label-container :column="2" :labelWidth="120">
-            <label-item label="压盖面积">{{item.area}}平方米</label-item>
-            <label-item label="所占比例">{{(item.radio * 100).toFixed(2)}}%</label-item>
+            <label-item label="压盖面积">{{ item.area }}平方米</label-item>
+            <label-item label="所占比例"
+              >{{ (item.radio * 100).toFixed(2) }}%</label-item
+            >
           </label-container>
         </label-item>
       </label-container>
@@ -147,7 +171,7 @@ export default class Precautionary extends Vue {
     if (positions) {
       result = await this.getRangeCheck(code, positions, cql)
     } else {
-      result = await this.getLayerCheck(code, layer)
+      // result = await this.getLayerCheck(code, layer)
     }
     if (result && result.length) {
       const alarm = this.getResultAlarm(this.fieldList, result)
@@ -172,7 +196,7 @@ export default class Precautionary extends Vue {
     if (positions) {
       result = await this.getRangeCheck(code, positions)
     } else {
-      result = await this.getLayerCheck(code, layer)
+      // result = await this.getLayerCheck(code, layer)
     }
     if (result && result.length) {
       const alarm = this.getResultAlarm(this.buildList, result)

@@ -47,24 +47,39 @@
             <div>{{ area | squareMeterToHectare }} 公顷</div>
           </label-item>
           <label-item label="评估单价">
-            <div>{{ result.assessmentPrice }} 元/平方米</div>
             <div>
-              {{ (result.assessmentPrice / unitByMu).toFixed(4) }}
+              {{ getCurrentMoney.sqm.toFixed(2) }}
+              元/平方米
+            </div>
+            <div>
+              {{ getCurrentMoney.mu.toFixed(4) }}
               万元/亩
             </div>
           </label-item>
           <label-item label="评估收益">
-            <div>{{ result.anticipated }} 元</div>
+            <div>{{ result.anticipated.toFixed(2) }} 元</div>
             <div>{{ result.anticipated | toTenThousand }} 万元</div>
           </label-item>
         </el-card>
         <el-card class="col-span-6" header="预算信息">
           <div v-for="(item, index) of computerResult" :key="index">
             <label-item label="成本级别" :value="item.level"></label-item>
-            <label-item label="面积" :value="item.area"></label-item>
-            <label-item label="单价" :value="item.price"></label-item>
-            <label-item label="金额" :value="item.cost"></label-item>
+            <label-item label="面积">
+              {{ item.area.toFixed(2) }} 平方米
+            </label-item>
+            <label-item label="单价">
+              {{ item.price.toFixed(2) }} 元/平方米
+            </label-item>
+            <label-item label="金额">
+              {{ item.cost | toTenThousand }} 万元
+            </label-item>
           </div>
+          <label-item label="预算总面积">
+            {{ result.area.toFixed(2) }} 平方米
+          </label-item>
+          <label-item label="预算总金额">
+            {{ result.cost | toTenThousand }} 万元
+          </label-item>
         </el-card>
       </el-tab-pane>
     </el-tabs>
@@ -101,8 +116,7 @@ export default class ComputeEarning extends Vue {
   private readonly units = ComputUnits
   private currentPanel = "input"
   // 万元/亩  -> 元 / 平方米
-  private readonly unitByMu: number = 6666.6666667
-  private readonly unitByMeter: number = 15
+  private readonly unitByMu: number = 10000 / 15000
 
   private rules = {
     assessmentPrice: { required: true, message: "请输入评估单价" },
@@ -112,14 +126,13 @@ export default class ComputeEarning extends Vue {
   private model: any = {
     unit: 1,
     assessmentPrice: "",
-    landUseType: "",
+    landUseType: ""
   }
 
   private result: any = {
     area: 0,
     cost: 0,
-    anticipated: 0,
-    assessmentPrice: 0
+    anticipated: 0
   }
 
   private computerResult: any[] = []
@@ -129,10 +142,31 @@ export default class ComputeEarning extends Vue {
   }
 
 
+  private meterToMu(price) {
+    return (price * 15000 / 10000)
+  }
+
+  private muToMeter(price) {
+    return (price * 10000 * 0.0015)
+  }
+
+  private get getCurrentMoney() {
+    const money = Number.parseFloat(this.model.assessmentPrice || 0)
+    if (this.model.unit === 1) {
+      return {
+        sqm: money,
+        mu: this.meterToMu(money)
+      }
+    } else {
+      return {
+        sqm: this.muToMeter(money),
+        mu: money
+      }
+    }
+  }
 
 
   private async compute() {
-
     const validateResult = await (this.$refs.form as any).validate().then(v => v).catch(() => false)
     if (!validateResult) return
 
@@ -150,14 +184,7 @@ export default class ComputeEarning extends Vue {
     // 地块总面积
     this.result.area = this.computerResult.map(v => v.area).reduce((s, c) => s + c).toFixed(2)
 
-    // 区域预估收益
-    if (this.model.unit === 1) {
-      this.result.assessmentPrice = Number.parseFloat(this.model.assessmentPrice).toFixed(2)
-      this.result.anticipated = (this.model.assessmentPrice * this.area).toFixed(2)
-    } else {
-      this.result.assessmentPrice = (this.model.assessmentPrice * this.unitByMeter).toFixed(2)
-      this.result.anticipated = (this.model.assessmentPrice * this.unitByMeter * this.area).toFixed(2)
-    }
+    this.result.anticipated = this.getCurrentMoney.sqm * this.area
 
     this.loading = false
     this.currentPanel = "result"
@@ -174,7 +201,7 @@ export default class ComputeEarning extends Vue {
     if (!result) return false
     this.computerResult = JSON.parse(result.geoJson).features.map(({ properties }) => {
       return {
-        price: properties[this.model.landUseType] * this.unitByMu,
+        price: this.muToMeter(Number.parseFloat(properties[this.model.landUseType])),
         area: properties['结果形状面积'],
         level: properties['级别'],
         get cost() {
