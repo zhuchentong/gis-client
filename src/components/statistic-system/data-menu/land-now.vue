@@ -3,25 +3,44 @@
     <div class="row">
       <el-card class="col-span-6">
         <common-title slot="header" :showIcon="false" title="土地现状数据统计">
-          <el-select slot="append" v-model="queryModel.year" placeholder="请输入要查询的年份" @change="onYearChange">
-            <el-option v-for="year of years" :key="year" :label="`${year}年`" :value="year"></el-option>
+          <el-select
+            slot="append"
+            v-model="queryModel.year"
+            placeholder="请输入要查询的年份"
+            @change="onYearChange"
+          >
+            <el-option
+              v-for="year of years"
+              :key="year"
+              :label="`${year}年`"
+              :value="year"
+            ></el-option>
           </el-select>
         </common-title>
         <ve-pie :data="chartData" :events="chartEvents"></ve-pie>
       </el-card>
       <el-card class="col-span-6">
         <div v-if="!typeName" class="no-data"></div>
-        <div v-else>
-          <common-title slot="header" :showIcon="false" :title="typeName"></common-title>
+        <template v-else>
+          <common-title
+            slot="header"
+            class="common-title"
+            :showIcon="false"
+            :title="typeName"
+          ></common-title>
           <ve-pie :data="chartDataByType"></ve-pie>
-        </div>
+        </template>
       </el-card>
     </div>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="name" label="土地现状类型"></el-table-column>
         <el-table-column prop="acreage" label="占地面积(亩)"></el-table-column>
-        <el-table-column prop="ratio" label="所占百分比" :formatter="row => $filter.toPercent(row.ratio)"></el-table-column>
+        <el-table-column
+          prop="ratio"
+          label="所占百分比"
+          :formatter="row => $filter.toPercent(row.ratio)"
+        ></el-table-column>
       </template>
     </data-box>
   </section>
@@ -50,10 +69,10 @@ export default class LandNow extends Vue {
   private sevice!: LayerStatisticalService
 
   private queryModel = {
-    year: "2017"
+    year: 2017
   }
 
-  private years = ['2016', '2017']
+  private years = [2016, 2017]
 
   private readonly setting = {
     name: "类型",
@@ -124,4 +143,12 @@ export default class LandNow extends Vue {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.component.land-now {
+  .common-title {
+    line-height: 26px;
+  }
+}
+</style>
 

@@ -1,11 +1,29 @@
 <template>
   <section class="component search-buildings">
     <el-form :model="model" inline ref="form" label-width="120px">
-      <el-form-item v-for="item of searchItems" :key="item.code" :label="item.name" :prop="item.code">
-        <el-input v-if="item.type === 'string'" v-model="model[item.code]" clearable></el-input>
-        <number-range v-else-if="item.type === 'number'" v-model="model[item.code]" clearable></number-range>
+      <el-form-item
+        v-for="item of searchItems"
+        :key="item.code"
+        :label="item.name"
+        :prop="item.code"
+      >
+        <el-input
+          v-if="item.type === 'string'"
+          v-model="model[item.code]"
+          clearable
+        ></el-input>
+        <number-range
+          v-else-if="item.type === 'number'"
+          v-model="model[item.code]"
+          clearable
+        ></number-range>
         <el-select v-else v-model="model[item.code]" clearable>
-          <el-option v-for="{code,name} of searchRangeSetting[item.code]" :key="code" :label="name" :value="code"></el-option>
+          <el-option
+            v-for="{ code, name } of searchRangeSetting[item.code]"
+            :key="code"
+            :label="name"
+            :value="code"
+          ></el-option>
         </el-select>
       </el-form-item>
     </el-form>

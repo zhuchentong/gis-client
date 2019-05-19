@@ -2,7 +2,7 @@
   <section class="component supply-land">
     <el-card>
       <common-title slot="header" :showIcon="false" title="供地统计">
-        <div slot="append">
+        <div slot="append" style="display: inline-flex;">
           <el-select
             v-if="queryModel.type === 2"
             v-model="queryModel.year"
@@ -30,11 +30,16 @@
     </el-card>
     <data-box :data="dataSet" :maxHeight="310">
       <template slot="columns">
-        <el-table-column prop="year" label="年份"></el-table-column>
+        <el-table-column
+          prop="year"
+          v-if="queryType === 1"
+          label="年份"
+        ></el-table-column>
         <el-table-column
           prop="quarterly"
           label="季度"
           v-if="queryType === 2"
+          :formatter="row => queryQuarterName(row.quarterly)"
         ></el-table-column>
         <el-table-column prop="area" label="面积(亩)"></el-table-column>
         <el-table-column
@@ -57,6 +62,8 @@ import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { VeHistogram } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
+import { QuarterSetting, queryQuarterName } from "~/components/statistic-system/statistic-system.config"
+
 @Component({
   components: {
     DataBox,
@@ -68,7 +75,7 @@ export default class SupplyLand extends Vue {
   private sevice!: StatisticalService
 
   private queryModel = {
-    year: "",
+    year: 0,
     type: 1
   }
 
@@ -76,6 +83,7 @@ export default class SupplyLand extends Vue {
 
   private selectedYear = ""
   private queryType = 1
+  private queryQuarterName = queryQuarterName
 
   private dataSet: any = []
   private readonly setting = {
@@ -103,7 +111,11 @@ export default class SupplyLand extends Vue {
       this.chartData.rows = data.map(v => {
         const row = {}
         Object.entries(this.setting).forEach(([key, value]) => {
-          row[value] = v[key]
+          if (key === 'quarterly') {
+            row[value] = this.queryQuarterName(v[key])
+          } else {
+            row[value] = v[key]
+          }
         })
         return row
       })
@@ -112,10 +124,9 @@ export default class SupplyLand extends Vue {
 
   private onTypeChange(val) {
     if (val === 1) {
-      this.queryModel.year = ""
       this.refreshData()
     } else {
-      this.queryModel.year = new Date().getFullYear().toString()
+      this.queryModel.year = new Date().getFullYear()
       this.refreshData()
     }
   }

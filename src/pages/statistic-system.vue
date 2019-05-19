@@ -1,10 +1,20 @@
 <template>
   <base-col-three class="page statistic-system">
     <div slot="middle" class="menu">
-      <div class="statistic-group" v-for="{name,icon,items} of menus" :key="name">
+      <div
+        class="statistic-group"
+        v-for="{ name, icon, items } of menus"
+        :key="name"
+      >
         <common-title :iconName="icon" :title="name"></common-title>
-        <div class="statistic-group-item" :class="{actived: currentComponent === item.component }" v-for="item of items" :key="item.component" @click="currentComponent = item.component">
-          {{item.label}}
+        <div
+          class="statistic-group-item"
+          :class="{ actived: currentComponent === item.component }"
+          v-for="item of items"
+          :key="item.component"
+          @click="currentComponent = item.component"
+        >
+          {{ item.label }}
         </div>
       </div>
     </div>
@@ -12,7 +22,6 @@
     <keep-alive slot="content">
       <component :is="currentComponent"></component>
     </keep-alive>
-
   </base-col-three>
 </template>
 
@@ -86,6 +95,16 @@ export default class extends Vue {
         height: 350px;
         margin: 0;
         line-height: 350px;
+      }
+
+      .el-select {
+        width: 120px;
+      }
+      .el-radio-group {
+        line-height: 26px;
+        .el-radio-button--mini > .el-radio-button__inner {
+          padding: 6px 15px;
+        }
       }
     }
   }

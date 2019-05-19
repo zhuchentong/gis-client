@@ -82,4 +82,15 @@ export class PatrolInfoService {
     return requestParams.request()
   }
 
+  /**
+   * 查询已巡查外业接口
+   */
+  @Request({
+    server: PatrolServer.queryPatrolInfoComplete
+  })
+  public queryPatrolInfoComplete(requestParams: RequestParams): Observable<any> {
+    return requestParams.request()
+  }
+
+
 }

@@ -1,11 +1,35 @@
 <template>
   <section class="component task-list-select">
-    <data-box :data="dataSet" :maxHeight="380" :selectionRow.sync="taskSelectedRow">
+    <data-box
+      :data="dataSet"
+      :maxHeight="320"
+      :selectionRow.sync="taskSelectedRow"
+      :page="page"
+      @onPageChange="refreshData"
+    >
       <template slot="columns">
-        <el-table-column label="任务类型" prop="name" :min-width="$helper.getColumnWidth(1)" show-overflow-tooltip></el-table-column>
-        <el-table-column label="任务名称" prop="name" :min-width="$helper.getColumnWidth(2)"></el-table-column>
-        <el-table-column label="巡查时间" prop="createTime" :min-width="$helper.getColumnWidth(2)" :formatter="row => $filter.dateTimeFormat(row.createTime)"></el-table-column>
-        <el-table-column label="巡查人员" prop="userName" :min-width="$helper.getColumnWidth(1)"></el-table-column>
+        <el-table-column
+          label="任务类型"
+          prop="name"
+          :min-width="$helper.getColumnWidth(1)"
+          show-overflow-tooltip
+        ></el-table-column>
+        <el-table-column
+          label="任务名称"
+          prop="name"
+          :min-width="$helper.getColumnWidth(2)"
+        ></el-table-column>
+        <el-table-column
+          label="巡查时间"
+          prop="createTime"
+          :min-width="$helper.getColumnWidth(2)"
+          :formatter="row => $filter.dateTimeFormat(row.createTime)"
+        ></el-table-column>
+        <el-table-column
+          label="巡查人员"
+          prop="userName"
+          :min-width="$helper.getColumnWidth(1)"
+        ></el-table-column>
       </template>
     </data-box>
     <div class="operate-buttons">
@@ -21,7 +45,6 @@ import DataBox from "~/components/common/data-box.vue"
 import { PatrolInfoService } from "~/services/patrol-info.service.ts"
 import { RequestParams } from "~/core/http/"
 import { Inject } from "typescript-ioc"
-// import { zip } from 'rxjs'
 import { PageService } from "~/extension/services/page.service.ts"
 
 @Component({
@@ -35,16 +58,11 @@ export default class TaskListSelect extends Vue {
   private dataSet: any[] = []
   @Inject
   private service!: PatrolInfoService
+  private page = new PageService()
 
   private async refreshData() {
-    // const [data1, data2] = await zip([
-    //   this.service.queryPatrolInfoAll(new RequestParams({ isArchive: 1 })),
-    //   this.service.queryPatrolInfoAll(new RequestParams({ isArchive: 0, status: "COMPLETE_PATROL" }))
-    // ]).toPromise()
-    // // 查展示有巡查结果区域的
-    // this.dataSet = [...data1, data2].filter(x => x.show === 'YES')
-    const page = new PageService({ pageSize: 1000 })
-    this.service.queryPatrolInfoAll(new RequestParams({ isArchive: 1 }, { page })).subscribe(
+    const requestParams = new RequestParams(null, { page: this.page })
+    this.service.queryPatrolInfoComplete(requestParams).subscribe(
       data => this.dataSet = data.content
     )
   }

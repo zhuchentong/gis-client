@@ -2,7 +2,7 @@
   <section class="component task-number">
     <el-card>
       <common-title slot="header" :showIcon="false" title="外业任务数统计">
-        <div slot="append">
+        <div slot="append" style="display: inline-flex;">
           <el-radio-group
             size="mini"
             v-model="queryModel.type"
@@ -62,7 +62,8 @@ import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { VePie } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
-import {getQuarter } from "date-fns"
+import { getQuarter } from "date-fns"
+import { QuarterSetting } from "~/components/statistic-system/statistic-system.config"
 
 @Component({
   components: {
@@ -75,9 +76,9 @@ export default class TaskNumber extends Vue {
   private sevice!: StatisticalService
 
   private queryModel: any = {
-    year: "",
+    year: 2019,
     type: 1,
-    quarterly: ""
+    quarterly: 0
   }
 
   private years: number[] = []
@@ -92,24 +93,7 @@ export default class TaskNumber extends Vue {
     prefecture: "所占百分比"
   }
 
-  private quarterDataSet = [
-    {
-      code: "1",
-      name: "一季度"
-    },
-    {
-      code: "2",
-      name: "二季度"
-    },
-    {
-      code: "3",
-      name: "三季度"
-    },
-    {
-      code: "4",
-      name: "四季度"
-    }
-  ]
+  private quarterDataSet = QuarterSetting
 
   private chartData: any = {
     columns: Object.values(this.setting),
@@ -139,9 +123,9 @@ export default class TaskNumber extends Vue {
   private onTypeChange(val) {
     if (val === 1) {
       this.refreshData()
-    }else {
-      this.queryModel.year = new Date().getFullYear().toString()
-      this.queryModel.quarterly = getQuarter(new Date()).toString()
+    } else {
+      this.queryModel.year = new Date().getFullYear()
+      this.queryModel.quarterly = getQuarter(new Date())
       this.refreshData()
     }
   }

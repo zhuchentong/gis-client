@@ -75,7 +75,7 @@
       <el-form-item label="任务备注" prop="remark">
         <el-input
           type="textarea"
-          :rows="1"
+          :rows="3"
           :maxlength="250"
           v-model="baseModel.remark"
           class="inline-full-textarea"

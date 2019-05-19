@@ -1,11 +1,36 @@
 <template>
   <section class="component business-list-select">
-    <data-box :data="dataSet" :selectionRow.sync="businessSelectedRow" :maxHeight="380" :page="page">
+    <data-box
+      :data="dataSet"
+      :selectionRow.sync="businessSelectedRow"
+      :maxHeight="380"
+      :page="page"
+      @onPageChange="refreshData"
+    >
       <template slot="columns">
-        <el-table-column label="业务类型" prop="type" :min-width="$helper.getColumnWidth(1)" :formatter="row => $filter.dictConvert(row.type,'FlowType')" show-overflow-tooltip></el-table-column>
-        <el-table-column label="项目名称" prop="name" :min-width="$helper.getColumnWidth(2)"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime" :min-width="$helper.getColumnWidth(1)" :formatter="row => $filter.dateFormat(row.createTime)"></el-table-column>
-        <el-table-column label="创建人" prop="partolUserName" :min-width="$helper.getColumnWidth(1)"></el-table-column>
+        <el-table-column
+          label="业务类型"
+          prop="type"
+          :min-width="$helper.getColumnWidth(1)"
+          :formatter="row => $filter.dictConvert(row.type, 'FlowType')"
+          show-overflow-tooltip
+        ></el-table-column>
+        <el-table-column
+          label="项目名称"
+          prop="name"
+          :min-width="$helper.getColumnWidth(2)"
+        ></el-table-column>
+        <el-table-column
+          label="创建时间"
+          prop="createTime"
+          :min-width="$helper.getColumnWidth(1)"
+          :formatter="row => $filter.dateFormat(row.createTime)"
+        ></el-table-column>
+        <el-table-column
+          label="创建人"
+          prop="userName"
+          :min-width="$helper.getColumnWidth(1)"
+        ></el-table-column>
       </template>
     </data-box>
     <div class="operate-buttons">
@@ -38,7 +63,7 @@ export default class BusinessListSelect extends Vue {
   private page = new PageService()
 
   private async refreshData() {
-    this.service.queryFlowInfoFinish(new RequestParams({ status: "FINSH" }, { page: this.page })).subscribe(
+    this.service.queryFlowInfoFinish(new RequestParams({ status: "FINSH", whether: 1 }, { page: this.page })).subscribe(
       data => this.dataSet = data.content.filter(x => x.whether === 'YES')
     )
   }

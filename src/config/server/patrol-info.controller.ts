@@ -58,6 +58,14 @@ export default {
     controller: CONTROLLER,
     action: 'getPatrolTrack',
     type: RequestMethod.Get
+  },
+  /**
+   * 查询已巡查外业接口
+   */
+  queryPatrolInfoComplete: {
+    controller: CONTROLLER,
+    action: 'queryPatrolInfoComplete',
+    type: RequestMethod.Get
   }
 
 }

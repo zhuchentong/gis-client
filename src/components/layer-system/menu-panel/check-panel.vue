@@ -9,10 +9,10 @@
         v-for="item of items"
         :key="item.key"
         @click="onItemClick(item)"
-        :class="{'active': checkItem.key === item.key}"
+        :class="{ active: checkItem.key === item.key }"
       >
         <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
-        <div>{{item.label}}</div>
+        <div>{{ item.label }}</div>
       </div>
     </el-card>
 
@@ -42,7 +42,7 @@
       <business-list-select @affirm="businessSelected"></business-list-select>
     </el-dialog>
     <el-dialog
-      title="选择业务项目"
+      title="临时图层上传"
       :center="true"
       :visible.sync="dialog.import"
       width="750px"
@@ -54,7 +54,8 @@
         :AllowExtension="allowExtension"
         :showFileList="false"
         @onUploadSuccess="onFileUploadSuccess"
-      >上传文件</file-upload>
+        >上传文件</file-upload
+      >
     </el-dialog>
     <el-dialog
       title="请选择检测项"

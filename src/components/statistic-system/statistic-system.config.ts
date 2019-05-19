@@ -2,7 +2,7 @@
 export const MenuList = [
   {
     name: "数据统计",
-    icon:"report-pie",
+    icon: "report-pie",
     items: [
       {
         label: "土地现状数据统计",
@@ -25,7 +25,7 @@ export const MenuList = [
   },
   {
     name: "业务统计",
-    icon:"report-line",
+    icon: "report-line",
     items: [
       {
         label: "报地统计",
@@ -47,7 +47,7 @@ export const MenuList = [
   },
   {
     name: "外业统计",
-    icon:"report-pie",
+    icon: "report-pie",
     items: [
       {
         label: "外业任务数统计",
@@ -93,4 +93,37 @@ export const TaskComponents = {
   TaskType,
   TaskNumber,
   LandDisasterDistribution
-} 
+}
+
+
+/**
+ * 季度设置
+ */
+export const QuarterSetting = [
+  {
+    code: 1,
+    name: "一季度"
+  },
+  {
+    code: 2,
+    name: "二季度"
+  },
+  {
+    code: 3,
+    name: "三季度"
+  },
+  {
+    code: 4,
+    name: "四季度"
+  }
+]
+
+/**
+ * 根据季度查找对应中文
+ * @param code 季度代码 
+ */
+export function queryQuarterName(code: number) {
+  if (!code) return ""
+  const quarterly = QuarterSetting.find(x => x.code === code)
+  return quarterly ? quarterly.name : code
+}

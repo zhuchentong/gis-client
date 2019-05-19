@@ -13,7 +13,7 @@ export class CesiumDrawService {
     label: Cesium.Color.BLACK,
     point: Cesium.Color.RED,
     outline: Cesium.Color.YELLOW,
-    polygon: Cesium.Color.RED,
+    polygon: Cesium.Color.PINK.withAlpha(0.3),
     polyline: Cesium.Color.RED,
     border: Cesium.Color.YELLOW,
     background: Cesium.Color.WHITE
