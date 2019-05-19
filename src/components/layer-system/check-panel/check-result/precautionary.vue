@@ -6,7 +6,12 @@
         <i v-if="fieldResult&&fieldResult.alarm" class="el-icon-warning alarm">压占基本农田，疑似违法用地，请核实！</i>
       </div>
       <label-container :column="1" :labelWidth="120">
-        <label-item label="基本农田保护区"></label-item>
+        <label-item label="基本农田保护区">
+          <label-container :column="2" :labelWidth="120">
+            <label-item label="压盖面积"></label-item>
+            <label-item label="所占比例">213</label-item>
+          </label-container>
+        </label-item>
         <label-item label="一般农用地"></label-item>
       </label-container>
     </el-card>
@@ -33,7 +38,7 @@ import { Inject } from 'typescript-ioc'
 import { DetectionService } from '~/services/detection.service'
 import { RequestParams } from '../../../../core/http'
 import { CqlBuilder } from '~/utils/cql-build.service'
-import * as turf from '@turf/turf'
+import { List } from 'linqts'
 @Component({
   components: {}
 })
@@ -85,9 +90,31 @@ export default class Precautionary extends Vue {
       this.getLayerCheck(code, layer)
     }
 
-    this.fieldResult = {
-      alarm: data.find(x => x.attr['TDYTQLXDM'] === '010'),
-      data
+    const jbnt = data
+      .filter(x => x.attr['TDYTQLXDM'] === '010')
+      .map(x => ({
+        area: x['结果形状面积'],
+        radio: x['对比图层总面积']
+      }))
+
+    const ybnt = data
+      .filter(x => x.attr['TDYTQLXDM'] === '020')
+      .map(x => ({
+        area: x['结果形状面积'],
+        radio: x['对比图层总面积']
+      }))
+
+    if (data) {
+      this.fieldResult = {
+        alarm: jbnt.length,
+        jbnt: {
+          area: new List(jbnt).Sum((x: any) => x.area),
+          radio: new List(jbnt).Sum((x: any) => x.radio)
+        },
+        ybnt: {}
+      }
+
+      console.log(this.fieldResult)
     }
   }
 
@@ -96,11 +123,6 @@ export default class Precautionary extends Vue {
   }
 
   private getRangeCheck(code, positions, cql?) {
-    console.log(positions)
-    const points = positions.map(x=>CesiumCommonService.cartesian3ToDegrees(x)).map(x=>([x.longitude,x.latitude]))
-    console.log(points)
-    const polygon1 = turf.polygon([[...points, points[0]]])
-    console.log(turf.area(polygon1))
     // 获取wkt区域数据
     const polygon = [...positions, positions[0]]
       .map(x => {
