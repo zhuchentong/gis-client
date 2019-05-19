@@ -7,20 +7,46 @@
       </div>
       <div class="container-full-page">
         <el-card header="巡查信息">
-          <p style="text-indent: 2em;">{{result.content || "暂无巡查信息!"}}</p>
+          <p style="text-indent: 2em;">
+            {{ content || '暂无巡查信息!' }}
+          </p>
         </el-card>
         <el-card header="巡查照片">
-          <p style="text-indent: 2em;" v-if="!result.image.length"> 暂无数据!</p>
-          <view-file-info v-else v-for="item of result.image" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
+          <p style="text-indent: 2em;" v-if="!image.length">暂无数据!</p>
+          <view-file-info
+            v-else
+            v-for="item of image"
+            :key="item.id"
+            :fileInfo="item"
+            class="content-file"
+          ></view-file-info>
         </el-card>
         <el-card header="巡查视频">
-          <p style="text-indent: 2em;" v-if="!result.video.length"> 暂无数据!</p>
-          <view-file-info v-else v-for="item of result.video" :key="item.id" :fileInfo="item" class="content-file"></view-file-info>
+          <p style="text-indent: 2em;" v-if="!video.length">暂无数据!</p>
+          <view-file-info
+            v-else
+            v-for="item of video"
+            :key="item.id"
+            :fileInfo="item"
+            class="content-file"
+          ></view-file-info>
         </el-card>
       </div>
     </div>
-    <el-dialog title="添加附件" :center="true" :visible.sync="dialog.appendAttach" width="750px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-      <append-task-attach :id="id" @close="dialog.appendAttach = false" @success="onIdChange"></append-task-attach>
+    <el-dialog
+      title="添加附件"
+      :center="true"
+      :visible.sync="dialog.appendAttach"
+      width="750px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <append-task-attach
+        :id="id"
+        @close="dialog.appendAttach = false"
+        @success="onIdChange"
+      ></append-task-attach>
       <div></div>
     </el-dialog>
   </section>
@@ -56,32 +82,21 @@ export default class extends Vue {
     appendAttach: false
   }
 
-  private resetResult() {
-    this.result = {
-      content: "",
-      image: [],
-      video: []
-    }
-  }
-
+  private content = ""
+  private image: any[] = []
+  private video: any[] = []
 
   @Watch('id', { immediate: true })
   private onIdChange() {
-    this.resetResult()
     const params = { id: this.id }
     this.id && this.service.getPatrolResultById(new RequestParams(params))
       .subscribe(data => {
-        this.result = {
-          content: data.content,
-          image: data.uploadFiles.filter(x => FileType.PICTURE.value.includes(x.extensionName.toLowerCase())),
-          video: data.uploadFiles.filter(x => FileType.MP4.value.includes(x.extensionName.toLowerCase()))
-        }
+        this.content = data.content
+        this.image = data.uploadFiles.filter(x => FileType.PICTURE.value.includes(x.extensionName.toLowerCase()))
+        this.video = data.uploadFiles.filter(x => FileType.MP4.value.includes(x.extensionName.toLowerCase()))
       })
   }
 
-  private created() {
-    this.resetResult()
-  }
 }
 </script>
 

@@ -85,6 +85,14 @@ export default {
     controller: CONTROLLER,
     action: 'multipleLayerComparisons',
     type: RequestMethod.Post
+  },
+  /**
+   * 形状与图层相交计算
+   */
+  intersectionWkt: {
+    controller: CONTROLLER,
+    action: 'intersectionWkt',
+    type: RequestMethod.Get
   }
 
 }

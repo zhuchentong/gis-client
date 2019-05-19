@@ -66,7 +66,7 @@ export default class extends Vue {
     position: absolute;
     left: 60px;
     top: 0;
-    bottom: 0;
+    bottom: 20px;
     width: 240px;
     overflow: auto;
   }

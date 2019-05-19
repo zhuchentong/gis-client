@@ -102,4 +102,14 @@ export class LayerInfoService {
   public multipleLayerComparisons(requestParams): Observable<any> {
     return requestParams.request()
   }
+
+  /**
+   * 形状与图层相交计算
+   */
+  @Request({
+    server: Controller.intersectionWkt
+  })
+  public intersectionWkt(requestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

@@ -19,6 +19,7 @@ import { RequestParams } from '~/core/http'
 import { Inject } from 'typescript-ioc'
 import { CesiumDrawService } from '~/utils/cesium/draw.service'
 import Cesium from 'cesium/Cesium'
+import { CesiumCommonService } from '~/utils/cesium/common.service'
 
 @Component({
   components: {
@@ -52,18 +53,17 @@ export default class extends Vue {
     const requestParams = new RequestParams({ id: this.id })
     this.service.getPatrolTrack(requestParams).subscribe(data => {
       if (!data.length) return
-      this.dataList = data.map(v =>
-        Cesium.Cartesian3.fromRadians(v.positionY, v.positionX)
-      )
+      this.dataList = data
       this.mapViewer && this.drawEntity()
     })
   }
 
   private drawEntity() {
     if (this.lastEntityId) {
-      this.mapViewer.getViewer().entities.removeById(this.lastEntityId)
+      this.mapViewer.drawEntities.removeById(this.lastEntityId)
     }
-    const entity = this.drawService.drawPolygon(this.dataList)
+    const positions = this.dataList.map(v => ({ longitude: v.positionX, latitude: v.positionY }))
+    const entity = this.drawService.drawPolygon(CesiumCommonService.degreesToCartesian3Array(positions))
     this.mapViewer.getViewer().zoomTo(entity)
     this.lastEntityId = entity.id
   }

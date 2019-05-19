@@ -11,7 +11,7 @@
         <el-select v-model="queryModel.grade" class="search-worktype">
           <el-option label="全部" value></el-option>
           <el-option
-            v-for="{code,name} of $dict.getDictData('DisasterGrade')"
+            v-for="{ code, name } of $dict.getDictData('DisasterGrade')"
             :key="code"
             :label="name"
             :value="code"
@@ -25,33 +25,37 @@
       </div>
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
-    <div v-else>
+    <div v-else class="site-content">
       <div
         v-for="item of dataList"
         :key="item.id"
         class="info-item row no-warp"
-        :class="{'info-item-disabled': item.status === 'DISABLED' }"
+        :class="{ 'info-item-disabled': item.status === 'DISABLED' }"
       >
-        <el-checkbox v-model="item.selected" @change="sitStatusChange" class="info-item-check-box"></el-checkbox>
+        <el-checkbox
+          v-model="item.selected"
+          @change="val => showSite(val, item)"
+          class="info-item-check-box"
+        ></el-checkbox>
         <div>
           <div class="row between-span info-item-title">
-            <label>{{item.name}}</label>
-            <el-button type="text" v-if="item.selected" @click="onItemClick(item)">编辑</el-button>
+            <label>{{ item.name }}</label>
+            <el-button
+              type="text"
+              v-if="item.selected"
+              @click="onItemClick(item)"
+              >编辑</el-button
+            >
           </div>
-          <label-item label="隐患级别" :value="item.grade | dictConvert('DisasterGrade')"></label-item>
-          <label-item label="所属行政区" :value="item.prefecture | districtName"></label-item>
+          <label-item
+            label="隐患级别"
+            :value="item.grade | dictConvert('DisasterGrade')"
+          ></label-item>
+          <label-item
+            label="所属行政区"
+            :value="item.prefecture | districtName"
+          ></label-item>
         </div>
-      </div>
-      <div class="text-center">
-        <el-pagination
-          @current-change="refreshData"
-          small
-          :pager-count="5"
-          :current-page.sync="pageService.pageIndex"
-          :page-size="pageService.pageSize"
-          layout="total, prev, pager, next"
-          :total="pageService.total"
-        ></el-pagination>
       </div>
     </div>
 
@@ -107,6 +111,7 @@ export default class SitePanel extends Vue {
   private pointEntitys: any[] = []
 
   private editModel = new DangerSiteModel()
+  private draw!: DrawInteractPoint
 
   private dialog = {
     modify: false
@@ -141,31 +146,22 @@ export default class SitePanel extends Vue {
     this.dialog.modify = true
   }
 
-  private addNew() {
+  private async addNew() {
     this.editModel = new DangerSiteModel()
-    const draw = new DrawInteractPoint(this.viewer)
-    draw.start().subscribe({
-      next: ({ degrees }) => {
-        this.editModel.positionX = degrees.latitude
-        this.editModel.positionY = degrees.longitude
-      },
-      complete: () => {
-        this.dialog.modify = true
-      }
-    })
+    const { degrees } = await this.draw.start().toPromise()
+    this.editModel.positionX = degrees.longitude
+    this.editModel.positionY = degrees.latitude
+    this.dialog.modify = true
   }
 
   private showSite(value, data) {
     if (!this.drawService) return
     if (value) {
-      const position = CesiumCommonService.degreesToCartesian3Array([
-        {
-          x: data.positionX,
-          y: data.positionY
-        }
-      ])[0]
+      const position = CesiumCommonService.positionToCartesian3({
+        longitude: data.positionX,
+        latitude: data.positionY
+      })
       const entity = this.drawService.drawPoint(position, data.name)
-      this.viewer.getViewer().flyTo(entity)
       // 坐标点添加到记录里面
       this.pointEntitys.push({
         id: data.id,
@@ -182,10 +178,6 @@ export default class SitePanel extends Vue {
     }
   }
 
-  private sitStatusChange(value) {
-    this.showSite(value, this.editModel)
-  }
-
   /**
    * 监听查询model变化
    */
@@ -193,33 +185,26 @@ export default class SitePanel extends Vue {
   private onqueryModelChange() {
     this.refreshData()
   }
+
   private mounted() {
+    this.drawService = new CesiumDrawService(this.viewer)
+    this.draw = new DrawInteractPoint(this.viewer)
     this.refreshData()
-    if (this.viewer) this.drawService = new CesiumDrawService(this.viewer)
   }
 
-  private refreshData() {
+  private async refreshData() {
     // 删除已经加载的点
     if (this.viewer) {
-      this.viewer.getViewer().entities.removeAll()
+      this.viewer.drawDataSource.entities.removeAll()
       this.pointEntitys = []
     }
     // 查询数据
-    const requestParam = new RequestParams(this.queryModel, {
-      page: this.pageService
-    })
-    this.service.queryLandDisasterAll(requestParam).subscribe(data => {
-      this.dataList = data.content.map(v => {
-        return {
-          ...v,
-          selected: false
-        }
-      })
-    })
+    const requestParam = new RequestParams(this.queryModel)
+    const data = await this.service.getLandDisasters(requestParam).toPromise()
+    this.dataList = data.map(v => ({ ...v, selected: false }))
   }
 
   private onAppendSuccess() {
-    this.viewer.drawDataSource.entities.removeAll()
     this.refreshData()
   }
 }
@@ -232,6 +217,7 @@ export default class SitePanel extends Vue {
   .search {
     padding: 0 5px;
     line-height: 40px;
+    height: 40px;
     background-color: #f3f3f3;
     border-bottom: solid 2px #f3f3f3;
     &-worktype {
@@ -242,6 +228,10 @@ export default class SitePanel extends Vue {
       margin-right: 10px;
     }
   }
+  .site-content {
+    height: calc(100% - 40px);
+    overflow-y: auto;
+  }
   .info-item {
     padding: 5px 5px 0 5px;
     border-bottom: solid 2px #f3f3f3;
@@ -251,7 +241,7 @@ export default class SitePanel extends Vue {
       }
     }
     &-disabled {
-      background-color: #f3f3f3;
+      background-color: #d3d3d3;
     }
     .el-button {
       padding: 0;
@@ -288,9 +278,6 @@ export default class SitePanel extends Vue {
     .el-button.el-button--default {
       line-height: @line-height!important;
     }
-  }
-  .el-pagination {
-    margin-top: 10px;
   }
 }
 </style>

@@ -151,11 +151,19 @@ export class CesiumCommonService {
    * @param degrees
    */
   public static degreesToCartesian3Array(
-    degrees: Array<{ x: number; y: number }>
+    degrees: Array<{ longitude: number; latitude: number }>
   ) {
     return degrees.map(item => {
-      return Cesium.Cartesian3.fromDegrees(item.x, item.y)
+      return Cesium.Cartesian3.fromDegrees(item.longitude, item.latitude)
     })
+  }
+
+  /**
+   * 角度转笛卡尔坐标系
+   * @param degrees
+   */
+  public static positionToCartesian3(postion: { longitude: number; latitude: number }) {
+    return Cesium.Cartesian3.fromDegrees(postion.longitude, postion.latitude)
   }
 
   /**
@@ -163,10 +171,10 @@ export class CesiumCommonService {
    * @param radians
    */
   public static radiansToCartesian3Array(
-    radians: Array<{ x: number; y: number }>
+    radians: Array<{ longitude: number; latitude: number }>
   ) {
     return radians.map(item => {
-      return Cesium.Cartesian3.fromRadians(item.x, item.y)
+      return Cesium.Cartesian3.fromRadians(item.longitude, item.latitude)
     })
   }
 

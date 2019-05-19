@@ -15,17 +15,16 @@ export class PatrolInfoModel extends Model {
   public type: string = ""
   public userId: string = ""
   public remark: string = ""
-
-  private cartographic: Cesium.Cartographic | null = null
+  public cartographic: Cesium.Cartographic | null = null
 
   public get positionX() {
     if (!this.cartographic) return 0
-    return Cesium.Math.toDegrees(this.cartographic.latitude)
+    return Cesium.Math.toDegrees(this.cartographic.longitude)
   }
 
   public get positionY() {
     if (!this.cartographic) return 0
-    return Cesium.Math.toDegrees(this.cartographic.longitude)
+    return Cesium.Math.toDegrees(this.cartographic.latitude)
   }
 
 }

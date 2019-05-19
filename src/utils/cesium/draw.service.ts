@@ -164,8 +164,8 @@ export class CesiumDrawService {
     // }
     return new Cesium.LabelGraphics({
       text: label,
-      font: '20px sans-serif',
-      scale: 0.8,
+      font: '32px system-ui',
+      scale: 0.5,
       fillColor: this.color.label,
       outlineWidth: 1,
       outlineColor: this.color.background,

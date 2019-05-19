@@ -15,12 +15,16 @@
       :title="computeItem.label"
       :center="true"
       :visible.sync="dialog.compute"
-      width="500px"
+      width="700px"
       @close="computeItem = {}"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
-      <component :is="computeItem.key" :area="polygonArae" :polygon="polygon"></component>
+      <component
+        :is="computeItem.key"
+        :area="drawEntity.area"
+        :positions="drawEntity.positions"
+      ></component>
     </el-dialog>
   </section>
 </template>
@@ -48,7 +52,10 @@ export default class ComputePanel extends Vue {
   private computeItem: any = {}
 
   private drawPolyLineService!: DrawInteractPolyline
-  private polygonArae = 0
+  private drawEntity = {
+    positions: {},
+    area: 0
+  }
 
   private dialog = {
     compute: false
@@ -71,7 +78,8 @@ export default class ComputePanel extends Vue {
 
     // 计算多边形
     const polygon = turf.polygon([[...points, points[0]]])
-    this.polygonArae = turf.area(polygon)
+    this.drawEntity.area = turf.area(polygon)
+    this.drawEntity.positions = [...points, points[0]]
     this.dialog.compute = true
   }
 

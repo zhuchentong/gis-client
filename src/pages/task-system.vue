@@ -1,15 +1,33 @@
 <template>
-  <base-col-three class="page task-system" :class="{'only-detail':onlyShowDetail}">
-    <div slot="left" class="col between-span system-menu text-center" style="height:100%">
+  <base-col-three
+    class="page task-system"
+    :class="{ 'only-detail': onlyShowDetail }"
+  >
+    <div
+      slot="left"
+      class="col between-span system-menu text-center"
+      style="height:100%"
+    >
       <div>
-        <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === currentMenu.status}">
+        <div
+          v-for="item of menus"
+          :key="item.label"
+          class="system-menu-item pointer"
+          @click="menuClick(item)"
+          :class="{
+            'system-menu-activated': item.status === currentMenu.status
+          }"
+        >
           <svg-icon :iconName="item.icon" iconSize="24"></svg-icon>
-          <div class="menu-item-label">{{item.label}}</div>
+          <div class="menu-item-label">{{ item.label }}</div>
         </div>
       </div>
-      <div class="add-item system-menu-item pointer" @click="dialog.craeteNew=true">
+      <div
+        class="add-item system-menu-item pointer"
+        @click="dialog.craeteNew = true"
+      >
         <svg-icon iconName="add-new" iconSize="24"></svg-icon>
-        <div class="menu-item-label">新增业务</div>
+        <div class="menu-item-label">新增任务</div>
       </div>
     </div>
     <div slot="middle">
@@ -18,7 +36,12 @@
           <label>外业类型:</label>
           <el-select v-model="queryModel.type" class="search-worktype">
             <el-option label="全部" value=""></el-option>
-            <el-option v-for="{code,name} of $dict.getDictData('PatrolType')" :key="code" :label="name" :value="code"></el-option>
+            <el-option
+              v-for="{ code, name } of $dict.getDictData('PatrolType')"
+              :key="code"
+              :label="name"
+              :value="code"
+            ></el-option>
           </el-select>
         </div>
         <div v-show="false">
@@ -30,24 +53,68 @@
       </div>
       <div class="no-data" v-if="!dataList.length"></div>
       <div v-else>
-        <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="id = item.id" :class="{'info-item-activated': item.id === id}">
+        <div
+          v-for="item of dataList"
+          :key="item.id"
+          class="info-item pointer"
+          @click="id = item.id"
+          :class="{ 'info-item-activated': item.id === id }"
+        >
           <label-item label="任务名称" :value="item.name"></label-item>
-          <label-item label="外业类型" :value="item.type | dictConvert('PatrolType')"></label-item>
-          <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+          <label-item
+            label="外业类型"
+            :value="item.type | dictConvert('PatrolType')"
+          ></label-item>
+          <label-item
+            label="创建时间"
+            :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"
+          ></label-item>
         </div>
       </div>
       <div class="text-center">
-        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+        <el-pagination
+          @current-change="refreshData"
+          small
+          :pager-count="5"
+          :current-page.sync="pageService.pageIndex"
+          :page-size="pageService.pageSize"
+          layout="total, prev, pager, next"
+          :total="pageService.total"
+        >
         </el-pagination>
       </div>
-      <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="750px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-        <create-new-task @close="dialog.craeteNew = false" @success="refreshData"></create-new-task>
+      <el-dialog
+        title="新增任务"
+        :center="true"
+        :visible.sync="dialog.craeteNew"
+        width="750px"
+        :show-close="false"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+      >
+        <create-new-task
+          @close="dialog.craeteNew = false"
+          @success="refreshData"
+        ></create-new-task>
       </el-dialog>
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
-      <el-tab-pane v-for="item of tabs.filter( x => !currentMenu.hiddenPage.includes(x.name))" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
+      <el-tab-pane
+        v-for="item of tabs.filter(
+          x => !currentMenu.hiddenPage.includes(x.name)
+        )"
+        :key="item.name"
+        :name="item.name"
+        :label="item.label"
+        class="content-tabs-panes"
+      >
         <keep-alive>
-          <component :is="item.component" :queryModel="queryModel" :id="id" class="content-tabs-panes-base"></component>
+          <component
+            :is="item.component"
+            :queryModel="queryModel"
+            :id="id"
+            class="content-tabs-panes-base"
+          ></component>
         </keep-alive>
       </el-tab-pane>
     </el-tabs>

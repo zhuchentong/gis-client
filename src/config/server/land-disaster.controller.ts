@@ -25,5 +25,13 @@ export default {
     controller: CONTROLLER,
     action: 'queryLandDisasterAll',
     type: RequestMethod.Get
+  },
+  /**
+   * 查询所有的隐患点信息（不分页）
+   */
+  getLandDisasters: {
+    controller: CONTROLLER,
+    action: 'getLandDisasters',
+    type: RequestMethod.Get
   }
 }

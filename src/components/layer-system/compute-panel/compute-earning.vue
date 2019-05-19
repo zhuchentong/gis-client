@@ -1,5 +1,5 @@
 <template>
-  <section class="component compute-earning">
+  <section class="component compute-earning" v-loading="loading">
     <common-title iconName="info" title="当前选择区域面积">
       <template slot="append">
         <span>{{ area.toFixed(2) }} 平方米</span>
@@ -9,7 +9,7 @@
 
     <el-tabs v-model="currentPanel">
       <el-tab-pane label="输入信息" name="input">
-        <el-form :model="model" label-width="120px" ref="form">
+        <el-form :model="model" label-width="120px" ref="form" :rules="rules">
           <el-form-item label="选择单位" prop="unit">
             <el-radio-group v-model="model.unit">
               <el-radio
@@ -30,44 +30,42 @@
               <span slot="append">{{ currentUnit.name }}</span>
             </el-input>
           </el-form-item>
-          <el-form-item label="基准地价" prop="landPrice">
-            <el-input
-              v-model="model.landPrice"
-              type="number"
-              :min="0"
-              :max="999999"
-            >
-              <span slot="append">{{ currentUnit.name }}</span>
-            </el-input>
-          </el-form-item>
           <el-form-item label="土地用途" prop="landUseType">
             <el-select v-model="model.landUseType" class="search-worktype">
-              <el-option
-                v-for="{ code, name } of $dict.getDictData('LandNature')"
-                :key="code"
-                :label="name"
-                :value="code"
-              ></el-option>
+              <el-option label="住宅用地" value="住宅基准"></el-option>
+              <el-option label="商业用地" value="商服基准"></el-option>
+              <el-option label="工业用地" value="工业基准"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="计算结果" name="result">
-        <el-form :model="result" label-width="120px">
-          <el-form-item label="估算面积">
-            <div>{{ result.area }} 平方米</div>
-            <div>{{ result.area | squareMeterToMu }} 亩</div>
-            <div>{{ result.area | squareMeterToHectare }} 公顷</div>
-          </el-form-item>
-          <el-form-item label="预计收益">
+      <el-tab-pane label="分析结果" name="result" class="row">
+        <el-card class="col-span-6" header="评估结果">
+          <label-item label="预算面积">
+            <div>{{ area.toFixed(2) }} 平方米</div>
+            <div>{{ area | squareMeterToMu }} 亩</div>
+            <div>{{ area | squareMeterToHectare }} 公顷</div>
+          </label-item>
+          <label-item label="评估单价">
+            <div>{{ result.assessmentPrice }} 元/平方米</div>
+            <div>
+              {{ (result.assessmentPrice / unitByMu).toFixed(4) }}
+              万元/亩
+            </div>
+          </label-item>
+          <label-item label="评估收益">
             <div>{{ result.anticipated }} 元</div>
             <div>{{ result.anticipated | toTenThousand }} 万元</div>
-          </el-form-item>
-          <el-form-item label="评估收益">
-            <div>{{ result.assessment }} 元</div>
-            <div>{{ result.assessment | toTenThousand }} 万元</div>
-          </el-form-item>
-        </el-form>
+          </label-item>
+        </el-card>
+        <el-card class="col-span-6" header="预算信息">
+          <div v-for="(item, index) of computerResult" :key="index">
+            <label-item label="成本级别" :value="item.level"></label-item>
+            <label-item label="面积" :value="item.area"></label-item>
+            <label-item label="单价" :value="item.price"></label-item>
+            <label-item label="金额" :value="item.cost"></label-item>
+          </div>
+        </el-card>
       </el-tab-pane>
     </el-tabs>
     <div class="operate-buttons">
@@ -79,11 +77,13 @@
 
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import { ComputUnits } from "~/components/layer-system/compute-panel/compute.config.ts"
 import { FilterService } from '~/utils/filter.service'
 import { RequestParams } from "~/core/http"
 import { CesiumCommonService } from '@/utils/cesium/common.service'
+import { LayerInfoService } from "~/services/layer-info.service"
+import { Inject } from "typescript-ioc"
 
 @Component({
   components: {}
@@ -91,55 +91,99 @@ import { CesiumCommonService } from '@/utils/cesium/common.service'
 export default class ComputeEarning extends Vue {
   @Prop()
   private area!: number
-
   @Prop()
-  private polygon!: any[]
+  private positions!: any[]
+  @Inject
+  private service!: LayerInfoService
+
+  private loading = false
 
   private readonly units = ComputUnits
   private currentPanel = "input"
+  // 万元/亩  -> 元 / 平方米
+  private readonly unitByMu: number = 6666.6666667
+  private readonly unitByMeter: number = 15
+
+  private rules = {
+    assessmentPrice: { required: true, message: "请输入评估单价" },
+    landUseType: { required: true, message: "请选择土地用途" }
+  }
 
   private model: any = {
     unit: 1,
     assessmentPrice: "",
-    landPrice: "",
     landUseType: "",
   }
 
   private result: any = {
     area: 0,
+    cost: 0,
     anticipated: 0,
-    assessment: 0
+    assessmentPrice: 0
   }
+
+  private computerResult: any[] = []
 
   private get currentUnit() {
     return ComputUnits.find(x => x.value === this.model.unit)
   }
 
-  private compute() {
-    let result = 0
 
-    // 坐标系数组
-    const coordinate = this.polygon.map(x => {
-      const point = CesiumCommonService.cartesian3ToDegrees(x)
-      return `${point.longitude} ${point.latitude}`
-    }).join(',')
 
-    const params = new RequestParams({
-      wkt: `POLYGON ((${coordinate}))`,
-      layerCode: ""
-    })
 
-    if (this.model.unit === 1) {
-      result += (this.model.assessmentPrice || 0) * this.area
-      result += (this.model.landPrice || 0) * this.area
-    } else {
-      result += (this.model.assessmentPrice || 0) * Number.parseFloat(FilterService.squareMeterToMu(this.model.assessmentPrice)) * 10000
-      result += (this.model.landPrice || 0) * Number.parseFloat(FilterService.squareMeterToMu(this.model.landPrice)) * 10000
+  private async compute() {
+
+    const validateResult = await (this.$refs.form as any).validate().then(v => v).catch(() => false)
+    if (!validateResult) return
+
+    this.loading = true
+
+    const serverResult = await this.computeArea()
+    if (!serverResult) {
+      this.$message("形状交互失败，请重试")
+      this.loading = false
+      return
     }
 
-    this.result.area = this.area
-    this.result.price = result
+    // 地块总成本
+    this.result.cost = this.computerResult.map(v => v.cost).reduce((s, c) => s + c).toFixed(2)
+    // 地块总面积
+    this.result.area = this.computerResult.map(v => v.area).reduce((s, c) => s + c).toFixed(2)
+
+    // 区域预估收益
+    if (this.model.unit === 1) {
+      this.result.assessmentPrice = Number.parseFloat(this.model.assessmentPrice).toFixed(2)
+      this.result.anticipated = (this.model.assessmentPrice * this.area).toFixed(2)
+    } else {
+      this.result.assessmentPrice = (this.model.assessmentPrice * this.unitByMeter).toFixed(2)
+      this.result.anticipated = (this.model.assessmentPrice * this.unitByMeter * this.area).toFixed(2)
+    }
+
+    this.loading = false
     this.currentPanel = "result"
+  }
+
+  private async computeArea() {
+    // 坐标系数组
+    const coordinates = this.positions.map(point => point.join(' ')).join(',')
+    const params = new RequestParams({
+      wkt: `POLYGON ((${coordinates}))`,
+      layerCode: "6533273251451228160"
+    })
+    const result = await this.service.intersectionWkt(params).toPromise()
+    if (!result) return false
+    this.computerResult = JSON.parse(result.geoJson).features.map(({ properties }) => {
+      return {
+        price: properties[this.model.landUseType] * this.unitByMu,
+        area: properties['结果形状面积'],
+        level: properties['级别'],
+        get cost() {
+          // 此地块成本  元 / 平方米
+          return this.price * this.area
+        }
+      }
+    })
+    return true
   }
 
   private reset() {

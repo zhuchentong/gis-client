@@ -37,6 +37,15 @@ export class LandDisasterService {
   public queryLandDisasterAll(requestParams): Observable<any> {
     return requestParams.request()
   }
+  /**
+   * 查询所有的隐患点信息（不分页）
+   */
+  @Request({
+    server: Controller.getLandDisasters,
+  })
+  public getLandDisasters(requestParams): Observable<any> {
+    return requestParams.request()
+  }
 
 
 }

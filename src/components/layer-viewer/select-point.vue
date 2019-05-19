@@ -2,8 +2,7 @@
   <section class="component select-point">
     <map-viewer @map-ready="onMapReady"></map-viewer>
     <div class="map-bottom">
-      <el-button :disabled="!position" @click="startSelecte">重选</el-button>
-      <el-button :disabled="!position" @click="onSubmit">提交</el-button>
+      <el-button :disabled="!position" @click="startDraw">重选</el-button>
     </div>
   </section>
 </template>
@@ -38,39 +37,18 @@ export default class SelectPoint extends Vue {
 
   @Watch('position')
   private onPositionChange(value) {
-    if (!value) this.startSelecte()
-  }
-
-  @Emit('submit')
-  private onSubmit() {
-    return
+    if (!value) this.startDraw()
   }
 
   private onMapReady(value) {
     this.mapViewer = value
     this.drawInteractPoint = new DrawInteractPoint(this.mapViewer)
-
-    this.drawInteractPoint.start().subscribe(({ cartographic }) => {
-      this.onPointSelected(cartographic)
-    })
-
-    if (this.position) {
-      const cartesian = this.mapViewer
-        .getViewer()
-        .scene.globe.ellipsoid.cartographicToCartesian(this.position)
-      const drawService = new CesiumDrawService(this.mapViewer)
-      drawService.drawPoint(cartesian)
-    }
+    this.startDraw()
   }
 
-  private startSelecte() {
-    if (this.mapViewer) {
-      this.mapViewer.getViewer().entities.removeAll()
-      this.onPointSelected(null)
-      this.drawInteractPoint.start().subscribe((data: any) => {
-        this.onPointSelected(data.cartographic)
-      })
-    }
+  private async startDraw() {
+    const { cartographic } = await this.drawInteractPoint.start().toPromise()
+    this.onPointSelected(cartographic)
   }
 }
 </script>
@@ -83,11 +61,10 @@ export default class SelectPoint extends Vue {
   .map-bottom {
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 20;
     background-color: #a9a9a954;
     text-align: right;
     padding: 10px 20px;
-    border-radius: 10px;
   }
 }
 </style>

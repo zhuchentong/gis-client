@@ -5,7 +5,12 @@
         <label>外业类型:</label>
         <el-select v-model="queryModel.type" class="search-worktype">
           <el-option label="全部" value=""></el-option>
-          <el-option v-for="{code,name} of $dict.getDictData('PatrolType')" :key="code" :label="name" :value="code"></el-option>
+          <el-option
+            v-for="{ code, name } of $dict.getDictData('PatrolType')"
+            :key="code"
+            :label="name"
+            :value="code"
+          ></el-option>
         </el-select>
       </div>
       <div v-show="false">
@@ -17,17 +22,47 @@
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
     <div v-else>
-      <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="itemClick(item)" :class="{'info-item-activated': item.id === id}">
-        <label-item label="任务名称" noWarp showTitle :value="item.name"></label-item>
-        <label-item label="外业类型" :value="item.type | dictConvert('PatrolType')"></label-item>
-        <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+      <div
+        v-for="item of dataList"
+        :key="item.id"
+        class="info-item pointer"
+        @click="itemClick(item)"
+        :class="{ 'info-item-activated': item.id === id }"
+      >
+        <label-item
+          label="任务名称"
+          noWarp
+          showTitle
+          :value="item.name"
+        ></label-item>
+        <label-item
+          label="外业类型"
+          :value="item.type | dictConvert('PatrolType')"
+        ></label-item>
+        <label-item
+          label="创建时间"
+          :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"
+        ></label-item>
         <div class="text-right item-operate">
           <el-button type="text" @click="viewTaskDetail">查看详情</el-button>
-          <el-button type="text" :disabled="item.show === 'NO'" @click="taskDataShow(item)">显示区域</el-button>
+          <el-button
+            type="text"
+            :disabled="item.show === 'NO'"
+            @click="taskDataShow(item)"
+            >显示区域</el-button
+          >
         </div>
       </div>
       <div class="text-center">
-        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+        <el-pagination
+          @current-change="refreshData"
+          small
+          :pager-count="5"
+          :current-page.sync="pageService.pageIndex"
+          :page-size="pageService.pageSize"
+          layout="total, prev, pager, next"
+          :total="pageService.total"
+        >
         </el-pagination>
       </div>
     </div>
@@ -122,7 +157,8 @@ export default class TaskPanel extends Vue {
     const requestParams = new RequestParams({ id: taskId })
     this.patrolService.getPatrolTrack(requestParams).subscribe(data => {
       if (!data.length) return
-      const positions = CesiumCommonService.radiansToCartesian3Array(data.map(v => ({ x: v.positionX, y: v.positionY })))
+      let positions = data.map(v => ({ longitude: v.positionX, latitude: v.positionY }))
+      positions = CesiumCommonService.degreesToCartesian3Array(positions)
       this.viewer && this.drawEntity(positions)
     })
   }
