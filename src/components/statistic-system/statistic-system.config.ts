@@ -127,3 +127,42 @@ export function queryQuarterName(code: number) {
   const quarterly = QuarterSetting.find(x => x.code === code)
   return quarterly ? quarterly.name : code
 }
+
+/**
+ * 地灾等级颜色配置
+ */
+export const ChartColorByLevel = [
+
+  {
+    name:"一级",
+    code :"ONE",
+    color:"#19d4ae",
+    sort:1
+  },{
+    name:"二级",
+    code :"TWO",
+    color:"#63c2ff",
+    sort:2
+  },{
+    name:"三级",
+    code :"THREE",
+    color:"#FFA500",
+    sort:3
+  },{
+    name:"四级",
+    code :"FOUR",
+    color:"#ffb980",
+    sort:4
+  },{
+    name:"五级",
+    code :"FIVE",
+    color:"#fa6e86",
+    sort:5
+  }
+  // "一级" : "#19d4ae",
+  // "二级":"#63c2ff",
+  // "三级":"#FFA500",
+  // "四级":"#ffb980",
+  // "五级":"#fa6e86",
+  // "OTHER" : "#BDB76B"
+]

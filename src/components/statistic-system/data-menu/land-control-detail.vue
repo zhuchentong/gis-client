@@ -6,7 +6,7 @@
         :showIcon="false"
         title="控制性详细规划统计"
       ></common-title>
-      <ve-pie :data="chartData" log></ve-pie>
+      <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
@@ -27,9 +27,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import DataBox from "~/components/common/data-box.vue"
-import { LayerStatisticalService } from "~/services/layer-statistical.service"
-import { VePie, VeHistogram, legendScroll } from "v-charts"
+import DataBox from '~/components/common/data-box.vue'
+import { LayerStatisticalService } from '~/services/layer-statistical.service'
+import { VePie, VeHistogram } from 'v-charts'
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 
@@ -37,8 +37,7 @@ import { RequestParams } from '~/core/http'
   components: {
     DataBox,
     VePie,
-    VeHistogram,
-    legendScroll
+    VeHistogram
   }
 })
 export default class LandControlDetail extends Vue {
@@ -46,8 +45,8 @@ export default class LandControlDetail extends Vue {
   private sevice!: LayerStatisticalService
 
   private readonly setting = {
-    name: "管制区类型",
-    acreage: "占地面积(亩)"
+    name: '管制区类型',
+    acreage: '占地面积(亩)'
   }
 
 
