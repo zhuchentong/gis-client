@@ -95,6 +95,7 @@ import FileUpload from '~/components/common/file-upload.vue'
 import { FileType } from '~/config/enum.config.ts'
 import { LayerInfo } from '~/models/layer-info.model.ts'
 import { TempLayers } from '~/models/temp-layers.model'
+import { CesiumCommonService } from '@/utils/cesium/common.service'
 
 @Component({
   components: {
@@ -115,8 +116,11 @@ export default class CheckPanel extends Vue {
   private loading = false
   private positions: any[] = []
   private checkItem: any = {}
-  // 临时图层
-  private tempLayerCode = ''
+
+  // 图层code
+  private layerCode = ''
+  // 区域 wkt
+  private wktStr: string = ""
 
   private dialog = {
     task: false,
@@ -146,25 +150,43 @@ export default class CheckPanel extends Vue {
       fill: true,
       fillColor: Cesium.Color.fromAlpha(Cesium.Color.LIGHTSKYBLUE, 0.5)
     })
+
     const { positions } = await drawInteractPolyline.start().toPromise()
+
     if (!positions || positions.length < 3) {
       this.$message('请选择有效测量区域')
       return
     }
 
-    this.positions = positions
+    // 生成闭合坐标范围，并转换成经纬度坐标数组
+    const lcoaltion = [...positions, positions[0]].map(position => {
+      const { longitude, latitude } = CesiumCommonService.cartesian3ToDegrees(position)
+      return [longitude, latitude].join(' ')
+    })
+    // 生成坐标范围表示字符串
+    const coordinates = lcoaltion.join(',')
+    // 组合WKT字符串
+    this.wktStr = `POLYGON ((${coordinates}))`
     this.dialog.layer = true
   }
 
   private taskSelected(data) {
-    console.log(data)
     this.dialog.task = false
-    this.positions = data
-    this.dialog.layer = true
+    if (data && data.length > 3) {
+      const lcoaltion = [...data, data[0]].map(item => [item.positionX, item.positionY].join(' '))
+      const coordinates = lcoaltion.join(',')
+      this.wktStr = `POLYGON ((${coordinates}))`
+      this.dialog.layer = true
+    } else {
+      this.$message("外业巡查数据不是有效区域，请重新选择")
+      return
+    }
+
   }
 
   private businessSelected(data) {
     this.dialog.business = false
+    this.layerCode = data.layerCode
     this.dialog.layer = true
   }
 
@@ -175,7 +197,8 @@ export default class CheckPanel extends Vue {
     this.$nextTick(() => {
       const checkResult = this.$refs['check-result'] as any
       checkResult.startCheck(checkContent, {
-        positions: this.positions
+        wkt: this.wktStr,
+        layer: this.layerCode
       })
     })
   }
@@ -185,7 +208,7 @@ export default class CheckPanel extends Vue {
    */
   private onFileUploadSuccess(id: string, data: any) {
     this.dialog.import = false
-    this.tempLayerCode = data.id
+    this.layerCode = data.id
     const layerInfo = new LayerInfo()
     layerInfo.fileId = data.id
     layerInfo.layerName = data.originalName

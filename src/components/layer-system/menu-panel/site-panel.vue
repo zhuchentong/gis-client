@@ -60,7 +60,7 @@
     </div>
 
     <el-dialog
-      title="维护地灾点"
+      title="维护地灾隐患点"
       :center="true"
       :visible.sync="dialog.modify"
       width="500px"

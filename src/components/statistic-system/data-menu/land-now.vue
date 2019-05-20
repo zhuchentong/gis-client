@@ -17,7 +17,11 @@
             ></el-option>
           </el-select>
         </common-title>
-        <ve-pie :data="chartData" :events="chartEvents"></ve-pie>
+        <ve-pie
+          :data="chartData"
+          :settings="chartSetting"
+          :events="chartEvents"
+        ></ve-pie>
       </el-card>
       <el-card class="col-span-6">
         <div v-if="!typeName" class="no-data"></div>
@@ -73,6 +77,11 @@ export default class LandNow extends Vue {
   }
 
   private years = [2016, 2017]
+
+  private chartSetting = {
+    selectedMode: "single"
+  }
+
 
   private readonly setting = {
     name: "类型",

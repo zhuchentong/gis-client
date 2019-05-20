@@ -7,7 +7,11 @@
           :showIcon="false"
           title="地灾分布统计"
         ></common-title>
-        <ve-pie :data="chartDataByName" :events="chartEvents"></ve-pie>
+        <ve-pie
+          :data="chartDataByName"
+          :settings="chartSetting"
+          :events="chartEvents"
+        ></ve-pie>
       </el-card>
       <el-card class="col-span-6">
         <div v-if="!chartDataName" class="no-data"></div>
@@ -60,6 +64,12 @@ export default class ReportLand extends Vue {
   private dataSet: any = []
 
   private chartDataName = ""
+
+  private chartSetting = {
+    selectedMode: "single"
+  }
+
+
   private readonly settingByName = {
     prefecture: "行政村",
     number: "数量"

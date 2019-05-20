@@ -66,6 +66,8 @@ import { DetectionService } from '~/services/detection.service'
 import { RequestParams } from '../../../../core/http'
 import { CqlBuilder } from '~/utils/cql-build.service'
 import { List } from 'linqts'
+import Cesium from "cesium/Cesium"
+
 @Component({
   components: {}
 })
@@ -162,14 +164,14 @@ export default class Precautionary extends Vue {
    */
   private async startFieldCheck({ code }) {
     // 获取检测范围
-    const { positions, layer } = this.range
+    const { wkt, layer } = this.range
     // 设置检测条件
     const cql = `"TDYTQLXDM" = '010' or "TDYTQLXDM" = '020'`
     // 检测结果
     let result
     // 获取检测数据
-    if (positions) {
-      result = await this.getRangeCheck(code, positions, cql)
+    if (wkt) {
+      result = await this.getRangeCheck(code, wkt, cql)
     } else {
       // result = await this.getLayerCheck(code, layer)
     }
@@ -187,14 +189,14 @@ export default class Precautionary extends Vue {
 
   private async startBuildCheck({ code }) {
     // 获取检测范围
-    const { positions, layer } = this.range
+    const { wkt, layer } = this.range
     // 设置检测条件
     // const cql = `"TDYTQLXDM" = '010' or "TDYTQLXDM" = '020'`
     // 检测结果
     let result
     // 获取检测数据
-    if (positions) {
-      result = await this.getRangeCheck(code, positions)
+    if (wkt) {
+      result = await this.getRangeCheck(code, wkt)
     } else {
       // result = await this.getLayerCheck(code, layer)
     }
@@ -241,21 +243,13 @@ export default class Precautionary extends Vue {
   /**
    * 进行区域检测
    */
-  private getRangeCheck(code, positions, cql?) {
+  private getRangeCheck(code, wktStr, cql?) {
     const detectionService = new DetectionService()
-    // 获取wkt区域数据
-    const polygon = [...positions, positions[0]]
-      .map(x => {
-        const point = CesiumCommonService.cartesian3ToDegrees(x)
-        return `${point.longitude} ${point.latitude}`
-      })
-      .join(',')
-
     // 获取对比数据
     return detectionService
       .getDetectionWkt(
         new RequestParams({
-          wkt: `POLYGON ((${polygon}))`,
+          wkt: wktStr,
           layerCode: code,
           cql
         })

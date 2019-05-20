@@ -74,12 +74,15 @@
               {{ item.cost | toTenThousand }} 万元
             </label-item>
           </div>
-          <label-item label="预算总面积">
-            {{ result.area.toFixed(2) }} 平方米
-          </label-item>
-          <label-item label="预算总金额">
-            {{ result.cost | toTenThousand }} 万元
-          </label-item>
+          <div class="result-content">
+            <label-item label="预算总面积">
+              <span>{{ result.area }} 平方米</span>
+              <span style="margin-left:10px">{{ result.area | squareMeterToMu }} 亩</span>
+            </label-item>
+            <label-item label="预算总金额">
+              {{ result.cost | toTenThousand }} 万元
+            </label-item>
+          </div>
         </el-card>
       </el-tab-pane>
     </el-tabs>
@@ -180,7 +183,7 @@ export default class ComputeEarning extends Vue {
     }
 
     // 地块总成本
-    this.result.cost = this.computerResult.map(v => v.cost).reduce((s, c) => s + c).toFixed(2)
+    this.result.cost = this.computerResult.map(v => v.cost).reduce((s, c) => s + c)
     // 地块总面积
     this.result.area = this.computerResult.map(v => v.area).reduce((s, c) => s + c).toFixed(2)
 
@@ -220,3 +223,14 @@ export default class ComputeEarning extends Vue {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.component.compute-earning {
+  .result-content {
+    border: 1px solid #bfc9c0;
+    border-radius: 5px;
+    padding: 5px 0;
+  }
+}
+</style>
+

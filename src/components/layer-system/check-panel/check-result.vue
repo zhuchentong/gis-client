@@ -1,9 +1,18 @@
 <template>
   <section class="component check-result">
     <el-tabs v-model="currentTab">
-      <el-tab-pane v-for="tab of tabs" :key="tab.component" :name="tab.component" :label="tab.name">
+      <el-tab-pane
+        v-for="tab of tabs"
+        :key="tab.component"
+        :name="tab.component"
+        :label="tab.name"
+      >
         <keep-alive>
-          <component :is="tab.component" :content="tab.data" :range="tab.range"></component>
+          <component
+            :is="tab.component"
+            :content="tab.data"
+            :range="tab.range"
+          ></component>
         </keep-alive>
       </el-tab-pane>
     </el-tabs>
@@ -29,7 +38,7 @@ export default class CheckResult extends Vue {
   private tabs: any[] = []
   private currentTab = ResultTabs[0].key
 
-  public startCheck(checkContent: any, range: { positions?; layer? }) {
+  public startCheck(checkContent: any, range: { wkt?: string; layer?: string }) {
     // 生成检测结果tab
     this.tabs = Object.entries(checkContent)
       .filter(([key, { name, values }]: [string, any]) => values.length)
@@ -39,6 +48,7 @@ export default class CheckResult extends Vue {
         data: data.values.map(x => data.children.find(y => y.code === x)),
         range
       }))
+    this.currentTab = this.tabs[0].component
   }
 }
 </script>
