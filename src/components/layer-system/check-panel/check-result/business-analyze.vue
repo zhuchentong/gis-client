@@ -16,13 +16,6 @@
               :min-width="$helper.getColumnWidth(2)"
               show-overflow-tooltip
             ></el-table-column>
-            <!-- <el-table-column
-          label="项目类型"
-          prop="type"
-          :min-width="$helper.getColumnWidth(2)"
-          :formatter="row => $filter.dictConvert(row.type,'FlowType')"
-          show-overflow-tooltip
-            ></el-table-column>-->
             <el-table-column
               label="项目面积"
               prop="acreage"
@@ -68,6 +61,9 @@ export default class BusinessAnalyzeBase extends Vue {
   @Prop()
   public range
 
+  @Inject
+  private service!:DetectionService
+
   private bcData = []
   private pdData = []
   private zdData = []
@@ -103,14 +99,14 @@ export default class BusinessAnalyzeBase extends Vue {
 
   private async startRequestCheck(node) {
     // 获取检测范围
-    const { positions, layer } = this.range
+    const { wkt, layer } = this.range
     // 检测结果
     let result
     // 获取检测数据
-    if (positions) {
-      result = await this.getRangeCheck(node, positions)
+    if (wkt) {
+      result = await this.getRangeCheck(node, wkt)
     } else {
-      // result = await this.getLayerCheck(code, layer)
+      result = await this.getLayerCheck(node, layer)
     }
 
     return result
@@ -119,30 +115,28 @@ export default class BusinessAnalyzeBase extends Vue {
   /**
    * 进行区域检测
    */
-  private getRangeCheck({ key }, positions, cql?) {
-    const detectionService = new DetectionService()
-    // 获取wkt区域数据
-    const polygon = [...positions, positions[0]]
-      .map(x => {
-        const point = CesiumCommonService.cartesian3ToDegrees(x)
-        return `${point.longitude} ${point.latitude}`
-      })
-      .join(',')
-
+  private getRangeCheck({ key }, wktStr) {
     // 获取对比数据
-    return detectionService
+    return this.service
       .getBusinessWkt(
         new RequestParams({
-          wkt: `POLYGON ((${polygon}))`,
-          flowType: key,
-          cql
+          wkt: wktStr,
+          flowType: key
         })
       )
       .toPromise()
   }
 
-  private getLayerCheck(code, layer) {
-    return
+  private getLayerCheck({key}, layer) {
+     // 获取对比数据
+    return this.service
+      .getBusinessLayerCode(
+        new RequestParams({
+          layerCode: layer,
+          flowType: key
+        })
+      )
+      .toPromise()
   }
 }
 </script>

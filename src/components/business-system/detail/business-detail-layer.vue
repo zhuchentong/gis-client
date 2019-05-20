@@ -30,7 +30,7 @@ export default class extends Vue {
   private flowId!: string
   private load = false
 
-  private layerInfo!: any
+  private layerInfo: any = null
   private mapView!: MapViewer
 
   @Inject

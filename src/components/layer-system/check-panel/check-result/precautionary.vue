@@ -21,8 +21,8 @@
           <label-container :column="2" :labelWidth="120">
             <label-item label="压盖面积">{{ item.area }}平方米</label-item>
             <label-item label="所占比例"
-              >{{ (item.radio * 100).toFixed(2) }}%</label-item
-            >
+              >{{ (item.radio * 100).toFixed(2) }}%
+            </label-item>
           </label-container>
         </label-item>
       </label-container>
@@ -48,8 +48,8 @@
           <label-container :column="2" :labelWidth="120">
             <label-item label="压盖面积">{{ item.area }}平方米</label-item>
             <label-item label="所占比例"
-              >{{ (item.radio * 100).toFixed(2) }}%</label-item
-            >
+              >{{ (item.radio * 100).toFixed(2) }}%
+            </label-item>
           </label-container>
         </label-item>
       </label-container>
@@ -79,6 +79,9 @@ export default class Precautionary extends Vue {
 
   @Prop()
   public range
+
+  @Inject
+  private service!: DetectionService
 
   // 基本农田检测结果
   private fieldResult: any = null
@@ -147,15 +150,24 @@ export default class Precautionary extends Vue {
     this.buildResult = null
     this.fieldResult = null
 
+    // 检测方法配置
+    const funSetting = {
+      jbnt: this.startFieldCheck,
+      yxjsq: this.startBuildCheck
+    }
+
+
     this.content.forEach(x => {
-      switch (x.type) {
-        case 'jbnt':
-          this.startFieldCheck(x)
-          break
-        case 'yxjsq':
-          this.startBuildCheck(x)
-          break
-      }
+      const fun = funSetting[x.type]
+      fun && fun(x)
+      // switch (x.type) {
+      //   case 'jbnt':
+      //     this.startFieldCheck(x)
+      //     break
+      //   case 'yxjsq':
+      //     this.startBuildCheck(x)
+      //     break
+      // }
     })
   }
 
@@ -173,7 +185,7 @@ export default class Precautionary extends Vue {
     if (wkt) {
       result = await this.getRangeCheck(code, wkt, cql)
     } else {
-      // result = await this.getLayerCheck(code, layer)
+      result = await this.getLayerCheck(code, layer, cql)
     }
     if (result && result.length) {
       const alarm = this.getResultAlarm(this.fieldList, result)
@@ -190,15 +202,13 @@ export default class Precautionary extends Vue {
   private async startBuildCheck({ code }) {
     // 获取检测范围
     const { wkt, layer } = this.range
-    // 设置检测条件
-    // const cql = `"TDYTQLXDM" = '010' or "TDYTQLXDM" = '020'`
     // 检测结果
     let result
     // 获取检测数据
     if (wkt) {
       result = await this.getRangeCheck(code, wkt)
     } else {
-      // result = await this.getLayerCheck(code, layer)
+      result = await this.getLayerCheck(code, layer)
     }
     if (result && result.length) {
       const alarm = this.getResultAlarm(this.buildList, result)
@@ -241,31 +251,41 @@ export default class Precautionary extends Vue {
   }
 
   /**
-   * 进行区域检测
+   * 进行区域检测 使用WKT 区域对比
    */
-  private getRangeCheck(code, wktStr, cql?) {
-    const detectionService = new DetectionService()
+  private getRangeCheck(mainLayerCode, wktStr, cql?) {
     // 获取对比数据
-    return detectionService
+    return this.service
       .getDetectionWkt(
         new RequestParams({
           wkt: wktStr,
-          layerCode: code,
+          layerCode: mainLayerCode,
           cql
         })
       )
       .toPromise()
   }
 
-  private getLayerCheck(code, layer) {
-    return
+  /**
+   * 区域对比  使用图层对比
+   */
+  private getLayerCheck(mainLayerCode, checkLayerCode, cql?) {
+    return this.service.getDetectionLayerCode(
+      new RequestParams({
+        layerCode1: checkLayerCode,
+        layerCode2: mainLayerCode,
+        cql
+      })
+    ).toPromise()
   }
 }
 </script>
 
 <style lang="less" scoped>
-.alarm {
-  color: red;
+.component.precautionary {
+  .alarm {
+    color: red;
+  }
 }
 </style>
 

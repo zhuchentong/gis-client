@@ -23,5 +23,29 @@ export default {
     controller: CONTROLLER,
     action: 'getBusinessWkt',
     type: RequestMethod.Get
+  },
+  /**
+   * 预警检测（图层对比）
+   */
+  getDetectionLayerCode:{
+    controller: CONTROLLER,
+    action: 'getDetectionLayerCode',
+    type: RequestMethod.Get
+  },
+  /**
+   * 数据分析（图层对比）
+   */
+  getDateAnalysisLayerCode:{
+    controller: CONTROLLER,
+    action: 'getDateAnalysisLayerCode',
+    type: RequestMethod.Get
+  },
+  /**
+   * 业务分析（图层对比）
+   */
+  getBusinessLayerCode:{
+    controller: CONTROLLER,
+    action: 'getBusinessLayerCode',
+    type: RequestMethod.Get
   }
 }
