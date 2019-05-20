@@ -11,8 +11,8 @@
         <el-option
           v-for="item of dataSet"
           :key="item.id"
-          :label="item.name"
-          :value="item.id"
+          :label="item.layerName"
+          :value="item.layerCode"
         ></el-option>
       </el-select>
     </common-title>
@@ -63,6 +63,7 @@ import { Form } from 'element-ui'
 import { namespace } from 'vuex-class'
 
 const LayerTableModule = namespace('layerTableModule')
+const LayerRelationModule = namespace('layerRelationModule')
 
 @Component({
   components: {
@@ -73,6 +74,7 @@ export default class SearchLand extends Vue {
   @LayerTableModule.Getter private getTable!: (id) => any
   @LayerTableModule.Mutation private addLayerAttrTable!: (data) => void
   @LayerTableModule.Mutation private removeLayerAttrTable!: (id) => void
+  @LayerRelationModule.Getter private layerRelations!: any[]
 
   private currentLayer = ''
   private lastQueryTableId = ''
@@ -91,11 +93,6 @@ export default class SearchLand extends Vue {
 
   private dataSet: any[] = []
   private model: any = {}
-
-  private get searchLayers() {
-    return this.searchSetting.map(v => v.name)
-  }
-
   private searchItems: any[] = []
 
   @Emit('success')
@@ -103,25 +100,16 @@ export default class SearchLand extends Vue {
     return
   }
 
-
-  private get currentSelectItem() {
-    return this.dataSet.find(x => x.id === this.currentLayer)
-  }
-
   @Watch('count', { immediate: true })
   private onVisabledChange(val) {
     // 监听页面打开状态，更新图层列表
     this.dataSet = this.viewer
       .getLayerList()
-      .map(({ layer }) => {
-        return {
-          id: layer.id,
-          name: layer.layerName
-        }
-      })
-      .filter(layer => !!this.searchLayers.find(x => layer.name.includes(x)))
+      .map(item => item.layer)
+      .filter(layer => !!this.searchSetting.find(x => x.layerCode === layer.layerCode))
+
+    // 如果没有勾选图层，相应的查询表单也应该清除
     if (!this.dataSet.length) {
-      // 如果没有勾选图层，相应的查询表单也应该清除
       this.currentLayer = ""
       this.layerChange()
     }
@@ -129,12 +117,13 @@ export default class SearchLand extends Vue {
 
   private layerChange(id?) {
     this.model = {}
-    if (!id) this.searchItems = []
-    if (!this.currentSelectItem) return
+    if (!id) {
+      this.searchItems = []
+      return
+    }
+
     // 更新检索项
-    const { searchItems } = this.searchSetting.find(x =>
-      this.currentSelectItem.name.includes(x.name)
-    )
+    const { searchItems } = this.searchSetting.find(x => x.layerCode === this.currentLayer)
     if (!searchItems) return
     this.searchItems = searchItems
     searchItems.forEach(({ code, type }) => {
@@ -148,7 +137,10 @@ export default class SearchLand extends Vue {
   }
 
   private submit() {
-    const tableInfo = this.getTable(this.currentLayer)
+    // 创建检索数据table
+    const currentItem = this.dataSet.find(x => x.layerCode === this.currentLayer)
+
+    const tableInfo = this.getTable(currentItem.id)
     if (!tableInfo) {
       this.$message.error('未找到关联图层数据信息')
       return
@@ -159,10 +151,11 @@ export default class SearchLand extends Vue {
       return
     }
     this.$message.success(`检索到 ${filterData.length} 条数据`)
-    // 创建检索数据table
+
+
     const attrTable = {
       id: this.lastQueryTableId + Date.now(),
-      name: `${this.currentSelectItem.name}-地块检索`,
+      name: `${currentItem.layerName}-地块检索`,
       data: filterData
     }
     this.addLayerAttrTable(attrTable)
@@ -198,6 +191,17 @@ export default class SearchLand extends Vue {
       this.removeLayerAttrTable(this.lastQueryTableId)
       this.lastQueryTableId = ''
     }
+  }
+
+  private mounted() {
+    // 使用图层关系图层code   layerCode
+    this.searchSetting = this.searchSetting.map(setting => {
+      const relation = this.layerRelations.find(x => x.type === setting.relationType)
+      return {
+        ...relation,
+        ...setting
+      }
+    })
   }
 }
 </script>

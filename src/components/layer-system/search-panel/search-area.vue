@@ -42,22 +42,28 @@
 
 <script lang="ts">
 import { Component, Vue, Emit, Prop } from 'vue-property-decorator'
-import District from '~/components/business-common/district.vue'
+import { namespace } from "vuex-class"
 import NumberRange from '~/components/common/number-range.vue'
 import { CqlBuilder } from '~/utils/cql-build.service'
 import { LayerInfoService } from '~/services/layer-info.service'
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
-import Cesium from 'cesium/Cesium'
+import { SearchAreaLayerSetting } from "~/components/layer-system/search-panel/search-panel.config"
+// import Cesium from 'cesium/Cesium'
+// import { CesiumCommonService } from '~/utils/cesium/common.service'
+// import { CesiumComputeService } from "~/utils/cesium/compute.service"
+
+const LayerRelationModule = namespace('layerRelationModule')
 
 @Component({
   components: {
-    District,
     NumberRange
   }
 })
 export default class SearchArea extends Vue {
+  @LayerRelationModule.Getter private layerRelations!: any[]
+
   private searchRangeSetting: any[] = require('~/assets/json/search-range-setting.json')
   private searchConfing: any[] = require('~/assets/json/search-setting.json')
   @Inject
@@ -73,32 +79,7 @@ export default class SearchArea extends Vue {
   private model: any = {}
 
   // 查询项目配置
-  private itemsSeting = [
-    {
-      layerCode: '6533189554047692800',
-      layerName: '地类图斑',
-      showName: '土地现状', // 界面显示的搜索类型名称
-      items: ['DLMC', 'ZLDWMC', 'TBDLMJ']
-    },
-    {
-      layerCode: '6534620896976896000',
-      layerName: '建设用地管制区',
-      showName: '建设用地管制区',
-      items: ['GZQLXDM']
-    },
-    {
-      layerCode: '6534621158219120640',
-      layerName: '土地用途区',
-      showName: '土地用途区',
-      items: ['TDYTQLXDM']
-    },
-    {
-      layerCode: '6534621635535110144',
-      layerName: '土地使用规划',
-      showName: '控制性详细规划',
-      items: ['用地代码']
-    }
-  ]
+  private itemsSeting: any[] = SearchAreaLayerSetting
 
   @Emit('success')
   private onSuccess() {
@@ -106,9 +87,34 @@ export default class SearchArea extends Vue {
   }
 
   private mounted() {
+    // this.viewer.getViewer().screenSpaceEventHandler.setInputAction((e: any) => {
+    //   const feautre: any = this.viewer.getViewer().scene.pick(e.position)
+    //   // console.log(feautre)
+    //   if (!feautre) return
+    //   const polygon = feautre.id.polygon
+    //   if (!polygon) return
+    //   const hierarchy = polygon.hierarchy as Cesium.ConstantProperty
+    //   let { positions } = hierarchy.getValue()
+    //   positions = positions.map(v => {
+    //      const c = CesiumCommonService.cartesian3ToDegrees(v)
+    //      return [c.longitude,c.latitude]
+    //   })
+    //   const area = CesiumComputeService.computeArea(positions)
+    //   console.log(area)
+
+    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+
+    const relations = this.itemsSeting.map(setting => {
+      const relation = this.layerRelations.find(x => x.type === setting.relationType) || {}
+      return {
+        ...setting,
+        layerCode: relation.layerCode
+      }
+    })
+
     // 根据配置的搜索项，组件formItem 字段类型 以及model属性
-    this.itemsSeting.forEach(setting => {
-      const config = this.searchConfing.find(x => x.name === setting.layerName)
+    relations.forEach(setting => {
+      const config = this.searchConfing.find(x => x.relationType === setting.relationType)
       if (!config) return
       const items = setting.items.map(v => {
         const configItem = config.searchItems.find(x => x.code === v)
@@ -121,6 +127,7 @@ export default class SearchArea extends Vue {
       })
       setting.items = items
     })
+    this.itemsSeting = relations
   }
 
   private reset() {
@@ -133,22 +140,22 @@ export default class SearchArea extends Vue {
     // 便利表单项目，生成查询对象
     this.itemsSeting.forEach(setting => {
       const cql = new CqlBuilder()
-        // 便利表单项，为cql 添加查询条件
-        ; (setting.items as any).forEach(({ code, type }) => {
-          const queryData = this.model[code]
-          // 没有值则不参与生成cql
-          if (!queryData) return
-          // 根据表单数据类型，设置条件连接词
-          if (type === 'number') {
-            const { min, max } = queryData
-            if (!min && !max) return
-            cql.addPredicater(code, 'between', [min, max])
-          } else if (type === 'range') {
-            cql.addPredicater(code, 'equal', queryData)
-          } else {
-            cql.addPredicater(code, 'like', queryData)
-          }
-        })
+      // 遍历表单项，为cql 添加查询条件
+      setting.items.forEach(({ code, type }) => {
+        const queryData = this.model[code]
+        // 没有值则不参与生成cql
+        if (!queryData) return
+        // 根据表单数据类型，设置条件连接词
+        if (type === 'number') {
+          const { min, max } = queryData
+          if (!min && !max) return
+          cql.addPredicater(code, 'between', [min, max])
+        } else if (type === 'range') {
+          cql.addPredicater(code, 'equal', queryData)
+        } else {
+          cql.addPredicater(code, 'like', queryData)
+        }
+      })
       const cqlStr = cql.build()
       if (!cqlStr) return
       params.push({
@@ -165,8 +172,14 @@ export default class SearchArea extends Vue {
   }
 
   private qeury(queryList) {
+    const mainLayer = this.itemsSeting.find(x => x.main && x.layerCode)
+    if (!mainLayer) {
+      console.error("layer_relation表配置有问题")
+      this.$message.error("图层配置错误，请检查图层关系设置")
+      return
+    }
     const requestParams = new RequestParams({
-      mainLayerCode: '6533189554047692800',
+      mainLayerCode: mainLayer.layerCode,
       layerCodes: queryList
     })
     this.loading = true

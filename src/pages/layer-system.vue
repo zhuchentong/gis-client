@@ -34,7 +34,7 @@ import { TempLayers } from '~/models/temp-layers.model.ts'
     LayerAttrTable
   }
 })
-export default class extends Vue {
+export default class LayerSystem extends Vue {
   public mapViewer: MapViewer | null = null
 
   private onMapReady(viewer) {

@@ -140,7 +140,7 @@ import CreateNewTask from "~/components/task-system/add-new/create-new-task.vue"
     CreateNewTask
   }
 })
-export default class extends Vue {
+export default class TaskSystem extends Vue {
   private queryModel = {
     status: "PENDING_PATROL", // 待巡查
     type: "" // 全部

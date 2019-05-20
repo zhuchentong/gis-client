@@ -112,4 +112,14 @@ export class LayerInfoService {
   public intersectionWkt(requestParams): Observable<any> {
     return requestParams.request()
   }
+
+  /**
+   * 获取图层关系
+   */
+  @Request({
+    server: Controller.getLayerRelation
+  })
+  public getLayerRelation(requestParams): Observable<any> {
+    return requestParams.request()
+  }
 }

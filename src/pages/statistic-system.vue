@@ -40,7 +40,7 @@ import { MenuList, DataComponents, TaskComponents, BussinessComponents } from "~
     ...TaskComponents
   }
 })
-export default class extends Vue {
+export default class StatisticSystem extends Vue {
 
   private readonly menus = MenuList
 

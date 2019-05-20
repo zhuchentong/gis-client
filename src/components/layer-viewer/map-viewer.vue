@@ -3,18 +3,29 @@
     <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div v-if="isDrawing||drawEntitiesLength" class="draw-tool-bar icon-button-group">
+    <div
+      v-if="isDrawing || drawEntitiesLength"
+      class="draw-tool-bar icon-button-group"
+    >
       <div class="icon-button" @click="onDrawEvent('close')">
         <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
-      <div class="icon-button" @click="isDrawing&&onDrawEvent('reset')">
-        <svg-icon :iconColor="isDrawing?'white':'gray'" iconName="reset"></svg-icon>
+      <div class="icon-button" @click="isDrawing && onDrawEvent('reset')">
+        <svg-icon
+          :iconColor="isDrawing ? 'white' : 'gray'"
+          iconName="reset"
+        ></svg-icon>
       </div>
-      <div class="icon-button" @click="isDrawing&&onDrawEvent('submit')">
-        <svg-icon :iconColor="isDrawing?'white':'gray'" iconName="right"></svg-icon>
+      <div class="icon-button" @click="isDrawing && onDrawEvent('submit')">
+        <svg-icon
+          :iconColor="isDrawing ? 'white' : 'gray'"
+          iconName="right"
+        ></svg-icon>
       </div>
     </div>
-    <div v-if="isDrawing&&drawTipInfo" class="draw-tip-panel">{{drawTipInfo}}</div>
+    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
+      {{ drawTipInfo }}
+    </div>
     <div id="credit" style="display:none"></div>
   </section>
 </template>
@@ -313,7 +324,6 @@ export default class MapViewer extends Vue {
 
   // 初始化cesium
   private mounted() {
-    console.log(cesiumNavigation)
     this.$nextTick(this.initMap)
   }
 
@@ -391,7 +401,6 @@ export default class MapViewer extends Vue {
     )
 
     this.GetGeographicBoundingBox(this.workspace).then((x: any) => {
-      console.log(x)
       cesiumNavigation(this.viewer, {
         defaultResetView: x.destination,
         enableCompass: true,
@@ -469,7 +478,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-        this.geoServer
+      this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -637,7 +646,7 @@ export default class MapViewer extends Vue {
       filter: gray;
     }
   }
-  .navigation-control-icon-reset{
+  .navigation-control-icon-reset {
     display: none;
   }
 }

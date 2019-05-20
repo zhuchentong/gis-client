@@ -38,13 +38,19 @@
 import { Component, Vue, Emit, Prop } from "vue-property-decorator"
 import MapViewer from "~/components/layer-viewer/map-viewer.vue"
 import { CqlBuilder } from "~/utils/cql-build.service"
+import { namespace } from "vuex-class"
+import { SearchBuildingSetting } from "~/components/layer-system/search-panel/search-panel.config"
+import { LayerInfoService } from "~/services/layer-info.service"
+import { RequestParams } from "~/core/http"
+
+const LayerRelationModule = namespace('layerRelationModule')
 
 @Component({
   components: {
   }
 })
 export default class SearchBuildings extends Vue {
-
+  @LayerRelationModule.Getter private layerRelations!: any[]
   @Prop()
   private viewer!: MapViewer
 
@@ -52,32 +58,9 @@ export default class SearchBuildings extends Vue {
   private layerInfo: any = null
 
   // layerInfo
-  private buildingLayerInfo = {
-    id: "6535103650042814464",
-    layerName: "建筑物信息",
-    layerCode: "6535103650042814464",
-    layerSpace: "third-space"
-  }
-
+  private buildingLayerInfo: any = {}
   // formItems setting
-  private searchItems = [
-    {
-      name: "建筑结构",
-      code: "建筑结构",
-      type: "range",
-      filter: "equal"
-    }, {
-      name: "建筑层数",
-      code: "建筑层数",
-      type: "string",
-      filter: "equal"
-    }, {
-      name: "坐落位置",
-      code: "坐落位置",
-      type: "string",
-      filter: "equal"
-    }
-  ]
+  private searchItems = SearchBuildingSetting.searchItems
 
   // formItem 数据源
   private searchRangeSetting = {
@@ -93,6 +76,16 @@ export default class SearchBuildings extends Vue {
     this.searchItems.forEach(({ code, type }) => {
       this.$set(this.model, code, type === 'number' ? { min: '', max: '' } : '')
     })
+  }
+
+  private mounted() {
+    // 查找关系， 设置图层
+    const service = new LayerInfoService()
+    service.getLayerInfoList(new RequestParams({ layerSpace: SearchBuildingSetting.layerSpace }))
+      .subscribe(data => {
+        const relation = this.layerRelations.find(x => x.type === SearchBuildingSetting.relationType)
+        this.buildingLayerInfo = data.find(x => x.layerCode === relation.layerCode)
+      })
   }
 
 

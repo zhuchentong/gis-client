@@ -27,7 +27,7 @@ const DistrictModule = namespace('districtModule')
 @Component({
   components: {}
 })
-export default class extends Vue {
+export default class Home extends Vue {
   @DistrictModule.Mutation private updateDistrictData
 
   private readonly menuList = [
@@ -104,8 +104,6 @@ export default class extends Vue {
     position: absolute;
     top: 120px;
     left: 30px;
-    div:nth-child(1) {
-    }
     div:nth-child(2) {
       margin-top: 10px;
       margin-left: 30px;

@@ -2,7 +2,7 @@
   <section class="component check-layer-selecte">
     <el-card v-for="checkGroup in checkContentList" :key="checkGroup.name">
       <div slot="header" class="row middle-span between-span">
-        <span>{{checkGroup.name}}</span>
+        <span>{{ checkGroup.name }}</span>
         <!-- <el-checkbox :value="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
       </div>
       <div>
@@ -12,7 +12,8 @@
             :label="checkItem.code"
             :key="checkItem.code"
             v-for="checkItem in checkGroup.children"
-          >{{checkItem.name}}</el-checkbox>
+            >{{ checkItem.name }}</el-checkbox
+          >
         </el-checkbox-group>
       </div>
     </el-card>
@@ -71,7 +72,7 @@ export default class CheckLayerSelect extends Vue {
           name: '土地变更现状数据分析',
           type: 'bgxz',
           key: 'LAND_CLASSIFICATION',
-          code: '6533189554047692800'
+          code: '6533189554047692800',
         },
         {
           name: '土地用途区数据分析',
@@ -101,22 +102,26 @@ export default class CheckLayerSelect extends Vue {
         {
           name: '报地数据分析',
           code: 'bd',
-          key: 'REPORT'
+          key: 'REPORT',
+          sort: 1
         },
         {
           name: '批地数据分析',
           code: 'pd',
-          key: 'GRANT'
+          key: 'GRANT',
+          sort: 2
         },
         {
           name: '征地数据分析',
           code: 'zd',
-          key: 'EXPROPRIA'
+          key: 'EXPROPRIA',
+          sort: 3
         },
         {
           name: '供地数据分析',
           code: 'gd',
-          key: 'SUPPLY'
+          key: 'SUPPLY',
+          sort: 4
         }
       ]
     }

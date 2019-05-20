@@ -1,6 +1,7 @@
 [
   {
     "name": "行政区",
+    "relationType": "01",
     "searchItems": [
       {
         "name": "行政区名称",
@@ -21,6 +22,7 @@
   },
   {
     "name": "建设用地管制区",
+    "relationType": "02",
     "searchItems": [
       {
         "name": "管制区类型",
@@ -36,6 +38,7 @@
   },
   {
     "name": "土地用途区",
+    "relationType": "03",
     "searchItems": [
       {
         "name": "用途区类型",
@@ -51,6 +54,7 @@
   },
   {
     "name": "土地使用规划",
+    "relationType": "04",
     "searchItems": [
       {
         "name": "地块编号",
@@ -81,6 +85,7 @@
   },
   {
     "name": "基准地价",
+    "relationType": "08",
     "searchItems": [
       {
         "name": "级别",
@@ -111,6 +116,7 @@
   },
   {
     "name": "基本农田保护红线",
+    "relationType": "09",
     "searchItems": [
       {
         "name": "用途区类型",
@@ -126,6 +132,7 @@
   },
   {
     "name": "地类图斑",
+    "relationType": "12",
     "searchItems": [
       {
         "name": "地类编码",
@@ -166,6 +173,7 @@
   },
   {
     "name": "线状地物",
+    "relationType": "13",
     "searchItems": [
       {
         "name": "地类编码",
@@ -216,6 +224,7 @@
   },
   {
     "name": "零星地物",
+    "relationType": "14",
     "searchItems": [
       {
         "name": "地类编码",

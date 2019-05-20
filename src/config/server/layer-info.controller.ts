@@ -93,6 +93,14 @@ export default {
     controller: CONTROLLER,
     action: 'intersectionWkt',
     type: RequestMethod.Get
+  },
+  /**
+   * 获取图层关系
+   */
+  getLayerRelation: {
+    controller: CONTROLLER,
+    action: 'getLayerRelation',
+    type: RequestMethod.Get
   }
 
 }

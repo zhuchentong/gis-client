@@ -272,8 +272,8 @@ export default class Precautionary extends Vue {
   private getLayerCheck(mainLayerCode, checkLayerCode, cql?) {
     return this.service.getDetectionLayerCode(
       new RequestParams({
-        layerCode1: checkLayerCode,
-        layerCode2: mainLayerCode,
+        deputyLayer: checkLayerCode,
+        mainLayer: mainLayerCode,
         cql
       })
     ).toPromise()

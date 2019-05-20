@@ -72,7 +72,7 @@ import { PageService } from "~/extension/services/page.service"
     CreateNewBusiness
   }
 })
-export default class extends Vue {
+export default class BusinessSystem extends Vue {
   // @Inject
   private flowModel = new BusinessFlowModel()
   private pageService = new PageService({ pageSize: 8 })

@@ -6,13 +6,23 @@
         <div class="login-form">
           <el-form ref="login-form" :model="user" :rules="userRoles">
             <el-form-item prop="username">
-              <el-input v-model="user.username" auto-complete="off" placeholder="用户名"></el-input>
+              <el-input
+                v-model="user.username"
+                auto-complete="off"
+                placeholder="用户名"
+              ></el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input type="password" v-model="user.password" placeholder="密码"></el-input>
+              <el-input
+                type="password"
+                v-model="user.password"
+                placeholder="密码"
+              ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-checkbox class="remember-label" v-model="remember">记住用户名和密码</el-checkbox>
+              <el-checkbox class="remember-label" v-model="remember"
+                >记住用户名和密码</el-checkbox
+              >
             </el-form-item>
             <div v-if="loading">
               <i class="el-icon-loading"></i> 资源数据更新中,请稍后...
@@ -38,6 +48,10 @@ import { Layout } from '@/core/decorator'
 import { State, Mutation, Action, namespace } from 'vuex-class'
 import { DataDict } from '~/models/data-dict.model'
 import { StorageService } from '~/utils/storage.service'
+import { LayerInfoService } from "~/services/layer-info.service"
+import { RequestParams } from "~/core/http"
+
+const LayerRelationModule = namespace('layerRelationModule')
 
 @Layout('empty')
 @Component({
@@ -48,6 +62,8 @@ export default class Login extends Vue {
   @Mutation private updateUserPrincipalList!: () => void
   @Mutation private updateDictData!: (data) => void
   @Action private updateUserLoginData!: (data) => boolean
+  // 更新图层关系
+  @LayerRelationModule.Mutation private updateLayerRelations!: (data: any[]) => void
 
   private loading: boolean = false
   private dataDict = new DataDict()
@@ -69,6 +85,8 @@ export default class Login extends Vue {
 
     this.loading = true
     this.checkDictData()
+
+
   }
 
   private async checkDictData() {
@@ -134,6 +152,10 @@ export default class Login extends Vue {
           },
           this
         )
+        // 更新图层关系
+        const layerService = new LayerInfoService()
+        layerService.getLayerRelation(new RequestParams(null)).subscribe(this.updateLayerRelations)
+
         this.deleteLocalLayers()
       }
     })

@@ -140,8 +140,8 @@ export default class DataAnalyze extends Vue {
     return this.service
       .getDateAnalysisLayerCode(
         new RequestParams({
-          layerCode2: layer,
-          layerCode1: node.code,
+          deputyLayer: layer,
+          mainLayer: node.code,
           cql,
           rapporttype: node.key
         })

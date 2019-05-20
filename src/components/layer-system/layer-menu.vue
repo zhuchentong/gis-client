@@ -16,7 +16,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class extends Vue {
+export default class LayerMenu extends Vue {
   private readonly menuList = {
     测量: [
       {

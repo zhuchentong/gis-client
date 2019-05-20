@@ -24,7 +24,7 @@ import { MenuItems, PageComponents } from "~/components/manage-system/manage-sys
     ...PageComponents
   }
 })
-export default class extends Vue {
+export default class ManageSystem extends Vue {
 
   private menus = MenuItems
   private currentMenu = MenuItems[0]

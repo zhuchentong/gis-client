@@ -1,8 +1,17 @@
 <template>
   <section class="component business-analyze-base row">
     <el-tabs tab-position="left" class="business-analyze-tabs">
-      <el-tab-pane :label="item.name" v-for="item of result" :key="item.name">
-        <data-box v-if="item.data" :data="item.data" class="col-span">
+      <el-tab-pane
+        :label="item.name"
+        v-for="(item, index) of result"
+        :key="index"
+      >
+        <data-box
+          v-if="item.data"
+          :data="item.data"
+          class="col-span"
+          :maxHeight="420"
+        >
           <template slot="columns">
             <el-table-column
               label="项目名称"
@@ -21,13 +30,19 @@
               prop="acreage"
               :min-width="$helper.getColumnWidth(2)"
               show-overflow-tooltip
-            ></el-table-column>
-            <!-- <el-table-column label="操作">
-              <template>
-                <el-button type="text">查看详情</el-button>
-                <el-button type="text">加载图层</el-button>
+            >
+            </el-table-column>
+            <el-table-column label="操作" width="70px">
+              <template slot-scope="scope">
+                <el-button
+                  type="text"
+                  :disabled="!scope.row.flowId"
+                  @click="viewBusinessDetail(scope.row)"
+                  >查看详情</el-button
+                >
+                <!-- <el-button type="text">加载图层</el-button> -->
               </template>
-            </el-table-column> -->
+            </el-table-column>
           </template>
         </data-box>
       </el-tab-pane>
@@ -46,6 +61,7 @@ import { PageService } from '~/extension/services/page.service'
 import { DetectionService } from '@/services/detection.service'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
 import clone from 'clone'
+import { WindowSize } from '@/config/enum.config'
 
 @Component({
   components: {
@@ -62,14 +78,10 @@ export default class BusinessAnalyzeBase extends Vue {
   public range
 
   @Inject
-  private service!:DetectionService
+  private service!: DetectionService
 
-  private bcData = []
-  private pdData = []
-  private zdData = []
-  private gdData = []
   // 数据分析结果
-  private result: any = []
+  private result: any[] = []
 
   private mounted() {
     this.startCheck()
@@ -92,9 +104,8 @@ export default class BusinessAnalyzeBase extends Vue {
     clone(this.content).forEach(async x => {
       x.data = await this.startRequestCheck(x)
       this.result.push(x)
+      this.result = this.result.sort((x1, x2) => x1.sort - x2.sort)
     })
-
-    console.log(this.result)
   }
 
   private async startRequestCheck(node) {
@@ -127,8 +138,8 @@ export default class BusinessAnalyzeBase extends Vue {
       .toPromise()
   }
 
-  private getLayerCheck({key}, layer) {
-     // 获取对比数据
+  private getLayerCheck({ key }, layer) {
+    // 获取对比数据
     return this.service
       .getBusinessLayerCode(
         new RequestParams({
@@ -137,6 +148,20 @@ export default class BusinessAnalyzeBase extends Vue {
         })
       )
       .toPromise()
+  }
+
+  private viewBusinessDetail({ flowId }) {
+    if (!flowId) return
+    this.$window.open('business-system',
+      {
+        width: WindowSize.large.width,
+        height: Math.min(WindowSize.large.height, window.screen.height - 40)
+      },
+      {
+        replace: false,
+        parent: null,
+        params: { flowId }
+      }, this)
   }
 }
 </script>
