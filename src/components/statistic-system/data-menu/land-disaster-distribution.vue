@@ -17,7 +17,7 @@
             :showIcon="false"
             :title="`${chartDataName}-隐患等级`"
           ></common-title>
-          <ve-pie :data="chartDataByGrade"></ve-pie>
+          <ve-pie :data="chartDataByGrade" :extend="chartExtend" :settings="chartSettings"></ve-pie>
         </template>
       </el-card>
     </div>
@@ -46,7 +46,7 @@ import { RequestParams } from '~/core/http'
 import { Pie } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
 import { FilterService } from "~/utils/filter.service"
-
+import { ChartColorByLevel}  from "~/components/statistic-system/statistic-system.config"
 @Component({
   components: {
     DataBox,
@@ -78,6 +78,21 @@ export default class ReportLand extends Vue {
     rows: []
   }
 
+  private chartSettings={
+    itemStyle:{
+      color:({name}) => {
+     const c = ChartColorByLevel.find(v=>v.name===name) 
+      return c ? c.color : '#FFFFFD'
+      }
+    }
+  }
+  private chartExtend={
+    legend:{
+        data:ChartColorByLevel
+    }
+          
+  }
+
   private chartEvents = {
     click: this.onChartClick
   }
@@ -101,10 +116,11 @@ export default class ReportLand extends Vue {
     const params = new RequestParams({ prefecture: e.name })
     this.sevice.getStatisticalDisasterByGrade(params).subscribe(data => {
       this.chartDataByGrade.rows = data.map(v => {
-        const row = {}
+        const row :any= {}
         Object.entries(this.settingByGrade).forEach(([key, value]) => {
           if (key === "grade") {
             row[value] = FilterService.dictConvert(v.grade, 'DisasterGrade')
+            row.grade = v.grade
           } else {
             row[value] = v[key]
           }
