@@ -23,9 +23,11 @@
 import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator'
 import Cesium, { CesiumTerrainProvider } from 'cesium/Cesium'
 import WMSCapabilities from 'wms-capabilities'
-import appConfig from '../../config/app.config'
-import { FilterService } from '../../utils/filter.service'
+import appConfig from '~/config/app.config'
+import { FilterService } from '~/utils/filter.service'
 import { namespace } from 'vuex-class'
+import cesiumNavigation from '@znemz/cesium-navigation'
+import '@znemz/cesium-navigation/dist/index.css'
 const LayerTableModule = namespace('layerTableModule')
 @Component({
   components: {}
@@ -311,6 +313,7 @@ export default class MapViewer extends Vue {
 
   // 初始化cesium
   private mounted() {
+    console.log(cesiumNavigation)
     this.$nextTick(this.initMap)
   }
 
@@ -348,7 +351,9 @@ export default class MapViewer extends Vue {
     this.viewer.scene.globe.baseColor = Cesium.Color.WHITE
 
     this.viewer.dataSources.add(this.drawDataSource)
+    // 设置摄像机视图
     this.cameraView = this.viewer.camera
+
     // 监听实体数组变化
     this.drawEntities.collectionChanged.addEventListener(() => {
       this.drawEntitiesLength = this.drawEntities.values.length
@@ -384,6 +389,16 @@ export default class MapViewer extends Vue {
       },
       true
     )
+
+    this.GetGeographicBoundingBox(this.workspace).then((x: any) => {
+      console.log(x)
+      cesiumNavigation(this.viewer, {
+        defaultResetView: x.destination,
+        enableCompass: true,
+        enableZoomControls: true,
+        enableDistanceLegend: true
+      })
+    })
   }
 
   private updateToolbarIcon(id) {
@@ -622,6 +637,9 @@ export default class MapViewer extends Vue {
       filter: gray;
     }
   }
+  .navigation-control-icon-reset{
+    display: none;
+  }
 }
 </style>
 <style lang="less" scoped>
@@ -634,7 +652,7 @@ export default class MapViewer extends Vue {
 
   .draw-tool-bar {
     position: absolute;
-    bottom: 50px;
+    bottom: 100px;
     right: 5px;
     .icon-button {
       cursor: pointer;

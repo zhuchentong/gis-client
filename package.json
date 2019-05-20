@@ -18,6 +18,7 @@
     "@turf/area": "^6.0.1",
     "@turf/turf": "^5.1.6",
     "@zct1989/vue-component": "^0.0.3",
+    "@znemz/cesium-navigation": "^3.0.1",
     "axios": "^0.18.0",
     "cesium": "^1.57.0",
     "chart.js": "^2.8.0",
