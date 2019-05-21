@@ -2,7 +2,7 @@
   <section class="component land-control">
     <el-card>
       <common-title slot="header" :showIcon="false" title="管制区类型统计"></common-title>
-      <ve-pie :data="chartData"></ve-pie>
+      <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
@@ -24,6 +24,7 @@ import { LayerStatisticalService } from "~/services/layer-statistical.service"
 import { Pie } from "v-charts"
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
+import { ChartColorByControlType}  from "~/components/statistic-system/statistic-system.config"
 @Component({
   components: {
     DataBox,
@@ -40,6 +41,14 @@ export default class LandControl extends Vue {
   private chartData = {
     columns: Object.values(this.setting),
     rows: []
+  }
+    private chartSettings: any = {
+    itemStyle: {
+        color:({name}) => {
+
+          return ChartColorByControlType[name]
+      }
+    }
   }
   private dataSet: any = []
 

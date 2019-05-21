@@ -2,7 +2,7 @@
   <section class="component land-use">
     <el-card>
       <common-title slot="header" :showIcon="false" title="土地用途区统计"></common-title>
-      <ve-pie :data="chartData"></ve-pie>
+      <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
@@ -24,6 +24,7 @@ import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { Pie, VeHistogram } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
+import { ChartColorByLandUse}  from "~/components/statistic-system/statistic-system.config"
 @Component({
   components: {
     DataBox,
@@ -43,6 +44,15 @@ export default class LandUse extends Vue {
   private chartData = {
     columns: Object.values(this.setting),
     rows: []
+  }
+
+    private chartSettings: any = {
+    itemStyle: {
+        color:({name}) => {
+          console.log(name,'name')
+          return ChartColorByLandUse[name]
+      }
+    }
   }
 
   private refreshData() {

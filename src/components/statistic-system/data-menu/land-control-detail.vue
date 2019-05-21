@@ -10,7 +10,6 @@
         :data="chartData"
         :extend="extendSetting"
         :settings="chartSettings"
-        log
       ></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
@@ -37,6 +36,7 @@ import { LayerStatisticalService } from '~/services/layer-statistical.service'
 import { VePie, VeHistogram } from 'v-charts'
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
+import { ChartColorByControl}  from "~/components/statistic-system/statistic-system.config"
 
 @Component({
   components: {
@@ -61,7 +61,8 @@ export default class LandControlDetail extends Vue {
     },
     legend: {
       orient: 'vertical',
-      x: 'right'
+      x: 'right',
+      bottom:40
     },
     series: s => {
       s.forEach(i => {
@@ -80,7 +81,11 @@ export default class LandControlDetail extends Vue {
     label: {
       show: false
     },
-    itemStyle: {}
+    itemStyle: {
+        color:({name}) => {
+          return ChartColorByControl[name]
+      }
+    }
   }
 
   private chartData = {
