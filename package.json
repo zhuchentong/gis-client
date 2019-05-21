@@ -20,6 +20,7 @@
     "@zct1989/vue-component": "^0.0.3",
     "@znemz/cesium-navigation": "^3.0.1",
     "axios": "^0.18.0",
+    "canvas2image-es6": "^1.2.0",
     "cesium": "^1.57.0",
     "chart.js": "^2.8.0",
     "class-transformer": "^0.2.0",
