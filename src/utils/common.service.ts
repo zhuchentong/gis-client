@@ -190,6 +190,43 @@ export class CommonService {
   }
 
   /**
+   * 转换面积
+   * @param area 面积数
+   * @param areaUnit 当前使用单位
+   */
+  public static convertArea(area, areaUnit = 'SQUARE_METRE') {
+    const result = {
+      squ: 0,
+      mu: 0,
+      ha: 0
+    }
+    const areaNumber = Number.parseFloat(area || '0')
+    if (!areaNumber) return result
+
+    switch (areaUnit) {
+      case "SQUARE_METRE": // 平方米
+        result.squ = area
+        result.mu = area * 0.0015
+        result.ha = area * 0.0001
+        break
+      case "MU": // 亩
+        result.squ = area * 666.6666667
+        result.mu = area
+        result.ha = area * 0.0666667
+        break
+      case "HECTARE": // 公顷
+        result.squ = area * 10000
+        result.mu = area * 15
+        result.ha = area
+        break
+    }
+    result.squ = Number.parseFloat(result.squ.toFixed(2))
+    result.mu = Number.parseFloat(result.mu.toFixed(2))
+    result.ha = Number.parseFloat(result.ha.toFixed(4))
+    return result
+  }
+
+  /**
    * 生成树型结构数据
    * @param sourceList 包含id 和 pid 的线性数据
    * @param options 数据项配置 配置 keyName: 主键名称,parentKeyName: 父级键名称

@@ -71,6 +71,8 @@ export abstract class DrawInteract {
   private handleDrawToolEvent(event) {
     switch (event) {
       case 'close':
+        // 清空数据
+        this.resetDraw()
         this.clioseEventListener()
         break
       case 'reset':

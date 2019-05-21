@@ -3,18 +3,29 @@
     <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div v-if="isDrawing || drawEntitiesLength" class="draw-tool-bar icon-button-group">
+    <div
+      v-if="isDrawing || drawEntitiesLength"
+      class="draw-tool-bar icon-button-group"
+    >
       <div class="icon-button" @click="onDrawEvent('close')">
         <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
       <div class="icon-button" @click="isDrawing && onDrawEvent('reset')">
-        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="reset"></svg-icon>
+        <svg-icon
+          :iconColor="isDrawing ? 'white' : 'gray'"
+          iconName="reset"
+        ></svg-icon>
       </div>
       <div class="icon-button" @click="isDrawing && onDrawEvent('submit')">
-        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="right"></svg-icon>
+        <svg-icon
+          :iconColor="isDrawing ? 'white' : 'gray'"
+          iconName="right"
+        ></svg-icon>
       </div>
     </div>
-    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">{{ drawTipInfo }}</div>
+    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
+      {{ drawTipInfo }}
+    </div>
     <div id="credit" style="display:none"></div>
   </section>
 </template>
@@ -397,11 +408,11 @@ export default class MapViewer extends Vue {
     this.addToolBar(
       'download',
       '导出图像',
-      'Widgets/Images/TerrainProviders/CesiumWorldTerrain.png',
+      require('~/assets/images/export-layer.png'),
       () => {
         this.viewer.render()
-        const {width,height} = this.viewer.canvas
-        Canvas2Image.saveAsJPEG(this.viewer.canvas,width,height,`image-${Date.now()}.jpg`)
+        const { width, height } = this.viewer.canvas
+        Canvas2Image.saveAsJPEG(this.viewer.canvas, width, height, `image-${Date.now()}.jpg`)
       },
       false
     )
@@ -485,7 +496,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-        this.geoServer
+      this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -585,7 +596,7 @@ export default class MapViewer extends Vue {
 
   private formatFeatureProperties(properties) {
     const data = {}
-    const filterKey = ['对比图层总面积', '面积'] // '结果形状面积'
+    const filterKey = ['对比图层总面积'] // '结果形状面积'
     // 字段转译
     Object.entries(properties)
       .map(([key, value]) => ({

@@ -2,7 +2,9 @@
   <data-grid :totalSpan="2" :labelWidth="90" contentAlign="left" class="component approve-detail">
     <data-grid-item :span="1" label="项目名称">{{data.name}}</data-grid-item>
     <data-grid-item :span="1" label="项目类型">{{data.type | dictConvert('FlowType')}}</data-grid-item>
-    <data-grid-item :span="1" label="项目面积">{{`${data.acreage} 亩`}}</data-grid-item>
+    <data-grid-item :span="1" label="项目面积">
+       <area-detail :area="data.acreage" :unit="data.unit"></area-detail>
+    </data-grid-item>
     <data-grid-item :span="1" label="行政区">{{data.region | districtName}}</data-grid-item>
     <data-grid-item :span="2" label="备注">{{data.remark}}</data-grid-item>
     <data-grid-item :span="1" label="批文编号">{{data.code}}</data-grid-item>
@@ -28,11 +30,13 @@ import { DataGrid, DataGridItem } from "@zct1989/vue-component"
 import ReportDetail from "./report-detail.vue"
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
+import AreaDetail from "./area-detail.vue"
 @Component({
   components: {
     DataGrid,
     DataGridItem,
-    ReportDetail
+    ReportDetail,
+    AreaDetail
   }
 })
 export default class extends Vue {

@@ -1,6 +1,6 @@
 <template>
   <section class="component search-area" v-loading="loading">
-    <el-form v-model="model" inline label-width="120px">
+    <el-form v-model="model" inline label-width="120px" ref="form">
       <div v-for="setting of itemsSeting" :key="setting.layerCode">
         <common-title
           :showIcon="false"
@@ -62,7 +62,7 @@ const LayerRelationModule = namespace('layerRelationModule')
   }
 })
 export default class SearchArea extends Vue {
-  @LayerRelationModule.Getter private layerRelations!: any[]
+  @LayerRelationModule.Getter private getRelationByType!: (type) => any
 
   private searchRangeSetting: any[] = require('~/assets/json/search-range-setting.json')
   private searchConfing: any[] = require('~/assets/json/search-setting.json')
@@ -87,25 +87,9 @@ export default class SearchArea extends Vue {
   }
 
   private mounted() {
-    // this.viewer.getViewer().screenSpaceEventHandler.setInputAction((e: any) => {
-    //   const feautre: any = this.viewer.getViewer().scene.pick(e.position)
-    //   // console.log(feautre)
-    //   if (!feautre) return
-    //   const polygon = feautre.id.polygon
-    //   if (!polygon) return
-    //   const hierarchy = polygon.hierarchy as Cesium.ConstantProperty
-    //   let { positions } = hierarchy.getValue()
-    //   positions = positions.map(v => {
-    //      const c = CesiumCommonService.cartesian3ToDegrees(v)
-    //      return [c.longitude,c.latitude]
-    //   })
-    //   const area = CesiumComputeService.computeArea(positions)
-    //   console.log(area)
 
-    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-
-    const relations = this.itemsSeting.map(setting => {
-      const relation = this.layerRelations.find(x => x.type === setting.relationType) || {}
+    const relations = SearchAreaLayerSetting.map(setting => {
+      const relation = this.getRelationByType(setting.relationType) || {}
       return {
         ...setting,
         layerCode: relation.layerCode
@@ -131,7 +115,7 @@ export default class SearchArea extends Vue {
   }
 
   private reset() {
-    //
+    (this.$refs.form as any).resetFields()
   }
 
   private search() {

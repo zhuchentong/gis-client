@@ -57,7 +57,8 @@ export class LayerInfoService {
    * @param requestParams
    */
   @Request({
-    server: Controller.queryMapSpotByAttr
+    server: Controller.queryMapSpotByAttr,
+    force: true
   })
   public queryMapSpotByAttr(requestParams): Observable<any> {
     return requestParams.request()
