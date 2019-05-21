@@ -32,7 +32,7 @@
             :showIcon="false"
             :title="typeName"
           ></common-title>
-          <ve-pie :data="chartDataByType"></ve-pie>
+          <ve-pie :data="chartDataByType" ></ve-pie>
         </template>
       </el-card>
     </div>
@@ -60,6 +60,7 @@ import { LayerStatisticalService } from "~/services/layer-statistical.service"
 import { Pie } from "v-charts"
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
+import { ChartColorByLandNow}  from "~/components/statistic-system/statistic-system.config"
 
 @Component({
   components: {
@@ -79,7 +80,19 @@ export default class LandNow extends Vue {
   private years = [2016, 2017]
 
   private chartSetting = {
-    selectedMode: "single"
+    selectedMode: "single",
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
+    },
+    itemStyle: {
+        color:({name}) => {
+          console.log(name,'name')
+          return ChartColorByLandNow[name]
+      }
+    }
   }
 
 
