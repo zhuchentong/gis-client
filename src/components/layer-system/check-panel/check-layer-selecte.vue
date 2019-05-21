@@ -33,6 +33,10 @@ import { RequestParams } from '~/core/http'
 import { LayerSpace } from '~/config/business-config.ts'
 import { Tree } from 'element-ui'
 import { zip } from 'rxjs'
+import { CheckLayerSetting } from "~/components/layer-system/check-panel/check-panel.config"
+import { namespace } from 'vuex-class'
+
+const LayerRelationModule = namespace('layerRelationModule')
 
 @Component({
   components: {}
@@ -42,6 +46,7 @@ export default class CheckLayerSelect extends Vue {
   private groupService!: LayerGroupService
   @Inject
   private layerService!: LayerInfoService
+  @LayerRelationModule.Getter private getRelationByType!: (type) => any
 
   private layerList: any[] = []
 
@@ -50,82 +55,47 @@ export default class CheckLayerSelect extends Vue {
       values: [],
       name: '预警检测',
       component: 'precautionary',
-      children: [
-        {
-          name: '基本农田占用检测',
-          type: 'jbnt',
-          code: '6534621933959839744'
-        },
-        {
-          name: '非允许建设区检测',
-          type: 'yxjsq',
-          code: '6534620896976896000'
-        }
-      ]
+      children: [] as any[]
     },
     dataCheck: {
       values: [],
       name: '数据分析',
       component: 'data-analyze',
-      children: [
-        {
-          name: '土地变更现状数据分析',
-          type: 'bgxz',
-          key: 'LAND_CLASSIFICATION',
-          code: '6533189554047692800',
-        },
-        {
-          name: '土地用途区数据分析',
-          type: 'tdytq',
-          key: 'LAND_USE_AREA',
-          code: '6534621158219120640'
-        },
-        {
-          name: '控制性详细规划数据分析',
-          type: 'kzxxxgh',
-          key: 'REGULATORY_PLAN',
-          code: '6534621635535110144'
-        },
-        {
-          name: '建设用地管制区',
-          type: 'jzydgzq',
-          key: 'LAND_CONSTRUCTION',
-          code: '6534620896976896000'
-        }
-      ]
+      children: [] as any[]
     },
     businessCheck: {
       values: [],
       name: '业务分析',
       component: 'business-analyze',
-      children: [
-        {
-          name: '报地数据分析',
-          code: 'bd',
-          key: 'REPORT',
-          sort: 1
-        },
-        {
-          name: '批地数据分析',
-          code: 'pd',
-          key: 'GRANT',
-          sort: 2
-        },
-        {
-          name: '征地数据分析',
-          code: 'zd',
-          key: 'EXPROPRIA',
-          sort: 3
-        },
-        {
-          name: '供地数据分析',
-          code: 'gd',
-          key: 'SUPPLY',
-          sort: 4
-        }
-      ]
+      children: [] as any[]
     }
   }
+
+  private mounted() {
+
+    // 预警设置
+    this.checkContentList.alarmCheck.children = CheckLayerSetting.precautionary.map(
+      item => {
+        const relation = this.getRelationByType(item.relationType)
+        item.code = relation.layerCode
+        return item
+      }
+    )
+
+    // 数据检测
+    this.checkContentList.dataCheck.children = CheckLayerSetting.data.map(
+      item => {
+        const relation = this.getRelationByType(item.relationType)
+        item.code = relation.layerCode
+        return item
+      }
+    )
+
+
+    // 业务设置
+    this.checkContentList.businessCheck.children = CheckLayerSetting.business
+  }
+
 
   private submit() {
     this.emitSubmit()

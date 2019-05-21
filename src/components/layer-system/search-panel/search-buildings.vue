@@ -42,11 +42,13 @@ import { namespace } from "vuex-class"
 import { SearchBuildingSetting } from "~/components/layer-system/search-panel/search-panel.config"
 import { LayerInfoService } from "~/services/layer-info.service"
 import { RequestParams } from "~/core/http"
+import NumberRange from "~/components/common/number-range.vue"
 
 const LayerRelationModule = namespace('layerRelationModule')
 
 @Component({
   components: {
+    NumberRange
   }
 })
 export default class SearchBuildings extends Vue {
@@ -64,10 +66,14 @@ export default class SearchBuildings extends Vue {
 
   // formItem 数据源
   private searchRangeSetting = {
-    "建筑结构": [
+    jiegou: [
       {
         code: "钢混",
         name: "钢混"
+      },
+      {
+        code: "砖混",
+        name: "砖混"
       }
     ]
   }
@@ -91,10 +97,17 @@ export default class SearchBuildings extends Vue {
 
   private reset() {
     (this.$refs.form as any).resetFields()
+    if (!this.buildingLayerInfo) return
     this.viewer.removeLayer(this.buildingLayerInfo)
   }
 
   private search() {
+    if (!this.buildingLayerInfo) {
+      console.error("建筑信息图层关系图层code错误")
+      this.$message.error("未找到建筑信息图层")
+      return
+    }
+
     this.viewer.removeLayer(this.buildingLayerInfo)
     const cqlBuilder = new CqlBuilder()
 
@@ -102,14 +115,15 @@ export default class SearchBuildings extends Vue {
       const queryData = this.model[code]
       if (!queryData) return
       if (type === 'number') {
-        const min = queryData.min || 0
-        const max = queryData.max || 0
+        const { min, max } = queryData
         if (!min && !max) return
         cqlBuilder.addPredicater(code, filter, [min, max])
       } else {
         cqlBuilder.addPredicater(code, filter, queryData)
       }
     })
+    this.buildingLayerInfo.layerName += '-检索结果'
+    // TODO getlayerAttr filter
     this.layerInfo = this.viewer.addLayer(this.buildingLayerInfo, cqlBuilder.build())
   }
 

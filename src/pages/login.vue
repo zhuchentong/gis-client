@@ -50,6 +50,8 @@ import { DataDict } from '~/models/data-dict.model'
 import { StorageService } from '~/utils/storage.service'
 import { LayerInfoService } from "~/services/layer-info.service"
 import { RequestParams } from "~/core/http"
+import { TempLayers } from '@/models/temp-layers.model'
+import { LayerSpace } from '~/config/business-config'
 
 const LayerRelationModule = namespace('layerRelationModule')
 
@@ -65,6 +67,8 @@ export default class Login extends Vue {
   // 更新图层关系
   @LayerRelationModule.Mutation private updateLayerRelations!: (data: any[]) => void
 
+  @Inject
+  private layerService!: LayerInfoService
   private loading: boolean = false
   private dataDict = new DataDict()
   private user = new User()
@@ -127,7 +131,7 @@ export default class Login extends Vue {
     })
   }
 
-  private login() {
+  private async login() {
     if (this.remember) {
       StorageService.setItem('remember', {
         username: this.user.username,
@@ -136,42 +140,49 @@ export default class Login extends Vue {
     } else {
       StorageService.removeItem('remember')
     }
-    this.user.login().subscribe(data => {
-      const loginStatus = this.updateUserLoginData({
+    let data = await this.user.login().toPromise()
+    const loginStatus = this.updateUserLoginData(
+      {
         token: data.token,
         user: data.operatorResponse
-      })
-      if (loginStatus) {
-        this.$window.open(
-          'home',
-          {
-            size: WindowSize.normal
-          },
-          {
-            replace: true
-          },
-          this
-        )
-        // 更新图层关系
-        const layerService = new LayerInfoService()
-        layerService.getLayerRelation(new RequestParams(null)).subscribe(this.updateLayerRelations)
-
-        this.deleteLocalLayers()
       }
-    })
+    )
+    if (loginStatus) {
+
+      data = await this.layerService.getLayerRelation(new RequestParams(null)).toPromise()
+      this.updateLayerRelations(data)
+      this.deleteLocalLayers()
+
+      this.$window.open(
+        'home',
+        {
+          size: WindowSize.normal
+        },
+        {
+          replace: true
+        },
+        this
+      )
+
+    } else {
+      this.$message.error("登录失败")
+    }
   }
 
   /**
    * 删除所有的临时发布图层
    */
   private deleteLocalLayers() {
-    // const tmpLayers = new TempLayers()
-    // const layerInfo = new LayerInfo()
-    // tmpLayers.layerList.forEach(item => {
-    //   layerInfo.deleteTempLayer(item.layerCode).subscribe(
-    //     () => tmpLayers.delete(item.layerCode)
-    //   )
-    // })
+    const tmpLayers = new TempLayers()
+    tmpLayers.layerList.forEach(item => {
+      const param = new RequestParams({
+        ...item,
+        layerSpace: LayerSpace.temp
+      })
+      this.layerService.deleteTempLayer(param).subscribe(
+        () => tmpLayers.delete(item.layerCode)
+      )
+    })
   }
 
   private exit() {

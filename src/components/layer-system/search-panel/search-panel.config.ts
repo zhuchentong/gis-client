@@ -72,19 +72,19 @@ export const SearchBuildingSetting = {
   searchItems: [
     {
       name: "建筑结构",
-      code: "建筑结构",
+      code: "jiegou",
       type: "range",
       filter: "equal"
     }, {
-      name: "建筑层数",
-      code: "建筑层数",
-      type: "string",
-      filter: "equal"
+      name: "建筑面积",
+      code: "mianji",
+      type: "number",
+      filter: "between"
     }, {
       name: "坐落位置",
-      code: "坐落位置",
+      code: "zuoluo",
       type: "string",
-      filter: "equal"
+      filter: "like"
     }
   ]
 }

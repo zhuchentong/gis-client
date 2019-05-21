@@ -16,6 +16,15 @@ export default {
      */
     layerRelations(state) {
       return state.relations.map(v => ({ ...v }))
+    },
+    /**
+     * 图层关系 根据type查找
+     * @param state 
+     */
+    getRelationByType(state) {
+      return (type) => {
+        return state.relations.find(x => x.type === type)
+      }
     }
   }
 }

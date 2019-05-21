@@ -15,7 +15,13 @@ export class CqlBuilder {
         str = `"${key}" = '${value}'`
         break
       case "between":
-        str = `"${key}" between ${value[0]} and ${value[1]}`
+        if (value[0] && value[1]) {
+          str = `"${key}" between ${value[0]} and ${value[1]}`
+        } else if (value[0]) {
+          str = `"${key}" > ${value[0]}`
+        } else {
+          str = `"${key}" < ${value[1]}`
+        }
         break
       case "like":
         str = `"${key}" like '%${value}%'`

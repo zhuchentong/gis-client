@@ -1,24 +1,27 @@
 <template>
   <section class="component data-analyze">
-    <el-card v-for="node in result" :key="node.key">
-      <div slot="header" class="row middle-span between-span">
-        {{ node.name }}
-      </div>
-      <label-container :column="1" :labelWidth="200">
-        <label-item
-          :label="item.name"
-          v-for="item in node.data"
-          :key="item.name"
-        >
-          <label-container :column="2" :labelWidth="120">
-            <label-item label="压盖面积">{{ item.area }}平方米</label-item>
-            <label-item label="所占比例"
-              >{{ (item.radio * 100).toFixed(2) }}%</label-item
-            >
-          </label-container>
-        </label-item>
-      </label-container>
-    </el-card>
+    <div v-if="!result.length" v-loading="!result.length" class="no-data"></div>
+    <div v-else>
+      <el-card v-for="node in result" :key="node.key">
+        <div slot="header" class="row middle-span between-span">
+          {{ node.name }}
+        </div>
+        <label-container :column="1" :labelWidth="200">
+          <label-item
+            :label="item.name"
+            v-for="item in node.data"
+            :key="item.name"
+          >
+            <label-container :column="2" :labelWidth="120">
+              <label-item label="压盖面积">{{ item.area }}平方米</label-item>
+              <label-item label="所占比例"
+                >{{ (item.radio * 100).toFixed(2) }}%</label-item
+              >
+            </label-container>
+          </label-item>
+        </label-container>
+      </el-card>
+    </div>
   </section>
 </template>
 
@@ -73,7 +76,7 @@ export default class DataAnalyze extends Vue {
     this.result = []
     clone(this.content).forEach(x => {
       x.data = []
-      this.startRequestCheck(x)
+      return this.startRequestCheck(x)
     })
   }
 
@@ -89,9 +92,9 @@ export default class DataAnalyze extends Vue {
       result = await this.getLayerCheck(node, layer)
     }
 
+    this.result.push(node)
     if (result && result.length) {
       node.data = this.getResultData(result, node)
-      this.result.push(node)
     }
   }
 

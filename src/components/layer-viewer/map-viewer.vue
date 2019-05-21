@@ -579,7 +579,7 @@ export default class MapViewer extends Vue {
 
   private formatFeatureProperties(properties) {
     const data = {}
-    const filterKey = ['对比图层总面积', '结果形状面积']
+    const filterKey = ['对比图层总面积', '面积'] // '结果形状面积'
     // 字段转译
     Object.entries(properties)
       .map(([key, value]) => ({
@@ -590,7 +590,13 @@ export default class MapViewer extends Vue {
       .filter(x => !filterKey.includes(x.key))
       .filter(x => x.key !== x.label || /[\u4e00-\u9fa5]/.test(x.key))
       .forEach(x => {
-        data[x.label] = x.value
+        // 辅助选址，结果字段过滤
+        if (x.label === '结果形状面积') {
+          const value = (x.value as string) || "0"
+          data[x.label] = Number.parseFloat(value).toFixed(2) + ' 平方米'
+        } else {
+          data[x.label] = x.value
+        }
       })
     return data
   }

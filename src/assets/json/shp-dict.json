@@ -118,5 +118,17 @@
   {
     "code": "XZ",
     "name": "乡镇"
+  },
+  {
+    "code": "mianji",
+    "name": "建筑面积"
+  },
+  {
+    "code": "jiegou",
+    "name": "建筑结构"
+  },
+  {
+    "code": "zuoluo",
+    "name": "坐落位置"
   }
 ]
