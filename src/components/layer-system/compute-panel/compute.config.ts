@@ -45,3 +45,8 @@ export const ComputUnits = [
     name: "万元/亩"
   }
 ]
+
+export const ComputerLayerSetting = {
+  relationType: "09",
+  layerSpace: "third-space"
+}

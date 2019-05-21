@@ -96,17 +96,20 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import { ComputUnits } from "~/components/layer-system/compute-panel/compute.config.ts"
+import { ComputUnits,ComputerLayerSetting } from "~/components/layer-system/compute-panel/compute.config.ts"
 import { FilterService } from '~/utils/filter.service'
 import { RequestParams } from "~/core/http"
 import { CesiumCommonService } from '@/utils/cesium/common.service'
 import { LayerInfoService } from "~/services/layer-info.service"
 import { Inject } from "typescript-ioc"
+import { namespace } from 'vuex-class'
+const LayerRelationModule = namespace('layerRelationModule')
 
 @Component({
   components: {}
 })
 export default class ComputeEarning extends Vue {
+  @LayerRelationModule.Getter private getRelationByType!: (type) => any
   @Prop()
   private area!: number
   @Prop()
@@ -115,6 +118,8 @@ export default class ComputeEarning extends Vue {
   private service!: LayerInfoService
 
   private loading = false
+
+  private layerInfo:any = null
 
   private readonly units = ComputUnits
   private currentPanel = "input"
@@ -198,7 +203,7 @@ export default class ComputeEarning extends Vue {
     const coordinates = this.positions.map(point => point.join(' ')).join(',')
     const params = new RequestParams({
       wkt: `POLYGON ((${coordinates}))`,
-      layerCode: "6533273251451228160"
+      layerCode: this.layerInfo.layerCode
     })
     const result = await this.service.intersectionWkt(params).toPromise()
     if (!result) return false
@@ -220,6 +225,14 @@ export default class ComputeEarning extends Vue {
     (this.$refs.form as any).resetFields()
     this.result.price = 0
     this.currentPanel = "input"
+  }
+
+  private mounted(){
+    const relation = this.getRelationByType(ComputerLayerSetting.relationType)
+    this.layerInfo = {
+      ...relation,
+      ...ComputerLayerSetting
+    }
   }
 }
 </script>

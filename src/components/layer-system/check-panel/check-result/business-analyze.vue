@@ -7,8 +7,8 @@
         :key="index"
       >
         <data-box
-          v-if="item.data"
-          :data="item.data"
+          v-loading="!item.load"
+          :data="item.data || []"
           class="col-span"
           :maxHeight="420"
         >
@@ -60,7 +60,6 @@ import { Inject } from 'typescript-ioc'
 import { PageService } from '~/extension/services/page.service'
 import { DetectionService } from '@/services/detection.service'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
-import clone from 'clone'
 import { WindowSize } from '@/config/enum.config'
 
 @Component({
@@ -72,7 +71,7 @@ export default class BusinessAnalyzeBase extends Vue {
   @Prop({
     default: []
   })
-  public content
+  public content!: any[]
 
   @Prop()
   public range
@@ -83,11 +82,8 @@ export default class BusinessAnalyzeBase extends Vue {
   // 数据分析结果
   private result: any[] = []
 
-  private mounted() {
-    this.startCheck()
-  }
 
-  @Watch('content')
+  @Watch('content', { immediate: true })
   private onChecnChange() {
     this.startCheck()
   }
@@ -101,11 +97,9 @@ export default class BusinessAnalyzeBase extends Vue {
    */
   private startCheck() {
     this.result = []
-    clone(this.content).forEach(async x => {
-      x.data = await this.startRequestCheck(x)
-      this.result.push(x)
-      this.result = this.result.sort((x1, x2) => x1.sort - x2.sort)
-    })
+
+    this.result = this.content.map(v => ({ ...v, load: false })).sort((a, b) => a.sort - b.sort)
+    this.result.forEach(item => this.startRequestCheck(item))
   }
 
   private async startRequestCheck(node) {
@@ -120,7 +114,8 @@ export default class BusinessAnalyzeBase extends Vue {
       result = await this.getLayerCheck(node, layer)
     }
 
-    return result
+    node.load = true
+    this.$set(node, 'data', result || [])
   }
 
   /**

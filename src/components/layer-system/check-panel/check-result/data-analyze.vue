@@ -1,27 +1,41 @@
 <template>
   <section class="component data-analyze">
-    <div v-if="!result.length" v-loading="!result.length" class="no-data"></div>
-    <div v-else>
-      <el-card v-for="node in result" :key="node.key">
-        <div slot="header" class="row middle-span between-span">
-          {{ node.name }}
-        </div>
-        <label-container :column="1" :labelWidth="200">
-          <label-item
-            :label="item.name"
-            v-for="item in node.data"
-            :key="item.name"
-          >
-            <label-container :column="2" :labelWidth="120">
-              <label-item label="压盖面积">{{ item.area }}平方米</label-item>
-              <label-item label="所占比例"
-                >{{ (item.radio * 100).toFixed(2) }}%</label-item
-              >
-            </label-container>
-          </label-item>
-        </label-container>
-      </el-card>
-    </div>
+    <el-card v-for="node in result" :key="node.key">
+      <div slot="header" class="row middle-span between-span">
+        {{ node.name }}
+      </div>
+      <div
+        v-if="!node.data"
+        v-loading="!node.load"
+        style="margin-top:10px"
+        class="no-data"
+      ></div>
+      <label-container
+        v-else-if="node.data.legnth"
+        :column="1"
+        :labelWidth="200"
+      >
+        <label-item
+          :label="item.name"
+          v-for="item in node.data"
+          :key="item.name"
+        >
+          <label-container :column="2" :labelWidth="120">
+            <label-item
+              label="压盖面积"
+              :value="`${item.area} 平方米`"
+            ></label-item>
+            <label-item
+              label="所占比例"
+              :value="item.radio | toPercent"
+            ></label-item>
+          </label-container>
+        </label-item>
+      </label-container>
+      <div v-else class="text-center">
+        未发现占用数据
+      </div>
+    </el-card>
   </section>
 </template>
 
@@ -36,7 +50,6 @@ import { PageService } from '~/extension/services/page.service'
 import { List } from 'linqts'
 import { DetectionService } from '@/services/detection.service'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
-import clone from 'clone'
 @Component({
   components: {
     DataBox
@@ -46,7 +59,7 @@ export default class DataAnalyze extends Vue {
   @Prop({
     default: []
   })
-  public content
+  public content!: any[]
 
   @Prop()
   public range
@@ -56,11 +69,7 @@ export default class DataAnalyze extends Vue {
   @Inject
   private service!: DetectionService
 
-  private mounted() {
-    this.startCheck()
-  }
-
-  @Watch('content')
+  @Watch('content', { immediate: true })
   private onChecnChange() {
     this.startCheck()
   }
@@ -74,10 +83,10 @@ export default class DataAnalyze extends Vue {
    */
   private startCheck() {
     this.result = []
-    clone(this.content).forEach(x => {
-      x.data = []
-      return this.startRequestCheck(x)
-    })
+    // 更新所选图层card
+    this.result = this.content.map(v => ({ ...v, load: false })).sort((a, b) => a.sort - b.sort)
+    // 开始检测，载入结果
+    this.result.forEach(item => this.startRequestCheck(item))
   }
 
   private async startRequestCheck(node) {
@@ -92,13 +101,12 @@ export default class DataAnalyze extends Vue {
       result = await this.getLayerCheck(node, layer)
     }
 
-    this.result.push(node)
-    if (result && result.length) {
-      node.data = this.getResultData(result, node)
-    }
+    // card data 载入数据
+    node.load = true
+    this.$set(node, "data", this.getResultData(result || []))
   }
 
-  private getResultData(result, node) {
+  private getResultData(result) {
     const data = result
       .map(x => ({
         name: x.attr.name,
@@ -119,6 +127,7 @@ export default class DataAnalyze extends Vue {
       radio: new List(list).Sum((x: any) => x.radio)
     }))
   }
+
   /**
    * 进行区域检测 wkt模式
    */

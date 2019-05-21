@@ -121,7 +121,7 @@
   },
   {
     "code": "mianji",
-    "name": "建筑面积"
+    "name": "占地面积"
   },
   {
     "code": "jiegou",
@@ -130,5 +130,9 @@
   {
     "code": "zuoluo",
     "name": "坐落位置"
+  },
+  {
+    "code": "cengshu",
+    "name": "建筑层数"
   }
 ]

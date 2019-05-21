@@ -76,7 +76,12 @@ export const SearchBuildingSetting = {
       type: "range",
       filter: "equal"
     }, {
-      name: "建筑面积",
+      name: "建筑层书",
+      code: "cengshu",
+      type: "string",
+      filter: "equal"
+    }, {
+      name: "占地面积",
       code: "mianji",
       type: "number",
       filter: "between"
