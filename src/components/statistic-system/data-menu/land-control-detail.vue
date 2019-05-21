@@ -83,8 +83,6 @@ export default class LandControlDetail extends Vue {
     },
     itemStyle: {
         color:({name}) => {
-     console.log(name,'name')
-
           return ChartColorByControl[name]
       }
     }
