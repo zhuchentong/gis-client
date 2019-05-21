@@ -6,7 +6,12 @@
         :showIcon="false"
         title="控制性详细规划统计"
       ></common-title>
-      <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+      <ve-pie
+        :data="chartData"
+        :extend="extendSetting"
+        :settings="chartSettings"
+        log
+      ></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
@@ -49,15 +54,33 @@ export default class LandControlDetail extends Vue {
     acreage: '占地面积(亩)'
   }
 
-
   private extendSetting: any = {
     title: {
-      text: "控制性详细规划统计",
+      text: '控制性详细规划统计',
       x: 'center'
     },
     legend: {
-      type: "scroll"
+      orient: 'vertical',
+      x: 'right'
+    },
+    series: s => {
+      s.forEach(i => {
+        if (i.type === 'pie') {
+          i.center = ['30%', '50%']
+        }
+      })
+      return s
     }
+  }
+
+  private chartSettings: any = {
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
+    },
+    itemStyle: {}
   }
 
   private chartData = {
@@ -65,7 +88,6 @@ export default class LandControlDetail extends Vue {
     rows: []
   }
   private dataSet: any = []
-
 
   private refreshData() {
     const params = new RequestParams({
