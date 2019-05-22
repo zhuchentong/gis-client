@@ -41,7 +41,7 @@
           v-if="queryType === 2"
           :formatter="row => queryQuarterName(row.quarterly)"
         ></el-table-column>
-        <el-table-column prop="area" label="面积(亩)"></el-table-column>
+        <el-table-column prop="area" label="面积(亩)" :formatter="row=>$common.convertArea(row.area,'SQUARE_METRE').mu"></el-table-column>
         <el-table-column
           prop="ratio"
           label="所占百分比"
@@ -61,6 +61,7 @@ import { StatisticalService } from "~/services/statistical.service"
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { VeHistogram } from "v-charts"
+import { CommonService } from '~/utils/common.service'
 import DataBox from "~/components/common/data-box.vue"
 import { QuarterSetting, queryQuarterName } from '~/components/statistic-system/statistic-system.config'
 @Component({
@@ -110,6 +111,7 @@ export default class GrantLand extends Vue {
       this.chartData.rows = data.map(v => {
         const row = {}
         Object.entries(this.setting).forEach(([key, value]) => {
+          CommonService.convertArea(v.area,'SQUARE_METRE')
           if (key === 'quarterly') {
             row[value] = this.queryQuarterName(v.quarterly)
           } else {

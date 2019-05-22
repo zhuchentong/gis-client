@@ -32,7 +32,7 @@
             :showIcon="false"
             :title="typeName"
           ></common-title>
-          <ve-pie :data="chartDataByType" :settings="chartSettingTwo"></ve-pie>
+          <ve-pie :data="chartDataByType" :settings="chartSetting"></ve-pie>
         </template>
       </el-card>
     </div>
@@ -88,18 +88,8 @@ export default class LandNow extends Vue {
     },
     itemStyle: {
       color: ({ name }) => {
-        return ChartColorByLandNow[name]
+        return ChartColorByLandNow[name.trim()]
       }
-    }
-  }
-
-  private chartSettingTwo = {
-    selectedMode: 'single',
-    labelLine: {
-      show: false
-    },
-    label: {
-      show: false
     }
   }
 
