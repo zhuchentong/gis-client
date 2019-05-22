@@ -98,6 +98,14 @@ export default class CheckLayerSelect extends Vue {
 
 
   private submit() {
+    const checkItemCount =
+      this.checkContentList.alarmCheck.values.length +
+      this.checkContentList.dataCheck.values.length +
+      this.checkContentList.businessCheck.values.length
+    if (checkItemCount < 1) {
+      this.$message("请选择检测项")
+      return
+    }
     this.emitSubmit()
   }
 

@@ -1,6 +1,6 @@
 <template>
   <section class="component search-area" v-loading="loading">
-    <el-form v-model="model" inline label-width="120px" ref="form">
+    <el-form :model="model" inline label-width="120px" ref="form">
       <div v-for="setting of itemsSeting" :key="setting.layerCode">
         <common-title
           :showIcon="false"

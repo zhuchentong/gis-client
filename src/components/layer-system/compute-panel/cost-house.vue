@@ -166,7 +166,6 @@ export default class CostHouse extends Vue {
     let result = 0
     result += (this.model.removal || 0) * (this.model.removalHouseHolds || 0)
     result += (this.model.houseplacement || 0) * (this.model.population || 0)
-    result += (this.model.removal || 0) * (this.model.removalHouseHolds || 0)
     result += (this.model.award || 0) * (this.model.awardHouseHolds || 0)
     result += Number.parseFloat((this.model.other || 0))
 

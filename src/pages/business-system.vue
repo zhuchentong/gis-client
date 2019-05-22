@@ -1,13 +1,29 @@
 <template>
-  <base-col-three class="page business-system" :class="{'only-detail':onlyShowDetail}">
-    <div slot="left" class="col between-span system-menu text-center" style="height:100%">
+  <base-col-three
+    class="page business-system"
+    :class="{ 'only-detail': onlyShowDetail }"
+  >
+    <div
+      slot="left"
+      class="col between-span system-menu text-center"
+      style="height:100%"
+    >
       <div>
-        <div v-for="item of menus" :key="item.label" class="system-menu-item pointer" @click="menuClick(item)" :class="{'system-menu-activated': item.status === flowModel.status}">
+        <div
+          v-for="item of menus"
+          :key="item.label"
+          class="system-menu-item pointer"
+          @click="menuClick(item)"
+          :class="{ 'system-menu-activated': item.status === flowModel.status }"
+        >
           <svg-icon :iconName="item.icon" iconSize="24"></svg-icon>
-          <div class="menu-item-label">{{item.label}}</div>
+          <div class="menu-item-label">{{ item.label }}</div>
         </div>
       </div>
-      <div class="add-item system-menu-item pointer" @click="dialog.craeteNew=true">
+      <div
+        class="add-item system-menu-item pointer"
+        @click="dialog.craeteNew = true"
+      >
         <svg-icon iconName="add-new" iconSize="24"></svg-icon>
         <div class="menu-item-label">新增业务</div>
       </div>
@@ -18,36 +34,85 @@
           <label>项目类型:</label>
           <el-select v-model="flowModel.type" class="search-worktype">
             <el-option label="全部" value=""></el-option>
-            <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
+            <el-option
+              v-for="{ code, name } of $dict.getDictData('FlowType')"
+              :key="code"
+              :label="name"
+              :value="code"
+            ></el-option>
           </el-select>
         </div>
-        <div v-show="false">
+        <div>
           <label>时间排序</label>
-          <a @click="sortList">
+          <a @click="sortChange">
             <svg-icon iconName="sort" iconSize="12"></svg-icon>
           </a>
         </div>
       </div>
       <div class="no-data" v-if="!dataList.length"></div>
       <div v-else class="middle-content">
-        <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="currentItem = item" :class="{'info-item-activated': item.flowId === currentItem.flowId}">
+        <div
+          v-for="item of dataList"
+          :key="item.id"
+          class="info-item pointer"
+          @click="currentItem = item"
+          :class="{ 'info-item-activated': item.flowId === currentItem.flowId }"
+        >
           <label-item label="项目名称" :value="item.name"></label-item>
-          <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
-          <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+          <label-item
+            label="项目类型"
+            :value="item.type | dictConvert('FlowType')"
+          ></label-item>
+          <label-item
+            label="创建时间"
+            :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"
+          ></label-item>
         </div>
         <div class="text-center">
-          <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size.sync="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+          <el-pagination
+            @current-change="refreshData"
+            small
+            :pager-count="5"
+            :current-page.sync="pageService.pageIndex"
+            :page-size.sync="pageService.pageSize"
+            layout="total, prev, pager, next"
+            :total="pageService.total"
+          >
           </el-pagination>
         </div>
       </div>
-      <el-dialog title="新增业务" :center="true" :visible.sync="dialog.craeteNew" width="800px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-        <create-new-business :show="dialog.craeteNew" @close="dialog.craeteNew = false" @success="refreshData"></create-new-business>
+      <el-dialog
+        title="新增业务"
+        :center="true"
+        :visible.sync="dialog.craeteNew"
+        width="800px"
+        :show-close="false"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+      >
+        <create-new-business
+          :show="dialog.craeteNew"
+          @close="dialog.craeteNew = false"
+          @success="refreshData"
+        ></create-new-business>
       </el-dialog>
     </div>
     <el-tabs slot="content" v-model="currentPanel" class="content-tabs">
-      <el-tab-pane v-for="item of tabs" :key="item.name" :name="item.name" :label="item.label" class="content-tabs-panes">
+      <el-tab-pane
+        v-for="item of tabs"
+        :key="item.name"
+        :name="item.name"
+        :label="item.label"
+        class="content-tabs-panes"
+      >
         <keep-alive>
-          <component :is="item.component" @success="refreshData" :status="flowModel.status" :flowId="currentItem.flowId" class="content-tabs-panes-base"></component>
+          <component
+            :is="item.component"
+            @success="refreshData"
+            :status="flowModel.status"
+            :flowId="currentItem.flowId"
+            class="content-tabs-panes-base"
+          ></component>
         </keep-alive>
       </el-tab-pane>
     </el-tabs>
@@ -63,6 +128,7 @@ import CreateNewBusiness from "~/components/business-system/add-new/create-new-b
 import { BusinessFlowModel } from "~/models/business-flow.model"
 import { Inject, Container } from 'typescript-ioc'
 import { PageService } from "~/extension/services/page.service"
+import { SortService } from '@/extension/services/sort.service'
 
 @Layout('workspace')
 @Component({
@@ -76,12 +142,14 @@ export default class BusinessSystem extends Vue {
   // @Inject
   private flowModel = new BusinessFlowModel()
   private pageService = new PageService({ pageSize: 8 })
+  private sortService = new SortService({ createTime: 'desc' })
   private menus = MenuItems
   private dataList: any[] = []
   private workType = ""
 
   // 仅显示详情，从一张图跳转过来
   private onlyShowDetail = false
+  private sortFlag = true
 
   private mCurrentPanel!: string
   private dialog = {
@@ -123,7 +191,7 @@ export default class BusinessSystem extends Vue {
    */
   private refreshData() {
     this.currentItem = {}
-    this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
+    this.flowModel.queryFollowDataByPage(this.pageService,this.sortService).subscribe(
       data => {
         this.dataList = data.content
         if (this.dataList.length) this.currentItem = this.dataList[0]
@@ -132,8 +200,11 @@ export default class BusinessSystem extends Vue {
   }
 
 
-  private sortList() {
-    // 
+  private sortChange() {
+    this.sortFlag = !this.sortFlag
+    this.pageService.reset()
+    this.sortService.update("createTime", this.sortFlag ? 'desc' : 'asc')
+    this.refreshData()
   }
 
   private mounted() {
