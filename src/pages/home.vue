@@ -5,7 +5,14 @@
       <div>多规合一综合信息平台</div>
     </div>
     <div class="menu row">
-      <a v-for="(item,index) of menuList" :key="item.url" :style="item.style" class="menu-item" :class="`menu-item-${index+1}`" @click="openWindow(item)">
+      <a
+        v-for="(item,index) of menuList"
+        :key="item.url"
+        :style="item.style"
+        class="menu-item"
+        :class="`menu-item-${index+1}`"
+        @click="openWindow(item)"
+      >
         <div class="menu-icon">
           <svg-icon :iconSize="32" :iconName="item.icon"></svg-icon>
         </div>
@@ -82,7 +89,8 @@ export default class Home extends Vue {
       },
       {
         replace: false,
-        parent: true
+        parent: true,
+        frame: true
       },
       this
     )

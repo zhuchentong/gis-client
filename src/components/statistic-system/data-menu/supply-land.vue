@@ -41,7 +41,7 @@
           v-if="queryType === 2"
           :formatter="row => queryQuarterName(row.quarterly)"
         ></el-table-column>
-        <el-table-column prop="area" label="面积(亩)"></el-table-column>
+        <el-table-column prop="area" label="面积(亩)" :formatter="row=>$common.convertArea(row.area,'SQUARE_METRE').mu"></el-table-column>
         <el-table-column
           prop="ratio"
           label="所占百分比"

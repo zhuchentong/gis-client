@@ -3,29 +3,18 @@
     <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div
-      v-if="isDrawing || drawEntitiesLength"
-      class="draw-tool-bar icon-button-group"
-    >
+    <div v-if="isDrawing || drawEntitiesLength" class="draw-tool-bar icon-button-group">
       <div class="icon-button" @click="onDrawEvent('close')">
         <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
       <div class="icon-button" @click="isDrawing && onDrawEvent('reset')">
-        <svg-icon
-          :iconColor="isDrawing ? 'white' : 'gray'"
-          iconName="reset"
-        ></svg-icon>
+        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="reset"></svg-icon>
       </div>
       <div class="icon-button" @click="isDrawing && onDrawEvent('submit')">
-        <svg-icon
-          :iconColor="isDrawing ? 'white' : 'gray'"
-          iconName="right"
-        ></svg-icon>
+        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="right"></svg-icon>
       </div>
     </div>
-    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
-      {{ drawTipInfo }}
-    </div>
+    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">{{ drawTipInfo }}</div>
     <div id="credit" style="display:none"></div>
   </section>
 </template>
@@ -78,7 +67,7 @@ export default class MapViewer extends Vue {
   private drawEntitiesLength = 0
 
   @LayerTableModule.Action
-  private getLayerAttrData!: (query: { layer: any, cql?: string }) => void
+  private getLayerAttrData!: (query: { layer: any; cql?: string }) => void
   @LayerTableModule.Mutation
   private removeLayerAttrTable
 
@@ -412,7 +401,12 @@ export default class MapViewer extends Vue {
       () => {
         this.viewer.render()
         const { width, height } = this.viewer.canvas
-        Canvas2Image.saveAsJPEG(this.viewer.canvas, width, height, `image-${Date.now()}.jpg`)
+        Canvas2Image.saveAsJPEG(
+          this.viewer.canvas,
+          width,
+          height,
+          `image-${Date.now()}.jpg`
+        )
       },
       false
     )
@@ -496,7 +490,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-      this.geoServer
+        this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -609,7 +603,7 @@ export default class MapViewer extends Vue {
       .forEach(x => {
         // 辅助选址，结果字段过滤
         if (x.label === '结果形状面积') {
-          const value = (x.value as string) || "0"
+          const value = (x.value as string) || '0'
           data[x.label] = Number.parseFloat(value).toFixed(2) + ' 平方米'
         } else {
           data[x.label] = x.value
@@ -679,7 +673,12 @@ export default class MapViewer extends Vue {
 </style>
 <style lang="less" scoped>
 .map-viewer {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+
   .cesium-viewer {
     height: 100%;
     width: 100%;

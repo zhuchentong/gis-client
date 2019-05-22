@@ -3,7 +3,6 @@ import { WindowSize } from '@/config/enum.config'
 import Vue, { VueConstructor } from 'vue'
 import qs from 'qs'
 export class WindowService {
-
   public static get params() {
     const params = window.location.href.split('?')
     return params.length > 1 ? qs.parse(params[1]) : {}
@@ -12,7 +11,7 @@ export class WindowService {
   public static open(
     url,
     { size = WindowSize.normal, width, height },
-    { replace, parent, params },
+    { replace, parent, params, frame = true },
     component: Vue
   ) {
     const { BrowserWindow, getCurrentWindow } = remote
@@ -21,10 +20,10 @@ export class WindowService {
       width: width ? width : size.width,
       height: height ? height : size.height,
       show: false,
-      frame: false,
-      resizable: false,
-      minimizable: false,
-      maximizable: false,
+      frame,
+      resizable: true,
+      minimizable: true,
+      maximizable: true,
       fullscreenable: false,
       alwaysOnTop: false,
       parent
