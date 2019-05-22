@@ -632,6 +632,9 @@ export default class MapViewer extends Vue {
    * 绘制工具事件监听
    */
   private onDrawEvent(event) {
+    // 实现绘制事件通知
+    this.drawEventListener.forEach(handle => handle(event))
+
     switch (event) {
       case 'close': {
         this.closeDrawMode()
@@ -646,10 +649,10 @@ export default class MapViewer extends Vue {
         break
       }
     }
+
     if (this.viewer.trackedEntity) {
       this.viewer.trackedEntity = undefined as any
     }
-    this.drawEventListener.forEach(handle => handle(event))
   }
 }
 </script>
