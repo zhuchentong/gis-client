@@ -46,7 +46,7 @@ export default class extends Vue {
     const requestParams = new RequestParams({ flowId: this.flowId })
     this.service.getLayerInfoByFlowId(requestParams).subscribe(data => {
       this.layerInfo = data
-      this.mapView && this.mapView.addLayer(this.layerInfo)
+      this.mapView && this.layerInfo && this.mapView.addLayer(this.layerInfo)
     })
   }
 

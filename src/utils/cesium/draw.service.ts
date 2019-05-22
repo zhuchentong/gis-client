@@ -6,7 +6,7 @@ import MapViewer from '~/components/layer-viewer/map-viewer.vue'
  */
 export class CesiumDrawService {
   // Cesium视图
-  private viewer: Cesium.Viewer
+  private $viewer: Cesium.Viewer
   private mapViewer: any
   // 颜色配置
   private readonly color = {
@@ -21,7 +21,7 @@ export class CesiumDrawService {
   // 构造函数
   constructor(mapViewer) {
     this.mapViewer = mapViewer
-    this.viewer = mapViewer.getViewer()
+    this.$viewer = mapViewer.getViewer()
   }
 
   /**
@@ -94,7 +94,7 @@ export class CesiumDrawService {
       hierarchy = new Cesium.PolygonHierarchy(
         positions.map(point => {
           if (point instanceof Cesium.Cartographic) {
-            return CesiumCommonService.DegreesToCartesian3(this.viewer, point)
+            return CesiumCommonService.DegreesToCartesian3(this.$viewer, point)
           } else {
             return point
           }
@@ -118,7 +118,7 @@ export class CesiumDrawService {
 
   /**
    * 绘制折线
-   * @param viewer
+   * @param $viewer
    * @param positions
    * @param color 线条颜色
    */
@@ -140,7 +140,7 @@ export class CesiumDrawService {
       () =>
         positions.map(point => {
           if (point instanceof Cesium.Cartographic) {
-            return CesiumCommonService.DegreesToCartesian3(this.viewer, point)
+            return CesiumCommonService.DegreesToCartesian3(this.$viewer, point)
           } else {
             return point
           }

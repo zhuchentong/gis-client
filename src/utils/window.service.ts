@@ -10,7 +10,7 @@ export class WindowService {
 
   public static open(
     url,
-    { size = WindowSize.normal, width, height },
+    { size = WindowSize.normal, width, height, maximizable = true, resizable = true },
     { replace, parent, params, frame = true },
     component: Vue
   ) {
@@ -21,13 +21,15 @@ export class WindowService {
       height: height ? height : size.height,
       show: false,
       frame,
-      resizable: true,
+      resizable,
       minimizable: true,
-      maximizable: true,
+      maximizable,
       fullscreenable: false,
       alwaysOnTop: false,
       parent
     })
+
+    win.setMenu(null)
 
     const loading = component.$loading({
       lock: true,

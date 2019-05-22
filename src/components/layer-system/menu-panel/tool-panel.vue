@@ -165,12 +165,12 @@ export default class ToolPanel extends Vue {
     const [start] = degrees
     const czml = this.generateCzml(degrees)
 
-    const viewer = this.viewer.getViewer()
+    const _viewer = this.viewer.getViewer()
 
     const source = await Cesium.CzmlDataSource.load(czml)
     const entity = source.entities.getById('point')
-    viewer.trackedEntity = entity
-    viewer.dataSources.add(source)
+    _viewer.trackedEntity = entity
+    _viewer.dataSources.add(source)
   }
 
   /**

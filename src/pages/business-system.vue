@@ -58,7 +58,12 @@
           @click="currentItem = item"
           :class="{ 'info-item-activated': item.flowId === currentItem.flowId }"
         >
-          <label-item label="项目名称" :value="item.name"></label-item>
+          <label-item
+            label="项目名称"
+            noWarp
+            showTitle
+            :value="item.name"
+          ></label-item>
           <label-item
             label="项目类型"
             :value="item.type | dictConvert('FlowType')"
@@ -109,7 +114,7 @@
           <component
             :is="item.component"
             @success="refreshData"
-            :status="flowModel.status"
+            :status="currentItem.status"
             :flowId="currentItem.flowId"
             class="content-tabs-panes-base"
           ></component>
@@ -191,7 +196,7 @@ export default class BusinessSystem extends Vue {
    */
   private refreshData() {
     this.currentItem = {}
-    this.flowModel.queryFollowDataByPage(this.pageService,this.sortService).subscribe(
+    this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
       data => {
         this.dataList = data.content
         if (this.dataList.length) this.currentItem = this.dataList[0]
@@ -211,7 +216,7 @@ export default class BusinessSystem extends Vue {
     // 从其他系统调用此系统
     const flowId = this.$route.query.flowId
     if (flowId) {
-      this.flowModel.status = 'FINSH'
+      this.currentItem.status = 'FINSH'
       this.currentItem.flowId = flowId
       this.onlyShowDetail = true
     } else {

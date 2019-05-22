@@ -111,7 +111,6 @@
         <keep-alive>
           <component
             :is="item.component"
-            :queryModel="queryModel"
             :id="id"
             class="content-tabs-panes-base"
           ></component>
@@ -209,8 +208,7 @@ export default class TaskSystem extends Vue {
     // 从其他系统调用此系统
     const id = this.$route.query.id as string
     if (id) {
-      this.currentMenu = MenuItems.find(x => !x.status)
-      this.queryModel.status = ""
+      this.currentMenu = MenuItems.find(x => x.status === 'COMPLETE_PATROL')
       this.id = id
       this.onlyShowDetail = true
     } else {

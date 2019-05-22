@@ -156,7 +156,9 @@ export default class Login extends Vue {
       this.$window.open(
         'home',
         {
-          size: WindowSize.normal
+          size: WindowSize.normal,
+          resizable: false,
+          maximizable: false
         },
         {
           replace: true

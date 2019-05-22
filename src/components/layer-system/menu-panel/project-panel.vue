@@ -5,7 +5,12 @@
         <label>项目类型:</label>
         <el-select v-model="flowModel.type" class="search-worktype">
           <el-option label="全部" value=""></el-option>
-          <el-option v-for="{code,name} of $dict.getDictData('FlowType')" :key="code" :label="name" :value="code"></el-option>
+          <el-option
+            v-for="{ code, name } of $dict.getDictData('FlowType')"
+            :key="code"
+            :label="name"
+            :value="code"
+          ></el-option>
         </el-select>
       </div>
       <div v-show="false">
@@ -17,17 +22,49 @@
     </div>
     <div class="no-data" v-if="!dataList.length"></div>
     <div v-else class="middle-content">
-      <div v-for="item of dataList" :key="item.id" class="info-item pointer" @click="itemClick(item)" :class="{'info-item-activated': item.flowId === flowId}">
-        <label-item label="项目名称" noWarp showTitle :value="item.name"></label-item>
-        <label-item label="项目类型" :value="item.type | dictConvert('FlowType')"></label-item>
-        <label-item label="创建时间" :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"></label-item>
+      <div
+        v-for="item of dataList"
+        :key="item.id"
+        class="info-item pointer"
+        @click="itemClick(item)"
+        :class="{ 'info-item-activated': item.flowId === flowId }"
+      >
+        <label-item
+          label="项目名称"
+          noWarp
+          showTitle
+          :value="item.name"
+        ></label-item>
+        <label-item
+          label="项目类型"
+          :value="item.type | dictConvert('FlowType')"
+        ></label-item>
+        <label-item
+          label="创建时间"
+          :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"
+        ></label-item>
         <div class="text-right item-operate">
-          <el-button type="text" @click="viewBusinessDetail">查看详情</el-button>
-          <el-button type="text" :disabled="!item.layerId" @click="addLayer">显示图层</el-button>
+          <el-button type="text" @click="viewBusinessDetail(item)"
+            >查看详情</el-button
+          >
+          <el-button
+            type="text"
+            :disabled="!item.layerId"
+            @click="addLayer(item)"
+            >显示图层</el-button
+          >
         </div>
       </div>
       <div class="text-center">
-        <el-pagination @current-change="refreshData" small :pager-count="5" :current-page.sync="pageService.pageIndex" :page-size.sync="pageService.pageSize" layout="total, prev, pager, next" :total="pageService.total">
+        <el-pagination
+          @current-change="refreshData"
+          small
+          :pager-count="5"
+          :current-page.sync="pageService.pageIndex"
+          :page-size.sync="pageService.pageSize"
+          layout="total, prev, pager, next"
+          :total="pageService.total"
+        >
         </el-pagination>
       </div>
     </div>
@@ -88,7 +125,8 @@ export default class ProjectPanel extends Vue {
     this.flowModel.status = 'FINSH'
   }
 
-  private viewBusinessDetail() {
+  private viewBusinessDetail(item) {
+    this.itemClick(item)
     if (!this.flowId) return
     this.$window.open('business-system',
       {
@@ -112,7 +150,8 @@ export default class ProjectPanel extends Vue {
     this.layerInfo = null
   }
 
-  private addLayer() {
+  private addLayer(item) {
+    this.itemClick(item)
     const requestParams = new RequestParams({ flowId: this.flowId })
     this.flowModel.flowInfoService.getLayerInfoByFlowId(requestParams)
       .subscribe(data => {

@@ -3,18 +3,29 @@
     <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div v-if="isDrawing || drawEntitiesLength" class="draw-tool-bar icon-button-group">
+    <div
+      v-if="isDrawing || drawEntitiesLength"
+      class="draw-tool-bar icon-button-group"
+    >
       <div class="icon-button" @click="onDrawEvent('close')">
         <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
       <div class="icon-button" @click="isDrawing && onDrawEvent('reset')">
-        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="reset"></svg-icon>
+        <svg-icon
+          :iconColor="isDrawing ? 'white' : 'gray'"
+          iconName="reset"
+        ></svg-icon>
       </div>
       <div class="icon-button" @click="isDrawing && onDrawEvent('submit')">
-        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="right"></svg-icon>
+        <svg-icon
+          :iconColor="isDrawing ? 'white' : 'gray'"
+          iconName="right"
+        ></svg-icon>
       </div>
     </div>
-    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">{{ drawTipInfo }}</div>
+    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
+      {{ drawTipInfo }}
+    </div>
     <div id="credit" style="display:none"></div>
   </section>
 </template>
@@ -38,17 +49,17 @@ export default class MapViewer extends Vue {
   // 绘制状态
   public isDrawing = false
   // 绘制数据源
-  public drawDataSource = new Cesium.CustomDataSource('draw')
+  public $drawDataSource!: Cesium.CustomDataSource 
   // 绘制事件监听
   public drawEventListener: Array<(event: string) => void> = []
   // 绘制提示信息
   private drawTipInfo = ''
   // Cesium视图
-  private viewer!: Cesium.Viewer
+  private $viewer!: Cesium.Viewer
   // Camera视图
-  private cameraView
+  private $cameraView
   // Map视图
-  private mapViewer!: MapViewer
+  private $mapViewer!: MapViewer
   // geoserver服务地址
   private geoServer = appConfig.geoServer
   // 默认工作区
@@ -58,9 +69,9 @@ export default class MapViewer extends Vue {
   // 三维图层列表
   private tilesetList: any[] = []
   // 影像图层
-  private imageProvider
+  private $imageProvider
   // 地形数据
-  private terrainProvider
+  private $terrainProvider
   // 地图ID
   private mapId = 'cesium-viewer'
 
@@ -72,7 +83,7 @@ export default class MapViewer extends Vue {
   private removeLayerAttrTable
 
   public get drawEntities() {
-    return this.drawDataSource.entities
+    return this.$drawDataSource.entities
   }
 
   public getLayerList() {
@@ -90,14 +101,14 @@ export default class MapViewer extends Vue {
    * 获取视图
    */
   public getViewer() {
-    return this.viewer
+    return this.$viewer
   }
 
   /**
    * 加载图层
    */
   public addLayer(layer, cqlFilter?: string) {
-    const layers = this.viewer.scene.imageryLayers
+    const layers = this.$viewer.scene.imageryLayers
     const providerLayers = `${layer.layerSpace}:${layer.layerCode}`
     const provider = layers.addImageryProvider(
       this.createLayer(layer.layerSpace, providerLayers, cqlFilter)
@@ -122,7 +133,7 @@ export default class MapViewer extends Vue {
   public removeLayer(target) {
     const layer = this.getWMSLayerByLayerId(target.id)
     if (!layer) return
-    this.viewer.scene.imageryLayers.remove(layer)
+    this.$viewer.scene.imageryLayers.remove(layer)
     this.layerList.splice(
       this.layerList.findIndex(x => x.layer.id === target.id),
       1
@@ -139,9 +150,9 @@ export default class MapViewer extends Vue {
     const layerData = this.layerList.find(x => x.layer.id === id)
     if (!layerData) return
     const providerLayers = layerData.providerLayers
-    const length = this.viewer.scene.imageryLayers.length
+    const length = this.$viewer.scene.imageryLayers.length
     for (let index = 0; index < length; index++) {
-      const layer = this.viewer.scene.imageryLayers.get(index)
+      const layer = this.$viewer.scene.imageryLayers.get(index)
       const wms = layer.imageryProvider as Cesium.WebMapServiceImageryProvider
       if (wms.layers === providerLayers) return layer
     }
@@ -153,7 +164,7 @@ export default class MapViewer extends Vue {
    */
   public async addTileset({ id, url, heightOffset }) {
     // 添加3d图层
-    const tileset = this.viewer.scene.primitives.add(
+    const _tileset = this.$viewer.scene.primitives.add(
       new Cesium.Cesium3DTileset({
         url
         // maximumScreenSpaceError: 10, //最大的屏幕空间误差
@@ -161,8 +172,8 @@ export default class MapViewer extends Vue {
       })
     )
     // 调整3d图层位置
-    tileset.allTilesLoaded.addEventListener(() => {
-      const boundingSphere = tileset.boundingSphere
+    _tileset.allTilesLoaded.addEventListener(() => {
+      const boundingSphere = _tileset.boundingSphere
       const cartographic = Cesium.Cartographic.fromCartesian(
         boundingSphere.center
       )
@@ -181,11 +192,11 @@ export default class MapViewer extends Vue {
         surface,
         new Cesium.Cartesian3()
       )
-      tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
+      _tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
     })
 
     // 调整视角
-    await this.viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0, -0.5, 0))
+    await this.$viewer.zoomTo(_tileset, new Cesium.HeadingPitchRange(0, -0.5, 0))
 
     // 添加到图层列表
     this.tilesetList.push({
@@ -203,14 +214,14 @@ export default class MapViewer extends Vue {
     const item = this.tilesetList.find(x => x.id === id)
     if (!item) return
 
-    for (let index = 0; index < this.viewer.scene.primitives.length; index++) {
-      const primitive = this.viewer.scene.primitives.get(index)
+    for (let index = 0; index < this.$viewer.scene.primitives.length; index++) {
+      const primitive = this.$viewer.scene.primitives.get(index)
 
       if (
         primitive instanceof Cesium.Cesium3DTileset &&
         primitive.url === item.url
       ) {
-        this.viewer.scene.primitives.remove(primitive)
+        this.$viewer.scene.primitives.remove(primitive)
         break
       }
     }
@@ -236,34 +247,34 @@ export default class MapViewer extends Vue {
       rectangle,
       maximumLevel: 17
     })
-    this.imageProvider = this.viewer.imageryLayers.addImageryProvider(provider)
-    this.viewer.scene.imageryLayers.lowerToBottom(this.imageProvider)
+    this.$imageProvider = this.$viewer.imageryLayers.addImageryProvider(provider)
+    this.$viewer.scene.imageryLayers.lowerToBottom(this.$imageProvider)
   }
 
   /**
    * 删除遥感影像
    */
   public removeImageProvider() {
-    this.viewer.scene.imageryLayers.remove(this.imageProvider, true)
-    this.imageProvider = null
+    this.$viewer.scene.imageryLayers.remove(this.$imageProvider, true)
+    this.$imageProvider = null
   }
 
   /**
    * 添加地形数据
    */
   public addTerrainProvider() {
-    this.terrainProvider = new Cesium.CesiumTerrainProvider({
+    this.$terrainProvider = new Cesium.CesiumTerrainProvider({
       url: `${appConfig.mapResouce}/terrain`
     })
-    this.viewer.terrainProvider = this.terrainProvider
+    this.$viewer.terrainProvider = this.$terrainProvider
   }
 
   /**
    * 删除地形数据
    */
   public removeTerrainProvider() {
-    this.viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider({})
-    this.terrainProvider = null
+    this.$viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider({})
+    this.$terrainProvider = null
   }
 
   public addGeoJson(data) {
@@ -273,7 +284,7 @@ export default class MapViewer extends Vue {
       feature.id = '属性信息'
     }
 
-    this.viewer.dataSources.add(
+    this.$viewer.dataSources.add(
       Cesium.GeoJsonDataSource.load(featureCollection, {
         stroke: Cesium.Color.RED,
         fill: Cesium.Color.fromAlpha(Cesium.Color.LIGHTGREEN, 0.5)
@@ -297,7 +308,7 @@ export default class MapViewer extends Vue {
    */
   @Emit('map-ready')
   private emitMapReady() {
-    return this.mapViewer
+    return this.$mapViewer
   }
 
   /**
@@ -310,7 +321,7 @@ export default class MapViewer extends Vue {
 
   // 组件创建
   private created() {
-    this.mapViewer = this
+    this.$mapViewer = this
   }
 
   // 初始化cesium
@@ -319,7 +330,7 @@ export default class MapViewer extends Vue {
   }
 
   private initMap() {
-    this.viewer = new Cesium.Viewer(this.mapId, {
+    this.$viewer = new Cesium.Viewer(this.mapId, {
       sceneModePicker: false,
       sceneMode: Cesium.SceneMode.SCENE3D,
       baseLayerPicker: false,
@@ -335,25 +346,26 @@ export default class MapViewer extends Vue {
       creditContainer: 'credit'
     })
     // 清除默认图层
-    this.viewer.imageryLayers.removeAll()
+    this.$viewer.imageryLayers.removeAll()
     // 清除背景星空
-    this.viewer.scene.skyBox.destroy()
-    this.viewer.scene.skyBox = undefined as any
+    this.$viewer.scene.skyBox.destroy()
+    this.$viewer.scene.skyBox = undefined as any
     // 清除太阳
-    this.viewer.scene.sun.destroy()
-    this.viewer.scene.sun = undefined as any
+    this.$viewer.scene.sun.destroy()
+    this.$viewer.scene.sun = undefined as any
     // 清除月亮
-    this.viewer.scene.moon.destroy()
-    this.viewer.scene.moon = undefined as any
+    this.$viewer.scene.moon.destroy()
+    this.$viewer.scene.moon = undefined as any
     // 清除大气层
-    this.viewer.scene.skyAtmosphere.destroy()
-    this.viewer.scene.skyAtmosphere = undefined as any
+    this.$viewer.scene.skyAtmosphere.destroy()
+    this.$viewer.scene.skyAtmosphere = undefined as any
     // 设置地球背景色
-    this.viewer.scene.globe.baseColor = Cesium.Color.WHITE
-    this.viewer.scene.canvas.id = 'map-viewer-cesium-canvas'
-    this.viewer.dataSources.add(this.drawDataSource)
+    this.$viewer.scene.globe.baseColor = Cesium.Color.WHITE
+    this.$viewer.scene.canvas.id = 'map-viewer-cesium-canvas'
+    this.$drawDataSource = new Cesium.CustomDataSource('draw')
+    this.$viewer.dataSources.add(this.$drawDataSource)
     // 设置摄像机视图
-    this.cameraView = this.viewer.camera
+    this.$cameraView = this.$viewer.camera
 
     // 监听实体数组变化
     this.drawEntities.collectionChanged.addEventListener(() => {
@@ -370,7 +382,7 @@ export default class MapViewer extends Vue {
       'Widgets/Images/ImageryProviders/naturalEarthII.png',
       () => {
         this.updateToolbarIcon('imagery')
-        this.imageProvider
+        this.$imageProvider
           ? this.removeImageProvider()
           : this.addImageProvider()
       },
@@ -384,7 +396,7 @@ export default class MapViewer extends Vue {
       'Widgets/Images/TerrainProviders/CesiumWorldTerrain.png',
       () => {
         this.updateToolbarIcon('terrain')
-        this.terrainProvider
+        this.$terrainProvider
           ? this.removeTerrainProvider()
           : this.addTerrainProvider()
       },
@@ -399,10 +411,10 @@ export default class MapViewer extends Vue {
       '导出图像',
       require('~/assets/images/export-layer.png'),
       () => {
-        this.viewer.render()
-        const { width, height } = this.viewer.canvas
+        this.$viewer.render()
+        const { width, height } = this.$viewer.canvas
         Canvas2Image.saveAsJPEG(
-          this.viewer.canvas,
+          this.$viewer.canvas,
           width,
           height,
           `image-${Date.now()}.jpg`
@@ -413,7 +425,7 @@ export default class MapViewer extends Vue {
     this.updateToolbarIcon('download')
 
     this.GetGeographicBoundingBox(this.workspace).then((x: any) => {
-      cesiumNavigation(this.viewer, {
+      cesiumNavigation(this.$viewer, {
         defaultResetView: x.destination,
         enableCompass: true,
         enableZoomControls: true,
@@ -433,7 +445,7 @@ export default class MapViewer extends Vue {
    * 初始化镜头
    */
   private initCamera() {
-    this.viewer.homeButton.viewModel.command.beforeExecute.addEventListener(
+    this.$viewer.homeButton.viewModel.command.beforeExecute.addEventListener(
       e => {
         e.cancel = true
         // 镜头位置为工作区bbox
@@ -454,7 +466,7 @@ export default class MapViewer extends Vue {
   ) {
     this.GetGeographicBoundingBox(layerSpace, layerName)
       .then((view: any) => {
-        view && this.viewer.camera[setView](view)
+        view && this.$viewer.camera[setView](view)
       })
       .catch(ex => {
         console.log(ex)
@@ -490,7 +502,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-        this.geoServer
+      this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -644,8 +656,8 @@ export default class MapViewer extends Vue {
       }
     }
 
-    if (this.viewer.trackedEntity) {
-      this.viewer.trackedEntity = undefined as any
+    if (this.$viewer.trackedEntity) {
+      this.$viewer.trackedEntity = undefined as any
     }
   }
 }

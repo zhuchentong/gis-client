@@ -170,7 +170,7 @@ export default class SitePanel extends Vue {
     } else {
       const item = this.pointEntitys.find(x => x.id === data.id)
       if (!item) return
-      this.viewer.drawDataSource.entities.removeById(item.entityId)
+      this.viewer.drawEntities.removeById(item.entityId)
       this.pointEntitys.splice(
         this.pointEntitys.findIndex(x => x.id === item.id),
         1
@@ -195,7 +195,7 @@ export default class SitePanel extends Vue {
   private async refreshData() {
     // 删除已经加载的点
     if (this.viewer) {
-      this.viewer.drawDataSource.entities.removeAll()
+      this.viewer.drawEntities.removeAll()
       this.pointEntitys = []
     }
     // 查询数据

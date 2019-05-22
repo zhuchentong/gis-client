@@ -44,7 +44,9 @@
           :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"
         ></label-item>
         <div class="text-right item-operate">
-          <el-button type="text" @click="viewTaskDetail">查看详情</el-button>
+          <el-button type="text" @click="viewTaskDetail(item)"
+            >查看详情</el-button
+          >
           <el-button
             type="text"
             :disabled="item.show === 'NO'"
@@ -128,8 +130,8 @@ export default class TaskPanel extends Vue {
       )
   }
 
-  private viewTaskDetail() {
-    if (!this.id) return
+  private viewTaskDetail(item) {
+    console.log(item)
     this.$window.open('task-system',
       {
         width: WindowSize.large.width,
@@ -138,7 +140,7 @@ export default class TaskPanel extends Vue {
       {
         replace: false,
         parent: null,
-        params: { id: this.id }
+        params: { id: item.id }
       }, this)
   }
 
@@ -153,8 +155,7 @@ export default class TaskPanel extends Vue {
    * 拉取巡查数据，展示区域
    */
   private taskDataShow(item) {
-    const taskId = item.id
-    const requestParams = new RequestParams({ id: taskId })
+    const requestParams = new RequestParams({ id: item.id })
     this.patrolService.getPatrolTrack(requestParams).subscribe(data => {
       if (!data.length) return
       let positions = data.map(v => ({ longitude: v.positionX, latitude: v.positionY }))

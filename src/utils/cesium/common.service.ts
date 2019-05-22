@@ -6,9 +6,9 @@ export class CesiumCommonService {
    * @param viewer
    * @param cartographic
    */
-  public static DegreesToCartesian3(viewer, cartographic) {
+  public static DegreesToCartesian3(_viewer, cartographic) {
     // 海拔
-    const height = viewer.scene.globe.getHeight(cartographic)
+    const height = _viewer.scene.globe.getHeight(cartographic)
     // 地理坐标（弧度）转经纬度坐标
     return Cesium.Cartesian3.fromDegrees(
       (cartographic.longitude / Math.PI) * 180,
@@ -23,22 +23,22 @@ export class CesiumCommonService {
    * @param cartographic
    */
   public static RadiansToCartesian3(
-    viewer: Cesium.Viewer,
+    _viewer: Cesium.Viewer,
     cartographic: Cesium.Cartographic
   ) {
     return Cesium.Cartesian3.fromRadians(
       cartographic.longitude,
       cartographic.latitude,
       cartographic.height,
-      viewer.scene.globe.ellipsoid
+      _viewer.scene.globe.ellipsoid
     )
   }
 
-  public static getViewCartesianPoint(viewer, position) {
+  public static getViewCartesianPoint(_viewer, position) {
     // 获取投射点
-    const ray = viewer.scene.camera.getPickRay(position)
+    const ray = _viewer.scene.camera.getPickRay(position)
     // 获取投射点坐标
-    const point = viewer.scene.globe.pick(ray, viewer.scene)
+    const point = _viewer.scene.globe.pick(ray, _viewer.scene)
     // 投射点在地球外则为空
     if (!point) return
     // 获取地理坐标
@@ -85,18 +85,18 @@ export class CesiumCommonService {
    * @param viewer viewer
    * @param postion windowsPostition
    */
-  public static getPosition(viewer: Cesium.Viewer, postion: Cesium.Cartesian2) {
+  public static getPosition(_viewer: Cesium.Viewer, postion: Cesium.Cartesian2) {
     let result: Cesium.Cartesian3 | undefined
-    const feature = viewer.scene.pick(postion)
-    if (feature && viewer.scene.pickPositionSupported) {
-      viewer.scene.pickPosition(postion, result)
+    const feature = _viewer.scene.pick(postion)
+    if (feature && _viewer.scene.pickPositionSupported) {
+      _viewer.scene.pickPosition(postion, result)
     } else {
       const cartographic = CesiumCommonService.getViewCartesianPoint(
-        viewer,
+        _viewer,
         postion
       )
       if (cartographic) {
-        result = CesiumCommonService.DegreesToCartesian3(viewer, cartographic)
+        result = CesiumCommonService.DegreesToCartesian3(_viewer, cartographic)
       }
     }
     return result
