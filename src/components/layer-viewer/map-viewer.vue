@@ -78,7 +78,7 @@ export default class MapViewer extends Vue {
   private drawEntitiesLength = 0
 
   @LayerTableModule.Action
-  private getLayerAttrData
+  private getLayerAttrData!: (query: { layer: any, cql?: string }) => void
   @LayerTableModule.Mutation
   private removeLayerAttrTable
 
@@ -123,7 +123,7 @@ export default class MapViewer extends Vue {
 
     this.setCamera(layer.layerSpace, layer.layerCode)
     this.emitLayerListChange(this.layerList)
-    this.getLayerAttrData(layer)
+    this.getLayerAttrData({ layer, cql: cqlFilter })
     return provider
   }
 

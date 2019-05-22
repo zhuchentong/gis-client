@@ -46,7 +46,7 @@ export default {
     }
   },
   actions: {
-    getLayerAttrData({ commit }, layer) {
+    getLayerAttrData({ commit }, { layer, cql }) {
       if (!layerInfoService) {
         layerInfoService = new LayerInfoService()
       }
@@ -55,7 +55,8 @@ export default {
         .queryMapSpotByAttr(
           new RequestParams({
             layerSpace: layer.layerSpace,
-            layerCode: layer.layerCode
+            layerCode: layer.layerCode,
+            cql
           })
         )
         .subscribe(data => {
