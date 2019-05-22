@@ -1,38 +1,59 @@
 <template>
   <section class="map-viewer fill">
-    <div id="cesium-viewer" class="col-span no-padding fill">
+    <div
+      id="cesium-viewer"
+      class="col-span no-padding fill"
+    >
       <div id="slider"></div>
     </div>
     <div
       v-if="isDrawing || drawEntitiesLength"
       class="draw-tool-bar icon-button-group"
     >
-      <div class="icon-button" @click="onDrawEvent('close')">
-        <svg-icon iconColor="white" iconName="close"></svg-icon>
+      <div
+        class="icon-button"
+        @click="onDrawEvent('close')"
+      >
+        <svg-icon
+          iconColor="white"
+          iconName="close"
+        ></svg-icon>
       </div>
-      <div class="icon-button" @click="isDrawing && onDrawEvent('reset')">
+      <div
+        class="icon-button"
+        @click="isDrawing && onDrawEvent('reset')"
+      >
         <svg-icon
           :iconColor="isDrawing ? 'white' : 'gray'"
           iconName="reset"
         ></svg-icon>
       </div>
-      <div class="icon-button" @click="isDrawing && onDrawEvent('submit')">
+      <div
+        class="icon-button"
+        @click="isDrawing && onDrawEvent('submit')"
+      >
         <svg-icon
           :iconColor="isDrawing ? 'white' : 'gray'"
           iconName="right"
         ></svg-icon>
       </div>
     </div>
-    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
+    <div
+      v-if="isDrawing && drawTipInfo"
+      class="draw-tip-panel"
+    >
       {{ drawTipInfo }}
     </div>
-    <div id="credit" style="display:none"></div>
+    <div
+      id="credit"
+      style="display:none"
+    ></div>
   </section>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator'
-import Cesium, { CesiumTerrainProvider } from 'cesium/Cesium'
+import Cesium, { CesiumTerrainProvider, PolygonGraphics } from 'cesium/Cesium'
 import WMSCapabilities from 'wms-capabilities'
 import appConfig from '~/config/app.config'
 import { FilterService } from '~/utils/filter.service'
@@ -49,7 +70,9 @@ export default class MapViewer extends Vue {
   // 绘制状态
   public isDrawing = false
   // 绘制数据源
-  public $drawDataSource!: Cesium.CustomDataSource 
+  public $drawDataSource!: Cesium.CustomDataSource
+  // 选择数据源
+  public $pickDataSource!: Cesium.CustomDataSource
   // 绘制事件监听
   public drawEventListener: Array<(event: string) => void> = []
   // 绘制提示信息
@@ -84,6 +107,10 @@ export default class MapViewer extends Vue {
 
   public get drawEntities() {
     return this.$drawDataSource.entities
+  }
+
+  public get pickEntities() {
+    return this.$pickDataSource.entities
   }
 
   public getLayerList() {
@@ -196,7 +223,10 @@ export default class MapViewer extends Vue {
     })
 
     // 调整视角
-    await this.$viewer.zoomTo(_tileset, new Cesium.HeadingPitchRange(0, -0.5, 0))
+    await this.$viewer.zoomTo(
+      _tileset,
+      new Cesium.HeadingPitchRange(0, -0.5, 0)
+    )
 
     // 添加到图层列表
     this.tilesetList.push({
@@ -247,7 +277,9 @@ export default class MapViewer extends Vue {
       rectangle,
       maximumLevel: 17
     })
-    this.$imageProvider = this.$viewer.imageryLayers.addImageryProvider(provider)
+    this.$imageProvider = this.$viewer.imageryLayers.addImageryProvider(
+      provider
+    )
     this.$viewer.scene.imageryLayers.lowerToBottom(this.$imageProvider)
   }
 
@@ -362,8 +394,12 @@ export default class MapViewer extends Vue {
     // 设置地球背景色
     this.$viewer.scene.globe.baseColor = Cesium.Color.WHITE
     this.$viewer.scene.canvas.id = 'map-viewer-cesium-canvas'
+
     this.$drawDataSource = new Cesium.CustomDataSource('draw')
     this.$viewer.dataSources.add(this.$drawDataSource)
+
+    this.$pickDataSource = new Cesium.CustomDataSource('pick')
+    this.$viewer.dataSources.add(this.$pickDataSource)
     // 设置摄像机视图
     this.$cameraView = this.$viewer.camera
 
@@ -432,6 +468,13 @@ export default class MapViewer extends Vue {
         enableDistanceLegend: true
       })
     })
+
+    const handler = new Cesium.ScreenSpaceEventHandler(
+      this.$viewer.scene.canvas
+    )
+    handler.setInputAction((e: any) => {
+      this.setPickFeature(e)
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
   }
 
   private updateToolbarIcon(id) {
@@ -502,7 +545,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-      this.geoServer
+        this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -659,6 +702,57 @@ export default class MapViewer extends Vue {
     if (this.$viewer.trackedEntity) {
       this.$viewer.trackedEntity = undefined as any
     }
+  }
+
+  /**
+   * 设置单击鼠标，高亮地图
+   */
+  private setPickFeature(e: any) {
+    const windowPosition = e.position
+    const pickRay = this.$viewer.camera.getPickRay(windowPosition)
+    const featuresPromise = this.$viewer.imageryLayers
+    .pickImageryLayerFeatures(
+      pickRay,
+      this.$viewer.scene
+    )
+    if (!Cesium.defined(featuresPromise)) return
+    featuresPromise.then(
+      (features: Cesium.ImageryLayerFeatureInfo[]) => {
+        // 清空选择区域
+        this.pickEntities.removeAll()
+        const [feature] = features
+
+        if (feature) {
+          try {
+            const geometry = feature.data.geometry
+            const [[position]] = geometry.coordinates
+
+            const hierarchy = new Cesium.PolygonHierarchy(
+              position.map(point =>
+                Cesium.Cartesian3.fromDegrees(point[0], point[1])
+              )
+            )
+
+            this.pickEntities.add(
+              new Cesium.Entity({
+                polygon: {
+                  hierarchy,
+                  height: 0,
+                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                  fill: false,
+                  outline: true,
+                  outlineColor: Cesium.Color.BLUE,
+                  outlineWidth: 20
+                }
+              })
+            )
+          } catch (ex) {
+            console.log(ex)
+          }
+        }
+      },
+      () => console.error('获取iamgeLayerFeatures失败')
+    )
   }
 }
 </script>

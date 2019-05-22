@@ -10,7 +10,13 @@ export class WindowService {
 
   public static open(
     url,
-    { size = WindowSize.normal, width, height, maximizable = true, resizable = true },
+    {
+      size = WindowSize.normal,
+      width,
+      height,
+      maximizable = true,
+      resizable = true
+    },
     { replace, parent, params, frame = true },
     component: Vue
   ) {

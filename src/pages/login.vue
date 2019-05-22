@@ -1,10 +1,17 @@
 <template>
-  <section class="login-page fill-absolute" @keydown.enter="submitForm">
+  <section
+    class="login-page fill-absolute"
+    @keydown.enter="submitForm"
+  >
     <div class="col center-span fill-height">
       <div class="login-title">多规合一综合信息平台</div>
       <div class="login-content">
         <div class="login-form">
-          <el-form ref="login-form" :model="user" :rules="userRoles">
+          <el-form
+            ref="login-form"
+            :model="user"
+            :rules="userRoles"
+          >
             <el-form-item prop="username">
               <el-input
                 v-model="user.username"
@@ -20,16 +27,23 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-checkbox class="remember-label" v-model="remember"
-                >记住用户名和密码</el-checkbox
-              >
+              <el-checkbox
+                class="remember-label"
+                v-model="remember"
+              >记住用户名和密码</el-checkbox>
             </el-form-item>
             <div v-if="loading">
               <i class="el-icon-loading"></i> 资源数据更新中,请稍后...
             </div>
             <div class="text-center">
-              <el-button class="login-btn" @click="submitForm">登录</el-button>
-              <el-button class="login-btn" @click="exit">退出</el-button>
+              <el-button
+                class="login-btn"
+                @click="submitForm"
+              >登录</el-button>
+              <el-button
+                class="login-btn"
+                @click="exit"
+              >退出</el-button>
             </div>
           </el-form>
         </div>
@@ -48,8 +62,8 @@ import { Layout } from '@/core/decorator'
 import { State, Mutation, Action, namespace } from 'vuex-class'
 import { DataDict } from '~/models/data-dict.model'
 import { StorageService } from '~/utils/storage.service'
-import { LayerInfoService } from "~/services/layer-info.service"
-import { RequestParams } from "~/core/http"
+import { LayerInfoService } from '~/services/layer-info.service'
+import { RequestParams } from '~/core/http'
 import { TempLayers } from '@/models/temp-layers.model'
 import { LayerSpace } from '~/config/business-config'
 
@@ -65,7 +79,9 @@ export default class Login extends Vue {
   @Mutation private updateDictData!: (data) => void
   @Action private updateUserLoginData!: (data) => boolean
   // 更新图层关系
-  @LayerRelationModule.Mutation private updateLayerRelations!: (data: any[]) => void
+  @LayerRelationModule.Mutation private updateLayerRelations!: (
+    data: any[]
+  ) => void
 
   @Inject
   private layerService!: LayerInfoService
@@ -89,8 +105,6 @@ export default class Login extends Vue {
 
     this.loading = true
     this.checkDictData()
-
-
   }
 
   private async checkDictData() {
@@ -141,15 +155,14 @@ export default class Login extends Vue {
       StorageService.removeItem('remember')
     }
     let data = await this.user.login().toPromise()
-    const loginStatus = this.updateUserLoginData(
-      {
-        token: data.token,
-        user: data.operatorResponse
-      }
-    )
+    const loginStatus = this.updateUserLoginData({
+      token: data.token,
+      user: data.operatorResponse
+    })
     if (loginStatus) {
-
-      data = await this.layerService.getLayerRelation(new RequestParams(null)).toPromise()
+      data = await this.layerService
+        .getLayerRelation(new RequestParams(null))
+        .toPromise()
       this.updateLayerRelations(data)
       this.deleteLocalLayers()
 
@@ -161,13 +174,13 @@ export default class Login extends Vue {
           maximizable: false
         },
         {
-          replace: true
+          replace: true,
+          frame: false
         },
         this
       )
-
     } else {
-      this.$message.error("登录失败")
+      this.$message.error('登录失败')
     }
   }
 
@@ -181,9 +194,9 @@ export default class Login extends Vue {
         ...item,
         layerSpace: LayerSpace.temp
       })
-      this.layerService.deleteTempLayer(param).subscribe(
-        () => tmpLayers.delete(item.layerCode)
-      )
+      this.layerService
+        .deleteTempLayer(param)
+        .subscribe(() => tmpLayers.delete(item.layerCode))
     })
   }
 
