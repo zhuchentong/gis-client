@@ -32,7 +32,7 @@
             :showIcon="false"
             :title="typeName"
           ></common-title>
-          <ve-pie :data="chartDataByType" ></ve-pie>
+          <ve-pie :data="chartDataByType" :settings="chartSettingTwo"></ve-pie>
         </template>
       </el-card>
     </div>
@@ -55,12 +55,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import DataBox from "~/components/common/data-box.vue"
-import { LayerStatisticalService } from "~/services/layer-statistical.service"
-import { Pie } from "v-charts"
+import DataBox from '~/components/common/data-box.vue'
+import { LayerStatisticalService } from '~/services/layer-statistical.service'
+import { Pie } from 'v-charts'
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
-import { ChartColorByLandNow}  from "~/components/statistic-system/statistic-system.config"
+import { ChartColorByLandNow } from '~/components/statistic-system/statistic-system.config'
 
 @Component({
   components: {
@@ -69,7 +69,6 @@ import { ChartColorByLandNow}  from "~/components/statistic-system/statistic-sys
   }
 })
 export default class LandNow extends Vue {
-
   @Inject
   private sevice!: LayerStatisticalService
 
@@ -80,7 +79,7 @@ export default class LandNow extends Vue {
   private years = [2016, 2017]
 
   private chartSetting = {
-    selectedMode: "single",
+    selectedMode: 'single',
     labelLine: {
       show: false
     },
@@ -88,17 +87,25 @@ export default class LandNow extends Vue {
       show: false
     },
     itemStyle: {
-        color:({name}) => {
-          console.log(name,'name')
-          return ChartColorByLandNow[name]
+      color: ({ name }) => {
+        return ChartColorByLandNow[name]
       }
     }
   }
 
+  private chartSettingTwo = {
+    selectedMode: 'single',
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
+    }
+  }
 
   private readonly setting = {
-    name: "类型",
-    acreage: "占地面积(亩)"
+    name: '类型',
+    acreage: '占地面积(亩)'
   }
 
   private chartEvents = {
@@ -106,8 +113,7 @@ export default class LandNow extends Vue {
   }
 
   private dataSet: any = []
-  private typeName = ""
-
+  private typeName = ''
 
   private chartData = {
     columns: Object.values(this.setting),
@@ -125,7 +131,8 @@ export default class LandNow extends Vue {
   }
 
   private refreshData() {
-    this.sevice.getClassificationOne(new RequestParams(this.queryModel))
+    this.sevice
+      .getClassificationOne(new RequestParams(this.queryModel))
       .subscribe(data => {
         this.dataSet = data
         this.chartData.rows = data.map(v => {
@@ -146,19 +153,17 @@ export default class LandNow extends Vue {
       publishId: findRow.publishId,
       code: findRow.code
     })
-    this.sevice.getSecondClassification(queryParams)
-      .subscribe(data => {
-        this.typeName = name
-        this.chartDataByType.rows = data.map(v => {
-          const row: any = {}
-          Object.entries(this.setting).forEach(([key, value]) => {
-            row[value] = v[key]
-          })
-          return row
+    this.sevice.getSecondClassification(queryParams).subscribe(data => {
+      this.typeName = name
+      this.chartDataByType.rows = data.map(v => {
+        const row: any = {}
+        Object.entries(this.setting).forEach(([key, value]) => {
+          row[value] = v[key]
         })
+        return row
       })
+    })
   }
-
 
   private mounted() {
     this.refreshData()
