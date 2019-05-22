@@ -1,6 +1,10 @@
 <template>
   <section class="layer-attr-table">
-    <div class="table-icon" @click="updateTableShow" title="图层属性表">
+    <div
+      class="table-icon"
+      @click="updateTableShow"
+      title="图层属性表"
+    >
       <svg-icon
         :iconSize="24"
         :iconColor="(isTableShow||this.tableList.length===0)?'gray':'white'"
@@ -9,7 +13,12 @@
     </div>
     <!-- <transition name="fade"> -->
     <div v-show="isTableShow">
-      <el-tabs type="border-card" v-model="currentTable" @tab-remove="onRemoveTab" closable>
+      <el-tabs
+        type="border-card"
+        v-model="currentTable"
+        @tab-remove="onRemoveTab"
+        closable
+      >
         <el-tab-pane
           v-for="layerTable of tableList"
           :key="layerTable.id"
@@ -20,6 +29,7 @@
             class="layer-table-data-box"
             :data="layerTable.data"
             ref="layer-table-data-box"
+            @onRowClick="onRowClick"
             :height="240"
           >
             <template slot="columns">
@@ -46,6 +56,8 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import { State, Mutation, namespace } from 'vuex-class'
 import { PanelComponents } from './layer-system.config'
 import { cursorTo } from 'readline'
+import appConfig from '~/config/app.config'
+
 const LayerTableModule = namespace('layerTableModule')
 
 @Component({
@@ -60,6 +72,7 @@ export default class LayerAttrTable extends Vue {
   private updateTableVisibility
   @Prop()
   private viewer
+  private workspace = 'base-space'
   private currentTable = ''
   private lastTabelList
   private updateTableShow() {
@@ -70,6 +83,10 @@ export default class LayerAttrTable extends Vue {
 
   private onRemoveTab(id) {
     this.removeLayerAttrTable(id)
+  }
+
+  private onRowClick(row) {
+    // http://117.36.75.166:48080/geoserver/base-space/wms?service=wfs&version=1.0.0&request=GetFeature&featureid=6533272557960810496.2&query_layers=base-space:6533272557960810496
   }
 
   @Watch('tableList.length')
