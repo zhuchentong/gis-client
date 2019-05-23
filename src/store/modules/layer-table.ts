@@ -67,17 +67,22 @@ export default {
           commit('addLayerAttrTable', {
             id: layer.id,
             name: layer.layerName,
-            data: data.map(x => x.attr)
+            code: layer.code,
+            data: data.map(x => ({
+              ...x.attr,
+              featureId: x.identifier,
+              layerCode: layer.layerCode
+            }))
           })
         })
-    },
+    }
   },
   getters: {
     /**
      * 获取图层table信息
      */
     getTable(state) {
-      return (id) => state.tableList.find(x => x.id === id)
+      return id => state.tableList.find(x => x.id === id)
     }
   }
 }

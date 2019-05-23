@@ -8,7 +8,10 @@
     </div>
     <div class="layer-view">
       <map-viewer @map-ready="onMapReady"></map-viewer>
-      <layer-attr-table class="layer-table"></layer-attr-table>
+      <layer-attr-table
+        :viewer="mapViewer"
+        class="layer-table"
+      ></layer-attr-table>
     </div>
     <div class="bottom-panel"></div>
   </section>

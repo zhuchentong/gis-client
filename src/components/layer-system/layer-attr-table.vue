@@ -62,7 +62,7 @@ import { State, Mutation, namespace } from 'vuex-class'
 import { PanelComponents } from './layer-system.config'
 import { cursorTo } from 'readline'
 import appConfig from '~/config/app.config'
-
+import WMSCapabilities from 'wms-capabilities'
 const LayerTableModule = namespace('layerTableModule')
 
 @Component({
@@ -91,7 +91,22 @@ export default class LayerAttrTable extends Vue {
   }
 
   private onRowClick(row) {
-    // http://117.36.75.166:48080/geoserver/base-space/wms?service=wfs&version=1.0.0&request=GetFeature&featureid=6533272557960810496.2&query_layers=base-space:6533272557960810496
+    return fetch(
+      `${appConfig.geoServer}/${
+        this.workspace
+      }/wms?service=wfs&version=2.0.0&request=GetFeature&&featureid=${
+        row.featureId
+      }&&query_layers=base-space:${row.layerCode}&&outputFormat=json`
+    ).then(async data => {
+      try {
+        const { features } = await data.json()
+        const [feature] = features
+
+        this.viewer.drawPickFeature(feature.geometry)
+      } catch (ex) {
+        console.log(ex)
+      }
+    })
   }
 
   @Watch('tableList.length')

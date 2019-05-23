@@ -61,6 +61,7 @@ import { namespace } from 'vuex-class'
 import cesiumNavigation from '@znemz/cesium-navigation'
 import '@znemz/cesium-navigation/dist/index.css'
 import Canvas2Image from 'canvas2image-es6'
+// import * as turf from '@turf/turf'
 
 const LayerTableModule = namespace('layerTableModule')
 @Component({
@@ -326,6 +327,46 @@ export default class MapViewer extends Vue {
         fill: Cesium.Color.fromAlpha(Cesium.Color.LIGHTGREEN, 0.5)
       })
     )
+  }
+
+  public drawPickFeature(geometry) {
+    // 清空选择区域
+    this.pickEntities.removeAll()
+    try {
+      const [[position]] = geometry.coordinates
+
+      const hierarchy = new Cesium.PolygonHierarchy(
+        position.map(point => Cesium.Cartesian3.fromDegrees(point[0], point[1]))
+      )
+
+      this.pickEntities.add(
+        new Cesium.Entity({
+          polygon: {
+            hierarchy,
+            height: 0,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+            fill: false,
+            outline: true,
+            outlineColor: Cesium.Color.BLUE,
+            outlineWidth: 20
+          }
+        })
+      )
+      // // 计算多边形
+      // const polygon = turf.polygon([[...position, position[0]]])
+      // // 获取多边形中心
+      // const {
+      //   geometry: { coordinates }
+      // } = turf.centerOfMass(polygon) as any
+      // const center = Cesium.Cartesian3.fromDegrees(
+      //   coordinates[0],
+      //   coordinates[1]
+      // )
+
+      // this.$cameraView.flyTo({destination:coordinates})
+    } catch (ex) {
+      console.log(ex)
+    }
   }
 
   /**
@@ -664,8 +705,7 @@ export default class MapViewer extends Vue {
         if (x.label === '结果形状面积') {
           const value = (x.value as string) || '0'
           data[x.label] = Number.parseFloat(value).toFixed(2) + ' 平方米'
-        }
-        else {
+        } else {
           data[x.label] = FilterService.fieldCodeConvert(x.key, x.value)
         }
       })
@@ -715,45 +755,18 @@ export default class MapViewer extends Vue {
   private setPickFeature(e: any) {
     const windowPosition = e.position
     const pickRay = this.$viewer.camera.getPickRay(windowPosition)
-    const featuresPromise = this.$viewer.imageryLayers
-    .pickImageryLayerFeatures(
+    const featuresPromise = this.$viewer.imageryLayers.pickImageryLayerFeatures(
       pickRay,
       this.$viewer.scene
     )
     if (!Cesium.defined(featuresPromise)) return
     featuresPromise.then(
       (features: Cesium.ImageryLayerFeatureInfo[]) => {
-        // 清空选择区域
-        this.pickEntities.removeAll()
         const [feature] = features
 
         if (feature) {
-          try {
-            const geometry = feature.data.geometry
-            const [[position]] = geometry.coordinates
-
-            const hierarchy = new Cesium.PolygonHierarchy(
-              position.map(point =>
-                Cesium.Cartesian3.fromDegrees(point[0], point[1])
-              )
-            )
-
-            this.pickEntities.add(
-              new Cesium.Entity({
-                polygon: {
-                  hierarchy,
-                  height: 0,
-                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-                  fill: false,
-                  outline: true,
-                  outlineColor: Cesium.Color.BLUE,
-                  outlineWidth: 20
-                }
-              })
-            )
-          } catch (ex) {
-            console.log(ex)
-          }
+          const geometry = feature.data.geometry
+          this.drawPickFeature(geometry)
         }
       },
       () => console.error('获取iamgeLayerFeatures失败')
