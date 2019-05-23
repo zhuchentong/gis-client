@@ -26,6 +26,10 @@ export default {
      * 添加到图层属性表
      */
     addLayerAttrTable(state, { id, name, data }) {
+      if (state.tableList.findIndex(x => x.id === id) > -1) {
+        console.error(`已存在属性表:${id},Name:${name}`)
+        return
+      }
       if (!data.length) {
         return
       }

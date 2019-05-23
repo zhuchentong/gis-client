@@ -3,13 +3,20 @@
     <div class="table-icon" @click="updateTableShow" title="图层属性表">
       <svg-icon
         :iconSize="24"
-        :iconColor="(isTableShow||this.tableList.length===0)?'gray':'white'"
+        :iconColor="
+          isTableShow || this.tableList.length === 0 ? 'gray' : 'white'
+        "
         iconName="table"
       ></svg-icon>
     </div>
     <!-- <transition name="fade"> -->
     <div v-show="isTableShow">
-      <el-tabs type="border-card" v-model="currentTable" @tab-remove="onRemoveTab" closable>
+      <el-tabs
+        type="border-card"
+        v-model="currentTable"
+        @tab-remove="onRemoveTab"
+        closable
+      >
         <el-tab-pane
           v-for="layerTable of tableList"
           :key="layerTable.id"
@@ -29,6 +36,9 @@
                 :prop="column.key"
                 :label="column.label"
                 align="center"
+                :formatter="
+                  row => $filter.fieldCodeConvert(column.key, row[column.key])
+                "
                 show-overflow-tooltip
               ></el-table-column>
             </template>

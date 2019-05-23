@@ -1,6 +1,7 @@
 import store from '~/store'
 import * as enumData from '~/config/enum.config'
 import shpDict from '~/assets/json/shp-dict.json'
+import fieldDict from "~/assets/json/search-range-setting.json"
 
 export class FilterService {
   /**
@@ -281,5 +282,18 @@ export class FilterService {
       data = value
     }
     return (data / 10000).toFixed(d)
+  }
+
+  /**
+   * shp图层字段值转换
+   * @param key 字典类型
+   * @param code 转码code
+   */
+  public static fieldCodeConvert(key, code) {
+    const dict: Array<{ code: string, name: string }> = fieldDict[key]
+    if (!dict) return code
+
+    const dictItem = dict.find(v => v.code === code)
+    return dictItem ? dictItem.name : code
   }
 }

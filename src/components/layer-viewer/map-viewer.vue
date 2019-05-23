@@ -49,7 +49,7 @@ export default class MapViewer extends Vue {
   // 绘制状态
   public isDrawing = false
   // 绘制数据源
-  public $drawDataSource!: Cesium.CustomDataSource 
+  public $drawDataSource!: Cesium.CustomDataSource
   // 绘制事件监听
   public drawEventListener: Array<(event: string) => void> = []
   // 绘制提示信息
@@ -164,12 +164,16 @@ export default class MapViewer extends Vue {
    */
   public async addTileset({ id, url, heightOffset }) {
     // 添加3d图层
+    const options: any = {
+      url,
+      preferLeaves: true,
+      dynamicScreenSpaceError: true
+      // maximumScreenSpaceError: 10, //最大的屏幕空间误差
+      // maximumNumberOfLoadedTiles: 1000 //最大加载瓦片个数
+    }
+
     const _tileset = this.$viewer.scene.primitives.add(
-      new Cesium.Cesium3DTileset({
-        url
-        // maximumScreenSpaceError: 10, //最大的屏幕空间误差
-        // maximumNumberOfLoadedTiles: 1000 //最大加载瓦片个数
-      })
+      new Cesium.Cesium3DTileset(options)
     )
     // 调整3d图层位置
     _tileset.allTilesLoaded.addEventListener(() => {
@@ -611,14 +615,15 @@ export default class MapViewer extends Vue {
         label: FilterService.convertShpCode(key)
       }))
       .filter(x => !filterKey.includes(x.key))
-      .filter(x => x.key !== x.label || /[\u4e00-\u9fa5]/.test(x.key))
+      .filter(x => /[\u4e00-\u9fa5]/.test(x.key) || x.key !== x.label)
       .forEach(x => {
         // 辅助选址，结果字段过滤
         if (x.label === '结果形状面积') {
           const value = (x.value as string) || '0'
           data[x.label] = Number.parseFloat(value).toFixed(2) + ' 平方米'
-        } else {
-          data[x.label] = x.value
+        }
+        else {
+          data[x.label] = FilterService.fieldCodeConvert(x.key, x.value)
         }
       })
     return data
