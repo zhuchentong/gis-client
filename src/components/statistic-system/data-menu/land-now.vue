@@ -39,7 +39,7 @@
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="name" label="土地现状类型"></el-table-column>
-        <el-table-column prop="acreage" label="占地面积(亩)" ></el-table-column>
+        <el-table-column prop="acreage" label="占地面积(亩)" :formatter="row=>$common.convertArea(row.acreage,'SQUARE_METRE').mu"></el-table-column>
         <el-table-column
           prop="ratio"
           label="所占百分比"
