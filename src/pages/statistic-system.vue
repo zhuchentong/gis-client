@@ -19,9 +19,9 @@
       </div>
     </div>
 
-    <keep-alive slot="content">
+    <div slot="content">
       <component :is="currentComponent"></component>
-    </keep-alive>
+    </div>
   </base-col-three>
 </template>
 

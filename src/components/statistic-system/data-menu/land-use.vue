@@ -2,12 +2,12 @@
   <section class="component land-use">
     <el-card>
       <common-title slot="header" :showIcon="false" title="土地用途区统计"></common-title>
-      <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+      <ve-pie :data="chartData" :settings="chartSettings" :extend="extendSetting"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="name" label="土地用途区类型"></el-table-column>
-        <el-table-column prop="acreage" label="占地面积(亩)"></el-table-column>
+        <el-table-column prop="acreage" label="占地面积(亩)" :formatter="row=>$common.convertArea(row.acreage,'SQUARE_METRE').mu"></el-table-column>
         <el-table-column prop="ratio" label="所占百分比" :formatter="row => $filter.toPercent(row.ratio)"></el-table-column>
       </template>
     </data-box>
@@ -61,6 +61,12 @@ export default class LandUse extends Vue {
     },
     label: {
       show: false
+    }
+  }
+
+   private extendSetting={
+    tooltip:{
+    confine:true
     }
   }
 

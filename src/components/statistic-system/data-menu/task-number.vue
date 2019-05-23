@@ -39,7 +39,7 @@
         </div>
       </common-title>
       <div v-if="!dataSet.length" class="no-data"></div>
-      <ve-pie v-else :data="chartData" :settings="chartSettings"></ve-pie>
+      <ve-pie v-else :data="chartData" :extend="extendSetting" :settings="chartSettings"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="310">
       <template slot="columns">
@@ -111,6 +111,12 @@ export default class TaskNumber extends Vue {
       borderWidth:1,
       borderType:'solid',
       borderColor:'#f3eeee'
+    }
+  }
+
+   private extendSetting={
+    tooltip:{
+    confine:true
     }
   }
 

@@ -10,7 +10,7 @@
         <ve-pie
           :data="chartDataByName"
           :settings="chartSetting"
-          :events="chartEvents"
+          :events="chartEvents" :extend="extendSetting"
         ></ve-pie>
       </el-card>
       <el-card class="col-span-6">
@@ -119,8 +119,16 @@ export default class ReportLand extends Vue {
   private chartExtend={
     legend:{
         data:ChartColorByLevel
+    },
+    tooltip:{
+    confine:true
     }
-          
+  }
+
+  private extendSetting={
+    tooltip:{
+    confine:true
+    }
   }
 
   private chartEvents = {
