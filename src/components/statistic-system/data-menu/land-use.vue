@@ -2,7 +2,7 @@
   <section class="component land-use">
     <el-card>
       <common-title slot="header" :showIcon="false" title="土地用途区统计"></common-title>
-      <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+      <ve-pie :data="chartData" :settings="chartSettings" :extend="extendSetting"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
@@ -61,6 +61,12 @@ export default class LandUse extends Vue {
     },
     label: {
       show: false
+    }
+  }
+
+   private extendSetting={
+    tooltip:{
+    confine:true
     }
   }
 

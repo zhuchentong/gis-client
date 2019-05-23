@@ -2,7 +2,7 @@
   <section class="component land-control">
     <el-card>
       <common-title slot="header" :showIcon="false" title="管制区类型统计"></common-title>
-      <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+      <ve-pie :data="chartData" :extend="extendSetting" :settings="chartSettings"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
@@ -56,6 +56,12 @@ export default class LandControl extends Vue {
     },
     label: {
       show: false
+    }
+  }
+
+     private extendSetting={
+    tooltip:{
+    confine:true
     }
   }
   private dataSet: any = []

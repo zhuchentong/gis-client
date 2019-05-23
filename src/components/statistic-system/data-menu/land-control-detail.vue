@@ -64,6 +64,9 @@ export default class LandControlDetail extends Vue {
       x: 'right',
       bottom:40
     },
+    tooltip:{
+    confine:true
+    },
     series: s => {
       s.forEach(i => {
         if (i.type === 'pie') {

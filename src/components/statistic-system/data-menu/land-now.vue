@@ -20,7 +20,7 @@
         <ve-pie
           :data="chartData"
           :settings="chartSetting"
-          :events="chartEvents"
+          :events="chartEvents" :extend="extendSetting"
         ></ve-pie>
       </el-card>
       <el-card class="col-span-6">
@@ -32,7 +32,7 @@
             :showIcon="false"
             :title="typeName"
           ></common-title>
-          <ve-pie :data="chartDataByType" :settings="chartSetting"></ve-pie>
+          <ve-pie :data="chartDataByType" :extend="extendSetting" :settings="chartSetting"></ve-pie>
         </template>
       </el-card>
     </div>
@@ -93,6 +93,12 @@ export default class LandNow extends Vue {
       borderWidth:1,
       borderType:'solid',
       borderColor:'#f3eeee'
+    }
+  }
+
+  private extendSetting={
+    tooltip:{
+    confine:true
     }
   }
 
