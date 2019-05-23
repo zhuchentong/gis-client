@@ -93,7 +93,7 @@ export default class GrantLand extends Vue {
   }
 
   private chartSettings = {
-    yAxisType: ["KMB"],
+    // yAxisType: ["KMB"],
     yAxisName: ['面积(亩)']
   }
 
@@ -111,11 +111,12 @@ export default class GrantLand extends Vue {
       this.chartData.rows = data.map(v => {
         const row = {}
         Object.entries(this.setting).forEach(([key, value]) => {
-          CommonService.convertArea(v.area,'SQUARE_METRE')
           if (key === 'quarterly') {
             row[value] = this.queryQuarterName(v.quarterly)
+            row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           } else {
             row[value] = v[key]
+            row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           }
         })
         return row

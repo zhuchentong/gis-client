@@ -20,7 +20,7 @@
         <ve-pie
           :data="chartData"
           :settings="chartSetting"
-          :events="chartEvents"
+          :events="chartEvents" :extend="extendSetting"
         ></ve-pie>
       </el-card>
       <el-card class="col-span-6">
@@ -32,14 +32,14 @@
             :showIcon="false"
             :title="typeName"
           ></common-title>
-          <ve-pie :data="chartDataByType" :settings="chartSetting"></ve-pie>
+          <ve-pie :data="chartDataByType" :extend="extendSetting" :settings="chartSetting"></ve-pie>
         </template>
       </el-card>
     </div>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="name" label="土地现状类型"></el-table-column>
-        <el-table-column prop="acreage" label="占地面积(亩)"></el-table-column>
+        <el-table-column prop="acreage" label="占地面积(亩)" :formatter="row=>$common.convertArea(row.acreage,'SQUARE_METRE').mu"></el-table-column>
         <el-table-column
           prop="ratio"
           label="所占百分比"
@@ -89,7 +89,16 @@ export default class LandNow extends Vue {
     itemStyle: {
       color: ({ name }) => {
         return ChartColorByLandNow[name.trim()]
-      }
+      },
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee'
+    }
+  }
+
+  private extendSetting={
+    tooltip:{
+    confine:true
     }
   }
 

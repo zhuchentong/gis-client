@@ -22,7 +22,7 @@
       width="750px"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      @close=";(checkItem = {}), count++"
+      @close="checkItem = {}"
     >
       <keep-alive>
         <component
@@ -66,6 +66,7 @@ export default class SearchPanel extends Vue {
 
   private onItemClick(item) {
     this.checkItem = item
+    this.count += 1
     this.dialog.search = true
   }
 

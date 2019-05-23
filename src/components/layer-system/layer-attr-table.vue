@@ -7,7 +7,9 @@
     >
       <svg-icon
         :iconSize="24"
-        :iconColor="(isTableShow||this.tableList.length===0)?'gray':'white'"
+        :iconColor="
+          isTableShow || this.tableList.length === 0 ? 'gray' : 'white'
+        "
         iconName="table"
       ></svg-icon>
     </div>
@@ -39,6 +41,9 @@
                 :prop="column.key"
                 :label="column.label"
                 align="center"
+                :formatter="
+                  row => $filter.fieldCodeConvert(column.key, row[column.key])
+                "
                 show-overflow-tooltip
               ></el-table-column>
             </template>

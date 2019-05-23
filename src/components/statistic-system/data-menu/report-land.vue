@@ -95,7 +95,7 @@ export default class ReportLand extends Vue {
   }
 
   private chartSettings = {
-    yAxisType: ["KMB"],
+    // yAxisType: ["KMB"],
     yAxisName: ['面积(亩)']
   }
 
@@ -115,8 +115,10 @@ export default class ReportLand extends Vue {
         Object.entries(this.setting).forEach(([key, value]) => {
           if (key === 'quarterly') {
             row[value] = this.queryQuarterName(v.quarterly)
+            row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           } else {
             row[value] = v[key]
+            row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           }
         })
         return row

@@ -76,7 +76,7 @@ export const SearchBuildingSetting = {
       type: "range",
       filter: "equal"
     }, {
-      name: "建筑层书",
+      name: "建筑层数",
       code: "cengshu",
       type: "string",
       filter: "equal"

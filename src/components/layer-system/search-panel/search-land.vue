@@ -100,8 +100,8 @@ export default class SearchLand extends Vue {
     return
   }
 
-  @Watch('count', { immediate: true })
-  private onVisabledChange(val) {
+  @Watch('count')
+  private onVisabledChange() {
     // 监听页面打开状态，更新图层列表
     this.dataSet = this.viewer
       .getLayerList()
@@ -174,6 +174,8 @@ export default class SearchLand extends Vue {
         if (!min && !max) return
         tmpData = tmpData.filter(row => {
           const originData = row[code] as number
+          if(!min) return originData < max
+          if(!max) return originData > min
           return originData >= min && originData <= max
         })
       } else {
@@ -202,6 +204,7 @@ export default class SearchLand extends Vue {
         ...setting
       }
     })
+    this.onVisabledChange()
   }
 }
 </script>

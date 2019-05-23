@@ -10,7 +10,7 @@
         <ve-pie
           :data="chartDataByName"
           :settings="chartSetting"
-          :events="chartEvents"
+          :events="chartEvents" :extend="extendSetting"
         ></ve-pie>
       </el-card>
       <el-card class="col-span-6">
@@ -66,7 +66,18 @@ export default class ReportLand extends Vue {
   private chartDataName = ""
 
   private chartSetting = {
-    selectedMode: "single"
+    selectedMode: "single",
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
+    },
+    itemStyle:{
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee'
+    }
   }
 
 
@@ -93,14 +104,31 @@ export default class ReportLand extends Vue {
       color:({name}) => {
      const c = ChartColorByLevel.find(v=>v.name===name) 
       return c ? c.color : '#FFFFFD'
-      }
+      },
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee'
+    },
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
     }
   }
   private chartExtend={
     legend:{
         data:ChartColorByLevel
+    },
+    tooltip:{
+    confine:true
     }
-          
+  }
+
+  private extendSetting={
+    tooltip:{
+    confine:true
+    }
   }
 
   private chartEvents = {

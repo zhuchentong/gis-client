@@ -19,9 +19,9 @@
       </div>
     </div>
 
-    <keep-alive slot="content">
+    <div slot="content">
       <component :is="currentComponent"></component>
-    </keep-alive>
+    </div>
   </base-col-three>
 </template>
 
@@ -76,7 +76,7 @@ export default class StatisticSystem extends Vue {
       }
     }
     .actived {
-      color: #fc8144;
+      color: #040e12;
       font-weight: bold;
     }
   }
