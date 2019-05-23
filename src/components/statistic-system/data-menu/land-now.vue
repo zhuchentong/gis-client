@@ -39,7 +39,7 @@
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
         <el-table-column prop="name" label="土地现状类型"></el-table-column>
-        <el-table-column prop="acreage" label="占地面积(亩)"></el-table-column>
+        <el-table-column prop="acreage" label="占地面积(亩)" ></el-table-column>
         <el-table-column
           prop="ratio"
           label="所占百分比"
@@ -89,7 +89,10 @@ export default class LandNow extends Vue {
     itemStyle: {
       color: ({ name }) => {
         return ChartColorByLandNow[name.trim()]
-      }
+      },
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee'
     }
   }
 

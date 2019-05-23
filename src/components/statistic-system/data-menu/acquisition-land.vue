@@ -26,7 +26,8 @@
           </el-radio-group>
         </div>
       </common-title>
-      <ve-histogram :data="chartData" :settings="chartSettings"></ve-histogram>
+      <div v-if="chartData.rows.length===0" class="no-data"></div>
+      <ve-histogram v-else :data="chartData" :settings="chartSettings"></ve-histogram>
     </el-card>
     <data-box :data="dataSet" :maxHeight="310">
       <template slot="columns">
@@ -41,7 +42,11 @@
           v-if="queryType === 2"
           :formatter="row => queryQuarterName(row.quarterly)"
         ></el-table-column>
-        <el-table-column prop="area" label="面积(亩)" :formatter="row=>$common.convertArea(row.area,'SQUARE_METRE').mu"></el-table-column>
+        <el-table-column
+          prop="area"
+          label="面积(亩)"
+          :formatter="row => $common.convertArea(row.area, 'SQUARE_METRE').mu"
+        ></el-table-column>
         <el-table-column
           prop="ratio"
           label="所占百分比"
@@ -57,13 +62,17 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { StatisticalService } from "~/services/statistical.service"
+import { StatisticalService } from '~/services/statistical.service'
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
-import { VeHistogram } from "v-charts"
+import { VeHistogram } from 'v-charts'
 import { CommonService } from '~/utils/common.service'
-import DataBox from "~/components/common/data-box.vue"
-import { QuarterSetting, queryQuarterName } from '~/components/statistic-system/statistic-system.config'
+import DataBox from '~/components/common/data-box.vue'
+import {
+  QuarterSetting,
+  queryQuarterName
+} from '~/components/statistic-system/statistic-system.config'
+import { constants } from 'fs'
 @Component({
   components: {
     DataBox,
@@ -83,18 +92,18 @@ export default class AcquisitionLand extends Vue {
 
   private queryQuarterName = queryQuarterName
 
-  private selectedYear = ""
+  private selectedYear = ''
   private queryType = 1
 
   private dataSet: any = []
   private readonly setting = {
-    year: "年份",
-    quarterly: "季度",
-    area: "面积(亩)"
+    year: '年份',
+    quarterly: '季度',
+    area: '面积(亩)'
   }
 
   private chartSettings = {
-    yAxisType: ["KMB"],
+    // yAxisType: ['KMB'],
     yAxisName: ['面积(亩)']
   }
 
@@ -114,8 +123,10 @@ export default class AcquisitionLand extends Vue {
         Object.entries(this.setting).forEach(([key, value]) => {
           if (key === 'quarterly') {
             row[value] = this.queryQuarterName(v.quarterly)
+             row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           } else {
             row[value] = v[key]
+             row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           }
         })
         return row
@@ -134,9 +145,13 @@ export default class AcquisitionLand extends Vue {
 
   private changeChartColums() {
     if (this.queryType === 1) {
-      this.chartData.columns = Object.values(this.setting).filter(x => x !== '季度')
+      this.chartData.columns = Object.values(this.setting).filter(
+        x => x !== '季度'
+      )
     } else {
-      this.chartData.columns = Object.values(this.setting).filter(x => x !== '年份')
+      this.chartData.columns = Object.values(this.setting).filter(
+        x => x !== '年份'
+      )
     }
   }
 
@@ -144,8 +159,6 @@ export default class AcquisitionLand extends Vue {
     if (!year) return
     this.refreshData()
   }
-
-
 
   private mounted() {
     const currentYear = new Date().getFullYear()
@@ -156,7 +169,6 @@ export default class AcquisitionLand extends Vue {
     this.onTypeChange(1)
     this.refreshData()
   }
-
 }
 </script>
 

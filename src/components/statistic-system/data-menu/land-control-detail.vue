@@ -14,7 +14,7 @@
     </el-card>
     <data-box :data="dataSet" :maxHeight="320">
       <template slot="columns">
-        <el-table-column prop="name" label="土地现状类型"></el-table-column>
+        <el-table-column prop="name" label="规划分类"></el-table-column>
         <el-table-column prop="acreage" label="占地面积(亩)"></el-table-column>
         <el-table-column
           prop="ratio"
@@ -84,7 +84,10 @@ export default class LandControlDetail extends Vue {
     itemStyle: {
         color:({name}) => {
           return ChartColorByControl[name]
-      }
+      },
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee'
     }
   }
 

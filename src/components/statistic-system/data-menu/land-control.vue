@@ -45,9 +45,17 @@ export default class LandControl extends Vue {
     private chartSettings: any = {
     itemStyle: {
         color:({name}) => {
-
           return ChartColorByControlType[name]
-      }
+      },
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee'
+    },
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
     }
   }
   private dataSet: any = []

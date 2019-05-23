@@ -51,7 +51,16 @@ export default class LandUse extends Vue {
         color:({name}) => {
           console.log(name,'name')
           return ChartColorByLandUse[name]
-      }
+      },
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee',
+    },
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
     }
   }
 

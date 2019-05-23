@@ -62,6 +62,7 @@ import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { VeHistogram } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
+import { CommonService } from '~/utils/common.service'
 import { QuarterSetting, queryQuarterName } from "~/components/statistic-system/statistic-system.config"
 
 @Component({
@@ -93,7 +94,7 @@ export default class SupplyLand extends Vue {
   }
 
   private chartSettings = {
-    yAxisType: ["KMB"],
+    // yAxisType: ["KMB"],
     yAxisName: ['面积(亩)']
   }
 
@@ -113,8 +114,10 @@ export default class SupplyLand extends Vue {
         Object.entries(this.setting).forEach(([key, value]) => {
           if (key === 'quarterly') {
             row[value] = this.queryQuarterName(v[key])
+             row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           } else {
             row[value] = v[key]
+             row['面积(亩)']=CommonService.convertArea(row['面积(亩)'],'SQUARE_METRE').mu
           }
         })
         return row

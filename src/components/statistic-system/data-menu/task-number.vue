@@ -39,7 +39,7 @@
         </div>
       </common-title>
       <div v-if="!dataSet.length" class="no-data"></div>
-      <ve-pie v-else :data="chartData"></ve-pie>
+      <ve-pie v-else :data="chartData" :settings="chartSettings"></ve-pie>
     </el-card>
     <data-box :data="dataSet" :maxHeight="310">
       <template slot="columns">
@@ -99,6 +99,21 @@ export default class TaskNumber extends Vue {
     columns: Object.values(this.setting),
     rows: []
   }
+
+  private chartSettings={
+    labelLine: {
+      show: false
+    },
+    label: {
+      show: false
+    },
+    itemStyle:{
+      borderWidth:1,
+      borderType:'solid',
+      borderColor:'#f3eeee'
+    }
+  }
+
 
   private refreshData() {
     if (this.queryModel.type === 2) {
