@@ -68,8 +68,8 @@ export default class ToolPanel extends Vue {
     },
     {
       label:'平整量测量',
-      key: 'area',
-      icon:"area",
+      key: 'flatness',
+      icon:"flatness",
       handle:this.Flatness.bind(this)
     }
   ]
@@ -242,6 +242,7 @@ export default class ToolPanel extends Vue {
     cursor: pointer;
     display: inline-block;
     width: 50%;
+    padding-bottom:20px;
   }
 }
 </style>
