@@ -29,7 +29,7 @@
       </div>
     </el-card>
      <el-dialog :close-on-click-modal="false" title="平整量测量" :visible.sync="dialog.flat">
-    <flat-ness></flat-ness>
+    <flat-ness ref="flat-ness"></flat-ness>
     </el-dialog>
   </section>
 </template>

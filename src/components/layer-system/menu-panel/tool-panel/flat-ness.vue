@@ -11,12 +11,12 @@
         </el-form-item>
       </el-form>
       <div class="operate-buttons">
-      <el-button>测算</el-button>
+      <el-button @click="FlatNessButton">测算</el-button>
       </div>
-      <div>
-      <p>测量结果</p>
+      <div v-show="result">
+      <p v-if="result">测量结果</p>
       <el-card class="approve-steps-item">
-      <label-item label="最高点"></label-item>
+      <label-item style="text-align:left" label="最高点"></label-item>
       <label-item label="最低点"></label-item>
       <label-item label="填方量"></label-item>
       <label-item label="挖方量"></label-item>
@@ -40,6 +40,12 @@ export default class FlatNess extends Vue {
 
     private model:any={
         land:""
+    }
+
+    private result:any=false
+
+    private FlatNessButton(){
+    this.result=true
     }
 }
 </script>
