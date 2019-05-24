@@ -18,6 +18,11 @@ export const MenuList = [
     label: "导入图层检测",
     key: "import",
     icon: "check-import"
+  },
+  {
+    label: "地块数据检测",
+    key: "block",
+    icon: "shp-buffer"
   }
 ]
 

@@ -10,11 +10,7 @@
         style="margin-top:10px"
         class="no-data"
       ></div>
-      <label-container
-        v-else-if="node.data.legnth"
-        :column="1"
-        :labelWidth="200"
-      >
+      <label-container v-else-if="node.hasData" :column="1" :labelWidth="200">
         <label-item
           :label="item.name"
           v-for="item in node.data"
@@ -104,6 +100,7 @@ export default class DataAnalyze extends Vue {
     // card data 载入数据
     node.load = true
     this.$set(node, "data", this.getResultData(result || []))
+    this.$set(node, "hasData", !!result.length)
   }
 
   private getResultData(result) {

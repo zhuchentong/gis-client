@@ -9,7 +9,7 @@ export default {
   getDetectionWkt: {
     controller: CONTROLLER,
     action: 'getDetectionWkt',
-    type: RequestMethod.Get
+    type: RequestMethod.Post
   },
   /**
    * 获取数据分析
@@ -17,17 +17,20 @@ export default {
   getDateAnalysisWkt: {
     controller: CONTROLLER,
     action: 'getDateAnalysisWkt',
-    type: RequestMethod.Get
+    type: RequestMethod.Post
   },
+  /**
+   * 业务分析（区域对比）
+   */
   getBusinessWkt: {
     controller: CONTROLLER,
     action: 'getBusinessWkt',
-    type: RequestMethod.Get
+    type: RequestMethod.Post
   },
   /**
    * 预警检测（图层对比）
    */
-  getDetectionLayerCode:{
+  getDetectionLayerCode: {
     controller: CONTROLLER,
     action: 'getDetectionLayerCode',
     type: RequestMethod.Get
@@ -35,7 +38,7 @@ export default {
   /**
    * 数据分析（图层对比）
    */
-  getDateAnalysisLayerCode:{
+  getDateAnalysisLayerCode: {
     controller: CONTROLLER,
     action: 'getDateAnalysisLayerCode',
     type: RequestMethod.Get
@@ -43,7 +46,7 @@ export default {
   /**
    * 业务分析（图层对比）
    */
-  getBusinessLayerCode:{
+  getBusinessLayerCode: {
     controller: CONTROLLER,
     action: 'getBusinessLayerCode',
     type: RequestMethod.Get

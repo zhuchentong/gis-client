@@ -2,7 +2,7 @@
   <section class="tool-panel">
     <el-card shadow="never">
       <div slot="header">
-        <span>测量</span>
+        <span>平面测量</span>
       </div>
       <div
         class="icon-item text-center"
@@ -10,8 +10,12 @@
         :key="item.key"
         @click="item.handle()"
       >
-        <svg-icon iconColor="black" :iconName="item.icon" iconSize="40"></svg-icon>
-        <div>{{item.label}}</div>
+        <svg-icon
+          iconColor="black"
+          :iconName="item.icon"
+          iconSize="40"
+        ></svg-icon>
+        <div>{{ item.label }}</div>
       </div>
     </el-card>
     <el-card shadow="never">
@@ -25,7 +29,25 @@
         @click="item.handle()"
       >
         <svg-icon :iconName="item.icon" iconSize="40"></svg-icon>
-        <div>{{item.label}}</div>
+        <div>{{ item.label }}</div>
+      </div>
+    </el-card>
+    <el-card shadow="never">
+      <div slot="header">
+        <span>三维测量</span>
+      </div>
+      <div
+        class="icon-item text-center"
+        v-for="item of measure3dList"
+        :key="item.key"
+        @click="item.handle()"
+      >
+        <svg-icon
+          iconColor="black"
+          :iconName="item.icon"
+          iconSize="40"
+        ></svg-icon>
+        <div>{{ item.label }}</div>
       </div>
     </el-card>
   </section>
@@ -35,9 +57,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
-import { DrawInteractPolyline } from '~/utils/cesium/interact'
+import { DrawInteractPolyline, DrawInteractPoint, DrawInteractLine } from '~/utils/cesium/interact'
 import Cesium from 'cesium/Cesium'
-import { CesiumCommonService } from '../../../utils/cesium/common.service'
+import { CesiumCommonService } from '~/utils/cesium/common.service'
 import { CesiumDrawService } from '@/utils/cesium/draw.service'
 import * as turf from '@turf/turf'
 
@@ -68,6 +90,15 @@ export default class ToolPanel extends Vue {
       key: 'cruise',
       icon: 'camera-fly',
       handle: this.onStartCruise.bind(this)
+    }
+  ]
+
+  private readonly measure3dList = [
+    {
+      label: '三角测量',
+      key: 'height',
+      icon: 'juli',
+      handle: this.onHeightClick.bind(this)
     }
   ]
 
@@ -210,6 +241,123 @@ export default class ToolPanel extends Vue {
       }
     ]
   }
+
+  private onHeightClick() {
+    // 清空之前绘制的点
+    this.viewer.drawEntities.removeAll()
+    this.viewer.getViewer().screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+
+    // 接收两个坐标点的位置
+    const positions: Cesium.Cartographic[] = []
+    const drawService = new CesiumDrawService(this.viewer)
+    const drawLine = new DrawInteractLine(this.viewer)
+    drawLine.start().subscribe({
+      next: (data) => {
+        const graphicPoint = Cesium.Cartographic.fromCartesian(data.point)
+        const heightStr = CesiumCommonService.getDistanceStr(graphicPoint.height)
+        drawService.drawPoint(data.point, `海拔高度：${heightStr}`)
+        positions.push(graphicPoint)
+      },
+      complete: () => this.analyzeHeight(positions)
+    })
+  }
+
+  /**
+   * 高度分析
+   */
+  private analyzeHeight(positions) {
+    const drawService = new CesiumDrawService(this.viewer)
+
+    // 用于鼠标移动到线条，显示距离
+    const labelIdArray: string[] = []
+    const [first, second] = positions
+    const heightPosition = new Cesium.Cartographic(first.longitude, first.latitude, second.height)
+
+    // 临时实体
+    let entityId: string
+    let text: string
+
+    // 对应的cartesian3坐标点
+    const [f, s, h] = [first, second, heightPosition].map(p => CesiumCommonService.RadiansToCartesian3(this.viewer.getViewer(), p))
+
+    // 斜线
+    const slash = this.viewer.drawEntities.values.find(x => !!x.polyline)
+    if (slash) {
+      // 绘制距离线条
+      text = `直线距离：${CesiumCommonService.getDistanceStr(Cesium.Cartesian3.distance(f, s))}`
+      slash.position = Cesium.Cartesian3.midpoint(f, s, new Cesium.Cartesian3())
+      slash.label = drawService.createLabel(text, Cesium.Color.RED)
+      labelIdArray.push(slash.id)
+    }
+
+    // 点的数据也隐藏
+    const points = this.viewer.drawEntities.values.filter(x => !!x.point)
+    labelIdArray.push(...points.map(v => v.id))
+
+
+    // 绘制高度线条
+    text = `高度：${CesiumCommonService.getDistanceStr(second.height - first.height)}`
+    entityId = this.viewer.drawEntities.add({
+      polyline: {
+        positions: [f, h],
+        width: 3,
+        material: Cesium.Color.MEDIUMBLUE,
+        depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
+          color: Cesium.Color.WHITE,
+          outlineColor: Cesium.Color.MEDIUMBLUE,
+          outlineWidth: 3
+        })
+      },
+      position: Cesium.Cartesian3.midpoint(f, h, new Cesium.Cartesian3()),
+      label: drawService.createLabel(text, Cesium.Color.MEDIUMBLUE)
+    }).id
+    labelIdArray.push(entityId)
+
+    // 绘制水平线条
+    // 水平文字
+    text = `水平距离：${CesiumCommonService.getDistanceStr(Cesium.Cartesian3.distance(h, s))}`
+    entityId = this.viewer.drawEntities.add({
+      polyline: {
+        positions: [h, s],
+        width: 3,
+        material: Cesium.Color.MEDIUMORCHID,
+        depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
+          color: Cesium.Color.WHITE,
+          outlineColor: Cesium.Color.MEDIUMORCHID,
+          outlineWidth: 3
+        })
+      },
+      position: Cesium.Cartesian3.midpoint(h, s, new Cesium.Cartesian3()),
+      label: drawService.createLabel(text, Cesium.Color.MEDIUMORCHID)
+    }).id
+    labelIdArray.push(entityId)
+
+
+
+    // 添加鼠标pick 线条，显示文字事件
+    this.addMouseMoveEvent(labelIdArray)
+  }
+
+  private addMouseMoveEvent(labelIdArray) {
+    const viewer = this.viewer.getViewer()
+    viewer.screenSpaceEventHandler.setInputAction((e: any) => {
+      if (!this.viewer.drawEntities.values.length) return
+      labelIdArray.forEach(id => this.viewer.drawEntities.getById(id).label.show = false)
+      const feature = viewer.scene.pick(e.endPosition)
+      // 地图此处没有任何东西
+      if (!Cesium.defined(feature)) return
+      // pick的东西不是一个entity
+      if (!(feature.id instanceof Cesium.Entity)) return
+      if (labelIdArray.includes(feature.id.id)) {
+        // 没有点的实体给他改变坐标，label跟随鼠标移动
+        if (!feature.id.point) {
+          feature.id.position = viewer.scene.pickPosition(e.endPosition)
+        }
+        feature.id.label.show = true
+      }
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+  }
+
 }
 </script>
 

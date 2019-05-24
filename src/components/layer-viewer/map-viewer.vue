@@ -281,7 +281,8 @@ export default class MapViewer extends Vue {
    */
   public addTerrainProvider() {
     this.$terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: `${appConfig.mapResouce}/terrain`
+      url: `${appConfig.mapResouce}/terrain`,
+      requestWaterMask:true
     })
     this.$viewer.terrainProvider = this.$terrainProvider
   }

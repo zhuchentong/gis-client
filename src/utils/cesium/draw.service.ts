@@ -57,13 +57,7 @@ export class CesiumDrawService {
         ? Cesium.HeightReference.RELATIVE_TO_GROUND
         : Cesium.HeightReference.CLAMP_TO_GROUND
     // 设置点数据信息
-    entity.point = new Cesium.PointGraphics({
-      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-      color: this.color.point,
-      pixelSize: 6,
-      outlineColor: this.color.outline,
-      outlineWidth: 3
-    })
+    entity.point = this.createPoint()
 
     // 设置文字内容
     if (label && label.trim()) {
@@ -156,7 +150,7 @@ export class CesiumDrawService {
    * @param label
    * @param labelColor
    */
-  private createLabel(label: string) {
+  public createLabel(label: string, color?) {
     // 判断文字颜色是否与背景色一致，否则就换个背景色
     // let labelBackgroudColor = Cesium.Color.WHITE
     // if (labelBackgroudColor.equals(this.color.label)) {
@@ -166,7 +160,7 @@ export class CesiumDrawService {
       text: label,
       font: '32px system-ui',
       scale: 0.5,
-      fillColor: this.color.label,
+      fillColor: color || this.color.label,
       outlineWidth: 1,
       outlineColor: this.color.background,
       showBackground: true,
@@ -174,6 +168,21 @@ export class CesiumDrawService {
       horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
       pixelOffset: new Cesium.Cartesian2(10.0, 1.0),
       disableDepthTestDistance: Number.POSITIVE_INFINITY
+    })
+  }
+
+  /**
+   * 创建一个point
+   * @param color 点的内部颜色
+   * @param outlineColor 点的外边框颜色
+   */
+  public createPoint(color?, outlineColor?) {
+    return new Cesium.PointGraphics({
+      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+      color: color || this.color.point,
+      pixelSize: 6,
+      outlineColor: outlineColor || this.color.outline,
+      outlineWidth: 3
     })
   }
 }

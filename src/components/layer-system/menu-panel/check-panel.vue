@@ -96,6 +96,7 @@ import { FileType } from '~/config/enum.config.ts'
 import { LayerInfo } from '~/models/layer-info.model.ts'
 import { TempLayers } from '~/models/temp-layers.model'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
+import * as turf from '@turf/turf'
 
 @Component({
   components: {
@@ -136,6 +137,8 @@ export default class CheckPanel extends Vue {
     this.dialog.hasResult = false
     if (item.key === 'area') {
       this.drawPolygon()
+    } else if (item.key === "block") {
+      this.selectBlock()
     } else {
       this.dialog[item.key] = true
     }
@@ -170,6 +173,9 @@ export default class CheckPanel extends Vue {
     this.dialog.layer = true
   }
 
+  /**
+   * 任务区域转wkt
+   */
   private taskSelected(data) {
     this.dialog.task = false
     if (data && data.length > 3) {
@@ -181,7 +187,30 @@ export default class CheckPanel extends Vue {
       this.$message("外业巡查数据不是有效区域，请重新选择")
       return
     }
+  }
 
+  /**
+   * 地块数据转wkt
+   */
+  private selectBlock() {
+    const selectCount = this.viewer.pickEntities.values.length
+    if (!selectCount) {
+      this.$message("请先选择要对比的地块区域")
+      this.checkItem = {}
+      return
+    }
+    const entity = this.viewer.pickEntities.values[0]
+    const polygon = entity.polygon
+    if (!polygon) {
+      this.$message("不是多边形不参与比较")
+      return
+    }
+    const hierarchy = polygon.hierarchy._value as Cesium.PolygonHierarchy
+    const positions = hierarchy.positions.map(CesiumCommonService.cartesian3ToDegrees)
+    const lcoaltion = positions.map(v => [v.longitude, v.latitude].join(' '))
+    const coordinates = lcoaltion.join(',')
+    this.wktStr = `POLYGON ((${coordinates}))`
+    this.dialog.layer = true
   }
 
   private businessSelected(data) {
