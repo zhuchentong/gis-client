@@ -60,6 +60,7 @@ import { LayerStatisticalService } from '~/services/layer-statistical.service'
 import { Pie } from 'v-charts'
 import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
+import { CommonService } from '~/utils/common.service'
 import { ChartColorByLandNow } from '~/components/statistic-system/statistic-system.config'
 
 @Component({
@@ -138,6 +139,7 @@ export default class LandNow extends Vue {
           const row: any = {}
           Object.entries(this.setting).forEach(([key, value]) => {
             row[value] = v[key]
+            row['占地面积(亩)']=CommonService.convertArea(row['占地面积(亩)'],'SQUARE_METRE').mu
           })
           return row
         })
@@ -158,6 +160,7 @@ export default class LandNow extends Vue {
         const row: any = {}
         Object.entries(this.setting).forEach(([key, value]) => {
           row[value] = v[key]
+          row['占地面积(亩)']=CommonService.convertArea(row['占地面积(亩)'],'SQUARE_METRE').mu
         })
         return row
       })
