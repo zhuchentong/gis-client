@@ -28,6 +28,9 @@
         <div>{{item.label}}</div>
       </div>
     </el-card>
+     <el-dialog :close-on-click-modal="false" title="平整量测量" :visible.sync="dialog.flat">
+    <flat-ness></flat-ness>
+    </el-dialog>
   </section>
 </template>
 
@@ -39,10 +42,13 @@ import { DrawInteractPolyline } from '~/utils/cesium/interact'
 import Cesium from 'cesium/Cesium'
 import { CesiumCommonService } from '../../../utils/cesium/common.service'
 import { CesiumDrawService } from '@/utils/cesium/draw.service'
+import FlatNess from '~/components/layer-system/menu-panel/tool-panel/flat-ness.vue'
 import * as turf from '@turf/turf'
 
 @Component({
-  components: {}
+  components: {
+    FlatNess
+  }
 })
 export default class ToolPanel extends Vue {
   @Prop()
@@ -59,6 +65,12 @@ export default class ToolPanel extends Vue {
       key: 'area',
       icon: 'area',
       handle: this.computeArea.bind(this)
+    },
+    {
+      label:'平整量测量',
+      key: 'area',
+      icon:"area",
+      handle:this.Flatness.bind(this)
     }
   ]
 
@@ -70,6 +82,17 @@ export default class ToolPanel extends Vue {
       handle: this.onStartCruise.bind(this)
     }
   ]
+
+  private dialog={
+    flat:false
+  }
+
+  /**
+   * 平整量测量
+   */
+  private Flatness(){
+    this.dialog.flat=true
+  }
 
   /**
    * 计算距离

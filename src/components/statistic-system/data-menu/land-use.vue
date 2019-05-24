@@ -24,6 +24,7 @@ import { Inject } from 'typescript-ioc'
 import { RequestParams } from '~/core/http'
 import { Pie, VeHistogram } from "v-charts"
 import DataBox from "~/components/common/data-box.vue"
+import { CommonService } from '~/utils/common.service'
 import { ChartColorByLandUse}  from "~/components/statistic-system/statistic-system.config"
 @Component({
   components: {
@@ -80,6 +81,7 @@ export default class LandUse extends Vue {
         const row = {}
         Object.entries(this.setting).forEach(([key, value]) => {
           row[value] = v[key]
+          row['占地面积(亩)']=CommonService.convertArea(row['占地面积(亩)'],'SQUARE_METRE').mu
         })
         return row
       })
