@@ -10,6 +10,8 @@
       <map-viewer @map-ready="onMapReady"></map-viewer>
       <layer-attr-table
         :viewer="mapViewer"
+        @feature-change="val => (featureId = val)"
+        :featureId="featureId"
         class="layer-table"
       ></layer-attr-table>
     </div>
@@ -39,6 +41,7 @@ import { TempLayers } from '~/models/temp-layers.model.ts'
 })
 export default class LayerSystem extends Vue {
   public mapViewer: MapViewer | null = null
+  private featureId = ""
 
   private onMapReady(viewer) {
     this.mapViewer = viewer

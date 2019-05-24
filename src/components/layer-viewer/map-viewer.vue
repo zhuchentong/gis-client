@@ -1,53 +1,32 @@
 <template>
   <section class="map-viewer fill">
-    <div
-      id="cesium-viewer"
-      class="col-span no-padding fill"
-    >
+    <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
     <div
       v-if="isDrawing || drawEntitiesLength"
       class="draw-tool-bar icon-button-group"
     >
-      <div
-        class="icon-button"
-        @click="onDrawEvent('close')"
-      >
-        <svg-icon
-          iconColor="white"
-          iconName="close"
-        ></svg-icon>
+      <div class="icon-button" @click="onDrawEvent('close')">
+        <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
-      <div
-        class="icon-button"
-        @click="isDrawing && onDrawEvent('reset')"
-      >
+      <div class="icon-button" @click="isDrawing && onDrawEvent('reset')">
         <svg-icon
           :iconColor="isDrawing ? 'white' : 'gray'"
           iconName="reset"
         ></svg-icon>
       </div>
-      <div
-        class="icon-button"
-        @click="isDrawing && onDrawEvent('submit')"
-      >
+      <div class="icon-button" @click="isDrawing && onDrawEvent('submit')">
         <svg-icon
           :iconColor="isDrawing ? 'white' : 'gray'"
           iconName="right"
         ></svg-icon>
       </div>
     </div>
-    <div
-      v-if="isDrawing && drawTipInfo"
-      class="draw-tip-panel"
-    >
+    <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
       {{ drawTipInfo }}
     </div>
-    <div
-      id="credit"
-      style="display:none"
-    ></div>
+    <div id="credit" style="display:none"></div>
   </section>
 </template>
 
@@ -61,7 +40,8 @@ import { namespace } from 'vuex-class'
 import cesiumNavigation from '@znemz/cesium-navigation'
 import '@znemz/cesium-navigation/dist/index.css'
 import Canvas2Image from 'canvas2image-es6'
-// import * as turf from '@turf/turf'
+import * as turf from '@turf/turf'
+import { CesiumCommonService } from '~/utils/cesium/common.service'
 
 const LayerTableModule = namespace('layerTableModule')
 @Component({
@@ -329,43 +309,88 @@ export default class MapViewer extends Vue {
     )
   }
 
-  public drawPickFeature(geometry) {
-    // 清空选择区域
-    this.pickEntities.removeAll()
+  public drawPickFeature(geometry, zoomTo = false) {
+
     try {
-      const [[position]] = geometry.coordinates
+      /**
+       * 绘制多边形
+       */
+      const drawPickPolygon = (hierarchy) => {
+        const entity = this.pickEntities.add(
+          new Cesium.Entity({
+            polygon: {
+              hierarchy,
+              height: 0,
+              heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+              material: Cesium.Color.DARKORANGE.withAlpha(0.1),
+              outline: true,
+              outlineColor: Cesium.Color.CYAN,
+              outlineWidth: 20
+            }
+          })
+        )
+        return entity
+      }
 
-      const hierarchy = new Cesium.PolygonHierarchy(
-        position.map(point => Cesium.Cartesian3.fromDegrees(point[0], point[1]))
-      )
+      /**
+       * 绘制线
+       */
+      const drawPickLine = (coordinate: any[]) => {
+        const coordinates = coordinate.join().split(",").map(Number.parseFloat)
+        const entity = this.pickEntities.add(
+          new Cesium.Entity({
+            polyline: {
+              positions: Cesium.Cartesian3.fromDegreesArray(coordinates),
+              depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
+                color: Cesium.Color.WHITE,
+                outlineColor: Cesium.Color.RED,
+                outlineWidth: 5
+              }),
+              material: Cesium.Color.CYAN,
+              width: 5
+            }
+          })
+        )
+        return entity
+      }
 
-      this.pickEntities.add(
-        new Cesium.Entity({
-          polygon: {
-            hierarchy,
-            height: 0,
-            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-            fill: false,
-            outline: true,
-            outlineColor: Cesium.Color.BLUE,
-            outlineWidth: 20
-          }
+
+      if (geometry.type === "MultiPolygon") {
+        const entitys = geometry.coordinates.map(coordinate => {
+          const hierarchy = CesiumCommonService.coordinateToPolygonHierarchy(coordinate)
+          return drawPickPolygon(hierarchy)
         })
-      )
-      // // 计算多边形
-      // const polygon = turf.polygon([[...position, position[0]]])
-      // // 获取多边形中心
-      // const {
-      //   geometry: { coordinates }
-      // } = turf.centerOfMass(polygon) as any
-      // const center = Cesium.Cartesian3.fromDegrees(
-      //   coordinates[0],
-      //   coordinates[1]
-      // )
+        if (zoomTo) this.$viewer.zoomTo(entitys)
+      }
 
-      // this.$cameraView.flyTo({destination:coordinates})
+      if (geometry.type === "Polygon") {
+        const hierarchy = CesiumCommonService.coordinateToPolygonHierarchy(geometry.coordinates)
+        drawPickPolygon(hierarchy)
+      }
+
+      if (geometry.type === "Point") {
+        const pointOption: any = {
+          outlineColor: Cesium.Color.CYAN,
+          outlineWidth: 10,
+          heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND
+        }
+        const [longitude, latitude] = geometry.coordinates
+
+        const entity = this.pickEntities.add(
+          new Cesium.Entity({
+            position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
+            point: pointOption
+          })
+        )
+        if (zoomTo) this.$viewer.zoomTo(entity)
+      }
+
+      if (geometry.type === "MultiLineString") {
+        const entitys = geometry.coordinates.map(drawPickLine)
+        if (zoomTo) this.$viewer.zoomTo(entitys)
+      }
     } catch (ex) {
-      console.log(ex)
+      console.log(ex, geometry)
     }
   }
 
@@ -393,6 +418,14 @@ export default class MapViewer extends Vue {
    */
   @Emit('layer-list-change')
   private emitLayerListChange(layerList) {
+    return
+  }
+
+  /**
+   * 地图选中的物体变化
+   */
+  @Emit('feature-change')
+  private emitFeatureChange(featureDataId: string) {
     return
   }
 
@@ -590,7 +623,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-        this.geoServer
+      this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -763,11 +796,13 @@ export default class MapViewer extends Vue {
     featuresPromise.then(
       (features: Cesium.ImageryLayerFeatureInfo[]) => {
         const [feature] = features
-
+        // 清空选择区域
+        this.pickEntities.removeAll()
         if (feature) {
           const geometry = feature.data.geometry
           this.drawPickFeature(geometry)
         }
+        this.emitFeatureChange(feature ? feature.data.id : "")
       },
       () => console.error('获取iamgeLayerFeatures失败')
     )

@@ -1,10 +1,6 @@
 <template>
   <section class="layer-attr-table">
-    <div
-      class="table-icon"
-      @click="updateTableShow"
-      title="图层属性表"
-    >
+    <div class="table-icon" @click="updateTableShow" title="图层属性表">
       <svg-icon
         :iconSize="24"
         :iconColor="
@@ -63,6 +59,8 @@ import { PanelComponents } from './layer-system.config'
 import { cursorTo } from 'readline'
 import appConfig from '~/config/app.config'
 import WMSCapabilities from 'wms-capabilities'
+import MapViewer from '~/components/layer-viewer/map-viewer.vue'
+
 const LayerTableModule = namespace('layerTableModule')
 
 @Component({
@@ -76,8 +74,13 @@ export default class LayerAttrTable extends Vue {
   @LayerTableModule.Mutation
   private updateTableVisibility
   @Prop()
-  private viewer
+  private viewer!: MapViewer
+
+  @Prop()
+  private featureId!: string
+
   private workspace = 'base-space'
+  private currentRow: any = {}
   private currentTable = ''
   private lastTabelList
   private updateTableShow() {
@@ -93,16 +96,16 @@ export default class LayerAttrTable extends Vue {
   private onRowClick(row) {
     return fetch(
       `${appConfig.geoServer}/${
-        this.workspace
+      this.workspace
       }/wms?service=wfs&version=2.0.0&request=GetFeature&&featureid=${
-        row.featureId
+      row.featureId
       }&&query_layers=base-space:${row.layerCode}&&outputFormat=json`
     ).then(async data => {
       try {
         const { features } = await data.json()
         const [feature] = features
-
-        this.viewer.drawPickFeature(feature.geometry)
+        this.viewer.pickEntities.removeAll()
+        this.viewer.drawPickFeature(feature.geometry, true)
       } catch (ex) {
         console.log(ex)
       }
