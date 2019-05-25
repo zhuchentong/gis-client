@@ -15,7 +15,16 @@
         class="layer-table"
       ></layer-attr-table>
     </div>
-    <div class="bottom-panel"></div>
+    <div class="bottom-panel">
+      <!-- <div class="proccess" v-if="proccess.value && proccess.value < 100"> -->
+      <div class="row end-span" v-if="proccess.value && proccess.value < 100">
+        <span>{{ proccess.name }}</span>
+        <el-progress
+          style="width:300px;padding-right:50px"
+          :percentage="proccess.value"
+        ></el-progress>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -45,6 +54,11 @@ export default class LayerSystem extends Vue {
 
   private onMapReady(viewer) {
     this.mapViewer = viewer
+  }
+
+  private get proccess() {
+    if (!this.mapViewer) return {}
+    return this.mapViewer.proccess
   }
 
   private mounted() {

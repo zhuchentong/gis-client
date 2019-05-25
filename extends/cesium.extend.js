@@ -1,7 +1,7 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-module.exports = function(config) {
+module.exports = function (config) {
   const cesiumSource = 'node_modules/cesium/Source'
   const cesiumWorkers = '../Build/Cesium/Workers'
 
@@ -31,6 +31,13 @@ module.exports = function(config) {
       }
     ]
   ])
+
+  config.plugin('copy_ThirdParty').use(CopyWebpackPlugin, [
+    [{
+      from: path.join(cesiumSource, 'ThirdParty'),
+      to: 'ThirdParty'
+    }]
+  ]);
 
   config.resolve.alias.set(
     'cesium',

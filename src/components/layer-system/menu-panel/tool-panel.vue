@@ -68,7 +68,7 @@ import { DrawInteractPolyline, DrawInteractPoint, DrawInteractLine } from '~/uti
 import Cesium from 'cesium/Cesium'
 import { CesiumCommonService } from '~/utils/cesium/common.service'
 import { CesiumDrawService } from '@/utils/cesium/draw.service'
-import FlatNess from '~/components/layer-system/menu-panel/tool-panel/flat-ness.vue'
+import FlatNess from '~/components/layer-system/tool-panel/flat-ness.vue'
 import * as turf from '@turf/turf'
 
 @Component({

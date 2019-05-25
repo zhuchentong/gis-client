@@ -1,6 +1,6 @@
 import CheckPanel from './menu-panel/check-panel.vue'
 import ComputePanel from './menu-panel/compute-panel.vue'
-import LayerControlPanel from './menu-panel/layer-control-panel.vue'
+import ControlPanel from './menu-panel/control-panel.vue'
 import LayerListPanel from './menu-panel/layer-list-panel.vue'
 import MeasurePanel from './menu-panel/measure-panel.vue'
 import ProjectPanel from './menu-panel/project-panel.vue'
@@ -20,7 +20,7 @@ export const MenuList = [
     icon: 'layer-list'
   },
   {
-    key: 'layer-control-panel',
+    key: 'control-panel',
     label: '图层控制',
     icon: 'layer-control'
   },
@@ -73,7 +73,7 @@ export const PanelComponents = {
   CheckPanel,
   ComputePanel,
   ToolPanel,
-  LayerControlPanel,
+  ControlPanel,
   LayerListPanel,
   MeasurePanel,
   ProjectPanel,

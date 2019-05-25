@@ -1,13 +1,13 @@
 <template>
-  <section ref="display" class="layer-control-panel">
+  <section ref="display" class="component layer-control-panel">
     <transition-group name="flip-list">
       <div
-        v-for="(item,index) of layerList"
+        v-for="(item, index) of layerList"
         :key="item.layer.layerName"
         class="col layer-item text-left"
       >
         <div class="row between-span middle-span">
-          <div class="layer-title">{{item.layer.layerName}}</div>
+          <div class="layer-title">{{ item.layer.layerName }}</div>
           <div
             class="layer-close-icon"
             @click="onCloseLayer(item.layer)"
@@ -30,7 +30,7 @@
               <el-button
                 type="text"
                 @click="lowerLayer(item)"
-                :disabled="index >= (layerList.length - 1)"
+                :disabled="index >= layerList.length - 1"
                 icon="el-icon-bottom"
               ></el-button>
             </div>
@@ -43,13 +43,15 @@
               :step="0.1"
               :max="1"
               :min="0"
-              @change="onAlphaChange(item,$event)"
+              @change="onAlphaChange(item, $event)"
             ></el-input-number>
           </div>
         </div>
       </div>
     </transition-group>
-    <div v-if="!layerList.length" class="empty-tip row middle-span center-span">暂无图层</div>
+    <div v-if="!layerList.length" class="empty-tip row middle-span center-span">
+      暂无图层
+    </div>
   </section>
 </template>
 

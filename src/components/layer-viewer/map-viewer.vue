@@ -56,6 +56,12 @@ export default class MapViewer extends Vue {
   public $pickDataSource!: Cesium.CustomDataSource
   // 绘制事件监听
   public drawEventListener: Array<(event: string) => void> = []
+
+  public proccess = {
+    name: "",
+    value: 0
+  }
+
   // 绘制提示信息
   private drawTipInfo = ''
   // Cesium视图
@@ -80,6 +86,8 @@ export default class MapViewer extends Vue {
   private mapId = 'cesium-viewer'
 
   private drawEntitiesLength = 0
+
+
 
   @LayerTableModule.Action
   private getLayerAttrData!: (query: { layer: any; cql?: string }) => void
@@ -170,54 +178,33 @@ export default class MapViewer extends Vue {
   /**
    * 加载3d地图
    */
-  public async addTileset({ id, url, heightOffset }) {
+  public async addTileset({ name, id, url, heightOffset }) {
     // 添加3d图层
-    const options: any = {
-      url,
-      preferLeaves: true,
-      dynamicScreenSpaceError: true
-      // maximumScreenSpaceError: 10, //最大的屏幕空间误差
-      // maximumNumberOfLoadedTiles: 1000 //最大加载瓦片个数
-    }
+    const tileset = this.$viewer.scene.primitives.add(new Cesium.Cesium3DTileset({ url })) as Cesium.Cesium3DTileset
 
-    const _tileset = this.$viewer.scene.primitives.add(
-      new Cesium.Cesium3DTileset(options)
-    )
     // 调整3d图层位置
-    _tileset.allTilesLoaded.addEventListener(() => {
-      const boundingSphere = _tileset.boundingSphere
-      const cartographic = Cesium.Cartographic.fromCartesian(
-        boundingSphere.center
-      )
-      const surface = Cesium.Cartesian3.fromRadians(
-        cartographic.longitude,
-        cartographic.latitude,
-        0.0
-      )
-      const offset = Cesium.Cartesian3.fromRadians(
-        cartographic.longitude,
-        cartographic.latitude,
-        parseFloat(heightOffset)
-      )
-      const translation = Cesium.Cartesian3.subtract(
-        offset,
-        surface,
-        new Cesium.Cartesian3()
-      )
-      _tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation)
+    tileset.readyPromise.then((data: any) => {
+      const boundingSphere = data.boundingSphere as Cesium.BoundingSphere
+      const { longitude, latitude } = Cesium.Cartographic.fromCartesian(boundingSphere.center)
+      const position = Cesium.Cartesian3.fromDegrees(longitude, latitude, heightOffset)
+      const mat = Cesium.Transforms.eastNorthUpToFixedFrame(position)
+      const rotationX = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(0)))
+      Cesium.Matrix4.multiply(mat, rotationX, mat)
+      tileset['_root'].transform = mat
+      this.$viewer.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, heightOffset + 1000) })
     })
 
-    // 调整视角
-    await this.$viewer.zoomTo(
-      _tileset,
-      new Cesium.HeadingPitchRange(0, -0.5, 0)
-    )
+    // tileset.loadProgress.addEventListener((numberOfPendingRequests, numberOfTilesProcessing) => {
+    //   this.proccess.value = Math.round( numberOfTilesProcessing/ numberOfPendingRequests * 100)
+    // })
 
     // 添加到图层列表
     this.tilesetList.push({
+      name,
       id,
       url,
-      heightOffset
+      heightOffset,
+      alpha: 1
     })
   }
 
@@ -226,22 +213,33 @@ export default class MapViewer extends Vue {
    */
   public removeTileset(id) {
     // 查询tileset
+    const tileset = this.findTileset(id)
+    if (tileset) this.$viewer.scene.primitives.remove(tileset)
+
+    const findIndex = this.tilesetList.findIndex(x => x.id === id)
+    this.tilesetList.splice(findIndex, 1)
+  }
+
+  /**
+   * 查找已经加载的tileset
+   */
+  public findTileset(id) {
+    let tileset: Cesium.Cesium3DTileset | null = null
+
     const item = this.tilesetList.find(x => x.id === id)
-    if (!item) return
+    if (!item) return null
 
     for (let index = 0; index < this.$viewer.scene.primitives.length; index++) {
       const primitive = this.$viewer.scene.primitives.get(index)
-
       if (
         primitive instanceof Cesium.Cesium3DTileset &&
         primitive.url === item.url
       ) {
-        this.$viewer.scene.primitives.remove(primitive)
+        tileset = primitive
         break
       }
     }
-
-    this.tilesetList = this.tilesetList.filter(x => x.id !== id)
+    return tileset
   }
 
   /**
@@ -250,9 +248,9 @@ export default class MapViewer extends Vue {
   public addImageProvider() {
     const rectangle = new Cesium.Rectangle(
       Cesium.Math.toRadians(109.55151),
-      Cesium.Math.toRadians(36.611866),
+      Cesium.Math.toRadians(36.61187),
       Cesium.Math.toRadians(109.76861),
-      Cesium.Math.toRadians(36.73161)
+      Cesium.Math.toRadians(36.731606)
     )
 
     const provider = new Cesium.UrlTemplateImageryProvider({
@@ -282,7 +280,7 @@ export default class MapViewer extends Vue {
   public addTerrainProvider() {
     this.$terrainProvider = new Cesium.CesiumTerrainProvider({
       url: `${appConfig.mapResouce}/terrain`,
-      requestWaterMask:true
+      requestWaterMask: true
     })
     this.$viewer.terrainProvider = this.$terrainProvider
   }
