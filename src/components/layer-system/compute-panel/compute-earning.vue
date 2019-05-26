@@ -77,7 +77,9 @@
           <div class="result-content">
             <label-item label="预算总面积">
               <span>{{ result.area }} 平方米</span>
-              <span style="margin-left:10px">{{ result.area | squareMeterToMu }} 亩</span>
+              <span style="margin-left:10px"
+                >{{ result.area | squareMeterToMu }} 亩</span
+              >
             </label-item>
             <label-item label="预算总金额">
               {{ result.cost | toTenThousand }} 万元
@@ -96,7 +98,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
-import { ComputUnits,ComputerLayerSetting } from "~/components/layer-system/compute-panel/compute.config.ts"
+import { ComputUnits, ComputerLayerSetting } from "~/components/layer-system/compute-panel/compute.config.ts"
 import { FilterService } from '~/utils/filter.service'
 import { RequestParams } from "~/core/http"
 import { CesiumCommonService } from '@/utils/cesium/common.service'
@@ -119,7 +121,7 @@ export default class ComputeEarning extends Vue {
 
   private loading = false
 
-  private layerInfo:any = null
+  private layerInfo: any = null
 
   private readonly units = ComputUnits
   private currentPanel = "input"
@@ -227,7 +229,7 @@ export default class ComputeEarning extends Vue {
     this.currentPanel = "input"
   }
 
-  private mounted(){
+  private mounted() {
     const relation = this.getRelationByType(ComputerLayerSetting.relationType)
     this.layerInfo = {
       ...relation,

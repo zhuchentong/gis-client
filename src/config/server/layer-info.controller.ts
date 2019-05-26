@@ -92,7 +92,7 @@ export default {
   intersectionWkt: {
     controller: CONTROLLER,
     action: 'intersectionWkt',
-    type: RequestMethod.Get
+    type: RequestMethod.Post
   },
   /**
    * 获取图层关系
