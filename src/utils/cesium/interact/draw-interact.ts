@@ -26,7 +26,7 @@ export abstract class DrawInteract {
   /**
    * 启动绘制模式
    */
-  public start(): Observable<any> {
+  public start(tipInfo?): Observable<any> {
     this.obserable = new Observable(observer => (this.observer = observer))
     this.startEventListener = this.addEventListener(
       this.startEvent,
@@ -37,7 +37,10 @@ export abstract class DrawInteract {
       this.endEvent &&
       this.addEventListener(this.endEvent, this.endDraw.bind(this))
 
-    this.mapViewer.startDrawMode(this.handleDrawToolEvent.bind(this))
+    this.mapViewer.startDrawMode(
+      this.handleDrawToolEvent.bind(this),
+      tipInfo || this.tipInfo
+    )
     return this.obserable
   }
 

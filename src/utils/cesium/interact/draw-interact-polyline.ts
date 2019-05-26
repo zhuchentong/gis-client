@@ -11,7 +11,7 @@ export class DrawInteractPolyline extends DrawInteract {
   private fill
   private fillColor
   private borderColor
-
+  private readonly tipInfo = "222"
   constructor(
     mapViewer,
     {

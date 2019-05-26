@@ -7,7 +7,7 @@ import { CesiumDrawService } from '../draw.service'
 export class DrawInteractPoint extends DrawInteract {
   private drawService: CesiumDrawService
   private position
-
+  private readonly tipInfo = ''
   constructor(mapViewer) {
     super(mapViewer, {
       start: Cesium.ScreenSpaceEventType.LEFT_CLICK

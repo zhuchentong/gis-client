@@ -7,7 +7,7 @@ import { CesiumDrawService } from '../draw.service'
 export class DrawInteractLine extends DrawInteract {
   private drawService: CesiumDrawService
   private positions: Cesium.Cartesian3[] = []
-
+  private readonly tipInfo = ''
   constructor(mapViewer) {
     super(mapViewer, {
       start: Cesium.ScreenSpaceEventType.LEFT_CLICK
@@ -34,7 +34,7 @@ export class DrawInteractLine extends DrawInteract {
       this.positions.push(point)
       isCreatePolyline && this.drawService.drawPolyline(this.positions)
     }
-    
+
     // 通知坐标更新
     this.observer.next({
       point,
