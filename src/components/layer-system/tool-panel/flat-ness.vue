@@ -1,51 +1,182 @@
 <template>
   <section class="component flat-ness">
+    <el-card>
+      <div slot="header" class="clearfix">
+        <span>基准信息</span>
+      </div>
       <el-form :model="model" label-width="110px" ref="form">
-            <el-form-item label="基准面高程：" prop="land">
-            <span slot="append">{{ }}</span>
+        <el-form-item label="基准面高程：" prop="height">
+          <el-input v-model="model.height" type="number" readonly>
+            <span slot="append">米</span>
+          </el-input>
         </el-form-item>
-        <el-form-item label="预计平整高度：" prop="land">
-          <el-input v-model="model.land" type="number" :min="0" :max="999999">
-             <span slot="append">米</span>
+        <el-form-item label="平整偏移量:" prop="offset">
+          <el-input
+            v-model="model.offset"
+            type="number"
+            :min="-9999"
+            :max="9999"
+            @input.native="onHeightChange"
+          >
+            <span slot="append">米</span>
           </el-input>
         </el-form-item>
       </el-form>
       <div class="operate-buttons">
-      <el-button @click="FlatNessButton">测算</el-button>
+        <el-button @click="FlatNessButton">开始测算</el-button>
       </div>
-      <div v-show="result">
-      <p v-if="result">测量结果</p>
-      <el-card class="approve-steps-item">
-      <label-item style="text-align:left" label="最高点"></label-item>
-      <label-item label="最低点"></label-item>
-      <label-item label="填方量"></label-item>
-      <label-item label="挖方量"></label-item>
-      <label-item label="填挖方总量"></label-item>
-      <label-item label="填挖区域面积"></label-item>
-      <label-item label="挖方区域面积"></label-item>
-      <label-item label="填挖区域面积"></label-item>
-      <label-item label="区域总面积"></label-item>
-      </el-card>
+    </el-card>
+    <el-card class="approve-steps-item" v-if="result">
+      <div slot="header" class="clearfix">
+        <span>测量结果</span>
       </div>
+      <label-container :column="1" :labelWidth="100">
+        <label-item style="text-align:left" label="最高点">{{result.highest.toFixed(4)}} 米</label-item>
+        <label-item label="最低点">{{result.lowest.toFixed(4)}} 米</label-item>
+        <label-item label="填方量">{{Math.abs(result.fillCount).toFixed(4)}} 立方米</label-item>
+        <label-item label="挖方量">{{Math.abs(result.cutCount).toFixed(4)}} 立方米</label-item>
+        <!-- <label-item label="填挖方总量"></label-item> -->
+        <label-item label="填挖区域面积">{{result.fillArea.toFixed(4)}} 平方米</label-item>
+        <label-item label="挖方区域面积">{{result.cutArea.toFixed(4)}} 平方米</label-item>
+        <label-item label="填挖区域面积">{{(result.fillArea + result.cutArea).toFixed(4)}} 平方米</label-item>
+        <label-item label="区域总面积">{{result.allArea.toFixed(4)}} 平方米</label-item>
+      </label-container>
+    </el-card>
   </section>
 </template>
 
-
 <script lang="ts">
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator'
+import * as turf from '@turf/turf'
+import MapViewer from '../../layer-viewer/map-viewer.vue'
+import Cesium from 'cesium/Cesium'
+import { CesiumDrawService } from '../../../utils/cesium/draw.service'
+import { CesiumCommonService } from '@/utils/cesium/common.service'
 @Component({
   components: {}
 })
 export default class FlatNess extends Vue {
+  @Prop()
+  public viewer!: MapViewer
+  @Prop()
+  public points!: any
+  // 插值区域边长,影响精度
+  private readonly cellSide = 5
+  // 在最小高度差内认为无需进行填挖方
+  private readonly minHeightDiff = 0.2
+  private boxHeight = 0
+  private result: any = null
+  private model: any = {
+    height: 0,
+    offset: 0
+  }
 
-    private model:any={
-        land:""
+  @Watch('points', { immediate: true })
+  private onPointsChange() {
+    this.boxHeight = parseFloat(this.getBoxHeight(this.points).toFixed(4))
+    this.model.height = this.boxHeight
+  }
+
+  private onHeightChange({ target }) {
+    if (target.value === '') return
+    this.model.height = parseFloat(
+      (this.boxHeight + parseFloat(target.value)).toFixed(4)
+    )
+  }
+
+  /**
+   * 获取单点高度
+   */
+  private getPointHeight(point) {
+    const cartographic = Cesium.Cartographic.fromDegrees(point[0], point[1])
+    return this.viewer.getViewer().scene.globe.getHeight(cartographic)
+  }
+
+  /**
+   * 获取区域平均高度
+   */
+  private getBoxHeight(points) {
+    const heights = points.map(point => {
+      return this.getPointHeight(point)
+    })
+
+    // 获取平均高度
+    return heights.reduce((acc, val) => acc + val, 0) / heights.length
+  }
+
+  private getResult() {
+    // 获取测量区域集合图形
+    const polygon = turf.polygon([[...this.points, this.points[0]]])
+    // 获取总测量区域
+    this.result.allArea = turf.area(polygon)
+    // 获取对应的bbox
+    const bbox = turf.bbox(polygon)
+    // 生成插值区域
+    const grid = turf.squareGrid(bbox, this.cellSide, { units: 'meters' })
+
+    grid.features.forEach((item: any) => {
+      // const position = CesiumCommonService.positionToCartesian3({
+      //   longitude: center.geometry.coordinates[0],
+      //   latitude: center.geometry.coordinates[1]
+      // })
+
+      // 排除无效区域
+      // turf.booleanPointInPolygon(pt, poly);
+      if (!turf.booleanContains(polygon, item)) {
+        return
+      }
+      const center = turf.centerOfMass(item) as any
+      const height = this.getPointHeight(center.geometry.coordinates)
+      const heightdiff = this.model.height - height
+      // 更新最小高度
+      if (!this.result.lowest || this.result.lowest > height) {
+        this.result.lowest = height
+      }
+      // 更新最大高度
+      if (!this.result.highest || this.result.highest < height) {
+        this.result.highest = height
+      }
+      // 在最小高度差内无需进行填挖方
+      if (Math.abs(heightdiff) < this.minHeightDiff) {
+        return
+      }
+
+      // 获取当前面积
+      const area = turf.area(item)
+      const size = area * heightdiff
+
+      if (size > 0) {
+        this.result.cutCount += size
+        this.result.cutArea += area
+      } else {
+        this.result.fillCount += size
+        this.result.fillArea += area
+      }
+    })
+  }
+
+  private drawSizeBox() {
+    // var box = new Cesium.BoxGeometry({
+    //   vertexFormat: Cesium.VertexFormat.POSITION_ONLY,
+    //   maximum: new Cesium.Cartesian3(250000.0, 250000.0, 250000.0),
+    //   minimum: new Cesium.Cartesian3(-250000.0, -250000.0, -250000.0)
+    // })
+    // var geometry = Cesium.BoxGeometry.createGeometry(box)
+    // this.viewer.drawEntities.add(geometry)
+  }
+
+  private FlatNessButton() {
+    // reset
+    this.result = {
+      fillCount: 0,
+      cutCount: 0,
+      fillArea: 0,
+      cutArea: 0,
+      allArea: 0
     }
-
-    private result:any=false
-
-    private FlatNessButton(){
-    this.result=true
-    }
+    // this.result = true
+    this.getResult()
+    this.drawSizeBox()
+  }
 }
 </script>

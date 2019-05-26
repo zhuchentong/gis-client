@@ -10,11 +10,7 @@
         :key="item.key"
         @click="item.handle()"
       >
-        <svg-icon
-          iconColor="black"
-          :iconName="item.icon"
-          iconSize="40"
-        ></svg-icon>
+        <svg-icon iconColor="black" :iconName="item.icon" iconSize="40"></svg-icon>
         <div>{{ item.label }}</div>
       </div>
     </el-card>
@@ -42,20 +38,12 @@
         :key="item.key"
         @click="item.handle()"
       >
-        <svg-icon
-          iconColor="black"
-          :iconName="item.icon"
-          iconSize="40"
-        ></svg-icon>
+        <svg-icon iconColor="black" :iconName="item.icon" iconSize="40"></svg-icon>
         <div>{{ item.label }}</div>
       </div>
     </el-card>
-    <el-dialog
-      :close-on-click-modal="false"
-      title="平整量测量"
-      :visible.sync="dialog.flat"
-    >
-      <flat-ness ref="flat-ness"></flat-ness>
+    <el-dialog :close-on-click-modal="false" title="平整量测量" :visible.sync="dialog.flat">
+      <flat-ness :viewer="viewer" :points="points" ref="flat-ness"></flat-ness>
     </el-dialog>
   </section>
 </template>
@@ -64,7 +52,11 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import MapViewer from '~/components/layer-viewer/map-viewer.vue'
-import { DrawInteractPolyline, DrawInteractPoint, DrawInteractLine } from '~/utils/cesium/interact'
+import {
+  DrawInteractPolyline,
+  DrawInteractPoint,
+  DrawInteractLine
+} from '~/utils/cesium/interact'
 import Cesium from 'cesium/Cesium'
 import { CesiumCommonService } from '~/utils/cesium/common.service'
 import { CesiumDrawService } from '@/utils/cesium/draw.service'
@@ -77,6 +69,7 @@ import * as turf from '@turf/turf'
   }
 })
 export default class ToolPanel extends Vue {
+  public points = []
   @Prop()
   private viewer!: MapViewer
   private readonly measureList = [
@@ -113,7 +106,7 @@ export default class ToolPanel extends Vue {
     {
       label: '平整量测量',
       key: 'flatness',
-      icon: "flatness",
+      icon: 'flatness',
       handle: this.Flatness.bind(this)
     }
   ]
@@ -124,8 +117,21 @@ export default class ToolPanel extends Vue {
   /**
    * 平整量测量
    */
-  private Flatness() {
-    this.dialog.flat = true
+  private async Flatness() {
+    const drawInteractPolyline = new DrawInteractPolyline(this.viewer, {
+      closed: true
+    })
+    const drawService = new CesiumDrawService(this.viewer)
+    const { positions } = await drawInteractPolyline.start().toPromise()
+    if (positions && positions.length >= 3) {
+      // 生成点集合
+      const points = positions.map(point => {
+        const position = CesiumCommonService.cartesian3ToDegrees(point)
+        return [position.longitude, position.latitude]
+      })
+      this.points = points
+      this.dialog.flat = true
+    }
   }
 
   /**
@@ -271,16 +277,22 @@ export default class ToolPanel extends Vue {
   private onHeightClick() {
     // 清空之前绘制的点
     this.viewer.drawEntities.removeAll()
-    this.viewer.getViewer().screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+    this.viewer
+      .getViewer()
+      .screenSpaceEventHandler.removeInputAction(
+        Cesium.ScreenSpaceEventType.MOUSE_MOVE
+      )
 
     // 接收两个坐标点的位置
     const positions: Cesium.Cartographic[] = []
     const drawService = new CesiumDrawService(this.viewer)
     const drawLine = new DrawInteractLine(this.viewer)
     drawLine.start().subscribe({
-      next: (data) => {
+      next: data => {
         const graphicPoint = Cesium.Cartographic.fromCartesian(data.point)
-        const heightStr = CesiumCommonService.getDistanceStr(graphicPoint.height)
+        const heightStr = CesiumCommonService.getDistanceStr(
+          graphicPoint.height
+        )
         drawService.drawPoint(data.point, `海拔高度：${heightStr}`)
         positions.push(graphicPoint)
       },
@@ -297,20 +309,28 @@ export default class ToolPanel extends Vue {
     // 用于鼠标移动到线条，显示距离
     const labelIdArray: string[] = []
     const [first, second] = positions
-    const heightPosition = new Cesium.Cartographic(first.longitude, first.latitude, second.height)
+    const heightPosition = new Cesium.Cartographic(
+      first.longitude,
+      first.latitude,
+      second.height
+    )
 
     // 临时实体
     let entityId: string
     let text: string
 
     // 对应的cartesian3坐标点
-    const [f, s, h] = [first, second, heightPosition].map(p => CesiumCommonService.RadiansToCartesian3(this.viewer.getViewer(), p))
+    const [f, s, h] = [first, second, heightPosition].map(p =>
+      CesiumCommonService.RadiansToCartesian3(this.viewer.getViewer(), p)
+    )
 
     // 斜线
     const slash = this.viewer.drawEntities.values.find(x => !!x.polyline)
     if (slash) {
       // 绘制距离线条
-      text = `直线距离：${CesiumCommonService.getDistanceStr(Cesium.Cartesian3.distance(f, s))}`
+      text = `直线距离：${CesiumCommonService.getDistanceStr(
+        Cesium.Cartesian3.distance(f, s)
+      )}`
       slash.position = Cesium.Cartesian3.midpoint(f, s, new Cesium.Cartesian3())
       slash.label = drawService.createLabel(text, Cesium.Color.RED)
       labelIdArray.push(slash.id)
@@ -320,9 +340,10 @@ export default class ToolPanel extends Vue {
     const points = this.viewer.drawEntities.values.filter(x => !!x.point)
     labelIdArray.push(...points.map(v => v.id))
 
-
     // 绘制高度线条
-    text = `高度：${CesiumCommonService.getDistanceStr(second.height - first.height)}`
+    text = `高度：${CesiumCommonService.getDistanceStr(
+      second.height - first.height
+    )}`
     entityId = this.viewer.drawEntities.add({
       polyline: {
         positions: [f, h],
@@ -341,7 +362,9 @@ export default class ToolPanel extends Vue {
 
     // 绘制水平线条
     // 水平文字
-    text = `水平距离：${CesiumCommonService.getDistanceStr(Cesium.Cartesian3.distance(h, s))}`
+    text = `水平距离：${CesiumCommonService.getDistanceStr(
+      Cesium.Cartesian3.distance(h, s)
+    )}`
     entityId = this.viewer.drawEntities.add({
       polyline: {
         positions: [h, s],
@@ -358,8 +381,6 @@ export default class ToolPanel extends Vue {
     }).id
     labelIdArray.push(entityId)
 
-
-
     // 添加鼠标pick 线条，显示文字事件
     this.addMouseMoveEvent(labelIdArray)
   }
@@ -368,7 +389,9 @@ export default class ToolPanel extends Vue {
     const viewer = this.viewer.getViewer()
     viewer.screenSpaceEventHandler.setInputAction((e: any) => {
       if (!this.viewer.drawEntities.values.length) return
-      labelIdArray.forEach(id => this.viewer.drawEntities.getById(id).label.show = false)
+      labelIdArray.forEach(
+        id => (this.viewer.drawEntities.getById(id).label.show = false)
+      )
       const feature = viewer.scene.pick(e.endPosition)
       // 地图此处没有任何东西
       if (!Cesium.defined(feature)) return
@@ -383,7 +406,6 @@ export default class ToolPanel extends Vue {
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
   }
-
 }
 </script>
 
