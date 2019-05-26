@@ -17,7 +17,7 @@
     <el-dialog
       title="消息详情"
       :visible.sync="dialog.messageDetail"
-       width="700px"
+       width="500px"
       @close="getUnReadCount"
       append-to-body
     >

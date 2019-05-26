@@ -174,8 +174,7 @@ export default class Login extends Vue {
           maximizable: false
         },
         {
-          replace: true,
-          frame: false
+          replace: true
         },
         this
       )

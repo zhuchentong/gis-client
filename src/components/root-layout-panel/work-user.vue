@@ -13,7 +13,9 @@
         <el-dropdown-item icon="el-icon-refresh" command="logout"
           >注销</el-dropdown-item
         >
-        <el-dropdown-item icon="el-icon-switch-button" command="exit">退出</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-switch-button" command="exit"
+          >退出</el-dropdown-item
+        >
       </el-dropdown-menu>
     </el-dropdown>
     <el-dialog :visible.sync="dialog.password" width="500px" title="修改密码">
@@ -81,10 +83,12 @@ export default class WorkUser extends Vue {
       {
         width: 500,
         height: 400,
+        resizable: false,
         maximizable: false
       },
       {
-        replace: true
+        replace: true,
+        frame: false
       },
       this
     )

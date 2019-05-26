@@ -48,12 +48,11 @@
         <el-table-column label="查看详情">
           <template slot-scope="scope">
             <el-button
-              size="small"
               @click="openMessageDetail(scope.row)"
               type="text"
               >查看</el-button
             >
-            <el-button size="small" @click="deleteClick(scope.row)" type="text"
+            <el-button @click="deleteClick(scope.row)" type="text"
               >删除</el-button
             >
           </template>
@@ -64,6 +63,7 @@
       title="消息详情"
       :visible.sync="dialog.messageDetail"
       @close="getUnReadCount"
+      width="500px"
       append-to-body
     >
       <message-detail :message="websocketMsgModel"></message-detail>

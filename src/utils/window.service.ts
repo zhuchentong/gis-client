@@ -32,7 +32,7 @@ export class WindowService {
       maximizable,
       fullscreenable: false,
       alwaysOnTop: false,
-      parent
+      parent: parent && currentWindow
     })
 
     win.setMenu(null)
