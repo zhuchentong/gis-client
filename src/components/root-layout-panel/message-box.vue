@@ -47,9 +47,7 @@
         ></el-table-column>
         <el-table-column label="查看详情">
           <template slot-scope="scope">
-            <el-button
-              @click="openMessageDetail(scope.row)"
-              type="text"
+            <el-button @click="openMessageDetail(scope.row)" type="text"
               >查看</el-button
             >
             <el-button @click="deleteClick(scope.row)" type="text"
@@ -62,7 +60,7 @@
     <el-dialog
       title="消息详情"
       :visible.sync="dialog.messageDetail"
-      @close="getUnReadCount"
+      @close="dialog.messageDetail = false"
       width="500px"
       append-to-body
     >
@@ -145,7 +143,7 @@ export default class MessageBox extends Vue {
   private openMessageDetail(row: any) {
     this.websocketMsgModel = new WebsocketMsgModel()
     CommonService.revertData(this.websocketMsgModel, row)
-    this.websocketMsgModel.setRead()
+    this.websocketMsgModel.setRead().subscribe(this.getUnReadCount)
     this.dialog.messageDetail = true
   }
 
@@ -169,7 +167,6 @@ export default class MessageBox extends Vue {
    * 获取未读消息数量
    */
   private getUnReadCount() {
-    this.dialog.messageDetail = false
     this.websocketMsgModel
       .getUnReadMsgCount()
       .subscribe(count => this.updateUnReadCount(count))

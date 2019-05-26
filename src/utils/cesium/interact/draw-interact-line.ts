@@ -7,13 +7,14 @@ import { CesiumDrawService } from '../draw.service'
 export class DrawInteractLine extends DrawInteract {
   private drawService: CesiumDrawService
   private positions: Cesium.Cartesian3[] = []
-  private readonly tipInfo = ''
+
   constructor(mapViewer) {
     super(mapViewer, {
       start: Cesium.ScreenSpaceEventType.LEFT_CLICK
     })
 
     this.drawService = new CesiumDrawService(mapViewer)
+    this.tipInfo = '鼠标左键第一次点击绘制起点，第二次点击绘制终点'
   }
 
   /**
@@ -46,7 +47,7 @@ export class DrawInteractLine extends DrawInteract {
    * 结束绘制
    * @param e
    */
-  public endDraw(e) {
+  public endDraw() {
     return
   }
 

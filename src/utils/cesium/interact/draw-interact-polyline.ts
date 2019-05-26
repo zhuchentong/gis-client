@@ -11,7 +11,7 @@ export class DrawInteractPolyline extends DrawInteract {
   private fill
   private fillColor
   private borderColor
-  private readonly tipInfo = "222"
+
   constructor(
     mapViewer,
     {
@@ -37,6 +37,7 @@ export class DrawInteractPolyline extends DrawInteract {
     this.fill = fill
     this.fillColor = fillColor
     this.borderColor = borderColor
+    this.tipInfo = "鼠标左键点击绘制转折点，左键双击结束绘制"
   }
 
   /**
@@ -69,7 +70,7 @@ export class DrawInteractPolyline extends DrawInteract {
    * 结束绘制
    * @param e
    */
-  public endDraw(e) {
+  public endDraw() {
     // TODO: 添加绘制状态
     this.clioseEventListener()
 

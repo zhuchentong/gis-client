@@ -31,15 +31,34 @@
         <span>测量结果</span>
       </div>
       <label-container :column="1" :labelWidth="100">
-        <label-item style="text-align:left" label="最高点">{{result.highest.toFixed(4)}} 米</label-item>
-        <label-item label="最低点">{{result.lowest.toFixed(4)}} 米</label-item>
-        <label-item label="填方量">{{Math.abs(result.fillCount).toFixed(4)}} 立方米</label-item>
-        <label-item label="挖方量">{{Math.abs(result.cutCount).toFixed(4)}} 立方米</label-item>
+        <label-item style="text-align:left" label="最高点"
+          >{{ result.highest.toFixed(4) }} 米</label-item
+        >
+        <label-item label="最低点"
+          >{{ result.lowest.toFixed(4) }} 米</label-item
+        >
+        <label-item label="填方量"
+          >{{ Math.abs(result.fillCount).toFixed(4) }} 立方米</label-item
+        >
+        <label-item label="挖方量"
+          >{{ Math.abs(result.cutCount).toFixed(4) }} 立方米</label-item
+        >
         <!-- <label-item label="填挖方总量"></label-item> -->
-        <label-item label="填挖区域面积">{{result.fillArea.toFixed(4)}} 平方米</label-item>
-        <label-item label="挖方区域面积">{{result.cutArea.toFixed(4)}} 平方米</label-item>
-        <label-item label="填挖区域面积">{{(result.fillArea + result.cutArea).toFixed(4)}} 平方米</label-item>
-        <label-item label="区域总面积">{{result.allArea.toFixed(4)}} 平方米</label-item>
+        <label-item label="填挖区域面积"
+          >{{ result.fillArea.toFixed(4) }} 平方米</label-item
+        >
+        <label-item label="挖方区域面积"
+          >{{ result.cutArea.toFixed(4) }} 平方米</label-item
+        >
+        <label-item label="填挖区域面积"
+          >{{
+            (result.fillArea + result.cutArea).toFixed(4)
+          }}
+          平方米</label-item
+        >
+        <label-item label="区域总面积"
+          >{{ result.allArea.toFixed(4) }} 平方米</label-item
+        >
       </label-container>
     </el-card>
   </section>

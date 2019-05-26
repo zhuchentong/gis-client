@@ -100,6 +100,7 @@ export class CesiumDrawService {
       new Cesium.Entity({
         polygon: {
           hierarchy,
+          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
           material: fillColor || this.color.polygon,
           height: 0,
           outline: true,
@@ -118,7 +119,7 @@ export class CesiumDrawService {
    */
   public drawPolyline(
     positions: Array<Cesium.Cartographic | Cesium.Cartesian3>,
-    { clampToGround = false } = {}
+    { clampToGround = true } = {}
   ) {
     // 折线实体
     const polylineEntity = new Entity({

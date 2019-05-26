@@ -92,7 +92,7 @@ export class ReminderService {
    * 处理消息message事件
    */
   private onReminderHandle({ body }) {
-    console.log(JSON.parse(body), "onReminderHandle消息日志")
+    // console.log(JSON.parse(body), "onReminderHandle消息日志")
     const msgBody = JSON.parse(body)
     try {
       const messageType: string = msgBody.messageType

@@ -3,15 +3,32 @@
     <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div v-if="isDrawing || drawEntitiesLength" class="draw-tool-bar icon-button-group">
-      <div class="icon-button" @click="onDrawEvent('close')">
+    <div
+      v-if="isDrawing || drawEntitiesLength"
+      class="draw-tool-bar icon-button-group"
+    >
+      <div class="icon-button" @click="onDrawEvent('close')" title="关闭绘制">
         <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
-      <div class="icon-button" @click="isDrawing && onDrawEvent('reset')">
-        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="reset"></svg-icon>
+      <div
+        class="icon-button"
+        @click="drawEntitiesLength && !isDrawComplate && onDrawEvent('reset')"
+        title="重新开始"
+      >
+        <svg-icon
+          :iconColor="drawEntitiesLength && !isDrawComplate ? 'white' : 'gray'"
+          iconName="draw-chongzhi"
+        ></svg-icon>
       </div>
-      <div class="icon-button" @click="isDrawing && onDrawEvent('submit')">
-        <svg-icon :iconColor="isDrawing ? 'white' : 'gray'" iconName="right"></svg-icon>
+      <div
+        class="icon-button"
+        @click="drawEntitiesLength && !isDrawComplate && onDrawEvent('submit')"
+        title="提交绘制结果"
+      >
+        <svg-icon
+          :iconColor="drawEntitiesLength && !isDrawComplate ? 'white' : 'gray'"
+          iconName="draw-tijiao"
+        ></svg-icon>
       </div>
     </div>
     <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
@@ -51,6 +68,7 @@ export default class MapViewer extends Vue {
   public $drawDataSource!: Cesium.CustomDataSource
   // 选择数据源
   public $pickDataSource!: Cesium.CustomDataSource
+  public $geometryDataSource!: Cesium.CustomDataSource
   // 绘制事件监听
   public drawEventListener: Array<(event: string) => void> = []
 
@@ -83,6 +101,7 @@ export default class MapViewer extends Vue {
   private mapId = 'cesium-viewer'
 
   private drawEntitiesLength = 0
+  private isDrawComplate = false
 
   @LayerTableModule.Action
   private getLayerAttrData!: (query: { layer: any; cql?: string }) => void
@@ -91,6 +110,10 @@ export default class MapViewer extends Vue {
 
   public get drawEntities() {
     return this.$drawDataSource.entities
+  }
+
+  public get geometryEntities() {
+    return this.$geometryDataSource.entities
   }
 
   public get pickEntities() {
@@ -493,6 +516,9 @@ export default class MapViewer extends Vue {
 
     this.$pickDataSource = new Cesium.CustomDataSource('pick')
     this.$viewer.dataSources.add(this.$pickDataSource)
+    this.$pickDataSource = new Cesium.CustomDataSource('pick')
+    this.$geometryDataSource = new Cesium.CustomDataSource('geometry')
+    this.$viewer.scene.primitives.add(this.$geometryDataSource)
     // 设置摄像机视图
     this.$cameraView = this.$viewer.camera
 
@@ -638,7 +664,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-        this.geoServer
+      this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -766,6 +792,7 @@ export default class MapViewer extends Vue {
   private closeDrawMode() {
     this.isDrawing = false
     this.drawEntities.removeAll()
+    this.geometryEntities.removeAll()
     this.drawEventListener = []
     this.drawTipInfo = ''
   }
@@ -774,20 +801,22 @@ export default class MapViewer extends Vue {
    * 绘制工具事件监听
    */
   private onDrawEvent(event) {
+    console.log(event)
     // 实现绘制事件通知
     this.drawEventListener.forEach(handle => handle(event))
 
     switch (event) {
       case 'close': {
         this.closeDrawMode()
+        this.isDrawComplate = false
         break
       }
       case 'reset': {
         this.drawEntities.removeAll()
         break
       }
-      case 'sumbit': {
-        this.closeDrawMode()
+      case 'submit': {
+        this.isDrawComplate = true
         break
       }
     }
@@ -874,10 +903,13 @@ export default class MapViewer extends Vue {
       cursor: pointer;
       width: 24px;
       height: 24px;
-      border: solid 1px white;
+      border: solid 1px dimgrey;
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-bottom: 1px;
+      border-radius: 5px;
+      background-color: #4c4c4cbf;
     }
   }
 

@@ -7,13 +7,14 @@ import { CesiumDrawService } from '../draw.service'
 export class DrawInteractPoint extends DrawInteract {
   private drawService: CesiumDrawService
   private position
-  private readonly tipInfo = ''
   constructor(mapViewer) {
     super(mapViewer, {
       start: Cesium.ScreenSpaceEventType.LEFT_CLICK
     })
 
     this.drawService = new CesiumDrawService(mapViewer)
+    this.tipInfo = '鼠标左键点击绘制定位点'
+
   }
 
   /**
@@ -58,7 +59,7 @@ export class DrawInteractPoint extends DrawInteract {
    * 结束绘制
    * @param e
    */
-  public endDraw(e) {
+  public endDraw() {
     return
   }
 

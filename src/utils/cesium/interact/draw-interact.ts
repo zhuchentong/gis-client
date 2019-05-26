@@ -10,7 +10,7 @@ export abstract class DrawInteract {
   protected endEvent
   protected viewer
   protected mapViewer
-
+  protected tipInfo
   /**
    * 构造函数
    * @param mapViewer
@@ -52,7 +52,7 @@ export abstract class DrawInteract {
   /**
    * 结束绘制
    */
-  public abstract endDraw(e: any)
+  public abstract endDraw()
 
   /**
    * 重置绘制
@@ -80,10 +80,11 @@ export abstract class DrawInteract {
         break
       case 'reset':
         this.resetDraw()
+        this.start()
         break
       case 'submit':
         // 清空数据
-        this.resetDraw()
+        this.endDraw()
         // 关闭监听
         this.clioseEventListener()
         this.observer.complete()

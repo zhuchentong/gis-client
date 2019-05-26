@@ -10,7 +10,11 @@
         :key="item.key"
         @click="item.handle()"
       >
-        <svg-icon iconColor="black" :iconName="item.icon" iconSize="40"></svg-icon>
+        <svg-icon
+          iconColor="black"
+          :iconName="item.icon"
+          iconSize="40"
+        ></svg-icon>
         <div>{{ item.label }}</div>
       </div>
     </el-card>
@@ -38,11 +42,19 @@
         :key="item.key"
         @click="item.handle()"
       >
-        <svg-icon iconColor="black" :iconName="item.icon" iconSize="40"></svg-icon>
+        <svg-icon
+          iconColor="black"
+          :iconName="item.icon"
+          iconSize="40"
+        ></svg-icon>
         <div>{{ item.label }}</div>
       </div>
     </el-card>
-    <el-dialog :close-on-click-modal="false" title="平整量测量" :visible.sync="dialog.flat">
+    <el-dialog
+      :close-on-click-modal="false"
+      title="平整量测量"
+      :visible.sync="dialog.flat"
+    >
       <flat-ness :viewer="viewer" :points="points" ref="flat-ness"></flat-ness>
     </el-dialog>
   </section>
@@ -183,7 +195,8 @@ export default class ToolPanel extends Vue {
    */
   private async computeArea() {
     const drawInteractPolyline = new DrawInteractPolyline(this.viewer, {
-      closed: true
+      closed: true,
+      fill: true
     })
     const drawService = new CesiumDrawService(this.viewer)
     const { positions } = await drawInteractPolyline.start().toPromise()
