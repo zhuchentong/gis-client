@@ -68,7 +68,7 @@ export default class MapViewer extends Vue {
   public $drawDataSource!: Cesium.CustomDataSource
   // 选择数据源
   public $pickDataSource!: Cesium.CustomDataSource
-  public $geometryDataSource!: Cesium.CustomDataSource
+  // public $geometryDataSource!: Cesium.CustomDataSource
   // 绘制事件监听
   public drawEventListener: Array<(event: string) => void> = []
 
@@ -112,9 +112,9 @@ export default class MapViewer extends Vue {
     return this.$drawDataSource.entities
   }
 
-  public get geometryEntities() {
-    return this.$viewer.scene.primitives
-  }
+  // public get geometryEntitiesgeometryEntities() {
+  //   return this.$viewer.scene.primitives
+  // }
 
   public get pickEntities() {
     return this.$pickDataSource.entities
@@ -517,7 +517,7 @@ export default class MapViewer extends Vue {
     this.$pickDataSource = new Cesium.CustomDataSource('pick')
     this.$viewer.dataSources.add(this.$pickDataSource)
     this.$pickDataSource = new Cesium.CustomDataSource('pick')
-    this.$geometryDataSource = new Cesium.CustomDataSource('geometry')
+    // this.$geometryDataSource = new Cesium.CustomDataSource('geometry')
     // 设置摄像机视图
     this.$cameraView = this.$viewer.camera
 
@@ -791,7 +791,7 @@ export default class MapViewer extends Vue {
   private closeDrawMode() {
     this.isDrawing = false
     this.drawEntities.removeAll()
-    this.geometryEntities.removeAll()
+    // this.geometryEntities.removeAll()
     this.drawEventListener = []
     this.drawTipInfo = ''
   }
