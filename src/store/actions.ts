@@ -19,7 +19,6 @@ export default {
     // 更新用户token
     if (token !== "") {
       commit('updateUserToken', token)
-      ReminderService.connect()
       return true
     } else {
       return false

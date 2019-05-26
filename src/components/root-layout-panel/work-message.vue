@@ -2,13 +2,14 @@
   <section class="component work-message">
     <span class="message-icon" @click="dialog.messageBoxVisible = true">
       <el-badge :value="unReadMsgCount" class="icon" v-if="unReadMsgCount > 0">
-        <svg-icon iconName="message" iconSize="32"></svg-icon>
+        <i class="el-icon-bell"></i>
       </el-badge>
-      <svg-icon iconName="message" iconSize="32" v-else></svg-icon>
+      <i class="el-icon-bell" v-else></i>
     </span>
     <el-dialog
       :visible.sync="dialog.messageBoxVisible"
       title="消息列表"
+      width="700px"
       @close="getUnReadCount"
     >
       <message-box :visible="dialog.messageBoxVisible"></message-box>
@@ -16,6 +17,7 @@
     <el-dialog
       title="消息详情"
       :visible.sync="dialog.messageDetail"
+       width="700px"
       @close="getUnReadCount"
       append-to-body
     >
@@ -25,16 +27,15 @@
 </template>
 
 <script lang="ts">
-import SvgIcon from "~/components/common/svg-icon.vue"
-import MessageBox from "~/components/workspace/message/message-box.vue"
-import { Component, Prop, Vue } from "vue-property-decorator"
-import { State, Mutation } from "vuex-class"
-import { ReminderService } from "~/utils/reminder.service"
-import { WebsocketMsgModel } from "~/models/websocket-msg.model"
-import { CommonService } from "@/utils/common.service"
-import MessageDetail from "~/components/workspace/message/message-detail.vue"
-import { ElNotificationOptions } from "element-ui/types/notification"
-
+import SvgIcon from '~/components/common/svg-icon.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
+import { State, Mutation } from 'vuex-class'
+import { ReminderService } from '~/utils/reminder.service'
+import { WebsocketMsgModel } from '~/models/websocket-msg.model'
+import { CommonService } from '@/utils/common.service'
+import MessageBox from './message-box.vue'
+import MessageDetail from './message-detail.vue'
+import { ElNotificationOptions } from 'element-ui/types/notification'
 
 @Component({
   components: {
@@ -61,17 +62,19 @@ export default class WorkMessage extends Vue {
 
   private mounted() {
     this.getUnReadCount()
-    ReminderService.addMessageListener({ id: "work-message-onload", type: 'Reminder' })
-      .subscribe((data) => {
-        this.getUnReadCount()
-        this.showNotificationMsg(data)
-      })
+    ReminderService.addMessageListener({
+      id: 'work-message-onload',
+      type: 'Reminder'
+    }).subscribe(data => {
+      this.getUnReadCount()
+      this.showNotificationMsg(data)
+    })
   }
 
   private showNotificationMsg(data: any) {
     CommonService.revertData(this.websocketMsgModel, data)
     const option: any = {
-      title: this.websocketMsgModel.title || "新消息提醒",
+      title: this.websocketMsgModel.title || '新消息提醒',
       body: this.websocketMsgModel.content
     }
     // 通知主进程 进行WINDOW 消息弹出
@@ -92,10 +95,30 @@ export default class WorkMessage extends Vue {
    */
   private getUnReadCount() {
     this.dialog.messageBoxVisible = false
-    this.websocketMsgModel.getUnReadMsgCount().subscribe(count => this.updateUnReadCount(count))
+    this.websocketMsgModel
+      .getUnReadMsgCount()
+      .subscribe(count => this.updateUnReadCount(count))
   }
 }
 </script>
 
 <style lang="less" scoped>
+.component.work-message {
+  .el-icon-bell {
+    font-size: 18px;
+  }
+}
+</style>
+
+<style lang="less">
+.component.work-message {
+  .el-dialog__wrapper{
+    .el-dialog{
+      margin-top: 35px!important;
+      .el-dialog__body{
+        padding: 0 20px!important;
+      }
+    }
+  }
+}
 </style>

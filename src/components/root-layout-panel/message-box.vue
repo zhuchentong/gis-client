@@ -8,6 +8,7 @@
       row-key="id"
       :data="messageDataSet"
       :page="pageService"
+      :maxHeight="380"
       @onPageChange="refreshData"
     >
       <template slot="buttons">
@@ -71,13 +72,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue"
-import Component from "vue-class-component"
-import { Mutation } from "vuex-class"
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Mutation } from 'vuex-class'
 import { PageService } from '~/extension/services/page.service'
-import MessageDetail from "~/components/workspace/message/message-detail.vue"
-import DataBox from "~/components/common/data-box.vue"
-import { Prop, Watch } from "vue-property-decorator"
+import MessageDetail from './message-detail.vue'
+import DataBox from '~/components/common/data-box.vue'
+import { Prop, Watch } from 'vue-property-decorator'
 import { WebsocketMsgModel } from '@/models/websocket-msg.model'
 import { CommonService } from '@/utils/common.service'
 
@@ -109,8 +110,7 @@ export default class MessageBox extends Vue {
     this.refreshData()
   }
 
-
-  @Watch("visible", { immediate: true })
+  @Watch('visible', { immediate: true })
   private onVisibleChange(value) {
     if (value) {
       this.refreshData()
@@ -134,9 +134,9 @@ export default class MessageBox extends Vue {
    */
   private refreshData() {
     this.getUnReadCount()
-    this.queryMsgModel.queryMessages(this.pageService).subscribe(
-      data => this.messageDataSet = data.content
-    )
+    this.queryMsgModel
+      .queryMessages(this.pageService)
+      .subscribe(data => (this.messageDataSet = data.content))
   }
 
   /**
@@ -170,13 +170,16 @@ export default class MessageBox extends Vue {
    */
   private getUnReadCount() {
     this.dialog.messageDetail = false
-    this.websocketMsgModel.getUnReadMsgCount().subscribe(count => this.updateUnReadCount(count))
+    this.websocketMsgModel
+      .getUnReadMsgCount()
+      .subscribe(count => this.updateUnReadCount(count))
   }
 }
 </script>
 
 <style lang="less">
 .message-box.component {
+  height: 460px;
   .data-box {
     .el-table__row {
       &.unread {

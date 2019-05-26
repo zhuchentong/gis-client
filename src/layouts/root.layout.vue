@@ -1,8 +1,9 @@
 <template>
   <div class="default-layout fill" style="overflow:auto;">
     <div class="header draggable">
-      <div class="layout-header-operate-block">
-        <work-user></work-user>
+      <div class="layout-header-operate-block row">
+        <work-message class="work-tool"></work-message>
+        <work-user class="work-tool"></work-user>
       </div>
     </div>
     <div class="content">
@@ -15,17 +16,17 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Action, State } from 'vuex-class'
 import { WindowSize } from '@/config/enum.config'
-import ModifyPassword from "~/components/root-layout-panel/modify-password.vue"
-import WorkUser from "~/components/root-layout-panel/work-user.vue"
+import ModifyPassword from '~/components/root-layout-panel/modify-password.vue'
+import WorkUser from '~/components/root-layout-panel/work-user.vue'
+import WorkMessage from '~/components/root-layout-panel/work-message.vue'
 
 @Component({
   components: {
-    WorkUser
+    WorkUser,
+    WorkMessage
   }
 })
-export default class RootLayout extends Vue {
-
-}
+export default class RootLayout extends Vue {}
 </script>
 <style lang="less">
 .default-layout {
@@ -41,7 +42,12 @@ export default class RootLayout extends Vue {
   }
   .layout-header-operate-block {
     margin-top: 10px;
-    margin-right: 5px;
+    .work-tool {
+      padding-right: 15px;
+      &:hover{
+        cursor: pointer;
+      }
+    }
   }
 }
 </style>

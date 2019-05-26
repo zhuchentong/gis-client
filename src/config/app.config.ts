@@ -10,7 +10,7 @@ export default {
     password: process.env.VUE_APP_RABBITMQ_PASSWORD,
     exchange: process.env.VUE_APP_RABBITMQ_EXCHANGE
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: false, // process.env.NODE_ENV === 'development', //TODO 暂时关闭
   timeout: process.env.VUE_APP_TIMEOUT,
   root: process.env.WORK_DIR
 }

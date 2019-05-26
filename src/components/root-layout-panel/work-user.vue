@@ -7,13 +7,13 @@
         <i class="el-icon-arrow-down el-icon--right"></i>
       </div>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-edit" command="password"
+        <el-dropdown-item icon="el-icon-key" command="password"
           >修改密码</el-dropdown-item
         >
         <el-dropdown-item icon="el-icon-refresh" command="logout"
           >注销</el-dropdown-item
         >
-        <el-dropdown-item icon="el-icon-circle-close" command="exit">退出</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-switch-button" command="exit">退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <el-dialog :visible.sync="dialog.password" width="500px" title="修改密码">
@@ -67,6 +67,7 @@ export default class WorkUser extends Vue {
 
   private mounted() {
     // 更新行政区划信息
+    ReminderService.connect()
     new District().getDistrictList().subscribe(this.updateDistrictData)
   }
 
