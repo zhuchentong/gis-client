@@ -114,7 +114,7 @@
           <component
             :is="item.component"
             @success="refreshData"
-            :status="currentItem.status"
+            :status="currentItem.flowStatus"
             :flowId="currentItem.flowId"
             class="content-tabs-panes-base"
           ></component>
