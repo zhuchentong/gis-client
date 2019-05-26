@@ -30,11 +30,11 @@ export default class RootLayout extends Vue {}
 </script>
 <style lang="less">
 .default-layout {
-  .header {
-    .el-button--text {
-      color: white;
-    }
-  }
+  // .header {
+  //   .el-button--text {
+  //     color: white;
+  //   }
+  // }
   .user-setting {
     position: relative;
     color: white;
