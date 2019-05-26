@@ -6,17 +6,17 @@
     </div>
     <div class="menu row">
       <a
-        v-for="(item,index) of menuList"
+        v-for="(item, index) of menuList"
         :key="item.url"
         :style="item.style"
         class="menu-item"
-        :class="`menu-item-${index+1}`"
+        :class="`menu-item-${index + 1}`"
         @click="openWindow(item)"
       >
         <div class="menu-icon">
           <svg-icon :iconSize="32" :iconName="item.icon"></svg-icon>
         </div>
-        <div class="“menu-title“">{{item.label}}</div>
+        <div class="“menu-title“">{{ item.label }}</div>
       </a>
     </div>
   </section>
@@ -28,15 +28,12 @@ import { Layout } from '@/core/decorator'
 import { WindowSize } from '../config/enum.config'
 import { namespace } from 'vuex-class'
 import { District } from '~/models/district.model'
-const DistrictModule = namespace('districtModule')
 
 @Layout('root')
 @Component({
   components: {}
 })
 export default class Home extends Vue {
-  @DistrictModule.Mutation private updateDistrictData
-
   private readonly menuList = [
     {
       label: '多规管理',
@@ -94,10 +91,6 @@ export default class Home extends Vue {
       },
       this
     )
-  }
-
-  private mounted() {
-    new District().getDistrictList().subscribe(this.updateDistrictData)
   }
 }
 </script>
