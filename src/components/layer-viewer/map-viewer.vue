@@ -113,7 +113,7 @@ export default class MapViewer extends Vue {
   }
 
   public get geometryEntities() {
-    return this.$geometryDataSource.entities
+    return this.$viewer.scene.primitives
   }
 
   public get pickEntities() {
@@ -518,7 +518,6 @@ export default class MapViewer extends Vue {
     this.$viewer.dataSources.add(this.$pickDataSource)
     this.$pickDataSource = new Cesium.CustomDataSource('pick')
     this.$geometryDataSource = new Cesium.CustomDataSource('geometry')
-    this.$viewer.scene.primitives.add(this.$geometryDataSource)
     // 设置摄像机视图
     this.$cameraView = this.$viewer.camera
 
