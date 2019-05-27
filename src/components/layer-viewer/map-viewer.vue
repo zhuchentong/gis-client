@@ -437,6 +437,7 @@ export default class MapViewer extends Vue {
    */
   private startDrawMode(handle: () => void, tipInfo) {
     this.isDrawing = true
+    this.isDrawComplate = false
     this.drawEntities.removeAll()
     this.drawEventListener.push(handle)
     tipInfo && (this.drawTipInfo = tipInfo)
