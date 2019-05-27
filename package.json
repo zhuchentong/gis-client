@@ -1,6 +1,6 @@
 {
   "name": "gis-client",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": true,
   "scripts": {
     "dev": "npm run electron:serve",
