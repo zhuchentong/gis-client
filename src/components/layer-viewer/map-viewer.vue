@@ -353,7 +353,7 @@ export default class MapViewer extends Vue {
             polygon: {
               hierarchy,
               height: 0,
-              heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
               material: Cesium.Color.DARKORANGE.withAlpha(0.1),
               outline: true,
               outlineColor: Cesium.Color.CYAN,
@@ -437,6 +437,7 @@ export default class MapViewer extends Vue {
    */
   private startDrawMode(handle: () => void, tipInfo) {
     this.isDrawing = true
+    this.isDrawComplate = false
     this.drawEntities.removeAll()
     this.drawEventListener.push(handle)
     tipInfo && (this.drawTipInfo = tipInfo)
@@ -516,8 +517,6 @@ export default class MapViewer extends Vue {
 
     this.$pickDataSource = new Cesium.CustomDataSource('pick')
     this.$viewer.dataSources.add(this.$pickDataSource)
-    this.$pickDataSource = new Cesium.CustomDataSource('pick')
-    // this.$geometryDataSource = new Cesium.CustomDataSource('geometry')
     // 设置摄像机视图
     this.$cameraView = this.$viewer.camera
 
@@ -800,7 +799,6 @@ export default class MapViewer extends Vue {
    * 绘制工具事件监听
    */
   private onDrawEvent(event) {
-    console.log(event)
     // 实现绘制事件通知
     this.drawEventListener.forEach(handle => handle(event))
 
