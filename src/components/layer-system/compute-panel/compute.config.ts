@@ -47,6 +47,6 @@ export const ComputUnits = [
 ]
 
 export const ComputerLayerSetting = {
-  relationType: "09",
+  relationType: "08",
   layerSpace: "third-space"
 }

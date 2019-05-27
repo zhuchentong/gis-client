@@ -105,7 +105,7 @@ export default class LayerAttrTable extends Vue {
         const { features } = await data.json()
         const [feature] = features
         this.viewer.pickEntities.removeAll()
-        this.viewer.drawPickFeature(feature.geometry, true)
+        this.viewer.drawFeature(feature.geometry, true)
       } catch (ex) {
         console.log(ex)
       }

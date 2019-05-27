@@ -1,6 +1,6 @@
 <template>
   <section class="component area-detail">
-    {{ area }}{{ unit | dictConvert('AreaUnit') }}
+    {{ currentArea }}{{ unit | dictConvert('AreaUnit') }}
     <el-popover placement="right" trigger="hover">
       <div class="component area-detail content">
         <div class="content-item">{{ areaInfo.squ.toFixed(2) }} 平方米</div>
@@ -34,6 +34,11 @@ export default class AreaDetail extends Vue {
 
   private get areaInfo() {
     return CommonService.convertArea(this.area, this.unit)
+  }
+
+  private get currentArea() {
+    const num = this.area || '0'
+    return Number.parseFloat(num).toFixed(this.unit === 'SQUARE_METRE' ? 2 : 4)
   }
 
 }

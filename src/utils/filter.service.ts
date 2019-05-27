@@ -242,10 +242,9 @@ export class FilterService {
    * @param d 要格式化的小数位数
    */
   public static toTenThousand(value: number | string, d: number = 4) {
-    if (!value) return ''
     let data: number
     if (typeof value === 'string') {
-      data = Number.parseFloat(value)
+      data = Number.parseFloat(value || '0')
     } else {
       data = value
     }

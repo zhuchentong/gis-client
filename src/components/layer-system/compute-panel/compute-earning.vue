@@ -2,8 +2,9 @@
   <section class="component compute-earning" v-loading="loading">
     <common-title iconName="info" title="当前选择区域面积">
       <template slot="append">
-        <span>{{ area.toFixed(2) }} 平方米</span>
-        <span style="margin-left:10px;">{{ area | squareMeterToMu }} 亩</span>
+        <area-detail :area="area"></area-detail>
+        <!-- <span>{{ area.toFixed(2) }} 平方米</span>
+        <span style="margin-left:10px;">{{ area | squareMeterToMu }} 亩</span> -->
       </template>
     </common-title>
 
@@ -30,6 +31,16 @@
               <span slot="append">{{ currentUnit.name }}</span>
             </el-input>
           </el-form-item>
+          <el-form-item label="成交单价" prop="transactionPrice">
+            <el-input
+              v-model="model.transactionPrice"
+              type="number"
+              :min="0"
+              :max="999999"
+            >
+              <span slot="append">{{ currentUnit.name }}</span>
+            </el-input>
+          </el-form-item>
           <el-form-item label="土地用途" prop="landUseType">
             <el-select v-model="model.landUseType" class="search-worktype">
               <el-option label="住宅用地" value="住宅基准"></el-option>
@@ -40,32 +51,11 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="分析结果" name="result" class="row">
-        <el-card class="col-span-6" header="评估结果">
-          <label-item label="预算面积">
-            <div>{{ area.toFixed(2) }} 平方米</div>
-            <div>{{ area | squareMeterToMu }} 亩</div>
-            <div>{{ area | squareMeterToHectare }} 公顷</div>
-          </label-item>
-          <label-item label="评估单价">
-            <div>
-              {{ getCurrentMoney.sqm.toFixed(2) }}
-              元/平方米
-            </div>
-            <div>
-              {{ getCurrentMoney.mu.toFixed(4) }}
-              万元/亩
-            </div>
-          </label-item>
-          <label-item label="评估收益">
-            <div>{{ result.anticipated.toFixed(2) }} 元</div>
-            <div>{{ result.anticipated | toTenThousand }} 万元</div>
-          </label-item>
-        </el-card>
         <el-card class="col-span-6" header="预算信息">
           <div v-for="(item, index) of computerResult" :key="index">
             <label-item label="成本级别" :value="item.level"></label-item>
             <label-item label="面积">
-              {{ item.area.toFixed(2) }} 平方米
+              <area-detail :area="item.area"></area-detail>
             </label-item>
             <label-item label="单价">
               {{ item.price.toFixed(2) }} 元/平方米
@@ -76,13 +66,49 @@
           </div>
           <div class="result-content">
             <label-item label="预算总面积">
-              <span>{{ result.area }} 平方米</span>
-              <span style="margin-left:10px"
-                >{{ result.area | squareMeterToMu }} 亩</span
-              >
+              <area-detail :area="result.area"></area-detail>
             </label-item>
             <label-item label="预算总金额">
               {{ result.cost | toTenThousand }} 万元
+            </label-item>
+          </div>
+        </el-card>
+        <el-card class="col-span-6" header="评估结果">
+          <label-item label="评估单价">
+            <div>
+              {{ getCurrentMoney(model.assessmentPrice).sqm.toFixed(2) }}
+              元/平方米
+            </div>
+            <div>
+              {{ getCurrentMoney(model.assessmentPrice).mu.toFixed(4) }}
+              万元/亩
+            </div>
+          </label-item>
+          <label-item label="评估总价">
+            <div>{{ result.anticipated.toFixed(2) }} 元</div>
+            <div>{{ result.anticipated | toTenThousand }} 万元</div>
+          </label-item>
+          <label-item label="成交单价">
+            <div>
+              {{ getCurrentMoney(model.transactionPrice).sqm.toFixed(2) }}
+              元/平方米
+            </div>
+            <div>
+              {{ getCurrentMoney(model.transactionPrice).mu.toFixed(4) }}
+              万元/亩
+            </div>
+          </label-item>
+          <label-item label="成交总价">
+            <div>{{ result.knockdown.toFixed(2) }} 元</div>
+            <div>{{ result.knockdown | toTenThousand }} 万元</div>
+          </label-item>
+          <!-- 收益 -->
+          <div class="result-content">
+            <label-item label="评估收益">
+              {{ result.anticipatedMoney | toTenThousand }} 万元
+            </label-item>
+            <label-item label="成交收益">
+              {{ result.knockdownMoney | toTenThousand }} 万元
             </label-item>
           </div>
         </el-card>
@@ -105,10 +131,14 @@ import { CesiumCommonService } from '@/utils/cesium/common.service'
 import { LayerInfoService } from "~/services/layer-info.service"
 import { Inject } from "typescript-ioc"
 import { namespace } from 'vuex-class'
+import AreaDetail from "~/components/business-system/detail/area-detail.vue"
+
 const LayerRelationModule = namespace('layerRelationModule')
 
 @Component({
-  components: {}
+  components: {
+    AreaDetail
+  }
 })
 export default class ComputeEarning extends Vue {
   @LayerRelationModule.Getter private getRelationByType!: (type) => any
@@ -129,20 +159,29 @@ export default class ComputeEarning extends Vue {
   private readonly unitByMu: number = 10000 / 15000
 
   private rules = {
-    assessmentPrice: { required: true, message: "请输入评估单价" },
     landUseType: { required: true, message: "请选择土地用途" }
   }
 
   private model: any = {
     unit: 1,
     assessmentPrice: "",
-    landUseType: ""
+    landUseType: "",
+    transactionPrice: ""
   }
 
   private result: any = {
     area: 0,
     cost: 0,
-    anticipated: 0
+    anticipated: 0,
+    knockdown: 0,
+    get anticipatedMoney() {
+      if (this.anticipated === 0) return 0
+      return this.anticipated - this.cost
+    },
+    get knockdownMoney() {
+      if (this.knockdown === 0) return 0
+      return this.knockdown - this.cost
+    }
   }
 
   private computerResult: any[] = []
@@ -160,8 +199,8 @@ export default class ComputeEarning extends Vue {
     return (price * 10000 * 0.0015)
   }
 
-  private get getCurrentMoney() {
-    const money = Number.parseFloat(this.model.assessmentPrice || 0)
+  private getCurrentMoney(price) {
+    const money = Number.parseFloat(price || 0)
     if (this.model.unit === 1) {
       return {
         sqm: money,
@@ -189,12 +228,17 @@ export default class ComputeEarning extends Vue {
       return
     }
 
-    // 地块总成本
-    this.result.cost = this.computerResult.map(v => v.cost).reduce((s, c) => s + c)
-    // 地块总面积
-    this.result.area = this.computerResult.map(v => v.area).reduce((s, c) => s + c).toFixed(2)
 
-    this.result.anticipated = this.getCurrentMoney.sqm * this.area
+    if (this.computerResult.length) {
+      // 地块总成本
+      this.result.cost = this.computerResult.map(v => v.cost).reduce((s, c) => s + c)
+      // 地块总面积
+      this.result.area = this.computerResult.map(v => v.area).reduce((s, c) => s + c)
+    } else {
+      this.$message("所选区域在基础地价筛选条件中没有产生交集")
+    }
+    this.result.anticipated = this.getCurrentMoney(this.model.assessmentPrice).sqm * this.area
+    this.result.knockdown = this.getCurrentMoney(this.model.transactionPrice).sqm * this.area
 
     this.loading = false
     this.currentPanel = "result"
