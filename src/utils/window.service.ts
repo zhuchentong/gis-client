@@ -60,7 +60,7 @@ export class WindowService {
       win.webContents.openDevTools()
     } else {
       win.loadURL(`app://./index.html#${url}`)
-      win.webContents.openDevTools()
+      // win.webContents.openDevTools()
     }
 
     win.once('ready-to-show', () => {

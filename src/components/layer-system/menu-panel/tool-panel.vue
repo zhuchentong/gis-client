@@ -150,7 +150,7 @@ export default class ToolPanel extends Vue {
    * 计算距离
    */
   private computeDistance() {
-    const drawInteractPolyline = new DrawInteractPolyline(this.viewer)
+    const drawInteractPolyline = new DrawInteractPolyline(this.viewer, { clampToGround: false })
     const drawService = new CesiumDrawService(this.viewer)
     let distanceTotal = 0
     drawInteractPolyline.start().subscribe({
@@ -164,19 +164,8 @@ export default class ToolPanel extends Vue {
             positions[positions.length - 2],
             positions[positions.length - 1]
           )
-          // 中心点位置
-          // const middle = Cesium.Cartesian3.midpoint(
-          //   positions[positions.length - 2],
-          //   positions[positions.length - 1],
-          //   new Cesium.Cartesian3()
-          // )
           // 总距离
           distanceTotal += distance
-          // 绘制中心距离
-          // drawService.drawLabel(
-          //   middle,
-          //   CesiumCommonService.getDistanceStr(distance)
-          // )
           // 绘制总距离
           drawService.drawLabel(
             point,
@@ -213,10 +202,15 @@ export default class ToolPanel extends Vue {
       const {
         geometry: { coordinates }
       } = turf.centerOfMass(polygon) as any
-      const center = Cesium.Cartesian3.fromDegrees(
-        coordinates[0],
-        coordinates[1]
-      )
+      // const center = Cesium.Cartesian3.fromDegrees(
+      //   coordinates[0],
+      //   coordinates[1]
+      // )
+
+      const cartographic = Cesium.Cartographic.fromDegrees(coordinates[0], coordinates[1])
+      cartographic.height = this.viewer.getViewer().scene.globe.getHeight(cartographic)
+      const center = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
+
       // 绘制面积信息
       drawService.drawLabel(center, `${turf.area(polygon).toFixed(2)}平方米`)
     }
@@ -394,13 +388,24 @@ export default class ToolPanel extends Vue {
     this.addMouseMoveEvent(labelIdArray)
   }
 
-  private addMouseMoveEvent(labelIdArray) {
+  private addMouseMoveEvent(labelIdArray: string[]) {
     const viewer = this.viewer.getViewer()
     viewer.screenSpaceEventHandler.setInputAction((e: any) => {
       if (!this.viewer.drawEntities.values.length) return
-      labelIdArray.forEach(
-        id => (this.viewer.drawEntities.getById(id).label.show = false)
-      )
+
+      const setSuccess = labelIdArray.every(id => {
+        const entity = this.viewer.drawEntities.getById(id)
+        if (entity && entity.label) {
+          entity.label.show = false
+          return true
+        }
+        return false
+      })
+      // 如果由错误发生，说明labelEntity已经不存在，则销毁pick方法
+      if (!setSuccess) {
+        viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+        return
+      }
       const feature = viewer.scene.pick(e.endPosition)
       // 地图此处没有任何东西
       if (!Cesium.defined(feature)) return

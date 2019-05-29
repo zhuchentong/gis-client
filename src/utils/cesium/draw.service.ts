@@ -102,9 +102,8 @@ export class CesiumDrawService {
           hierarchy,
           heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
           material: fillColor || this.color.polygon,
-          height: 0,
           outline: true,
-          outlineColor: Cesium.Color.RED,
+          outlineColor: borderColor || Cesium.Color.RED,
           outlineWidth: 10
         }
       })

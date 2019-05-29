@@ -11,6 +11,7 @@ export class DrawInteractPolyline extends DrawInteract {
   private fill
   private fillColor
   private borderColor
+  private clampToGround
 
   constructor(
     mapViewer,
@@ -18,12 +19,14 @@ export class DrawInteractPolyline extends DrawInteract {
       closed = false,
       fill = false,
       fillColor,
-      borderColor
+      borderColor,
+      clampToGround = true
     }: {
-      closed?: boolean
-      fill?: boolean | Cesium.Color
-      fillColor?: Cesium.Color
-      borderColor?: Cesium.Color
+      closed?: boolean,
+      fill?: boolean,
+      fillColor?: Cesium.Color,
+      borderColor?: Cesium.Color,
+      clampToGround?: boolean
     } = {}
   ) {
     super(mapViewer, {
@@ -37,6 +40,7 @@ export class DrawInteractPolyline extends DrawInteract {
     this.fill = fill
     this.fillColor = fillColor
     this.borderColor = borderColor
+    this.clampToGround = clampToGround
     this.tipInfo = "鼠标左键点击绘制转折点，左键双击结束绘制"
   }
 
@@ -56,7 +60,7 @@ export class DrawInteractPolyline extends DrawInteract {
     this.drawService.drawPoint(point)
 
     if (this.positions.length === 1) {
-      this.drawService.drawPolyline(this.positions)
+      this.drawService.drawPolyline(this.positions, { clampToGround: this.clampToGround })
     }
 
     // 通知坐标更新
@@ -78,7 +82,7 @@ export class DrawInteractPolyline extends DrawInteract {
       this.drawService.drawPolyline([
         this.positions[0],
         this.positions[this.positions.length - 1]
-      ])
+      ], { clampToGround: this.clampToGround })
     }
 
     if (this.closed && this.fill) {
