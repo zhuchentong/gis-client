@@ -33,10 +33,6 @@
     </div>
     <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
       <el-card header="操作提示">
-        <!-- <div solt="header">
-          <i class="el-icon-info"></i>
-          <span>操作提示</span>
-        </div>-->
         {{ drawTipInfo }}
       </el-card>
     </div>
@@ -112,10 +108,6 @@ export default class MapViewer extends Vue {
     return this.$drawDataSource.entities
   }
 
-  // public get geometryEntitiesgeometryEntities() {
-  //   return this.$viewer.scene.primitives
-  // }
-
   public get pickEntities() {
     return this.$pickDataSource.entities
   }
@@ -174,7 +166,10 @@ export default class MapViewer extends Vue {
     )
     this.removeLayerAttrTable(target.id)
     this.emitLayerListChange(this.layerList)
+    this.clearPickEntitys()
   }
+
+
 
   /**
    * 获取场景中制定的图层的imageryProvider
@@ -343,6 +338,8 @@ export default class MapViewer extends Vue {
   }
 
   public drawFeature(feautre: any, zoomTo = false) {
+    // 清空选择区域
+    this.pickEntities.removeAll()
     const dataSource = new Cesium.GeoJsonDataSource()
     dataSource.load(feautre, {
       stroke: Cesium.Color.CYAN,
@@ -353,119 +350,36 @@ export default class MapViewer extends Vue {
     while (dataSource.entities.values.length > 0) {
       const entity = dataSource.entities.values.pop()
       if (!entity) continue
-
       this.pickEntities.add(entity)
-      // 给多边形填充发光边框
+
       if (entity.polygon) {
-        entity.polyline = new Cesium.PolylineGraphics({
-          positions: entity.polygon.hierarchy._value.positions,
-          width: 5,
-          material: new Cesium.PolylineGlowMaterialProperty({
-            color: Cesium.Color.CORNFLOWERBLUE
-          }),
-          clampToGround: true
+        // 额外添加发光边的线作为边框
+        this.pickEntities.add({
+          polyline: {
+            positions: entity.polygon.hierarchy._value.positions,
+            width: 5,
+            material: new Cesium.PolylineGlowMaterialProperty({
+              color: Cesium.Color.CORNFLOWERBLUE
+            }),
+            clampToGround: true
+          }
         })
       }
     }
-    zoomTo && this.$viewer.zoomTo(this.pickEntities)
+    zoomTo && this.$viewer.zoomTo(
+      this.pickEntities,
+      // 航向 城市发展线向东
+      // 角度 近似垂直向北
+      new Cesium.HeadingPitchRange(Cesium.Math.toRadians(-25), Cesium.Math.toRadians(-80))
+    )
   }
 
-  // DELETED 使用geojson datasource 加载更快
-  // public drawPickFeature(geometry, zoomTo = false) {
-  //   try {
-  //     /**
-  //      * 绘制多边形
-  //      */
-  //     const drawPickPolygon = hierarchy => {
-  //       const entity = this.pickEntities.add(
-  //         new Cesium.Entity({
-  //           polygon: {
-  //             hierarchy,
-  //             height: 0,
-  //             heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-  //             material: Cesium.Color.DARKORANGE.withAlpha(0.1),
-  //           },
-  //           polyline: {
-  //             positions: hierarchy.positions,
-  //             width: 5,
-  //             material: new Cesium.PolylineGlowMaterialProperty({
-  //               color: Cesium.Color.CORNFLOWERBLUE
-  //             }),
-  //             clampToGround: true
-  //           }
-  //         })
-  //       )
-  //       return entity
-  //     }
-
-  //     /**
-  //      * 绘制线
-  //      */
-  //     const drawPickLine = (coordinate: any[]) => {
-  //       const coordinates = coordinate
-  //         .join()
-  //         .split(',')
-  //         .map(Number.parseFloat)
-  //       const entity = this.pickEntities.add(
-  //         new Cesium.Entity({
-  //           polyline: {
-  //             positions: Cesium.Cartesian3.fromDegreesArray(coordinates),
-  //             depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
-  //               color: Cesium.Color.WHITE,
-  //               outlineColor: Cesium.Color.RED,
-  //               outlineWidth: 5
-  //             }),
-  //             material: Cesium.Color.CYAN,
-  //             width: 5,
-  //             clampToGround: true
-  //           }
-  //         })
-  //       )
-  //       return entity
-  //     }
-
-  //     if (geometry.type === 'MultiPolygon') {
-  //       const entitys = geometry.coordinates.map(coordinate => {
-  //         const hierarchy = CesiumCommonService.coordinateToPolygonHierarchy(
-  //           coordinate
-  //         )
-  //         return drawPickPolygon(hierarchy)
-  //       })
-  //       if (zoomTo) this.$viewer.zoomTo(entitys)
-  //     }
-
-  //     if (geometry.type === 'Polygon') {
-  //       const hierarchy = CesiumCommonService.coordinateToPolygonHierarchy(
-  //         geometry.coordinates
-  //       )
-  //       drawPickPolygon(hierarchy)
-  //     }
-
-  //     if (geometry.type === 'Point') {
-  //       const pointOption: any = {
-  //         outlineColor: Cesium.Color.CYAN,
-  //         outlineWidth: 10,
-  //         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-  //       }
-  //       const [longitude, latitude] = geometry.coordinates
-
-  //       const entity = this.pickEntities.add(
-  //         new Cesium.Entity({
-  //           position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
-  //           point: pointOption
-  //         })
-  //       )
-  //       if (zoomTo) this.$viewer.zoomTo(entity)
-  //     }
-
-  //     if (geometry.type === 'MultiLineString') {
-  //       const entitys = geometry.coordinates.map(drawPickLine)
-  //       if (zoomTo) this.$viewer.zoomTo(entitys)
-  //     }
-  //   } catch (ex) {
-  //     console.log(ex, geometry)
-  //   }
-  // }
+  private clearPickEntitys() {
+    if (this.pickEntities.values.length) {
+      this.pickEntities.removeAll()
+      this.$viewer.infoBox.viewModel.closeClicked.raiseEvent()
+    }
+  }
 
   /**
    * 开启绘制模式
@@ -473,7 +387,7 @@ export default class MapViewer extends Vue {
   private startDrawMode(handle: () => void, tipInfo) {
     this.isDrawing = true
     this.isDrawComplate = false
-    this.drawEntities.removeAll()
+    this.clearPickEntitys()
     this.drawEventListener.push(handle)
     tipInfo && (this.drawTipInfo = tipInfo)
     return this.drawEntities
@@ -624,9 +538,17 @@ export default class MapViewer extends Vue {
     const handler = new Cesium.ScreenSpaceEventHandler(
       this.$viewer.scene.canvas
     )
+
+    // 获取原始pick方法 并清除
+    const oldAction = this.$viewer.screenSpaceEventHandler.getInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)
+    this.$viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)
     handler.setInputAction((e: any) => {
+      if (this.isDrawing) return
+      // 重新注册该方法
+      oldAction(e)
       this.setPickFeature(e)
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+
   }
 
   private updateToolbarIcon(id) {
@@ -869,14 +791,18 @@ export default class MapViewer extends Vue {
       this.$viewer.scene
     )
     if (!Cesium.defined(featuresPromise)) return
-    featuresPromise.then(
-      (features: Cesium.ImageryLayerFeatureInfo[]) => {
-        const [feature] = features
-        // 清空选择区域
-        this.pickEntities.removeAll()
-        feature && this.drawFeature(feature.data)
-        this.emitFeatureChange(feature ? feature.data.id : '')
-      },
+    featuresPromise.then((features: Cesium.ImageryLayerFeatureInfo[]) => {
+      const [feature] = features
+      if (feature) {
+        this.drawFeature(feature.data)
+        this.emitFeatureChange(feature.data.id)
+      } else {
+        if (this.pickEntities.values.length) {
+          this.clearPickEntitys()
+          this.emitFeatureChange("")
+        }
+      }
+    },
       () => console.error('获取iamgeLayerFeatures失败')
     )
   }

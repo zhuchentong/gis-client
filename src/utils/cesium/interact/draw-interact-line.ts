@@ -8,11 +8,15 @@ export class DrawInteractLine extends DrawInteract {
   private drawService: CesiumDrawService
   private positions: Cesium.Cartesian3[] = []
 
-  constructor(mapViewer) {
+  /**
+   * 绘制线操作
+   * @param mapViewer mapViewer 组件
+   * @param clampToGround 是否贴地？ 默认开启贴地模式
+   */
+  constructor(mapViewer, private clampToGround?) {
     super(mapViewer, {
       start: Cesium.ScreenSpaceEventType.LEFT_CLICK
     })
-
     this.drawService = new CesiumDrawService(mapViewer)
     this.tipInfo = '鼠标左键第一次点击绘制起点，第二次点击绘制终点'
   }
@@ -33,7 +37,7 @@ export class DrawInteractLine extends DrawInteract {
     if (point) {
       const isCreatePolyline = this.positions.length === 0
       this.positions.push(point)
-      isCreatePolyline && this.drawService.drawPolyline(this.positions)
+      isCreatePolyline && this.drawService.drawPolyline(this.positions, { clampToGround: this.clampToGround })
     }
 
     // 通知坐标更新

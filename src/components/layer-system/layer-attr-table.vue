@@ -28,7 +28,7 @@
             :data="layerTable.data"
             ref="layer-table-data-box"
             @onRowClick="onRowClick"
-            :height="240"
+            :height="245"
           >
             <template slot="columns">
               <el-table-column
@@ -144,6 +144,9 @@ export default class LayerAttrTable extends Vue {
   }
   .layer-table-data-box.data-box {
     padding: 0;
+    & > * {
+      margin-bottom: unset;
+    }
   }
 }
 </style>

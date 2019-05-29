@@ -119,13 +119,16 @@ export class CesiumDrawService {
    */
   public drawPolyline(
     positions: Array<Cesium.Cartographic | Cesium.Cartesian3>,
-    { clampToGround = true } = {}
+    {
+      clampToGround = true,
+      color = this.color.polyline
+    } = {}
   ) {
     // 折线实体
     const polylineEntity = new Entity({
       polyline: {
         width: 3,
-        material: this.color.polyline,
+        material: color,
         clampToGround // 开启贴地模式
       }
     })

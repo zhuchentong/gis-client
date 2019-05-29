@@ -611,7 +611,7 @@ declare namespace Cesium {
         public style: Cesium3DTileStyle
         public readonly ready: boolean
         public readonly readyPromise: Promise<Cesium3DTileset>
-        public loadProgress :Event
+        public loadProgress: Event
 
         constructor(options: {
             url: string | Resource;
@@ -3309,7 +3309,7 @@ declare namespace Cesium {
     }
 
     class EntityCollection {
-        constructor(owner: DataSource | CompositeEntityCollection)
+        constructor(owner?: DataSource | CompositeEntityCollection)
         public collectionChanged: Event
         public id: string
         public owner: DataSource | CompositeEntityCollection
@@ -3830,6 +3830,7 @@ declare namespace Cesium {
         public followSurface: any
         public granularity: any
         public clampToGround: boolean
+        public depthFailMaterial: MaterialProperty
         constructor(options?: PolylineGraphicsOptions);
 
         public clone(result?: PolylineGraphics): PolylineGraphics

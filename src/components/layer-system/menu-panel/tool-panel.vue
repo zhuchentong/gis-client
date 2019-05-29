@@ -299,7 +299,7 @@ export default class ToolPanel extends Vue {
     // 接收两个坐标点的位置
     const positions: Cesium.Cartographic[] = []
     const drawService = new CesiumDrawService(this.viewer)
-    const drawLine = new DrawInteractLine(this.viewer)
+    const drawLine = new DrawInteractLine(this.viewer, false)
     drawLine.start().subscribe({
       next: data => {
         const graphicPoint = Cesium.Cartographic.fromCartesian(data.point)
@@ -329,7 +329,7 @@ export default class ToolPanel extends Vue {
     )
 
     // 临时实体
-    let entityId: string
+    let entity: Cesium.Entity
     let text: string
 
     // 对应的cartesian3坐标点
@@ -357,42 +357,38 @@ export default class ToolPanel extends Vue {
     text = `高度：${CesiumCommonService.getDistanceStr(
       second.height - first.height
     )}`
-    entityId = this.viewer.drawEntities.add({
-      polyline: {
-        positions: [f, h],
-        width: 3,
-        material: Cesium.Color.MEDIUMBLUE,
-        depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
-          color: Cesium.Color.WHITE,
-          outlineColor: Cesium.Color.MEDIUMBLUE,
-          outlineWidth: 3
-        })
-      },
-      position: Cesium.Cartesian3.midpoint(f, h, new Cesium.Cartesian3()),
-      label: drawService.createLabel(text, Cesium.Color.MEDIUMBLUE)
-    }).id
-    labelIdArray.push(entityId)
+    entity = drawService.drawPolyline([f, h], {
+      clampToGround: false,
+      color: Cesium.Color.MEDIUMBLUE
+    })
+    entity.polyline.depthFailMaterial = new Cesium.PolylineOutlineMaterialProperty({
+      color: Cesium.Color.WHITE,
+      outlineColor: Cesium.Color.MEDIUMBLUE,
+      outlineWidth: 3
+    })
+    entity.position = Cesium.Cartesian3.midpoint(f, h, new Cesium.Cartesian3())
+    entity.label = drawService.createLabel(text, Cesium.Color.MEDIUMBLUE)
 
-    // 绘制水平线条
+    labelIdArray.push(entity.id)
+
     // 水平文字
     text = `水平距离：${CesiumCommonService.getDistanceStr(
       Cesium.Cartesian3.distance(h, s)
     )}`
-    entityId = this.viewer.drawEntities.add({
-      polyline: {
-        positions: [h, s],
-        width: 3,
-        material: Cesium.Color.MEDIUMORCHID,
-        depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
-          color: Cesium.Color.WHITE,
-          outlineColor: Cesium.Color.MEDIUMORCHID,
-          outlineWidth: 3
-        })
-      },
-      position: Cesium.Cartesian3.midpoint(h, s, new Cesium.Cartesian3()),
-      label: drawService.createLabel(text, Cesium.Color.MEDIUMORCHID)
-    }).id
-    labelIdArray.push(entityId)
+    // 绘制水平线条
+    entity = drawService.drawPolyline([h, s], {
+      clampToGround: false,
+      color: Cesium.Color.MEDIUMORCHID
+    })
+    entity.polyline.depthFailMaterial = new Cesium.PolylineOutlineMaterialProperty({
+      color: Cesium.Color.WHITE,
+      outlineColor: Cesium.Color.MEDIUMORCHID,
+      outlineWidth: 3
+    })
+    entity.position = Cesium.Cartesian3.midpoint(h, s, new Cesium.Cartesian3())
+    entity.label = drawService.createLabel(text, Cesium.Color.MEDIUMORCHID)
+
+    labelIdArray.push(entity.id)
 
     // 添加鼠标pick 线条，显示文字事件
     this.addMouseMoveEvent(labelIdArray)
