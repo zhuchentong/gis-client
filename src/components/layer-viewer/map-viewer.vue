@@ -148,6 +148,34 @@ export default class MapViewer extends Vue {
     })
 
     this.setCamera(layer.layerSpace, layer.layerCode)
+    // this.$viewer.camera.flyTo({
+    //   destination: Cesium.Rectangle.fromDegrees(
+    //     109.677257962279,
+    //     36.6859373802395,
+    //     109.678656800633,
+    //     36.6869423064872
+    //   )
+    // })
+    // const rectangle = Cesium.Rectangle.fromDegrees(
+    //   109.677257962279,
+    //   36.6859373802395,
+    //   109.678656800633,
+    //   36.6869423064872
+    // )
+    // const cartographic = Cesium.Rectangle.center(rectangle)
+    // this.$viewer.camera.flyTo({
+    //   destination: Cesium.Cartesian3.fromRadians(cartographic.longitude,cartographic.latitude,
+    //     this.$viewer.scene.globe.getHeight(cartographic) + 1000
+    //   )
+    // })
+    // this.$viewer.flyTo(provider, {
+    //   offset: new Cesium.HeadingPitchRange(
+    //     0,
+    //     -Cesium.Math.PI_OVER_TWO
+    //   )
+    // })
+
+
     this.emitLayerListChange(this.layerList)
     this.getLayerAttrData({ layer, cql: cqlFilter })
     return provider
@@ -571,6 +599,16 @@ export default class MapViewer extends Vue {
     )
 
     this.setCamera(this.workspace, null, 'setView')
+
+    // this.$viewer.camera.changed.addEventListener((height: number) => {
+    //   const camerPosition = this.$viewer.camera.positionCartographic
+    //   const terrainHeight = this.$viewer.scene.globe.getHeight(camerPosition)
+    //   if (terrainHeight > camerPosition.height) this.$viewer.camera.cancelFlight()
+    //   if (terrainHeight < 10) return
+    //   const differceHiehgt = camerPosition.height - terrainHeight
+    //   if (differceHiehgt < 1000) this.$viewer.camera.cancelFlight()
+    // })
+
   }
 
   /**
@@ -584,6 +622,30 @@ export default class MapViewer extends Vue {
     this.GetGeographicBoundingBox(layerSpace, layerName)
       .then((view: any) => {
         view && this.$viewer.camera[setView](view)
+        // if (!view) return
+        // const { destination: rectangle } = view
+        // const center = Cesium.Rectangle.center(rectangle)
+        // const centerHight = this.$viewer.scene.globe.getHeight(center)
+        // // 如果存在地形高度，那就将视角切换到
+        // if (centerHight > 10) {
+        //   const option: any = {
+        //     rectangle: {
+        //       coordinates: rectangle,
+        //       height: centerHight,
+        //       fill: Cesium.Color.RED
+        //     }
+        //   }
+        //   const entity = this.drawEntities.add(new Cesium.Entity(option))
+
+        //   this.$viewer.flyTo(entity)
+
+
+        //   // const retcangleHeight = Cesium.Rectangle.computeHeight(rectangle)
+        //   // const viewHeight = centerHight + retcangleHeight + 1000
+        //   // view.destination = Cesium.Cartesian3.fromRadians(center.longitude, center.latitude, viewHeight)
+        // } else {
+        //   this.$viewer.camera[setView](view)
+        // }
       })
       .catch(ex => {
         console.log(ex)
@@ -638,15 +700,13 @@ export default class MapViewer extends Vue {
           : Capability.Layer
 
         if (layer) {
-          const EX_GeographicBoundingBox = layer.EX_GeographicBoundingBox
-          const [west, south, east, north] = EX_GeographicBoundingBox
-
+          const [west, south, east, north] = layer.EX_GeographicBoundingBox
           return {
             destination: Cesium.Rectangle.fromDegrees(west, south, east, north),
             orientation: {
               heading: 0.0,
               pitch: -Cesium.Math.PI_OVER_TWO,
-              roll: 0.0
+              roll: 0
             }
           }
         }

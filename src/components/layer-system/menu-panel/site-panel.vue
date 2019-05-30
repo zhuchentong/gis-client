@@ -91,6 +91,7 @@ import MapViewer from '~/components/layer-viewer/map-viewer.vue'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
 import { DrawInteractPoint } from '@/utils/cesium/interact'
 import { CesiumDrawService } from '~/utils/cesium/draw.service'
+import Cesium from "cesium/Cesium"
 
 @Component({
   components: {
@@ -157,11 +158,13 @@ export default class SitePanel extends Vue {
   private showSite(value, data) {
     if (!this.drawService) return
     if (value) {
-      const position = CesiumCommonService.positionToCartesian3({
-        longitude: data.positionX,
-        latitude: data.positionY
-      })
-      const entity = this.drawService.drawPoint(position, data.name)
+      const cartographic = Cesium.Cartographic.fromDegrees(data.positionX, data.positionY)
+      const position = Cesium.Cartesian3.fromRadians(
+        cartographic.longitude,
+        cartographic.latitude,
+        this.viewer.getViewer().scene.globe.getHeight(cartographic)
+      )
+      const entity = this.drawService.drawPoint(position, this.viewer.getViewer(), data.name)
       // 坐标点添加到记录里面
       this.pointEntitys.push({
         id: data.id,

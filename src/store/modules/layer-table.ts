@@ -1,7 +1,5 @@
 import { LayerInfoService } from '@/services/layer-info.service'
 import { RequestParams } from '@/core/http'
-import { dispatch } from 'rxjs/internal/observable/range'
-import { Entity } from 'cesium/Cesium'
 import { FilterService } from '@/utils/filter.service'
 
 let layerInfoService: LayerInfoService
@@ -25,7 +23,7 @@ export default {
     /**
      * 添加到图层属性表
      */
-    addLayerAttrTable(state, { id, name, data }) {
+    addLayerAttrTable(state, { id, name, layerSpace, layerCode, data }) {
       if (state.tableList.findIndex(x => x.id === id) > -1) {
         console.error(`已存在属性表:${id},Name:${name}`)
         return
@@ -35,7 +33,7 @@ export default {
       }
       const [attr] = data
       const columns = Object.entries(attr)
-        .map(([key, value]) => ({
+        .map(([key]) => ({
           key,
           label: FilterService.convertShpCode(key)
         }))
@@ -44,6 +42,8 @@ export default {
       state.tableList.push({
         id,
         name,
+        layerSpace,
+        layerCode,
         columns,
         data
       })
@@ -67,7 +67,8 @@ export default {
           commit('addLayerAttrTable', {
             id: layer.id,
             name: layer.layerName,
-            code: layer.code,
+            layerSpace: layer.layerSpace,
+            layerCode: layer.layerCode,
             data: data.map(x => ({
               ...x.attr,
               featureId: x.identifier,

@@ -50,7 +50,7 @@ export class DrawInteractPoint extends DrawInteract {
       }
 
       // 添加坐标点
-      this.drawService.drawPoint(this.position.cartesian3)
+      this.drawService.drawPoint(this.position.cartesian3, this.viewer)
       this.observer.next(this.position)
     }
   }

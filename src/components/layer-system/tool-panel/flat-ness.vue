@@ -31,14 +31,30 @@
         <span>测量结果</span>
       </div>
       <label-container :column="1" :labelWidth="120">
-        <label-item label="最高点" v-if="result.highest">{{ result.highest.toFixed(4) }} 米</label-item>
-        <label-item label="最低点" v-if="result.lowest">{{ result.lowest.toFixed(4) }} 米</label-item>
-        <label-item label="填方量">{{ Math.abs(result.fillCount).toFixed(4) }} 立方米</label-item>
-        <label-item label="挖方量">{{ Math.abs(result.cutCount).toFixed(4) }} 立方米</label-item>
-        <label-item label="填挖区域面积">{{ result.fillArea.toFixed(4) }} 平方米</label-item>
-        <label-item label="挖方区域面积">{{ result.cutArea.toFixed(4) }} 平方米</label-item>
-        <label-item label="填挖区域总面积">{{ (result.fillArea + result.cutArea).toFixed(4) }}平方米</label-item>
-        <label-item label="区域总面积">{{ result.allArea.toFixed(4) }} 平方米</label-item>
+        <label-item label="最高点" v-if="result.highest"
+          >{{ result.highest.toFixed(4) }} 米</label-item
+        >
+        <label-item label="最低点" v-if="result.lowest"
+          >{{ result.lowest.toFixed(4) }} 米</label-item
+        >
+        <label-item label="填方量"
+          >{{ Math.abs(result.fillCount).toFixed(4) }} 立方米</label-item
+        >
+        <label-item label="挖方量"
+          >{{ Math.abs(result.cutCount).toFixed(4) }} 立方米</label-item
+        >
+        <label-item label="填挖区域面积"
+          >{{ result.fillArea.toFixed(4) }} 平方米</label-item
+        >
+        <label-item label="挖方区域面积"
+          >{{ result.cutArea.toFixed(4) }} 平方米</label-item
+        >
+        <label-item label="填挖区域总面积"
+          >{{ (result.fillArea + result.cutArea).toFixed(4) }}平方米</label-item
+        >
+        <label-item label="区域总面积"
+          >{{ result.allArea.toFixed(4) }} 平方米</label-item
+        >
       </label-container>
     </el-card>
   </section>
@@ -186,24 +202,6 @@ export default class FlatNess extends Vue {
    */
   private drawSizeBox(coordinates, height, heightdiff) {
     const [longitude, latitude] = coordinates
-    // const option = {
-    //   dimensions: new Cesium.Cartesian3(
-    //     this.cellSide * 0.75,
-    //     this.cellSide * 0.75,
-    //     Math.abs(heightdiff)
-    //   ),
-    //   material: Cesium.Color.fromAlpha(
-    //     heightdiff > 0 ? Cesium.Color.YELLOW : Cesium.Color.GRAY,
-    //     0.5
-    //   ),
-    //   heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-    // } as any
-
-    // this.viewer.drawEntities.add({
-    //   position: Cesium.Cartesian3.fromDegrees(longitude, latitude, height),
-    //   box: option
-    // })
-
     const option = {
       width: 5,
       material: new Cesium.PolylineOutlineMaterialProperty({

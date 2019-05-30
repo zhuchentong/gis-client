@@ -43,7 +43,7 @@ export class CesiumDrawService {
    * @param label
    * @param labelColor
    */
-  public drawPoint(cartesian3: Cesium.Cartesian3, label?: string) {
+  public drawPoint(cartesian3: Cesium.Cartesian3, viewer: Cesium.Viewer, label?: string) {
     // 建立实体
     const entity = new Cesium.Entity()
 
@@ -52,12 +52,14 @@ export class CesiumDrawService {
 
     // 设置实体高度
     // TODO:测试空间绘点
-    const heightReference =
-      Cesium.Cartographic.fromCartesian(cartesian3).height > 0
-        ? Cesium.HeightReference.RELATIVE_TO_GROUND
-        : Cesium.HeightReference.CLAMP_TO_GROUND
+    const cartographic = Cesium.Cartographic.fromCartesian(cartesian3)
+    const terrainHeight = viewer.scene.globe.getHeight(cartographic)
+
+    const heightReference = terrainHeight > 0
+      ? Cesium.HeightReference.CLAMP_TO_GROUND
+      : Cesium.HeightReference.RELATIVE_TO_GROUND
     // 设置点数据信息
-    entity.point = this.createPoint()
+    entity.point = this.createPoint(heightReference)
 
     // 设置文字内容
     if (label && label.trim()) {
@@ -128,7 +130,13 @@ export class CesiumDrawService {
       polyline: {
         width: 3,
         material: color,
-        clampToGround // 开启贴地模式
+        arcType: Cesium.ArcType.NONE,
+        clampToGround, // 开启贴地模式
+        depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
+          color: Cesium.Color.RED,
+          outlineColor: Cesium.Color.WHITE,
+          outlineWidth: 3
+        })
       }
     })
 
@@ -144,7 +152,7 @@ export class CesiumDrawService {
         }),
       false
     )
-
+    console.log(polylineEntity)
     return this.mapViewer.drawEntities.add(polylineEntity)
   }
 
@@ -179,9 +187,9 @@ export class CesiumDrawService {
    * @param color 点的内部颜色
    * @param outlineColor 点的外边框颜色
    */
-  public createPoint(color?, outlineColor?) {
+  public createPoint(heightReference?, color?, outlineColor?) {
     return new Cesium.PointGraphics({
-      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+      heightReference: heightReference || Cesium.HeightReference.CLAMP_TO_GROUND,
       color: color || this.color.point,
       pixelSize: 6,
       outlineColor: outlineColor || this.color.outline,

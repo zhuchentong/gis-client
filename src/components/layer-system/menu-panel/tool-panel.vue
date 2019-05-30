@@ -300,7 +300,7 @@ export default class ToolPanel extends Vue {
         const heightStr = CesiumCommonService.getDistanceStr(
           graphicPoint.height
         )
-        drawService.drawPoint(data.point, `海拔高度：${heightStr}`)
+        drawService.drawPoint(data.point, this.viewer.getViewer(), `海拔高度：${heightStr}`)
         positions.push(graphicPoint)
       },
       complete: () => this.analyzeHeight(positions)
@@ -355,11 +355,6 @@ export default class ToolPanel extends Vue {
       clampToGround: false,
       color: Cesium.Color.MEDIUMBLUE
     })
-    entity.polyline.depthFailMaterial = new Cesium.PolylineOutlineMaterialProperty({
-      color: Cesium.Color.WHITE,
-      outlineColor: Cesium.Color.MEDIUMBLUE,
-      outlineWidth: 3
-    })
     entity.position = Cesium.Cartesian3.midpoint(f, h, new Cesium.Cartesian3())
     entity.label = drawService.createLabel(text, Cesium.Color.MEDIUMBLUE)
 
@@ -373,11 +368,6 @@ export default class ToolPanel extends Vue {
     entity = drawService.drawPolyline([h, s], {
       clampToGround: false,
       color: Cesium.Color.MEDIUMORCHID
-    })
-    entity.polyline.depthFailMaterial = new Cesium.PolylineOutlineMaterialProperty({
-      color: Cesium.Color.WHITE,
-      outlineColor: Cesium.Color.MEDIUMORCHID,
-      outlineWidth: 3
     })
     entity.position = Cesium.Cartesian3.midpoint(h, s, new Cesium.Cartesian3())
     entity.label = drawService.createLabel(text, Cesium.Color.MEDIUMORCHID)

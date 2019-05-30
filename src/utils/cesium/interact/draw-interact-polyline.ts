@@ -57,7 +57,7 @@ export class DrawInteractPolyline extends DrawInteract {
     }
 
     this.positions.push(point)
-    this.drawService.drawPoint(point)
+    this.drawService.drawPoint(point, this.viewer)
 
     if (this.positions.length === 1) {
       this.drawService.drawPolyline(this.positions, { clampToGround: this.clampToGround })

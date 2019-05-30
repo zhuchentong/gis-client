@@ -3,8 +3,6 @@
     <common-title iconName="info" title="当前选择区域面积">
       <template slot="append">
         <area-detail :area="area"></area-detail>
-        <!-- <span>{{ area.toFixed(2) }} 平方米</span>
-        <span style="margin-left:10px;">{{ area | squareMeterToMu }} 亩</span> -->
       </template>
     </common-title>
 
@@ -42,16 +40,40 @@
             </el-input>
           </el-form-item>
           <el-form-item label="土地用途" prop="landUseType">
-            <el-select v-model="model.landUseType" class="search-worktype">
-              <el-option label="住宅用地" value="住宅基准"></el-option>
-              <el-option label="商业用地" value="商服基准"></el-option>
-              <el-option label="工业用地" value="工业基准"></el-option>
-            </el-select>
+            <el-radio-group
+              v-model="model.landUseType"
+              size="mini"
+              style="margin-top:0"
+            >
+              <el-radio-button
+                v-for="key of basePriceDataSet.keys()"
+                :key="key"
+                :label="key"
+                >{{ key }}</el-radio-button
+              >
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="基准地价" class="base-price">
+            <div v-if="!model.landUseType">
+              请选择土地用途
+            </div>
+            <label-container v-else :labelWidth="40" :column="1">
+              <label-item
+                v-for="item of basePrice"
+                :key="item.level"
+                :label="item.level"
+              >
+                <span>{{ item.priceSqm }} 元/平方米</span>
+                <span style="margin-left:15px;"
+                  >{{ item.priceMu }} 万元/亩</span
+                >
+              </label-item>
+            </label-container>
           </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="分析结果" name="result" class="row">
-        <el-card class="col-span-6" header="预算信息">
+        <el-card header="预算信息" class="result-card">
           <div v-for="(item, index) of computerResult" :key="index">
             <label-item label="成本级别" :value="item.level"></label-item>
             <label-item label="面积">
@@ -73,7 +95,7 @@
             </label-item>
           </div>
         </el-card>
-        <el-card class="col-span-6" header="评估结果">
+        <el-card header="评估结果" class="result-card">
           <label-item label="评估单价">
             <div>
               {{ getCurrentMoney(model.assessmentPrice).sqm.toFixed(2) }}
@@ -169,6 +191,12 @@ export default class ComputeEarning extends Vue {
     transactionPrice: ""
   }
 
+  private basePriceDataSet = new Map<string, any[]>([
+    ["住宅基准", []],
+    ["商服基准", []],
+    ["工业基准", []],
+  ])
+
   private result: any = {
     area: 0,
     cost: 0,
@@ -189,7 +217,6 @@ export default class ComputeEarning extends Vue {
   private get currentUnit() {
     return ComputUnits.find(x => x.value === this.model.unit)
   }
-
 
   private meterToMu(price) {
     return (price * 15000 / 10000)
@@ -212,6 +239,10 @@ export default class ComputeEarning extends Vue {
         mu: money
       }
     }
+  }
+
+  private get basePrice() {
+    return this.basePriceDataSet.get(this.model.landUseType) || []
   }
 
 
@@ -279,6 +310,22 @@ export default class ComputeEarning extends Vue {
       ...relation,
       ...ComputerLayerSetting
     }
+    // 获取基础价格
+    this.service.queryMapSpotByAttr(new RequestParams({
+      layerCode: relation.layerCode
+    })).subscribe(data => {
+      const attrs = data.map(v => v.attr)
+      this.basePriceDataSet.forEach((value, key) => {
+        value = attrs.map(row => {
+          return {
+            level: row['级别'],
+            priceSqm: this.muToMeter(row[key]).toFixed(2),
+            priceMu: Number.parseFloat(row[key]).toFixed(4)
+          }
+        })
+        this.basePriceDataSet.set(key, value)
+      })
+    })
   }
 }
 </script>
@@ -289,6 +336,22 @@ export default class ComputeEarning extends Vue {
     border: 1px solid #bfc9c0;
     border-radius: 5px;
     padding: 5px 0;
+  }
+  .result-card {
+    width: 49%;
+  }
+  .result-card + .result-card {
+    margin-left: 5px;
+  }
+}
+</style>
+
+<style lang="less">
+.component.compute-earning {
+  .base-price {
+    .el-form-item__content {
+      font-size: 12px;
+    }
   }
 }
 </style>

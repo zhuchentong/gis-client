@@ -4020,8 +4020,9 @@ declare namespace Cesium {
         public outlineWidth: any
         public closeTop: any
         public closeBottom: any
+        public heightReference: any
 
-        constructor(options?: { coordinates?: any; height?: any; extrudedHeight?: any; closeTop?: any; closeBottom?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; rotation?: any; stRotation?: any; granularity?: any });
+        constructor(options?: { coordinates?: any; height?: any; extrudedHeight?: any; closeTop?: any; closeBottom?: any; show?: any; fill?: any; material?: MaterialProperty; outline?: any; outlineColor?: any; outlineWidth?: any; rotation?: any; stRotation?: any; granularity?: any, heightReference?: any });
 
         public clone(result?: RectangleGraphics): RectangleGraphics
 
@@ -6575,6 +6576,7 @@ declare namespace Cesium {
         public readonly trackedEntityChanged: Event
         public useDefaultRenderLoop: boolean
         public readonly vrButton: VRButton
+        public readonly positionCartographic: Cartographic
 
         constructor(container: Element | string, options?: ViewerOptions);
 

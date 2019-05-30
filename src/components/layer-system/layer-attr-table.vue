@@ -69,10 +69,9 @@ const LayerTableModule = namespace('layerTableModule')
 export default class LayerAttrTable extends Vue {
   @LayerTableModule.State private tableList!: any[]
   @LayerTableModule.State private isTableShow
-  @LayerTableModule.Mutation
-  private removeLayerAttrTable
-  @LayerTableModule.Mutation
-  private updateTableVisibility
+  @LayerTableModule.Mutation private removeLayerAttrTable
+  @LayerTableModule.Getter private getTable!: (id: string) => any
+  @LayerTableModule.Mutation private updateTableVisibility
   @Prop()
   private viewer!: MapViewer
 
@@ -94,12 +93,16 @@ export default class LayerAttrTable extends Vue {
   }
 
   private onRowClick(row) {
+    const layerInfo = this.getTable(this.currentTable)
+    if (!layerInfo) return
+    const { layerSpace, layerCode } = layerInfo
+
     return fetch(
       `${appConfig.geoServer}/${
-      this.workspace
+      layerSpace || this.workspace
       }/wms?service=wfs&version=2.0.0&request=GetFeature&&featureid=${
       row.featureId
-      }&&query_layers=base-space:${row.layerCode}&&outputFormat=json`
+      }&&query_layers=${layerSpace}:${layerCode}&&outputFormat=json`
     ).then(async data => {
       try {
         const { features } = await data.json()

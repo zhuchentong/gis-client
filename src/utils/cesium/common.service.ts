@@ -85,18 +85,18 @@ export class CesiumCommonService {
    * @param viewer viewer
    * @param postion windowsPostition
    */
-  public static getPosition(_viewer: Cesium.Viewer, postion: Cesium.Cartesian2) {
+  public static getPosition(viewer: Cesium.Viewer, postion: Cesium.Cartesian2) {
     let result: Cesium.Cartesian3 | undefined
-    const feature = _viewer.scene.pick(postion)
-    if (feature && _viewer.scene.pickPositionSupported) {
-      _viewer.scene.pickPosition(postion, result)
+    const feature = viewer.scene.pick(postion)
+    if (feature && viewer.scene.pickPositionSupported) {
+      result = viewer.scene.pickPosition(postion, result)
     } else {
       const cartographic = CesiumCommonService.getViewCartesianPoint(
-        _viewer,
+        viewer,
         postion
       )
       if (cartographic) {
-        result = CesiumCommonService.DegreesToCartesian3(_viewer, cartographic)
+        result = CesiumCommonService.DegreesToCartesian3(viewer, cartographic)
       }
     }
     return result
