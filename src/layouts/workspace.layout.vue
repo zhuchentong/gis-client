@@ -1,6 +1,6 @@
 <template>
   <div class="layout fill" style="overflow:hidden;">
-    <div class="header draggable row middle-span">
+    <div class="header  row middle-span">
       <img class="logo" src="../assets/images/logo.png" />
       <div class="title">多规合一综合信息平台</div>
     </div>

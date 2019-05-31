@@ -1,6 +1,6 @@
 <template>
   <div class="default-layout fill" style="overflow:auto;">
-    <div class="header draggable">
+    <div class="header ">
       <div class="layout-header-operate-block row">
         <work-message class="work-tool"></work-message>
         <work-user class="work-tool"></work-user>
@@ -26,7 +26,7 @@ import WorkMessage from '~/components/root-layout-panel/work-message.vue'
     WorkMessage
   }
 })
-export default class RootLayout extends Vue {}
+export default class RootLayout extends Vue { }
 </script>
 <style lang="less">
 .default-layout {
@@ -44,7 +44,7 @@ export default class RootLayout extends Vue {}
     margin-top: 10px;
     .work-tool {
       padding-right: 15px;
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
     }

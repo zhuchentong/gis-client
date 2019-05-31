@@ -26,8 +26,8 @@ function createWindow() {
   win = new BrowserWindow({
     center: true,
     frame: true,
-    minHeight: 600,
-    minWidth: 800
+    minWidth: 1024,
+    minHeight: 800
   })
   win.setMenu(null)
   if (process.env.WEBPACK_DEV_SERVER_URL) {

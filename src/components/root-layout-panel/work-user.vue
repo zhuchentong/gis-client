@@ -83,12 +83,10 @@ export default class WorkUser extends Vue {
       'login',
       {
         size: WindowSize.large,
-        resizable: false,
-        maximizable: false
       },
       {
         replace: true,
-        frame: false
+        frame: true
       },
       this
     )

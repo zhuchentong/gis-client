@@ -1,14 +1,14 @@
 .generateTheme(@theme) {
   .el-button.el-button--default {
-    color: @COLOR8;
-    border-color: @COLOR8;
-
+    color: @COLOR1;
+    background-color: @PrimaryColor;
     &:hover {
-      color: @COLOR1;
-      background-color: @COLOR8;
+      color: @PrimaryColor;
+      background-color: @COLOR1;
+      border-color: @PrimaryColor;
     }
   }
-
+  
   .el-button.el-button--default.is-disabled {
     background-color: lightgray;
     border-color: lightgray;
@@ -16,17 +16,24 @@
 
   .el-button.reset-button {
     background-color: @COLOR5;
-    color: @COLOR8;
+    color: @PrimaryColor;
   }
 
   .data-form {
     .search-button,
     .reset-button {
       background-color: @COLOR5;
-      color: @COLOR8;
+      color: @PrimaryColor;
     }
   }
+  .el-input__inner{
+    color: @FontColor;
+    border-color: @PrimaryColor;
+  }
 
+  .el-checkbox__input.is-checked+.el-checkbox__label{
+    color: @PrimaryColor;
+  }
 
 
   // 自定义组件样式
@@ -39,11 +46,11 @@
     }
 
     a {
-      color: @COLOR8;
+      color: @PrimaryColor;
     }
     .common-title{
       .title{
-        color: @COLOR8;
+        color: @PrimaryColor;
       }
     }
 
@@ -54,7 +61,7 @@
         color: @COLOR1;
       }
       &-activated {
-        color: @COLOR8;
+        color: @PrimaryColor;
         background-color: #75cbe4;
       }
     }

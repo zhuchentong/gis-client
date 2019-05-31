@@ -1,5 +1,5 @@
 <template>
-  <section class="login-page fill-absolute" @keydown.enter="submitForm">
+  <section class="login-page row center-span" @keydown.enter="submitForm">
     <!-- <div class="col center-span fill-height">
       <div class="login-title">多规合一综合信息平台</div>
       <div class="login-content">
@@ -36,11 +36,44 @@
       </div>
     </div> -->
     <!-- <el-row class="copyright">上海指旺信息科技有限公司 © 版权所有</el-row> -->
-    <div class="login-content">
+    <div class="login-content col middle-span">
       <div class="logo"></div>
-      <div class="system-area"></div>
-      <div class="system-name"></div>
-      <el-form class="login-form" :model="user"> </el-form>
+      <el-form
+        ref="login-form"
+        class="login-form "
+        :model="user"
+        :rules="userRoles"
+      >
+        <el-form-item prop="username">
+          <el-input
+            v-model="user.username"
+            prefix-icon="el-icon-user"
+            auto-complete="off"
+            placeholder="用户名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            prefix-icon="el-icon-lock"
+            type="password"
+            v-model="user.password"
+            placeholder="密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div class="text-left remember">
+            <el-checkbox class="remember-label " v-model="remember">
+              记住用户名和密码
+            </el-checkbox>
+          </div>
+        </el-form-item>
+      </el-form>
+      <div class="text-center">
+        <div v-if="loading">
+          <i class="el-icon-loading"></i> 资源数据更新中,请稍后...
+        </div>
+        <el-button v-else class="login-btn" @click="submitForm">登录</el-button>
+      </div>
     </div>
   </section>
 </template>
@@ -197,13 +230,14 @@ export default class Login extends Vue {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .login-page {
-  @color: #ffffff;
-
+  @contentWidth: 300px;
+  height: 100%;
   background: url('../assets/images/login.png');
   background-size: cover;
-  color: @color;
+  padding-top: 12%;
+
   // .login-title {
   //   margin-top: 20px;
   //   text-align: center;
@@ -245,5 +279,50 @@ export default class Login extends Vue {
   //   width: 100%;
   //   text-align: center;
   // }
+  .logo {
+    background-image: url('../assets/images/login-title.png');
+    height: 144px;
+    width: @contentWidth;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 24px;
+  }
+  .login-content {
+    width: 433px;
+    height: 440px;
+    background-color: #ffffffd1;
+    box-shadow: 0px 16px 26px 9px rgba(3, 0, 0, 0.72);
+    border-radius: 6px;
+    .login-form {
+      width: @contentWidth;
+      margin-top: 20px;
+      .remember {
+        padding-left: 10px;
+      }
+    }
+    .login-btn {
+      width: 300px;
+    }
+  }
+}
+</style>
+<style lang="less">
+.login-page {
+  .login-form {
+    .el-input__prefix {
+      font-size: 20px;
+      color: #1962c0;
+    }
+    .el-input.el-input--prefix {
+      .el-input__inner {
+        padding-left: 32px;
+        border-radius: 0;
+        border-top: unset;
+        border-right: unset;
+        border-left: unset;
+        background: unset;
+      }
+    }
+  }
 }
 </style>

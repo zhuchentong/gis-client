@@ -1,5 +1,5 @@
 <template>
-  <div class="layout fill draggable" style="overflow:hidden;">
+  <div class="layout fill " style="overflow:hidden;">
     <router-view />
   </div>
 </template>
