@@ -34,6 +34,7 @@ import { ReminderService } from '@/utils/reminder.service'
 import { District } from "~/models/district.model"
 import { LayerGroup } from "~/models/layer-group.model"
 import ModifyPassword from "~/components/root-layout-panel/modify-password.vue"
+import { WindowSize } from '@/config/enum.config'
 
 const DistrictModule = namespace('districtModule')
 
@@ -81,8 +82,7 @@ export default class WorkUser extends Vue {
     this.$window.open(
       'login',
       {
-        width: 500,
-        height: 400,
+        size: WindowSize.large,
         resizable: false,
         maximizable: false
       },

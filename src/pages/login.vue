@@ -1,17 +1,10 @@
 <template>
-  <section
-    class="login-page fill-absolute"
-    @keydown.enter="submitForm"
-  >
-    <div class="col center-span fill-height">
+  <section class="login-page fill-absolute" @keydown.enter="submitForm">
+    <!-- <div class="col center-span fill-height">
       <div class="login-title">多规合一综合信息平台</div>
       <div class="login-content">
         <div class="login-form">
-          <el-form
-            ref="login-form"
-            :model="user"
-            :rules="userRoles"
-          >
+          <el-form ref="login-form" :model="user" :rules="userRoles">
             <el-form-item prop="username">
               <el-input
                 v-model="user.username"
@@ -27,29 +20,28 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-checkbox
-                class="remember-label"
-                v-model="remember"
-              >记住用户名和密码</el-checkbox>
+              <el-checkbox class="remember-label" v-model="remember"
+                >记住用户名和密码</el-checkbox
+              >
             </el-form-item>
             <div v-if="loading">
               <i class="el-icon-loading"></i> 资源数据更新中,请稍后...
             </div>
             <div class="text-center">
-              <el-button
-                class="login-btn"
-                @click="submitForm"
-              >登录</el-button>
-              <el-button
-                class="login-btn"
-                @click="exit"
-              >退出</el-button>
+              <el-button class="login-btn" @click="submitForm">登录</el-button>
+              <el-button class="login-btn" @click="exit">退出</el-button>
             </div>
           </el-form>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- <el-row class="copyright">上海指旺信息科技有限公司 © 版权所有</el-row> -->
+    <div class="login-content">
+      <div class="logo"></div>
+      <div class="system-area"></div>
+      <div class="system-name"></div>
+      <el-form class="login-form" :model="user"> </el-form>
+    </div>
   </section>
 </template>
 
@@ -209,48 +201,49 @@ export default class Login extends Vue {
 .login-page {
   @color: #ffffff;
 
-  background: url('../assets/images/login_bg_1.png');
-  background-size: auto 100%;
-  background-repeat: no-repeat;
+  background: url('../assets/images/login.png');
+  background-size: cover;
   color: @color;
-  .login-title {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  .login-content {
-    margin: 30px 50px;
-    display: flex;
-    text-align: left;
-    border-width: 1px;
-    box-sizing: border-box;
-    border-radius: 2px;
-    .login-left {
-      width: 500px;
-      background: url('../assets/images/login_left.png');
-      background-repeat: round;
-    }
-    .login-form {
-      -webkit-app-region: no-drag;
-      flex: 1;
-      padding: 40px;
-      box-sizing: border-box;
-      background-color: rgba(242, 242, 242, 0.2);
-      .remember-label {
-        color: @color;
-      }
-    }
+  // .login-title {
+  //   margin-top: 20px;
+  //   text-align: center;
+  //   font-size: 24px;
+  //   font-weight: bold;
+  // }
+  // .login-content {
+  //   margin: 30px 50px;
+  //   width: 433px;
+  //   height: 440px;
+  //   display: flex;
+  //   text-align: left;
+  //   border-width: 1px;
+  //   box-sizing: border-box;
+  //   border-radius: 2px;
+  //   .login-left {
+  //     width: 500px;
+  //     background: url('../assets/images/login_left.png');
+  //     background-repeat: round;
+  //   }
+  //   .login-form {
+  //     -webkit-app-region: no-drag;
+  //     flex: 1;
+  //     padding: 40px;
+  //     box-sizing: border-box;
+  //     background-color: rgba(242, 242, 242, 0.2);
+  //     .remember-label {
+  //       color: @color;
+  //     }
+  //   }
 
-    .login-btn {
-      width: 100px;
-    }
-  }
-  .copyright {
-    position: fixed;
-    bottom: 20px;
-    width: 100%;
-    text-align: center;
-  }
+  //   .login-btn {
+  //     width: 100px;
+  //   }
+  // }
+  // .copyright {
+  //   position: fixed;
+  //   bottom: 20px;
+  //   width: 100%;
+  //   text-align: center;
+  // }
 }
 </style>

@@ -1,14 +1,11 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain, DownloadItem } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 
-import { download } from 'electron-dl'
-import path from 'path'
-import { exec } from 'child_process'
 import * as listeners from './listener'
 import { IBackgroundEventListener } from '@/interface'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -28,11 +25,9 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     center: true,
-    frame: false,
-    resizable: false,
-    maximizable: false,
-    width: 500,
-    height: 400
+    frame: true,
+    minHeight: 600,
+    minWidth: 800
   })
   win.setMenu(null)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
