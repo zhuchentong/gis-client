@@ -12,6 +12,7 @@ export class DrawInteractPolyline extends DrawInteract {
   private fillColor
   private borderColor
   private clampToGround
+  private polylineId = ""
 
   constructor(
     mapViewer,
@@ -57,10 +58,11 @@ export class DrawInteractPolyline extends DrawInteract {
     }
 
     this.positions.push(point)
-    this.drawService.drawPoint(point, this.viewer)
+    this.drawService.drawPoint(point)
 
     if (this.positions.length === 1) {
-      this.drawService.drawPolyline(this.positions, { clampToGround: this.clampToGround })
+      const entity = this.drawService.drawPolyline(this.positions, { clampToGround: this.clampToGround })
+      this.polylineId = entity.id
     }
 
     // 通知坐标更新
@@ -75,19 +77,22 @@ export class DrawInteractPolyline extends DrawInteract {
    * @param e
    */
   public endDraw() {
-    // TODO: 添加绘制状态
     this.clioseEventListener()
 
-    if (this.closed) {
-      this.drawService.drawPolyline([
-        this.positions[0],
-        this.positions[this.positions.length - 1]
-      ], { clampToGround: this.clampToGround })
-    }
+    if (!this.polylineId) return
+
+    //  重新绘制线，callbackproperty 不支持 地形深度遮挡填充
+    const entity: Cesium.Entity = this.mapViewer.drawEntities.getById(this.polylineId)
+    const polyline = entity.polyline.clone()
+    const linePositions: Cesium.Cartesian3[] = (polyline.positions as Cesium.CallbackProperty).getValue()
+    if (this.closed) linePositions.push(this.positions[0])
+    polyline.positions = linePositions
+    entity.polyline = polyline
 
     if (this.closed && this.fill) {
       this.drawService.drawPolygon(this.positions, {
         fillColor: this.fillColor,
+        clampToGround: this.clampToGround,
         borderColor: this.borderColor
       })
     }

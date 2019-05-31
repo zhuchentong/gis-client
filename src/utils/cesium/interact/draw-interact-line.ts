@@ -7,6 +7,7 @@ import { CesiumDrawService } from '../draw.service'
 export class DrawInteractLine extends DrawInteract {
   private drawService: CesiumDrawService
   private positions: Cesium.Cartesian3[] = []
+  private entityId = ""
 
   /**
    * 绘制线操作
@@ -37,7 +38,10 @@ export class DrawInteractLine extends DrawInteract {
     if (point) {
       const isCreatePolyline = this.positions.length === 0
       this.positions.push(point)
-      isCreatePolyline && this.drawService.drawPolyline(this.positions, { clampToGround: this.clampToGround })
+      if (isCreatePolyline) {
+        const entity = this.drawService.drawPolyline(this.positions, { clampToGround: this.clampToGround })
+        this.entityId = entity.id
+      }
     }
 
     // 通知坐标更新
@@ -52,7 +56,13 @@ export class DrawInteractLine extends DrawInteract {
    * @param e
    */
   public endDraw() {
-    return
+    if (!this.entityId) return
+
+    //  重新绘制线，callbackproperty 不支持 地形深度遮挡填充
+    const entity: Cesium.Entity = this.mapViewer.drawEntities.getById(this.entityId)
+    const polyline = entity.polyline.clone()
+    polyline.positions = (polyline.positions as Cesium.CallbackProperty).getValue()
+    entity.polyline = polyline
   }
 
   /**

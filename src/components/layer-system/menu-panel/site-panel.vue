@@ -164,7 +164,7 @@ export default class SitePanel extends Vue {
         cartographic.latitude,
         this.viewer.getViewer().scene.globe.getHeight(cartographic)
       )
-      const entity = this.drawService.drawPoint(position, this.viewer.getViewer(), data.name)
+      const entity = this.drawService.drawPoint(position, data.name)
       // 坐标点添加到记录里面
       this.pointEntitys.push({
         id: data.id,

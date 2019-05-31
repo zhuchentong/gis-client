@@ -97,6 +97,7 @@ import { LayerInfo } from '~/models/layer-info.model.ts'
 import { TempLayers } from '~/models/temp-layers.model'
 import { CesiumCommonService } from '@/utils/cesium/common.service'
 import * as turf from '@turf/turf'
+import { CesiumDrawService } from '@/utils/cesium/draw.service'
 
 @Component({
   components: {
@@ -151,7 +152,8 @@ export default class CheckPanel extends Vue {
     const drawInteractPolyline = new DrawInteractPolyline(this.viewer, {
       closed: true,
       fill: true,
-      fillColor: Cesium.Color.fromAlpha(Cesium.Color.LIGHTSKYBLUE, 0.5)
+      fillColor: Cesium.Color.fromAlpha(Cesium.Color.LIGHTSKYBLUE, 0.5),
+      clampToGround: true
     })
 
     const { positions } = await drawInteractPolyline.start().toPromise()
@@ -183,6 +185,15 @@ export default class CheckPanel extends Vue {
       const coordinates = lcoaltion.join(',')
       this.wktStr = `POLYGON ((${coordinates}))`
       this.dialog.layer = true
+
+      // draw task polygon
+      this.viewer.drawEntities.removeAll()
+      const draw = new CesiumDrawService(this.viewer)
+      let positions:any[] = data.map(v => ({ longitude: v.positionX, latitude: v.positionY }))
+      positions = CesiumCommonService.degreesToCartesian3Array(positions)
+      let entity = draw.drawPolygon(positions)
+      entity = draw.drawPolyline(positions.concat(positions[0]))
+      this.viewer.getViewer().zoomTo(entity)
     } else {
       this.$message("外业巡查数据不是有效区域，请重新选择")
       return

@@ -109,7 +109,8 @@ export default class FlatNess extends Vue {
    */
   private getPointHeight(point) {
     const cartographic = Cesium.Cartographic.fromDegrees(point[0], point[1])
-    return this.viewer.getViewer().scene.globe.getHeight(cartographic)
+    const height = this.viewer.getViewer().scene.sampleHeight(cartographic)
+    return height || this.viewer.getViewer().scene.globe.getHeight(cartographic)
   }
 
   /**
@@ -206,6 +207,11 @@ export default class FlatNess extends Vue {
       width: 5,
       material: new Cesium.PolylineOutlineMaterialProperty({
         color: heightdiff > 0 ? Cesium.Color.YELLOW : Cesium.Color.GRAY
+      }),
+      depthFailMaterial: new Cesium.PolylineOutlineMaterialProperty({
+        color: heightdiff > 0 ? Cesium.Color.YELLOW : Cesium.Color.GRAY,
+        outlineColor: Cesium.Color.WHITE.withAlpha(0.5),
+        outlineWidth: 3
       })
     } as any
 

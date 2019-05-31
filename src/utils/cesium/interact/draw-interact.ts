@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs'
 import { bearingToAngle } from '@turf/turf'
-
 export abstract class DrawInteract {
   protected observer
   protected obserable

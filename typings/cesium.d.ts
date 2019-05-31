@@ -5738,6 +5738,7 @@ declare namespace Cesium {
         public useDepthPicking: boolean
         public useWebVR: boolean
 
+
         constructor(options?: {
             canvas: HTMLCanvasElement;
             contextOptions?: any;
@@ -5773,6 +5774,8 @@ declare namespace Cesium {
         public pickPosition(windowPosition: Cartesian2, result?: Cartesian3): Cartesian3
 
         public requestRender(): void
+
+        public sampleHeight(position: Cartographic, objectsToExclude?, width?): number
     }
 
     class ScreenSpaceCameraController {

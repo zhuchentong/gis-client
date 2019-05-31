@@ -69,7 +69,7 @@ import {
   DrawInteractPoint,
   DrawInteractLine
 } from '~/utils/cesium/interact'
-import Cesium from 'cesium/Cesium'
+import Cesium, { CallbackProperty } from 'cesium/Cesium'
 import { CesiumCommonService } from '~/utils/cesium/common.service'
 import { CesiumDrawService } from '@/utils/cesium/draw.service'
 import FlatNess from '~/components/layer-system/tool-panel/flat-ness.vue'
@@ -185,7 +185,8 @@ export default class ToolPanel extends Vue {
   private async computeArea() {
     const drawInteractPolyline = new DrawInteractPolyline(this.viewer, {
       closed: true,
-      fill: true
+      fill: true,
+      clampToGround: false
     })
     const drawService = new CesiumDrawService(this.viewer)
     const { positions } = await drawInteractPolyline.start().toPromise()
@@ -202,13 +203,14 @@ export default class ToolPanel extends Vue {
       const {
         geometry: { coordinates }
       } = turf.centerOfMass(polygon) as any
-      // const center = Cesium.Cartesian3.fromDegrees(
-      //   coordinates[0],
-      //   coordinates[1]
-      // )
-
       const cartographic = Cesium.Cartographic.fromDegrees(coordinates[0], coordinates[1])
-      cartographic.height = this.viewer.getViewer().scene.globe.getHeight(cartographic)
+      const height = this.viewer.getViewer().scene.sampleHeight(cartographic)
+      if(height){
+        cartographic.height =  height
+      }else{
+        cartographic.height = this.viewer.getViewer().scene.globe.getHeight(cartographic)
+      }
+      
       const center = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
 
       // 绘制面积信息
@@ -300,7 +302,7 @@ export default class ToolPanel extends Vue {
         const heightStr = CesiumCommonService.getDistanceStr(
           graphicPoint.height
         )
-        drawService.drawPoint(data.point, this.viewer.getViewer(), `海拔高度：${heightStr}`)
+        drawService.drawPoint(data.point, `海拔高度：${heightStr}`)
         positions.push(graphicPoint)
       },
       complete: () => this.analyzeHeight(positions)
@@ -353,7 +355,8 @@ export default class ToolPanel extends Vue {
     )}`
     entity = drawService.drawPolyline([f, h], {
       clampToGround: false,
-      color: Cesium.Color.MEDIUMBLUE
+      color: Cesium.Color.MEDIUMBLUE,
+      finish: true
     })
     entity.position = Cesium.Cartesian3.midpoint(f, h, new Cesium.Cartesian3())
     entity.label = drawService.createLabel(text, Cesium.Color.MEDIUMBLUE)
@@ -367,7 +370,8 @@ export default class ToolPanel extends Vue {
     // 绘制水平线条
     entity = drawService.drawPolyline([h, s], {
       clampToGround: false,
-      color: Cesium.Color.MEDIUMORCHID
+      color: Cesium.Color.MEDIUMORCHID,
+      finish: true
     })
     entity.position = Cesium.Cartesian3.midpoint(h, s, new Cesium.Cartesian3())
     entity.label = drawService.createLabel(text, Cesium.Color.MEDIUMORCHID)
