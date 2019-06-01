@@ -25,10 +25,10 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     center: true,
-    frame: true,
-    minWidth: 1024,
-    minHeight: 800
+    minWidth: 800,
+    minHeight: 600
   })
+  win.maximize()
   win.setMenu(null)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode

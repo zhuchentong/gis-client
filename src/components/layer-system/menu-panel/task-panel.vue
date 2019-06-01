@@ -134,8 +134,8 @@ export default class TaskPanel extends Vue {
     console.log(item)
     this.$window.open('task-system',
       {
-        width: WindowSize.large.width,
-        height: Math.min(WindowSize.large.height, window.screen.height - 40)
+        size: WindowSize.large,
+        maximizable: false
       },
       {
         replace: false,

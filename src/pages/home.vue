@@ -86,8 +86,7 @@ export default class Home extends Vue {
       },
       {
         replace: false,
-        parent: true,
-        frame: true
+        parent: true
       },
       this
     )

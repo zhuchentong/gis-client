@@ -130,8 +130,8 @@ export default class ProjectPanel extends Vue {
     if (!this.flowId) return
     this.$window.open('business-system',
       {
-        width: WindowSize.large.width,
-        height: Math.min(WindowSize.large.height, window.screen.height - 40)
+        size: WindowSize.large,
+        maximizable: false
       },
       {
         replace: false,

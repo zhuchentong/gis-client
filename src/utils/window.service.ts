@@ -14,26 +14,28 @@ export class WindowService {
       size = WindowSize.normal,
       width,
       height,
-      maximizable = true,
-      resizable = true
+      maximizable = true
     },
-    { replace, parent, params, frame = true },
+    { replace, parent, params },
     component: Vue
   ) {
     const { BrowserWindow, getCurrentWindow } = remote
     const currentWindow = getCurrentWindow()
-    let win: Electron.BrowserWindow | null = new BrowserWindow({
-      width: width ? width : size.width,
-      height: height ? height : size.height,
+
+    const option: any = {
       show: false,
-      frame,
-      resizable,
-      minimizable: true,
+      minWidth: WindowSize.normal.width,
+      minHeight: WindowSize.normal.height,
       maximizable,
-      fullscreenable: false,
-      alwaysOnTop: false,
       parent: parent && currentWindow
-    })
+    }
+
+    if (!maximizable) {
+      option.width = width ? width : size.width
+      option.height = height ? height : size.height
+    }
+
+    let win: Electron.BrowserWindow | null = new BrowserWindow(option)
 
     win.setMenu(null)
 
@@ -65,8 +67,11 @@ export class WindowService {
 
     win.once('ready-to-show', () => {
       loading.close()
-      win && win.show()
-      replace && currentWindow.close()
+      if (win) {
+        if (maximizable) win.maximize()
+        win.show()
+      }
+      if (replace) currentWindow.close()
     })
 
     // 页面关闭时销毁页面
