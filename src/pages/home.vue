@@ -1,10 +1,25 @@
 <template>
   <section class="home-page fill">
-    <div class="system-title">
-      <div>延安高新区</div>
-      <div>多规合一综合信息平台</div>
+    <div class="system-logo"></div>
+    <div class="row system-menus">
+      <ul id="hexGrid">
+        <li class="hex" v-for="(item, index) of menuList" :key="index">
+          <div class="hexIn">
+            <a class="hexLink" @click="openWindow(item)" :style="item.style">
+              <div class="item-content">
+                <svg-icon
+                  class="item-icon"
+                  :iconSize="100"
+                  :iconName="item.icon"
+                ></svg-icon>
+                <div class="item-label">{{ item.label }}</div>
+              </div>
+            </a>
+          </div>
+        </li>
+      </ul>
     </div>
-    <div class="menu row">
+    <!-- <div class="menu row">
       <a
         v-for="(item, index) of menuList"
         :key="item.url"
@@ -18,7 +33,7 @@
         </div>
         <div class="“menu-title“">{{ item.label }}</div>
       </a>
-    </div>
+    </div> -->
   </section>
 </template>
 
@@ -95,74 +110,188 @@ export default class Home extends Vue {
 </script>
 
 
- <style lang="less">
+ <style lang="less" scoped>
 .home-page {
-  .system-title {
-    color: white;
-    font-size: 30px;
-    text-shadow: 5px 5px 5px gray;
-    position: absolute;
-    top: 120px;
-    left: 30px;
-    div:nth-child(2) {
-      margin-top: 10px;
-      margin-left: 30px;
-    }
+  .system-logo {
+    height: 120px;
+    background-image: url('../assets/images/home/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
   }
-  .menu {
-    position: absolute;
-    left: 200px;
-    right: 50px;
-    top: 100px;
-    bottom: 100px;
-    display: grid;
-    grid-template: 1fr 1fr/1fr 1fr 1fr;
-
-    .menu-item {
-      color: white;
-      font-weight: bold;
-      height: 150px;
-      width: 150px;
-      box-shadow: 2px 2px 2px gray;
-      border-radius: 10px;
-      margin: 10px;
+  .system-menus {
+    #hexGrid {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      flex-wrap: wrap;
+      width: 90%;
+      margin: 0 auto;
+      overflow: hidden;
+      font-family: 'Raleway', sans-serif;
+      font-size: 15px;
+      list-style-type: none;
+    }
+
+    .hex {
+      position: relative;
+      visibility: hidden;
+      outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+    }
+    .hex::after {
+      content: '';
+      display: block;
+      padding-bottom: 86.602%; /* =  100 / tan(60) * 1.5 */
+    }
+    .hexIn {
+      position: absolute;
+      width: 96%;
+      padding-bottom: 110.851%; /* =  width / sin(60) */
+      margin: 0 2%;
+      overflow: hidden;
+      visibility: hidden;
+      outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+      transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+    }
+    .hexIn * {
+      position: absolute;
+      visibility: visible;
+      outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+    }
+    .hexLink {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      color: #fff;
+      overflow: hidden;
+      transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+    }
+
+    .item-content {
+      height: 100%;
+      width: 100%;
+      display: flex;
       justify-content: center;
-
-      &:active {
-        box-shadow: 0px 0px 0px gray;
+      align-items: center;
+      .item-icon {
+        margin-top: -20px;
       }
-
-      .menu-title {
-        font-size: 18px;
+      .item-label {
+        margin-top: 85px;
+        font-size: 26px;
+        font-weight: bold;
       }
+    }
 
-      .menu-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 80px;
-        width: 80px;
-        background-color: rgba(255, 255, 255, 0.2);
-        border-radius: 100%;
-        margin-bottom: 10px;
+    // /*** HEX CONTENT **********************************************************************/
+    // .hex img {
+    //   left: -100%;
+    //   right: -100%;
+    //   width: auto;
+    //   height: 100%;
+    //   margin: 0 auto;
+    //   -webkit-transform: rotate3d(0, 0, 0, 0deg);
+    //   -ms-transform: rotate3d(0, 0, 0, 0deg);
+    //   transform: rotate3d(0, 0, 0, 0deg);
+    // }
+
+    // .hex h1,
+    // .hex p {
+    //   width: 100%;
+    //   padding: 5%;
+    //   box-sizing: border-box;
+    //   background-color: rgba(0, 128, 128, 0.8);
+    //   font-weight: 300;
+    //   -webkit-transition: -webkit-transform 0.2s ease-out, opacity 0.3s ease-out;
+    //   transition: transform 0.2s ease-out, opacity 0.3s ease-out;
+    // }
+    // .hex h1 {
+    //   bottom: 50%;
+    //   padding-top: 50%;
+    //   font-size: 1.5em;
+    //   z-index: 1;
+    //   -webkit-transform: translate3d(0, -100%, 0);
+    //   -ms-transform: translate3d(0, -100%, 0);
+    //   transform: translate3d(0, -100%, 0);
+    // }
+    // .hex h1::after {
+    //   content: '';
+    //   position: absolute;
+    //   bottom: 0;
+    //   left: 45%;
+    //   width: 10%;
+    //   text-align: center;
+    //   border-bottom: 1px solid #fff;
+    // }
+    // .hex p {
+    //   top: 50%;
+    //   padding-bottom: 50%;
+    //   -webkit-transform: translate3d(0, 100%, 0);
+    //   -ms-transform: translate3d(0, 100%, 0);
+    //   transform: translate3d(0, 100%, 0);
+    // }
+
+    /*** HEXAGON SIZING AND EVEN ROW INDENTATION *****************************************************************/
+    @media (min-width: 1201px) {
+      /* <- 5-4  hexagons per row */
+      #hexGrid {
+        padding-bottom: 4.4%;
+      }
+      .hex {
+        width: 20%; /* = 100 / 5 */
+      }
+      .hex:nth-child(9n + 6) {
+        /* first hexagon of even rows */
+        margin-left: 10%; /* = width of .hex / 2  to indent even rows */
+      }
+    }
+
+    @media (max-width: 1200px) and (min-width: 901px) {
+      /* <- 4-3  hexagons per row */
+      #hexGrid {
+        padding-bottom: 5.5%;
+      }
+      .hex {
+        width: 25%; /* = 100 / 4 */
+      }
+      .hex:nth-child(7n + 5) {
+        /* first hexagon of even rows */
+        margin-left: 12.5%; /* = width of .hex / 2  to indent even rows */
+      }
+    }
+
+    @media (max-width: 900px) and (min-width: 601px) {
+      /* <- 3-2  hexagons per row */
+      #hexGrid {
+        padding-bottom: 7.4%;
+      }
+      .hex {
+        width: 33.333%; /* = 100 / 3 */
+      }
+      .hex:nth-child(5n + 4) {
+        /* first hexagon of even rows */
+        margin-left: 16.666%; /* = width of .hex / 2  to indent even rows */
+      }
+    }
+
+    @media (max-width: 600px) {
+      /* <- 2-1  hexagons per row */
+      #hexGrid {
+        padding-bottom: 11.2%;
+      }
+      .hex {
+        width: 50%; /* = 100 / 3 */
+      }
+      .hex:nth-child(3n + 3) {
+        /* first hexagon of even rows */
+        margin-left: 25%; /* = width of .hex / 2  to indent even rows */
+      }
+    }
+
+    @media (max-width: 400px) {
+      #hexGrid {
+        font-size: 13px;
       }
     }
   }
 }
-
-.loop(@n) when (@n > 0) {
-  .menu-item.menu-item-@{n} {
-    grid-row-start: if((@n < 3), 1, 2);
-    grid-column-start: mod(@n, 3) + 1;
-    place-self: center;
-  }
-  //循环调用自身
-  .loop((@n - 1));
-}
-
-.loop(5);
 </style>
 

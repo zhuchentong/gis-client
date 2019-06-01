@@ -42,7 +42,7 @@
             ></el-option>
           </el-select>
         </div>
-        <div>
+        <div v-if="false">
           <label>时间排序</label>
           <a @click="sortChange">
             <svg-icon iconName="sort" iconSize="12"></svg-icon>
