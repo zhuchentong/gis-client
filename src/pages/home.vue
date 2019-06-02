@@ -1,39 +1,32 @@
 <template>
-  <section class="home-page fill">
+  <section class="home-page fill col">
     <div class="system-logo"></div>
-    <div class="row system-menus">
-      <ul id="hexGrid">
-        <li class="hex" v-for="(item, index) of menuList" :key="index">
-          <div class="hexIn">
-            <a class="hexLink" @click="openWindow(item)" :style="item.style">
-              <div class="item-content">
-                <svg-icon
-                  class="item-icon"
-                  :iconSize="100"
-                  :iconName="item.icon"
-                ></svg-icon>
-                <div class="item-label">{{ item.label }}</div>
-              </div>
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <!-- <div class="menu row">
-      <a
+
+    <div class="col system-menus">
+      <hexagon
         v-for="(item, index) of menuList"
-        :key="item.url"
-        :style="item.style"
+        :key="index"
         class="menu-item"
-        :class="`menu-item-${index + 1}`"
-        @click="openWindow(item)"
+        :class="{ 'middle-item': index % 3 === 0 }"
       >
-        <div class="menu-icon">
-          <svg-icon :iconSize="32" :iconName="item.icon"></svg-icon>
+        <div
+          :style="item.style"
+          class="menu-content col center-span middle-span"
+          :class="{ 'no-hover': !item.label }"
+          @click="openWindow(item)"
+        >
+          <template v-if="item.url">
+            <svg-icon
+              :iconSize="100"
+              :iconName="item.icon"
+              :iconColor="item.iconColor"
+            ></svg-icon>
+
+            <div class="menu-title">{{ item.label }}</div>
+          </template>
         </div>
-        <div class="“menu-title“">{{ item.label }}</div>
-      </a>
-    </div> -->
+      </hexagon>
+    </div>
   </section>
 </template>
 
@@ -41,58 +34,79 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Layout } from '@/core/decorator'
 import { WindowSize } from '../config/enum.config'
-import { namespace } from 'vuex-class'
-import { District } from '~/models/district.model'
+import Hexagon from "~/components/common/hexagon.vue"
 
 @Layout('root')
 @Component({
-  components: {}
+  components: {
+    Hexagon
+  }
 })
 export default class Home extends Vue {
   private readonly menuList = [
     {
+      style: {
+        backgroundImage: `url('${require("~/assets/images/home/menu-bg-1.png")}')`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover'
+      }
+    },
+    {
       label: '多规管理',
       url: 'layer-system',
       icon: 'layer',
+      iconColor: "#1962C0",
       style: {
-        background: '#409CE7'
+        background: '#398EDD'
       }
     },
     {
       label: '业务管理',
       url: 'business-system',
       icon: 'business',
+      iconColor: "#4463A6",
       style: {
-        background: '#819BEC'
+        background: '#678DE0'
       }
     },
     {
       label: '外业管理',
       url: 'task-system',
       icon: 'task',
+      iconColor: "#318048",
       style: {
-        background: '#72CA50'
+        background: '#49AA66'
       }
     },
     {
       label: '统计管理',
       url: 'statistic-system',
       icon: 'statistic',
+      iconColor: "#8C8037",
       style: {
-        background: '#F0C239'
+        background: '#B2A660'
       }
     },
     {
       label: '运维管理',
       url: 'manage-system',
       icon: 'manage',
+      iconColor: "#5345AE",
       style: {
-        background: '#955FF1'
+        background: '#7160E3'
+      }
+    },
+    {
+      style: {
+        backgroundImage: `url('${require("~/assets/images/home/menu-bg-2.png")}')`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover'
       }
     }
   ]
 
   private openWindow(item) {
+    if (!item.url) return
     this.$window.open(
       item.url,
       {
@@ -113,183 +127,45 @@ export default class Home extends Vue {
  <style lang="less" scoped>
 .home-page {
   .system-logo {
-    height: 120px;
+    flex-basis: 120px;
     background-image: url('../assets/images/home/logo.png');
     background-repeat: no-repeat;
     background-position: center;
   }
   .system-menus {
-    #hexGrid {
-      display: flex;
-      flex-wrap: wrap;
-      width: 90%;
-      margin: 0 auto;
-      overflow: hidden;
-      font-family: 'Raleway', sans-serif;
-      font-size: 15px;
-      list-style-type: none;
-    }
-
-    .hex {
-      position: relative;
-      visibility: hidden;
-      outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
-    }
-    .hex::after {
-      content: '';
-      display: block;
-      padding-bottom: 86.602%; /* =  100 / tan(60) * 1.5 */
-    }
-    .hexIn {
-      position: absolute;
-      width: 96%;
-      padding-bottom: 110.851%; /* =  width / sin(60) */
-      margin: 0 2%;
-      overflow: hidden;
-      visibility: hidden;
-      outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
-      transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
-    }
-    .hexIn * {
-      position: absolute;
-      visibility: visible;
-      outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
-    }
-    .hexLink {
-      display: block;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      color: #fff;
-      overflow: hidden;
-      transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
-    }
-
-    .item-content {
+    margin-top: 5%;
+    padding-top: 30px;
+    flex-wrap: wrap;
+    height: 500px;
+    align-content: center;
+    .menu-content {
       height: 100%;
       width: 100%;
+
+      .menu-title {
+        padding-top: 10px;
+        line-height: 40px;
+        height: 40px;
+        color: #ffffff;
+      }
+
+      &:hover:not(.no-hover) {
+        cursor: pointer;
+        .menu-title {
+          font-size: 20px;
+          transition: font-size 0.5s;
+        }
+      }
+    }
+    .menu-item {
+      margin: 5px;
+    }
+    .middle-item {
+      flex-basis: 380px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      .item-icon {
-        margin-top: -20px;
-      }
-      .item-label {
-        margin-top: 85px;
-        font-size: 26px;
-        font-weight: bold;
-      }
-    }
-
-    // /*** HEX CONTENT **********************************************************************/
-    // .hex img {
-    //   left: -100%;
-    //   right: -100%;
-    //   width: auto;
-    //   height: 100%;
-    //   margin: 0 auto;
-    //   -webkit-transform: rotate3d(0, 0, 0, 0deg);
-    //   -ms-transform: rotate3d(0, 0, 0, 0deg);
-    //   transform: rotate3d(0, 0, 0, 0deg);
-    // }
-
-    // .hex h1,
-    // .hex p {
-    //   width: 100%;
-    //   padding: 5%;
-    //   box-sizing: border-box;
-    //   background-color: rgba(0, 128, 128, 0.8);
-    //   font-weight: 300;
-    //   -webkit-transition: -webkit-transform 0.2s ease-out, opacity 0.3s ease-out;
-    //   transition: transform 0.2s ease-out, opacity 0.3s ease-out;
-    // }
-    // .hex h1 {
-    //   bottom: 50%;
-    //   padding-top: 50%;
-    //   font-size: 1.5em;
-    //   z-index: 1;
-    //   -webkit-transform: translate3d(0, -100%, 0);
-    //   -ms-transform: translate3d(0, -100%, 0);
-    //   transform: translate3d(0, -100%, 0);
-    // }
-    // .hex h1::after {
-    //   content: '';
-    //   position: absolute;
-    //   bottom: 0;
-    //   left: 45%;
-    //   width: 10%;
-    //   text-align: center;
-    //   border-bottom: 1px solid #fff;
-    // }
-    // .hex p {
-    //   top: 50%;
-    //   padding-bottom: 50%;
-    //   -webkit-transform: translate3d(0, 100%, 0);
-    //   -ms-transform: translate3d(0, 100%, 0);
-    //   transform: translate3d(0, 100%, 0);
-    // }
-
-    /*** HEXAGON SIZING AND EVEN ROW INDENTATION *****************************************************************/
-    @media (min-width: 1201px) {
-      /* <- 5-4  hexagons per row */
-      #hexGrid {
-        padding-bottom: 4.4%;
-      }
-      .hex {
-        width: 20%; /* = 100 / 5 */
-      }
-      .hex:nth-child(9n + 6) {
-        /* first hexagon of even rows */
-        margin-left: 10%; /* = width of .hex / 2  to indent even rows */
-      }
-    }
-
-    @media (max-width: 1200px) and (min-width: 901px) {
-      /* <- 4-3  hexagons per row */
-      #hexGrid {
-        padding-bottom: 5.5%;
-      }
-      .hex {
-        width: 25%; /* = 100 / 4 */
-      }
-      .hex:nth-child(7n + 5) {
-        /* first hexagon of even rows */
-        margin-left: 12.5%; /* = width of .hex / 2  to indent even rows */
-      }
-    }
-
-    @media (max-width: 900px) and (min-width: 601px) {
-      /* <- 3-2  hexagons per row */
-      #hexGrid {
-        padding-bottom: 7.4%;
-      }
-      .hex {
-        width: 33.333%; /* = 100 / 3 */
-      }
-      .hex:nth-child(5n + 4) {
-        /* first hexagon of even rows */
-        margin-left: 16.666%; /* = width of .hex / 2  to indent even rows */
-      }
-    }
-
-    @media (max-width: 600px) {
-      /* <- 2-1  hexagons per row */
-      #hexGrid {
-        padding-bottom: 11.2%;
-      }
-      .hex {
-        width: 50%; /* = 100 / 3 */
-      }
-      .hex:nth-child(3n + 3) {
-        /* first hexagon of even rows */
-        margin-left: 25%; /* = width of .hex / 2  to indent even rows */
-      }
-    }
-
-    @media (max-width: 400px) {
-      #hexGrid {
-        font-size: 13px;
-      }
+      justify-content: center;
+      margin: 0 -50px;
     }
   }
 }

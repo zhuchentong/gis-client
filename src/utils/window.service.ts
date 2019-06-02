@@ -11,7 +11,7 @@ export class WindowService {
   public static open(
     url,
     {
-      size = WindowSize.normal,
+      size = WindowSize.large,
       width,
       height,
       maximizable = true
@@ -24,16 +24,12 @@ export class WindowService {
 
     const option: any = {
       show: false,
-      minWidth: WindowSize.normal.width,
-      minHeight: WindowSize.normal.height,
+      minWidth: size.width,
+      minHeight: size.height,
       maximizable,
       parent: parent && currentWindow
     }
 
-    if (!maximizable) {
-      option.width = width ? width : size.width
-      option.height = height ? height : size.height
-    }
 
     let win: Electron.BrowserWindow | null = new BrowserWindow(option)
 

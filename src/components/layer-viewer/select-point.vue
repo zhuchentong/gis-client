@@ -41,9 +41,11 @@ export default class SelectPoint extends Vue {
   }
 
   private onMapReady(value) {
-    this.mapViewer = value
-    this.drawInteractPoint = new DrawInteractPoint(this.mapViewer)
-    this.startDraw()
+    this.$nextTick(() => {
+      this.mapViewer = value
+      this.drawInteractPoint = new DrawInteractPoint(this.mapViewer)
+      this.startDraw()
+    })
   }
 
   private async startDraw() {

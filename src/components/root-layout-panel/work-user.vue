@@ -107,7 +107,11 @@ export default class WorkUser extends Vue {
     margin-right: 5px;
   }
   .user-name {
+    margin-left: 5px;
     color: #ffc876;
+  }
+  .el-icon-arrow-down {
+    color: #d3cece;
   }
 }
 </style>

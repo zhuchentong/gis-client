@@ -19,6 +19,22 @@
     color: @PrimaryColor;
   }
 
+  .el-textarea,
+  .el-input{
+    .el-input__inner,
+    .el-textarea__inner{
+      &:focus{
+        border-color: @PrimaryColor;
+      }
+    }
+  }
+
+  .el-tabs__item{
+    &:hover{
+      color: @PrimaryColor;
+    }
+  }
+
   .data-form {
     .search-button,
     .reset-button {

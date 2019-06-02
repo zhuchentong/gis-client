@@ -1,8 +1,19 @@
 <template>
   <section class="layer-menu-list">
-    <div v-for="item in menuList" :class="{'active':currentMenu === item.key}" class="layer-menu-item col middle-span center-span" :key="item.key" @click="updateCurrentMenu(item.key)">
-      <svg-icon class="menu-item-icon" :iconSize="18" :iconName="item.icon"></svg-icon>
-      <div class="menu-item-label">{{item.label}}</div>
+    <div
+      v-for="item in menuList"
+      :class="{ active: currentMenu === item.key }"
+      class="layer-menu-item col middle-span center-span"
+      :key="item.key"
+      @click="updateCurrentMenu(item.key)"
+    >
+      <svg-icon
+        class="menu-item-icon"
+        :iconSize="18"
+        :iconName="item.icon"
+        iconColor="#FFF"
+      ></svg-icon>
+      <div class="menu-item-label">{{ item.label }}</div>
     </div>
   </section>
 </template>
