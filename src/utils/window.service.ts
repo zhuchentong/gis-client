@@ -30,6 +30,10 @@ export class WindowService {
       parent: parent && currentWindow
     }
 
+    if (!maximizable) {
+      option.width = width ? width : size.width
+      option.height = height ? height : size.height
+    }
 
     let win: Electron.BrowserWindow | null = new BrowserWindow(option)
 

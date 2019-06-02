@@ -95,7 +95,7 @@ export default class LayerManage extends Vue {
   private pageService = new PageService()
 
   // 开发人员可以开启此功能操作图层列表
-  private visabledAddGroupFlag = true
+  private visabledAddGroupFlag = false
 
   private layerGroup = new LayerGroup()
   private layer = new LayerInfo()
