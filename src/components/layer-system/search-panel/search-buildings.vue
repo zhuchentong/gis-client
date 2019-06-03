@@ -58,6 +58,7 @@ export default class SearchBuildings extends Vue {
 
   private model: any = {}
   private layerInfo: any = null
+  private layerName = ""
 
   // layerInfo
   private buildingLayerInfo: any = {}
@@ -91,6 +92,7 @@ export default class SearchBuildings extends Vue {
       .subscribe(data => {
         const relation = this.layerRelations.find(x => x.type === SearchBuildingSetting.relationType)
         this.buildingLayerInfo = data.find(x => x.layerCode === relation.layerCode)
+        this.layerName = this.buildingLayerInfo.layerName
       })
   }
 
@@ -122,7 +124,7 @@ export default class SearchBuildings extends Vue {
         cqlBuilder.addPredicater(code, filter, queryData)
       }
     })
-    this.buildingLayerInfo.layerName += '-检索结果'
+    this.buildingLayerInfo.layerName = `${this.layerName}-检索结果`
     // TODO getlayerAttr filter
     this.layerInfo = this.viewer.addLayer(this.buildingLayerInfo, cqlBuilder.build())
   }

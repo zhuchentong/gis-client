@@ -135,8 +135,9 @@ export default class MapViewer extends Vue {
    * 加载图层
    */
   public addLayer(layer, cqlFilter?: string) {
-    const layers = this.$viewer.scene.imageryLayers
     const providerLayers = `${layer.layerSpace}:${layer.layerCode}`
+    if (this.layerList.findIndex(x => x.providerLayers === providerLayers) > -1) return
+    const layers = this.$viewer.scene.imageryLayers
     const provider = layers.addImageryProvider(
       this.createLayer(layer.layerSpace, providerLayers, cqlFilter)
     )
@@ -160,7 +161,7 @@ export default class MapViewer extends Vue {
   public removeLayer(target) {
     const layer = this.getWMSLayerByLayerId(target.id)
     if (!layer) return
-    this.$viewer.scene.imageryLayers.remove(layer)
+    const result = this.$viewer.scene.imageryLayers.remove(layer)
     this.layerList.splice(
       this.layerList.findIndex(x => x.layer.id === target.id),
       1

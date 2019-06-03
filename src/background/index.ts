@@ -28,8 +28,10 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600
   })
-  win.maximize()
+
   win.setMenu(null)
+  win.maximize()
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -39,7 +41,6 @@ function createWindow() {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
-
   win.on('closed', () => {
     win = null
   })

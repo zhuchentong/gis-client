@@ -52,15 +52,6 @@ export default class Home extends Vue {
       }
     },
     {
-      label: '多规管理',
-      url: 'layer-system',
-      icon: 'layer',
-      iconColor: "#1962C0",
-      style: {
-        background: '#398EDD'
-      }
-    },
-    {
       label: '业务管理',
       url: 'business-system',
       icon: 'business',
@@ -76,6 +67,15 @@ export default class Home extends Vue {
       iconColor: "#318048",
       style: {
         background: '#49AA66'
+      }
+    },
+    {
+      label: '多规管理',
+      url: 'layer-system',
+      icon: 'layer',
+      iconColor: "#1962C0",
+      style: {
+        background: '#398EDD'
       }
     },
     {
