@@ -52,6 +52,7 @@ import '@znemz/cesium-navigation/dist/index.css'
 import Canvas2Image from 'canvas2image-es6'
 import * as turf from '@turf/turf'
 import { CesiumCommonService } from '~/utils/cesium/common.service'
+import { LayerSpace } from "~/config/business-config"
 
 const LayerTableModule = namespace('layerTableModule')
 @Component({
@@ -147,35 +148,7 @@ export default class MapViewer extends Vue {
       }
     })
 
-    this.setCamera(layer.layerSpace, layer.layerCode)
-    // this.$viewer.camera.flyTo({
-    //   destination: Cesium.Rectangle.fromDegrees(
-    //     109.677257962279,
-    //     36.6859373802395,
-    //     109.678656800633,
-    //     36.6869423064872
-    //   )
-    // })
-    // const rectangle = Cesium.Rectangle.fromDegrees(
-    //   109.677257962279,
-    //   36.6859373802395,
-    //   109.678656800633,
-    //   36.6869423064872
-    // )
-    // const cartographic = Cesium.Rectangle.center(rectangle)
-    // this.$viewer.camera.flyTo({
-    //   destination: Cesium.Cartesian3.fromRadians(cartographic.longitude,cartographic.latitude,
-    //     this.$viewer.scene.globe.getHeight(cartographic) + 1000
-    //   )
-    // })
-    // this.$viewer.flyTo(provider, {
-    //   offset: new Cesium.HeadingPitchRange(
-    //     0,
-    //     -Cesium.Math.PI_OVER_TWO
-    //   )
-    // })
-
-
+    //  this.setCamera(layer.layerSpace, layer.layerCode)
     this.emitLayerListChange(this.layerList)
     this.getLayerAttrData({ layer, cql: cqlFilter })
     return provider
@@ -621,10 +594,17 @@ export default class MapViewer extends Vue {
   ) {
     this.GetGeographicBoundingBox(layerSpace, layerName)
       .then((view: any) => {
-        view && this.$viewer.camera[setView](view)
-        // if (!view) return
-        // const { destination: rectangle } = view
-        // const center = Cesium.Rectangle.center(rectangle)
+        // view && this.$viewer.camera[setView](view)
+        if (!view) return
+        if (layerSpace !== LayerSpace.base) {
+          const { destination: rectangle } = view
+          const center = Cesium.Rectangle.center(rectangle)
+          const centerHight = this.$viewer.scene.globe.getHeight(center)
+          view.destination = Cesium.Cartesian3.fromRadians(center.longitude, center.latitude, centerHight + 1000)
+        }
+        this.$viewer.camera[setView](view)
+
+
         // const centerHight = this.$viewer.scene.globe.getHeight(center)
         // // 如果存在地形高度，那就将视角切换到
         // if (centerHight > 10) {
