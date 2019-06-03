@@ -3,10 +3,7 @@
     <div id="cesium-viewer" class="col-span no-padding fill">
       <div id="slider"></div>
     </div>
-    <div
-      v-if="isDrawing || drawEntitiesLength"
-      class="draw-tool-bar icon-button-group"
-    >
+    <div v-if="isDrawing || drawEntitiesLength" class="draw-tool-bar icon-button-group">
       <div class="icon-button" @click="onDrawEvent('close')" title="关闭绘制">
         <svg-icon iconColor="white" iconName="close"></svg-icon>
       </div>
@@ -32,9 +29,7 @@
       </div>
     </div>
     <div v-if="isDrawing && drawTipInfo" class="draw-tip-panel">
-      <el-card header="操作提示">
-        {{ drawTipInfo }}
-      </el-card>
+      <el-card header="操作提示">{{ drawTipInfo }}</el-card>
     </div>
     <div id="credit" style="display:none"></div>
   </section>
@@ -52,7 +47,7 @@ import '@znemz/cesium-navigation/dist/index.css'
 import Canvas2Image from 'canvas2image-es6'
 import * as turf from '@turf/turf'
 import { CesiumCommonService } from '~/utils/cesium/common.service'
-import { LayerSpace } from "~/config/business-config"
+import { LayerSpace } from '~/config/business-config'
 
 const LayerTableModule = namespace('layerTableModule')
 @Component({
@@ -149,7 +144,7 @@ export default class MapViewer extends Vue {
       }
     })
 
-    //  this.setCamera(layer.layerSpace, layer.layerCode)
+    this.setCamera(layer.layerSpace, layer.layerCode)
     this.emitLayerListChange(this.layerList)
     this.getLayerAttrData({ layer, cql: cqlFilter })
     return provider
@@ -170,8 +165,6 @@ export default class MapViewer extends Vue {
     this.emitLayerListChange(this.layerList)
     this.clearPickEntitys()
   }
-
-
 
   /**
    * 获取场景中制定的图层的imageryProvider
@@ -368,12 +361,16 @@ export default class MapViewer extends Vue {
         })
       }
     }
-    zoomTo && this.$viewer.zoomTo(
-      this.pickEntities,
-      // 航向 城市发展线向东
-      // 角度 近似垂直向北
-      new Cesium.HeadingPitchRange(Cesium.Math.toRadians(-25), Cesium.Math.toRadians(-80))
-    )
+    zoomTo &&
+      this.$viewer.zoomTo(
+        this.pickEntities,
+        // 航向 城市发展线向东
+        // 角度 近似垂直向北
+        new Cesium.HeadingPitchRange(
+          Cesium.Math.toRadians(-25),
+          Cesium.Math.toRadians(-80)
+        )
+      )
   }
 
   private clearPickEntitys() {
@@ -542,15 +539,18 @@ export default class MapViewer extends Vue {
     )
 
     // 获取原始pick方法 并清除
-    const oldAction = this.$viewer.screenSpaceEventHandler.getInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)
-    this.$viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)
+    const oldAction = this.$viewer.screenSpaceEventHandler.getInputAction(
+      Cesium.ScreenSpaceEventType.LEFT_CLICK
+    )
+    this.$viewer.screenSpaceEventHandler.removeInputAction(
+      Cesium.ScreenSpaceEventType.LEFT_CLICK
+    )
     handler.setInputAction((e: any) => {
       if (this.isDrawing) return
       // 重新注册该方法
       oldAction(e)
       this.setPickFeature(e)
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-
   }
 
   private updateToolbarIcon(id) {
@@ -573,16 +573,6 @@ export default class MapViewer extends Vue {
     )
 
     this.setCamera(this.workspace, null, 'setView')
-
-    // this.$viewer.camera.changed.addEventListener((height: number) => {
-    //   const camerPosition = this.$viewer.camera.positionCartographic
-    //   const terrainHeight = this.$viewer.scene.globe.getHeight(camerPosition)
-    //   if (terrainHeight > camerPosition.height) this.$viewer.camera.cancelFlight()
-    //   if (terrainHeight < 10) return
-    //   const differceHiehgt = camerPosition.height - terrainHeight
-    //   if (differceHiehgt < 1000) this.$viewer.camera.cancelFlight()
-    // })
-
   }
 
   /**
@@ -595,38 +585,7 @@ export default class MapViewer extends Vue {
   ) {
     this.GetGeographicBoundingBox(layerSpace, layerName)
       .then((view: any) => {
-        // view && this.$viewer.camera[setView](view)
-        if (!view) return
-        if (layerSpace !== LayerSpace.base) {
-          const { destination: rectangle } = view
-          const center = Cesium.Rectangle.center(rectangle)
-          const centerHight = this.$viewer.scene.globe.getHeight(center)
-          view.destination = Cesium.Cartesian3.fromRadians(center.longitude, center.latitude, centerHight + 1000)
-        }
-        this.$viewer.camera[setView](view)
-
-
-        // const centerHight = this.$viewer.scene.globe.getHeight(center)
-        // // 如果存在地形高度，那就将视角切换到
-        // if (centerHight > 10) {
-        //   const option: any = {
-        //     rectangle: {
-        //       coordinates: rectangle,
-        //       height: centerHight,
-        //       fill: Cesium.Color.RED
-        //     }
-        //   }
-        //   const entity = this.drawEntities.add(new Cesium.Entity(option))
-
-        //   this.$viewer.flyTo(entity)
-
-
-        //   // const retcangleHeight = Cesium.Rectangle.computeHeight(rectangle)
-        //   // const viewHeight = centerHight + retcangleHeight + 1000
-        //   // view.destination = Cesium.Cartesian3.fromRadians(center.longitude, center.latitude, viewHeight)
-        // } else {
-        //   this.$viewer.camera[setView](view)
-        // }
+        view && this.$viewer.camera[setView](view)
       })
       .catch(ex => {
         console.log(ex)
@@ -662,7 +621,7 @@ export default class MapViewer extends Vue {
   private async GetCapabilities(layerSpace) {
     return fetch(
       `${
-      this.geoServer
+        this.geoServer
       }/${layerSpace}/wms?service=wms&version=1.3.0&request=GetCapabilities`
     ).then(async data => {
       return new WMSCapabilities(await data.text()).toJSON()
@@ -681,9 +640,14 @@ export default class MapViewer extends Vue {
           : Capability.Layer
 
         if (layer) {
-          const [west, south, east, north] = layer.EX_GeographicBoundingBox
+          // 计算bbox中心
+          const bboxPolygon = turf.bboxPolygon(layer.EX_GeographicBoundingBox)
+          const {
+            geometry: { coordinates }
+          } = turf.centerOfMass(bboxPolygon) as any
+          const [lng, lat] = coordinates
           return {
-            destination: Cesium.Rectangle.fromDegrees(west, south, east, north),
+            destination: Cesium.Cartesian3.fromDegrees(lng, lat, 5000.0),
             orientation: {
               heading: 0.0,
               pitch: -Cesium.Math.PI_OVER_TWO,
@@ -832,18 +796,19 @@ export default class MapViewer extends Vue {
       this.$viewer.scene
     )
     if (!Cesium.defined(featuresPromise)) return
-    featuresPromise.then((features: Cesium.ImageryLayerFeatureInfo[]) => {
-      const [feature] = features
-      if (feature) {
-        this.drawFeature(feature.data)
-        this.emitFeatureChange(feature.data.id)
-      } else {
-        if (this.pickEntities.values.length) {
-          this.clearPickEntitys()
-          this.emitFeatureChange("")
+    featuresPromise.then(
+      (features: Cesium.ImageryLayerFeatureInfo[]) => {
+        const [feature] = features
+        if (feature) {
+          this.drawFeature(feature.data)
+          this.emitFeatureChange(feature.data.id)
+        } else {
+          if (this.pickEntities.values.length) {
+            this.clearPickEntitys()
+            this.emitFeatureChange('')
+          }
         }
-      }
-    },
+      },
       () => console.error('获取iamgeLayerFeatures失败')
     )
   }
