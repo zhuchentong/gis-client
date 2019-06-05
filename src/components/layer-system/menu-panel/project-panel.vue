@@ -114,7 +114,6 @@ export default class ProjectPanel extends Vue {
     this.flowModel.queryFollowDataByPage(this.pageService).subscribe(
       data => {
         this.dataList = data.content
-        if (this.dataList.length) this.flowId = this.dataList[0].flowId
       }
     )
   }
