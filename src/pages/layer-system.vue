@@ -16,14 +16,8 @@
       ></layer-attr-table>
     </div>
     <div class="bottom-panel">
-      <!-- <div class="proccess" v-if="proccess.value && proccess.value < 100"> -->
-      <div class="row end-span" v-if="proccess.value && proccess.value < 100">
-        <span>{{ proccess.name }}</span>
-        <el-progress
-          style="width:300px;padding-right:50px"
-          :percentage="proccess.value"
-        ></el-progress>
-      </div>
+      <span class="localtion">经度：{{ localtion.longitude }}</span>
+      <span class="localtion">纬度：{{ localtion.latitude }}</span>
     </div>
   </section>
 </template>
@@ -56,9 +50,22 @@ export default class LayerSystem extends Vue {
     this.mapViewer = viewer
   }
 
-  private get proccess() {
+  private get proccessInfo() {
     if (!this.mapViewer) return {}
-    return this.mapViewer.proccess
+    return this.mapViewer.proccessInfo as any
+  }
+
+  private get localtion() {
+    const result = {
+      longitude: "",
+      latitude: ""
+    }
+    const { position } = this.proccessInfo
+    if (!position) return result
+    const { longitude, latitude } = position
+    result.longitude = longitude ? longitude.toFixed(4) : ""
+    result.latitude = latitude ? latitude.toFixed(4) : ""
+    return result
   }
 
   private mounted() {
@@ -105,6 +112,18 @@ export default class LayerSystem extends Vue {
   .bottom-panel {
     grid-area: ~'2/1/span 1/span 3';
     background: gray;
+    text-align: right;
+    padding-right: 20px;
+    line-height: 20px;
+    color: #f2f2f2;
+    .localtion {
+      text-align: left;
+      display: inline-block;
+      min-width: 100px;
+    }
+    .localtion + .localtion {
+      margin-left: 10px;
+    }
   }
 }
 </style>

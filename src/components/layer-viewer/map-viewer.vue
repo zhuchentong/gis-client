@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator'
-import Cesium, { CesiumTerrainProvider, PolygonGraphics } from 'cesium/Cesium'
+import Cesium from 'cesium/Cesium'
 import WMSCapabilities from 'wms-capabilities'
 import appConfig from '~/config/app.config'
 import { FilterService } from '~/utils/filter.service'
@@ -67,9 +67,9 @@ export default class MapViewer extends Vue {
   // 绘制事件监听
   public drawEventListener: Array<(event: string) => void> = []
 
-  public proccess = {
-    name: '',
-    value: 0
+  // 主线程通知信息
+  public proccessInfo = {
+    position: {}
   }
 
   // 绘制提示信息
@@ -220,10 +220,6 @@ export default class MapViewer extends Vue {
         )
       })
     })
-
-    // tileset.loadProgress.addEventListener((numberOfPendingRequests, numberOfTilesProcessing) => {
-    //   this.proccess.value = Math.round( numberOfTilesProcessing/ numberOfPendingRequests * 100)
-    // })
 
     // 添加到图层列表
     this.tilesetList.push({
@@ -554,6 +550,14 @@ export default class MapViewer extends Vue {
       oldAction(e)
       this.setPickFeature(e)
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+
+    // 当前屏幕坐标对应地理位置
+    handler.setInputAction((e: any) => {
+      const cartesian = CesiumCommonService.getPosition(this.$viewer, e.endPosition)
+      if (!cartesian) return
+      const position = CesiumCommonService.cartesian3ToDegrees(cartesian)
+      this.proccessInfo.position = position
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
   }
 
   private updateToolbarIcon(id) {
