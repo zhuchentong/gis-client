@@ -237,7 +237,11 @@ export default class MapViewer extends Vue {
   public removeTileset(id) {
     // 查询tileset
     const tileset = this.findTileset(id)
-    if (tileset) this.$viewer.scene.primitives.remove(tileset)
+
+    if (tileset) {
+      this.$viewer.scene.primitives.remove(tileset)
+      // !tileset.isDestroyed() && tileset.destroy()
+    }
 
     const findIndex = this.tilesetList.findIndex(x => x.id === id)
     this.tilesetList.splice(findIndex, 1)
@@ -288,6 +292,8 @@ export default class MapViewer extends Vue {
     )
     this.$viewer.scene.imageryLayers.lowerToBottom(this.$imageProvider)
   }
+
+
 
   /**
    * 删除遥感影像
@@ -476,18 +482,23 @@ export default class MapViewer extends Vue {
     this.emitMapReady()
 
     // 添加遥感影像按钮
-    this.addToolBar(
-      'imagery',
-      '遥感影像',
-      'Widgets/Images/ImageryProviders/naturalEarthII.png',
-      () => {
-        this.updateToolbarIcon('imagery')
-        this.$imageProvider
-          ? this.removeImageProvider()
-          : this.addImageProvider()
-      },
-      true
-    )
+    // const imagerys = this.addToolBar(
+    //   'imagery',
+    //   '遥感影像',
+    //   'Widgets/Images/ImageryProviders/naturalEarthII.png',
+    //   () => {
+    //     // this.updateToolbarIcon('imagery')
+    //     // this.$imageProvider
+    //     //   ? this.removeImageProvider()
+    //     //   : this.addImageProvider()
+    //     // const element = document.querySelector('#imagery') as HTMLElement
+    //     // if(!element) return
+    //     // element.add
+    //   },
+    //   true
+    // )
+    // imagerys.appendChild()
+    this.addBaseLayerPick()
 
     // 添加地形数据按钮
     this.addToolBar(
@@ -620,6 +631,81 @@ export default class MapViewer extends Vue {
     container.append(element)
 
     return element
+  }
+
+  private addBaseLayerPick() {
+    // id="baseLayerPickerContainer"
+    let container = document.querySelector(
+      '.cesium-viewer-toolbar'
+    ) as HTMLElement
+    const element = document.createElement('div')
+    element.id = "baseLayerPickerContainer"
+    element.classList.add('cesium-toolbar-button')
+    element.style.display = 'inline-table'
+    element.title = '遥感影像'
+    container.append(element)
+
+    const imageryViewModels: Cesium.ProviderViewModel[] = []
+    // 2017 遥感影像
+    imageryViewModels.push(
+      new Cesium.ProviderViewModel({
+        name: "2017年",
+        tooltip: "2017年遥感影像",
+        iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/naturalEarthII.png'),
+        creationFunction: () => this.createRasterImageryLayer(2017)
+      })
+    )
+    // 2016 遥感影像
+    imageryViewModels.push(
+      new Cesium.ProviderViewModel({
+        name: "2016年",
+        tooltip: "2016年遥感影像",
+        iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/naturalEarthII.png'),
+        creationFunction: () => this.createRasterImageryLayer(2016)
+      })
+    )
+    // 不加载
+    imageryViewModels.push(
+      new Cesium.ProviderViewModel({
+        name: "关闭",
+        tooltip: "关闭遥感影像",
+        iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/Ellipsoid.png'),
+        creationFunction: () => this.createRasterImageryLayer('none', 0, 0)
+      })
+    )
+    const baseLayers = new Cesium.BaseLayerPicker('baseLayerPickerContainer',
+      {
+        globe: this.$viewer.scene.globe,
+        imageryProviderViewModels: imageryViewModels
+      }
+    )
+    // 修改图层分组名称
+    container = document.querySelector(
+      ".cesium-baseLayerPicker-sectionTitle"
+    ) as HTMLElement
+    if (!container) return
+    container.innerHTML = "遥感影像"
+
+  }
+
+  private createRasterImageryLayer(year, minLevel?, maxLevel?) {
+    const rectangle = new Cesium.Rectangle(
+      Cesium.Math.toRadians(109.55151),
+      Cesium.Math.toRadians(36.61187),
+      Cesium.Math.toRadians(109.76861),
+      Cesium.Math.toRadians(36.731606)
+    )
+
+    const provider = new Cesium.UrlTemplateImageryProvider({
+      url: `${appConfig.mapResouce}/raster/${year}/{z}/{x}/{y}.png`,
+      tilingScheme: new Cesium.WebMercatorTilingScheme(),
+      minimumLevel: minLevel !== undefined ? minLevel : 5,
+      rectangle,
+      maximumLevel: maxLevel !== undefined ? maxLevel : 17
+    })
+
+    this.$imageProvider = provider
+    return provider
   }
 
   /**

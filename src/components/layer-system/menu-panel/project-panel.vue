@@ -40,6 +40,8 @@
           :value="item.type | dictConvert('FlowType')"
         ></label-item>
         <label-item
+          noWarp
+          showTitle
           label="创建时间"
           :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"
         ></label-item>
@@ -92,7 +94,7 @@ export default class ProjectPanel extends Vue {
   private dataList: any[] = []
   private flowId = ""
   private flowModel: BusinessFlowModel = new BusinessFlowModel()
-  private pageService = new PageService({ pageSize: 6 })
+  private pageService = new PageService({ pageSize: 10 })
 
   private layerInfo: any = null
 

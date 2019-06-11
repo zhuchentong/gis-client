@@ -40,6 +40,8 @@
           :value="item.type | dictConvert('PatrolType')"
         ></label-item>
         <label-item
+          noWarp
+          showTitle
           label="创建时间"
           :value="item.createTime | dateTimeFormat('yyyy年MM月dd日 hh:mm:ss')"
         ></label-item>
@@ -98,7 +100,7 @@ export default class TaskPanel extends Vue {
   // 查询到的数据列表
   private dataList: any[] = []
   private id = ""
-  private pageService = new PageService({ pageSize: 6 })
+  private pageService = new PageService({ pageSize: 10 })
   @Inject
   private patrolService!: PatrolInfoService
 

@@ -205,12 +205,12 @@ export default class ToolPanel extends Vue {
       } = turf.centerOfMass(polygon) as any
       const cartographic = Cesium.Cartographic.fromDegrees(coordinates[0], coordinates[1])
       const height = this.viewer.getViewer().scene.sampleHeight(cartographic)
-      if(height){
-        cartographic.height =  height
-      }else{
+      if (height) {
+        cartographic.height = height
+      } else {
         cartographic.height = this.viewer.getViewer().scene.globe.getHeight(cartographic)
       }
-      
+
       const center = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
 
       // 绘制面积信息
